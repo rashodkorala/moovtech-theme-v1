@@ -1,0 +1,207 @@
+<div class="product-features full-width">
+  <div class="product-features__inner">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="product-features__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    <div class="product-features__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'feature' -%}
+          <div
+            class="product-features__item"
+            data-animate="feat-scroll"
+            style="--feat-delay: {{ forloop.index0 | times: 80 }}ms;"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.number != blank -%}
+              <span class="product-features__num">{{ block.settings.number | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="product-features__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="product-features__body">{{ block.settings.body | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-features {
+    background: #0E0E0E;
+    padding: 120px 40px;
+  }
+
+  .product-features__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .product-features__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #C8F55A;
+    margin: 0 0 64px;
+  }
+
+  .product-features__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+  }
+
+  .product-features__item {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 24px;
+  }
+
+  .product-features__num {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: rgba(245, 242, 238, 0.3);
+  }
+
+  .product-features__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #F5F2EE;
+    line-height: 1.2;
+    margin: 12px 0 0;
+  }
+
+  .product-features__body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 1.7;
+    color: rgba(245, 242, 238, 0.55);
+    margin: 10px 0 0;
+  }
+
+  /* Scroll animation */
+  [data-animate="feat-scroll"] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transition-delay: var(--feat-delay, 0ms);
+  }
+
+  [data-animate="feat-scroll"].is-visible {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .product-features {
+      padding: 80px 40px;
+    }
+
+    .product-features__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .product-features {
+      padding: 80px 24px;
+    }
+
+    .product-features__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .product-features__eyebrow {
+      margin-bottom: 40px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var items = document.querySelectorAll('.product-features [data-animate="feat-scroll"]');
+    if (!items.length) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    items.forEach(function (item) { observer.observe(item); });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_features.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "What it does"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "t:sections.product_features.blocks.feature.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "t:labels.feature_number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.heading",
+          "default": "Feature title"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "t:labels.body",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_features.name",
+      "blocks": [
+        { "type": "feature", "settings": { "number": "01", "title": "Motion-activated dismissal", "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." } },
+        { "type": "feature", "settings": { "number": "02", "title": "30-day battery life", "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." } },
+        { "type": "feature", "settings": { "number": "03", "title": "Bluetooth sync", "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." } },
+        { "type": "feature", "settings": { "number": "04", "title": "App-controlled routines", "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

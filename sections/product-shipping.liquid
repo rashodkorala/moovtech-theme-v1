@@ -1,0 +1,174 @@
+<div class="prod-ship full-width">
+  <div class="prod-ship__inner">
+
+    {%- comment -%} Left — Sticky label {%- endcomment -%}
+    <div class="prod-ship__label-col">
+      <h2 class="prod-ship__label">{{ section.settings.label_heading | escape }}</h2>
+    </div>
+
+    {%- comment -%} Right — Detail rows {%- endcomment -%}
+    <div class="prod-ship__rows">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'shipping_row' -%}
+          <div class="prod-ship__row" {{ block.shopify_attributes }}>
+            {%- if block.settings.label != blank -%}
+              <span class="prod-ship__row-label">{{ block.settings.label | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.value != blank -%}
+              <span class="prod-ship__row-value">{{ block.settings.value | escape }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .prod-ship {
+    background: #0E0E0E;
+    padding: 120px 40px;
+  }
+
+  .prod-ship__inner {
+    display: grid;
+    grid-template-columns: 40fr 60fr;
+    gap: 80px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Left — sticky label */
+  .prod-ship__label-col {
+    /* height determined by right rows */
+  }
+
+  .prod-ship__label {
+    position: sticky;
+    top: 120px;
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.15;
+    color: #F5F2EE;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* Right — rows */
+  .prod-ship__rows {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .prod-ship__row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .prod-ship__row-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(245, 242, 238, 0.4);
+  }
+
+  .prod-ship__row-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: #F5F2EE;
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .prod-ship {
+      padding: 80px 40px;
+    }
+
+    .prod-ship__inner {
+      gap: 48px;
+    }
+
+    .prod-ship__label {
+      font-size: 32px;
+      top: 80px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .prod-ship {
+      padding: 80px 24px;
+    }
+
+    .prod-ship__inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .prod-ship__label {
+      position: static;
+      font-size: 28px;
+    }
+
+    .prod-ship__row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.product_shipping.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label_heading",
+      "label": "t:labels.heading",
+      "default": "Shipping & Delivery"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shipping_row",
+      "name": "t:sections.product_shipping.blocks.shipping_row.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:labels.row_label",
+          "default": "Label"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "t:labels.row_value",
+          "default": "Value"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_shipping.name",
+      "blocks": [
+        { "type": "shipping_row", "settings": { "label": "Estimated ship date", "value": "Q3 2025" } },
+        { "type": "shipping_row", "settings": { "label": "Shipping", "value": "Free worldwide shipping" } },
+        { "type": "shipping_row", "settings": { "label": "Returns", "value": "30-day hassle-free returns" } },
+        { "type": "shipping_row", "settings": { "label": "Questions", "value": "hello@moovtech.ca" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

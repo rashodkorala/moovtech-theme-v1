@@ -1,0 +1,626 @@
+{%- assign first_variant = product.selected_or_first_available_variant -%}
+
+<div class="product-hero full-width">
+  <div class="product-hero__inner">
+
+    {%- comment -%} Left — Image gallery {%- endcomment -%}
+    <div class="product-hero__gallery" data-animate="gallery-load">
+
+      <div class="product-hero__main-frame">
+        {%- if product.media.size > 0 -%}
+          {%- for media in product.media -%}
+            <div
+              class="product-hero__media{%- if forloop.first %} is-active{%- endif -%}"
+              data-media-index="{{ forloop.index0 }}"
+            >
+              {%- if forloop.first -%}
+                {{
+                  media.preview_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'product-hero__img',
+                    loading: 'eager',
+                    alt: media.alt | default: product.title | escape
+                }}
+              {%- else -%}
+                {{
+                  media.preview_image
+                  | image_url: width: 1200
+                  | image_tag:
+                    class: 'product-hero__img',
+                    loading: 'lazy',
+                    alt: media.alt | default: product.title | escape
+                }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <div class="product-hero__media is-active">
+            {{ 'product-1' | placeholder_svg_tag: 'product-hero__img product-hero__img--placeholder' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if product.media.size > 1 -%}
+        <div class="product-hero__thumbs">
+          {%- for media in product.media -%}
+            <button
+              class="product-hero__thumb{%- if forloop.first %} is-active{%- endif -%}"
+              data-media-index="{{ forloop.index0 }}"
+              aria-label="View image {{ forloop.index }}"
+              type="button"
+            >
+              {{
+                media.preview_image
+                | image_url: width: 144, height: 144, crop: 'center'
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'product-hero__thumb-img',
+                  alt: media.alt | default: product.title | escape
+              }}
+            </button>
+          {%- endfor -%}
+        </div>
+        <p class="product-hero__counter" aria-live="polite">
+          <span class="product-hero__counter-current">1</span> / {{ product.media.size }}
+        </p>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} Right — Product details {%- endcomment -%}
+    <div class="product-hero__details" data-animate="details-load">
+
+      {%- comment -%} Breadcrumb {%- endcomment -%}
+      <nav class="product-hero__breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}" class="product-hero__breadcrumb-link">Home</a>
+        <span class="product-hero__breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="product-hero__breadcrumb-current">{{ product.title | escape }}</span>
+      </nav>
+
+      <h1 class="product-hero__title">{{ product.title | escape }}</h1>
+
+      {%- if section.settings.tagline != blank -%}
+        <p class="product-hero__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+
+      {%- comment -%} Price {%- endcomment -%}
+      <div class="product-hero__price-block">
+        <span class="product-hero__price">{{ product.price | money }}</span>
+        <span class="product-hero__preorder-badge" aria-label="Pre-order item">Pre-Order</span>
+      </div>
+
+      {%- if section.settings.shipping_note != blank -%}
+        <p class="product-hero__shipping-note">{{ section.settings.shipping_note | escape }}</p>
+      {%- endif -%}
+
+      <hr class="product-hero__divider" aria-hidden="true">
+
+      {%- comment -%} Add to cart form {%- endcomment -%}
+      {%- form 'product', product, id: 'ProductForm', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ first_variant.id }}">
+        <button
+          type="submit"
+          class="product-hero__cta"
+          {%- unless product.available %} disabled aria-disabled="true"{%- endunless -%}
+        >
+          {%- if product.available -%}
+            {{- section.settings.cta_label | default: 'Pre-Order Now' | escape -}}
+          {%- else -%}
+            Sold out
+          {%- endif -%}
+        </button>
+      {%- endform -%}
+
+      <button class="product-hero__wishlist" type="button">Add to Wishlist</button>
+
+      {%- comment -%} Trust signals {%- endcomment -%}
+      <div class="product-hero__trust">
+        <span>Secure checkout</span>
+        <span class="product-hero__trust-dot" aria-hidden="true">·</span>
+        <span>30-day returns</span>
+        <span class="product-hero__trust-dot" aria-hidden="true">·</span>
+        <span>Ships worldwide</span>
+      </div>
+
+      <hr class="product-hero__divider" aria-hidden="true">
+
+      {%- comment -%} Description {%- endcomment -%}
+      <div class="product-hero__description rte">
+        {{ product.description }}
+      </div>
+
+      {%- comment -%} App compatibility note {%- endcomment -%}
+      <p class="product-hero__app-note">
+        <svg class="product-hero__app-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+        </svg>
+        <svg class="product-hero__app-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M6 18l8.5-6L6 6v12zm13-9.5C19 6.5 17 5 14.5 5H5C3.3 5 2 6.3 2 8v8c0 1.7 1.3 3 3 3h9.5c2.5 0 4.5-1.5 4.5-3.5v-5z"/>
+        </svg>
+        {{- section.settings.app_compat_note | default: 'Works with the MOOV app — available on iOS and Android' | escape -}}
+      </p>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-hero {
+    background: #080808;
+    min-height: 100vh;
+  }
+
+  .product-hero__inner {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    gap: 80px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+    align-items: start;
+    min-height: 100vh;
+  }
+
+  /* ─── Gallery ─── */
+  .product-hero__gallery {
+    position: sticky;
+    top: 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .product-hero__main-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #0E0E0E;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .product-hero__media {
+    position: absolute;
+    inset: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .product-hero__media.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .product-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .product-hero__img--placeholder {
+    opacity: 0.12;
+  }
+
+  /* Thumbnails */
+  .product-hero__thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .product-hero__thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    background: #0E0E0E;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: border-color 0.2s ease;
+  }
+
+  .product-hero__thumb.is-active {
+    border-color: rgba(245, 242, 238, 0.4);
+  }
+
+  .product-hero__thumb:hover:not(.is-active) {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .product-hero__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-hero__counter {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.3);
+    margin: 12px 0 0;
+  }
+
+  /* ─── Details ─── */
+  .product-hero__details {
+    padding-top: 120px;
+    padding-right: 80px;
+    padding-bottom: 80px;
+  }
+
+  /* Breadcrumb */
+  .product-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .product-hero__breadcrumb-link,
+  .product-hero__breadcrumb-current {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(245, 242, 238, 0.3);
+    text-decoration: none;
+  }
+
+  .product-hero__breadcrumb-link:hover {
+    color: rgba(245, 242, 238, 0.6);
+  }
+
+  .product-hero__breadcrumb-sep {
+    color: rgba(245, 242, 238, 0.2);
+  }
+
+  /* Title */
+  .product-hero__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #F5F2EE;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+
+  /* Tagline */
+  .product-hero__tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.6;
+    color: rgba(245, 242, 238, 0.55);
+    margin: 0 0 32px;
+  }
+
+  /* Price block */
+  .product-hero__price-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .product-hero__price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #F5F2EE;
+    line-height: 1;
+  }
+
+  .product-hero__preorder-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: rgba(200, 245, 90, 0.12);
+    border: 1px solid rgba(200, 245, 90, 0.3);
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #C8F55A;
+  }
+
+  .product-hero__shipping-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.4);
+    margin: 0 0 36px;
+  }
+
+  /* Divider */
+  .product-hero__divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin: 0 0 36px;
+  }
+
+  /* Primary CTA */
+  .product-hero__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 56px;
+    background: #F5F2EE;
+    color: #080808;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    margin-bottom: 16px;
+  }
+
+  .product-hero__cta:hover:not(:disabled) {
+    background: #C8F55A;
+  }
+
+  .product-hero__cta:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Secondary — Wishlist */
+  .product-hero__wishlist {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: transparent;
+    border: 1px solid rgba(245, 242, 238, 0.15);
+    border-radius: 6px;
+    color: rgba(245, 242, 238, 0.6);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+    margin-bottom: 40px;
+  }
+
+  .product-hero__wishlist:hover {
+    border-color: rgba(245, 242, 238, 0.4);
+    color: #F5F2EE;
+  }
+
+  /* Trust signals */
+  .product-hero__trust {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .product-hero__trust span:not(.product-hero__trust-dot) {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(245, 242, 238, 0.35);
+  }
+
+  .product-hero__trust-dot {
+    color: rgba(245, 242, 238, 0.2);
+  }
+
+  /* Description */
+  .product-hero__description {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 200;
+    line-height: 1.8;
+    color: rgba(245, 242, 238, 0.6);
+    margin-bottom: 36px;
+  }
+
+  .product-hero__description p {
+    margin: 0 0 1em;
+  }
+
+  .product-hero__description p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* App note */
+  .product-hero__app-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.4);
+    margin: 0;
+  }
+
+  .product-hero__app-icon {
+    flex-shrink: 0;
+    color: rgba(245, 242, 238, 0.4);
+  }
+
+  /* ─── Page load animations ─── */
+  [data-animate="gallery-load"] {
+    opacity: 0;
+    transition: opacity 0.6s ease-out 0.1s;
+  }
+
+  [data-animate="details-load"] {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="gallery-load"].is-visible,
+  [data-animate="details-load"].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .product-hero__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+
+    .product-hero__title {
+      font-size: 36px;
+    }
+
+    .product-hero__details {
+      padding-right: 0;
+      padding-top: 80px;
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .product-hero__inner {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0;
+      min-height: auto;
+    }
+
+    .product-hero__gallery {
+      position: static;
+      padding: 0;
+    }
+
+    .product-hero__main-frame {
+      aspect-ratio: 1 / 1;
+      border-radius: 0;
+    }
+
+    .product-hero__media {
+      inset: 24px;
+    }
+
+    .product-hero__thumbs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0 24px;
+      margin-top: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .product-hero__thumbs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .product-hero__counter {
+      padding: 0 24px;
+    }
+
+    .product-hero__details {
+      padding: 32px 24px 64px;
+    }
+
+    .product-hero__title {
+      font-size: 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    /* ── Page load animations ── */
+    var gallery = document.querySelector('[data-animate="gallery-load"]');
+    var details = document.querySelector('[data-animate="details-load"]');
+
+    requestAnimationFrame(function () {
+      if (gallery) gallery.classList.add('is-visible');
+      if (details) {
+        setTimeout(function () {
+          details.classList.add('is-visible');
+        }, 60);
+      }
+    });
+
+    /* ── Gallery thumbnail interactions ── */
+    var mediaItems = document.querySelectorAll('.product-hero__media');
+    var thumbs = document.querySelectorAll('.product-hero__thumb');
+    var counterEl = document.querySelector('.product-hero__counter-current');
+
+    if (!thumbs.length) return;
+
+    function activateMedia(index) {
+      mediaItems.forEach(function (item, i) {
+        item.classList.toggle('is-active', i === index);
+      });
+      thumbs.forEach(function (thumb, i) {
+        thumb.classList.toggle('is-active', i === index);
+      });
+      if (counterEl) counterEl.textContent = index + 1;
+    }
+
+    thumbs.forEach(function (thumb, index) {
+      thumb.addEventListener('click', function () {
+        activateMedia(index);
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_hero.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "t:labels.tagline",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "t:labels.shipping_note",
+      "default": "Free shipping · Ships Q3 2025"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label",
+      "default": "Pre-Order Now"
+    },
+    {
+      "type": "text",
+      "id": "app_compat_note",
+      "label": "t:labels.compat_note",
+      "default": "Works with the MOOV app — available on iOS and Android"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_hero.name"
+    }
+  ]
+}
+{% endschema %}

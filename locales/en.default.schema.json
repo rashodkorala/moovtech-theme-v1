@@ -63,6 +63,28 @@
           "name": "FAQ item"
         }
       }
+    },
+    "product_hero": {
+      "name": "Product hero"
+    },
+    "product_features": {
+      "name": "Product features",
+      "blocks": {
+        "feature": {
+          "name": "Feature"
+        }
+      }
+    },
+    "product_app_compat": {
+      "name": "App compatibility"
+    },
+    "product_shipping": {
+      "name": "Shipping & delivery",
+      "blocks": {
+        "shipping_row": {
+          "name": "Shipping row"
+        }
+      }
     }
   },
   "labels": {
@@ -118,7 +140,12 @@
     "linkedin_url": "LinkedIn URL",
     "copyright_name": "Company name",
     "privacy_url": "Privacy policy URL",
-    "terms_url": "Terms of service URL"
+    "terms_url": "Terms of service URL",
+    "shipping_note": "Shipping note",
+    "compat_note": "App compatibility note",
+    "feature_number": "Feature number",
+    "row_label": "Row label",
+    "row_value": "Row value"
   },
   "options": {
     "alignment": {

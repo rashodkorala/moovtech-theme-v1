@@ -1,0 +1,101 @@
+{
+  "sections": {
+    "product_hero": {
+      "type": "product-hero",
+      "settings": {
+        "tagline": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "shipping_note": "Free shipping · Ships Q3 2025",
+        "cta_label": "Pre-Order Now",
+        "app_compat_note": "Works with the MOOV app — available on iOS and Android"
+      }
+    },
+    "product_features": {
+      "type": "product-features",
+      "settings": {
+        "eyebrow": "What it does"
+      },
+      "blocks": {
+        "feat-1": {
+          "type": "feature",
+          "settings": {
+            "number": "01",
+            "title": "Motion-activated dismissal",
+            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
+          }
+        },
+        "feat-2": {
+          "type": "feature",
+          "settings": {
+            "number": "02",
+            "title": "30-day battery life",
+            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
+          }
+        },
+        "feat-3": {
+          "type": "feature",
+          "settings": {
+            "number": "03",
+            "title": "Bluetooth sync",
+            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
+          }
+        },
+        "feat-4": {
+          "type": "feature",
+          "settings": {
+            "number": "04",
+            "title": "App-controlled routines",
+            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
+          }
+        }
+      },
+      "block_order": ["feat-1", "feat-2", "feat-3", "feat-4"]
+    },
+    "product_app_compat": {
+      "type": "product-app-compat",
+      "settings": {
+        "eyebrow": "The App",
+        "heading": "Lorem ipsum dolor sit amet consectetur.",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.",
+        "compat_note": "iOS 14+ and Android 10+"
+      }
+    },
+    "product_shipping": {
+      "type": "product-shipping",
+      "settings": {
+        "label_heading": "Shipping & Delivery"
+      },
+      "blocks": {
+        "row-1": {
+          "type": "shipping_row",
+          "settings": {
+            "label": "Estimated ship date",
+            "value": "Q3 2025"
+          }
+        },
+        "row-2": {
+          "type": "shipping_row",
+          "settings": {
+            "label": "Shipping",
+            "value": "Free worldwide shipping"
+          }
+        },
+        "row-3": {
+          "type": "shipping_row",
+          "settings": {
+            "label": "Returns",
+            "value": "30-day hassle-free returns"
+          }
+        },
+        "row-4": {
+          "type": "shipping_row",
+          "settings": {
+            "label": "Questions",
+            "value": "hello@moovtech.ca"
+          }
+        }
+      },
+      "block_order": ["row-1", "row-2", "row-3", "row-4"]
+    }
+  },
+  "order": ["product_hero", "product_features", "product_app_compat", "product_shipping"]
+}
