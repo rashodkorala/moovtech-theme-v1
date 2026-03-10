@@ -1,0 +1,1 @@
+/Users/rashodkorala/Documents/Clients/Moovtech/theme-v1/AGENTS.md
