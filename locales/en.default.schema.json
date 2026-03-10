@@ -37,7 +37,9 @@
     "secondary_button": "Secondary button",
     "community": "Community",
     "proof_points": "Proof points",
-    "product_render": "Product render"
+    "product_render": "Product render",
+    "features": "Features",
+    "download_links": "Download links"
   },
   "sections": {
     "hero": {
@@ -45,6 +47,9 @@
     },
     "product_intro": {
       "name": "Product intro"
+    },
+    "app_section": {
+      "name": "App section"
     }
   },
   "labels": {
@@ -82,7 +87,13 @@
     "body": "Body copy",
     "proof_point_1": "Proof point 1",
     "proof_point_2": "Proof point 2",
-    "product_render": "Product render (PNG with transparent background)"
+    "product_render": "Product render (PNG with transparent background)",
+    "app_image": "App screenshot / mockup",
+    "app_screen": "App screen mockup",
+    "app_store_url": "App Store URL",
+    "google_play_url": "Google Play URL",
+    "feature_label": "Feature label",
+    "feature_desc": "Feature description"
   },
   "options": {
     "alignment": {

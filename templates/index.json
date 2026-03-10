@@ -24,10 +24,18 @@
         "proof_2": "Stops when you're up",
         "cta_label": "Pre-Order Now"
       }
+    },
+    "app_section": {
+      "type": "app-section",
+      "settings": {
+        "eyebrow": "The App",
+        "cta_label": "Download the App"
+      }
     }
   },
   "order": [
     "hero",
-    "product_intro"
+    "product_intro",
+    "app_section"
   ]
 }
