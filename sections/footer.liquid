@@ -1,56 +1,712 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
+{%- liquid
+  assign current_year = 'now' | date: '%Y'
+-%}
+
+<footer class="footer full-width">
+
+  {%- comment -%} Part 1 — Community callout card {%- endcomment -%}
+  <div class="footer__outer">
+    <div class="footer__card" data-animate="footer-card">
+
+      <div class="footer__card-left">
+        {%- if section.settings.community_eyebrow != blank -%}
+          <p class="footer__card-eyebrow">{{ section.settings.community_eyebrow | escape }}</p>
+        {%- endif -%}
+
+        <h2 class="footer__card-heading">{{ section.settings.community_heading | escape }}</h2>
+
+        {%- if section.settings.community_body != blank -%}
+          <p class="footer__card-body">{{ section.settings.community_body | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.community_cta_label != blank -%}
+          <a
+            href="{{ section.settings.community_cta_url | default: '#community' }}"
+            class="footer__card-cta"
+          >
+            {{- section.settings.community_cta_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="footer__card-visual" aria-hidden="true">
+        <div class="footer__card-glow"></div>
+        <svg class="footer__card-orbits" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="72"  stroke="rgba(200,245,90,0.18)" stroke-width="1"/>
+          <circle cx="200" cy="200" r="120" stroke="rgba(200,245,90,0.11)" stroke-width="1"/>
+          <circle cx="200" cy="200" r="170" stroke="rgba(200,245,90,0.06)" stroke-width="1"/>
+          <circle cx="200" cy="128" r="4.5" fill="rgba(200,245,90,0.55)"/>
+          <circle cx="285" cy="238" r="3"   fill="rgba(200,245,90,0.4)"/>
+          <circle cx="128" cy="272" r="2.5" fill="rgba(200,245,90,0.32)"/>
+          <circle cx="248" cy="76"  r="2"   fill="rgba(200,245,90,0.28)"/>
+          <circle cx="56"  cy="182" r="2"   fill="rgba(200,245,90,0.22)"/>
+          <circle cx="320" cy="148" r="1.5" fill="rgba(200,245,90,0.18)"/>
+        </svg>
+      </div>
+
+    </div>
   </div>
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+  {%- comment -%} Part 2 — Footer columns {%- endcomment -%}
+  <div class="footer__columns-wrapper">
+    <div class="footer__columns">
+
+      {%- comment -%} Column 1 — Brand {%- endcomment -%}
+      <div class="footer__col footer__col--brand">
+        <a href="{{ routes.root_url }}" class="footer__logo">MOOV</a>
+        {%- if section.settings.brand_tagline != blank -%}
+          <p class="footer__tagline">{{ section.settings.brand_tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Column 2 — Company {%- endcomment -%}
+      <div class="footer__col">
+        <p class="footer__col-heading">Company</p>
+        <ul class="footer__links">
+          {%- for i in (1..4) -%}
+            {%- liquid
+              case i
+                when 1
+                  assign lbl = section.settings.company_link_1_label
+                  assign lurl = section.settings.company_link_1_url
+                when 2
+                  assign lbl = section.settings.company_link_2_label
+                  assign lurl = section.settings.company_link_2_url
+                when 3
+                  assign lbl = section.settings.company_link_3_label
+                  assign lurl = section.settings.company_link_3_url
+                when 4
+                  assign lbl = section.settings.company_link_4_label
+                  assign lurl = section.settings.company_link_4_url
+              endcase
+            -%}
+            {%- if lbl != blank -%}
+              <li><a href="{{ lurl | default: '#' }}" class="footer__link">{{ lbl | escape }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- comment -%} Column 3 — Socials {%- endcomment -%}
+      <div class="footer__col">
+        <p class="footer__col-heading">Socials</p>
+        <ul class="footer__links">
+          {%- if section.settings.instagram_url != blank -%}
+            <li>
+              <a href="{{ section.settings.instagram_url }}" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Instagram <span class="footer__link-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.tiktok_url != blank -%}
+            <li>
+              <a href="{{ section.settings.tiktok_url }}" class="footer__link" target="_blank" rel="noopener noreferrer">
+                TikTok <span class="footer__link-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.twitter_url != blank -%}
+            <li>
+              <a href="{{ section.settings.twitter_url }}" class="footer__link" target="_blank" rel="noopener noreferrer">
+                Twitter / X <span class="footer__link-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.linkedin_url != blank -%}
+            <li>
+              <a href="{{ section.settings.linkedin_url }}" class="footer__link" target="_blank" rel="noopener noreferrer">
+                LinkedIn <span class="footer__link-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      {%- comment -%} Column 4 — Newsletter {%- endcomment -%}
+      <div class="footer__col footer__col--newsletter">
+        <p class="footer__col-heading">{{ section.settings.newsletter_heading | default: 'Newsletter' | escape }}</p>
+        {%- if section.settings.newsletter_body != blank -%}
+          <p class="footer__newsletter-body">{{ section.settings.newsletter_body | escape }}</p>
+        {%- endif -%}
+        {% form 'customer' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="footer__newsletter-field">
+            <label for="footer-email-{{ section.id }}" class="footer__newsletter-label">Email address</label>
+            <input
+              type="email"
+              id="footer-email-{{ section.id }}"
+              name="contact[email]"
+              class="footer__newsletter-input"
+              placeholder="Enter your email..."
+              autocomplete="email"
+              required
+            >
+            <button type="submit" class="footer__newsletter-submit" aria-label="Subscribe">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="#080808" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        {% endform %}
+      </div>
+
+    </div>
   </div>
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+  {%- comment -%} Part 3 — Legal bar {%- endcomment -%}
+  <div class="footer__legal-wrapper">
+    <div class="footer__legal">
+      <p class="footer__copyright">
+        &copy; {{ current_year }} {{ section.settings.copyright_name | default: 'MOOV Technologies' | escape }} &middot; All rights reserved
+      </p>
+      <div class="footer__legal-links">
+        {%- if section.settings.privacy_url != blank -%}
+          <a href="{{ section.settings.privacy_url }}" class="footer__legal-link">Privacy Policy</a>
+        {%- endif -%}
+        {%- if section.settings.privacy_url != blank and section.settings.terms_url != blank -%}
+          <span class="footer__legal-sep" aria-hidden="true">&middot;</span>
+        {%- endif -%}
+        {%- if section.settings.terms_url != blank -%}
+          <a href="{{ section.settings.terms_url }}" class="footer__legal-link">Terms of Service</a>
+        {%- endif -%}
+      </div>
+    </div>
   </div>
+
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .footer {
+    background: #080808;
+    padding-top: 80px;
   }
-  footer a {
+
+  /* Shared max-width wrapper */
+  .footer__outer,
+  .footer__columns-wrapper,
+  .footer__legal-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  /* ─── Part 1: Community card ─── */
+  .footer__card {
+    background: #111111;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 64px 72px;
+    margin-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .footer__card-left {
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer__card-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #C8F55A;
+    margin: 0 0 16px;
+  }
+
+  .footer__card-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #F5F2EE;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .footer__card-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 200;
+    line-height: 1.7;
+    color: rgba(245, 242, 238, 0.55);
+    max-width: 380px;
+    margin: 0 0 36px;
+  }
+
+  .footer__card-cta {
+    display: inline-block;
+    padding: 16px 32px;
+    background: #F5F2EE;
+    color: #080808;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     text-decoration: none;
-    color: var(--color-foreground);
+    border-radius: 100px;
+    transition: background 0.2s ease;
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .footer__card-cta:hover {
+    background: #C8F55A;
+  }
+
+  .footer__card-visual {
+    position: relative;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+  }
+
+  .footer__card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(200, 245, 90, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .footer__card-orbits {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* ─── Part 2: Footer columns ─── */
+  .footer__columns-wrapper {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .footer__columns {
+    display: grid;
+    grid-template-columns: 30fr 20fr 20fr 30fr;
+    gap: 48px;
+    padding: 80px 0 64px;
+  }
+
+  .footer__logo {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #F5F2EE;
+    text-decoration: none;
+    margin-bottom: 16px;
+  }
+
+  .footer__tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 1.7;
+    color: rgba(245, 242, 238, 0.45);
+    max-width: 220px;
+    margin: 0;
+  }
+
+  .footer__col-heading {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #F5F2EE;
+    margin: 0 0 24px;
+  }
+
+  .footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer__link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.5);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer__link:hover {
+    color: #F5F2EE;
+  }
+
+  .footer__link-arrow {
+    color: rgba(245, 242, 238, 0.3);
+    transition: color 0.2s ease;
+  }
+
+  .footer__link:hover .footer__link-arrow {
+    color: #F5F2EE;
+  }
+
+  /* Newsletter */
+  .footer__newsletter-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 1.6;
+    color: rgba(245, 242, 238, 0.5);
+    margin: 0 0 24px;
+  }
+
+  .footer__newsletter-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .footer__newsletter-field {
+    position: relative;
+  }
+
+  .footer__newsletter-input {
+    width: 100%;
+    padding: 14px 52px 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #F5F2EE;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+
+  .footer__newsletter-input::placeholder {
+    color: rgba(245, 242, 238, 0.3);
+  }
+
+  .footer__newsletter-input:focus {
+    border-color: rgba(200, 245, 90, 0.5);
+  }
+
+  .footer__newsletter-submit {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: #F5F2EE;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .footer__newsletter-submit:hover {
+    background: #C8F55A;
+  }
+
+  /* ─── Part 3: Legal bar ─── */
+  .footer__legal-wrapper {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .footer__legal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+  }
+
+  .footer__copyright {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.3);
+    margin: 0;
+  }
+
+  .footer__legal-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer__legal-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.3);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer__legal-link:hover {
+    color: rgba(245, 242, 238, 0.7);
+  }
+
+  .footer__legal-sep {
+    color: rgba(245, 242, 238, 0.3);
+    font-size: 12px;
+  }
+
+  /* ─── Scroll animation ─── */
+  [data-animate="footer-card"] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="footer-card"].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .footer__card {
+      grid-template-columns: 55fr 45fr;
+      padding: 48px 48px;
+    }
+
+    .footer__card-heading {
+      font-size: 30px;
+    }
+
+    .footer__columns {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 48px;
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .footer__outer,
+    .footer__columns-wrapper,
+    .footer__legal-wrapper {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .footer__card {
+      grid-template-columns: 1fr;
+      padding: 40px 32px;
+      gap: 0;
+    }
+
+    .footer__card-visual {
+      display: none;
+    }
+
+    .footer__card-body {
+      max-width: 100%;
+    }
+
+    .footer__columns {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 48px 0;
+    }
+
+    .footer__legal {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const card = document.querySelector('[data-animate="footer-card"]');
+    if (!card) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(card);
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "t:general.footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "t:general.community"
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "text",
+      "id": "community_eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "Community"
+    },
+    {
+      "type": "text",
+      "id": "community_heading",
+      "label": "t:labels.heading",
+      "default": "Join the MOOV community."
+    },
+    {
+      "type": "textarea",
+      "id": "community_body",
+      "label": "t:labels.body",
+      "default": "Connect with early adopters, share your morning wins, and get exclusive updates before anyone else."
+    },
+    {
+      "type": "text",
+      "id": "community_cta_label",
+      "label": "t:labels.button_label",
+      "default": "Join the Community →"
+    },
+    {
+      "type": "url",
+      "id": "community_cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:general.brand"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_tagline",
+      "label": "t:labels.tagline",
+      "default": "The alarm that moves with you. Wake up stronger, every day."
+    },
+    {
+      "type": "header",
+      "content": "t:general.company_links"
+    },
+    {
+      "type": "text",
+      "id": "company_link_1_label",
+      "label": "t:labels.link_label",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "company_link_1_url",
+      "label": "t:labels.link_url"
+    },
+    {
+      "type": "text",
+      "id": "company_link_2_label",
+      "label": "t:labels.link_label",
+      "default": "How It Works"
+    },
+    {
+      "type": "url",
+      "id": "company_link_2_url",
+      "label": "t:labels.link_url"
+    },
+    {
+      "type": "text",
+      "id": "company_link_3_label",
+      "label": "t:labels.link_label",
+      "default": "Pre-Order"
+    },
+    {
+      "type": "url",
+      "id": "company_link_3_url",
+      "label": "t:labels.link_url"
+    },
+    {
+      "type": "text",
+      "id": "company_link_4_label",
+      "label": "t:labels.link_label",
+      "default": "Contact"
+    },
+    {
+      "type": "url",
+      "id": "company_link_4_url",
+      "label": "t:labels.link_url"
+    },
+    {
+      "type": "header",
+      "content": "t:general.social_links"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "t:labels.instagram_url"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "t:labels.tiktok_url"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "t:labels.twitter_url"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "t:labels.linkedin_url"
+    },
+    {
+      "type": "header",
+      "content": "t:general.newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "t:labels.heading",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_body",
+      "label": "t:labels.body",
+      "default": "Receive product updates, exclusive pre-order access, and launch news."
+    },
+    {
+      "type": "header",
+      "content": "t:general.legal"
+    },
+    {
+      "type": "text",
+      "id": "copyright_name",
+      "label": "t:labels.copyright_name",
+      "default": "MOOV Technologies"
+    },
+    {
+      "type": "url",
+      "id": "privacy_url",
+      "label": "t:labels.privacy_url"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "t:labels.terms_url"
     }
   ]
 }

@@ -39,7 +39,12 @@
     "proof_points": "Proof points",
     "product_render": "Product render",
     "features": "Features",
-    "download_links": "Download links"
+    "download_links": "Download links",
+    "brand": "Brand",
+    "company_links": "Company links",
+    "social_links": "Social links",
+    "newsletter": "Newsletter",
+    "legal": "Legal"
   },
   "sections": {
     "hero": {
@@ -103,7 +108,17 @@
     "feature_label": "Feature label",
     "feature_desc": "Feature description",
     "question": "Question",
-    "answer": "Answer"
+    "answer": "Answer",
+    "tagline": "Tagline",
+    "link_label": "Link label",
+    "link_url": "Link URL",
+    "instagram_url": "Instagram URL",
+    "tiktok_url": "TikTok URL",
+    "twitter_url": "Twitter / X URL",
+    "linkedin_url": "LinkedIn URL",
+    "copyright_name": "Company name",
+    "privacy_url": "Privacy policy URL",
+    "terms_url": "Terms of service URL"
   },
   "options": {
     "alignment": {
