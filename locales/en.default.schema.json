@@ -31,7 +31,21 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "navigation": "Navigation",
+    "primary_button": "Primary button",
+    "secondary_button": "Secondary button",
+    "community": "Community",
+    "proof_points": "Proof points",
+    "product_render": "Product render"
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero"
+    },
+    "product_intro": {
+      "name": "Product intro"
+    }
   },
   "labels": {
     "alignment": "Alignment",
@@ -48,7 +62,27 @@
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
     "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "video_url": "Background video URL",
+    "video_url_info": "Paste the URL of a video uploaded to Shopify Files. Overrides the image when set.",
+    "background_image": "Background image",
+    "background_image_info": "Used as poster frame while video loads, and as fallback if no video is set.",
+    "min_height": "Minimum height",
+    "eyebrow_text": "Eyebrow text",
+    "heading": "Heading",
+    "heading_accent": "Heading accent (italic)",
+    "button_label": "Button label",
+    "button_url": "Button URL",
+    "community_label": "Community label",
+    "community_subtitle": "Community subtitle",
+    "community_url": "Community URL",
+    "avatar_1": "Avatar 1",
+    "avatar_2": "Avatar 2",
+    "avatar_3": "Avatar 3",
+    "body": "Body copy",
+    "proof_point_1": "Proof point 1",
+    "proof_point_2": "Proof point 2",
+    "product_render": "Product render (PNG with transparent background)"
   },
   "options": {
     "alignment": {
@@ -72,6 +106,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

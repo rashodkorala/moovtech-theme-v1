@@ -48,5 +48,50 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "general": {
+    "accessibility": {
+      "nav_label": "Main navigation",
+      "account": "Account",
+      "cart": "Cart"
+    },
+    "content": "Content",
+    "navigation": "Navigation",
+    "primary_button": "Primary button",
+    "secondary_button": "Secondary button",
+    "community": "Community"
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero"
+    }
+  },
+  "labels": {
+    "background_image": "Background image",
+    "min_height": "Minimum height",
+    "menu": "Menu",
+    "eyebrow_text": "Eyebrow text",
+    "heading": "Heading",
+    "heading_accent": "Heading accent (italic)",
+    "button_label": "Button label",
+    "button_url": "Button URL",
+    "community_label": "Community label",
+    "community_subtitle": "Community subtitle",
+    "community_url": "Community URL",
+    "avatar_1": "Avatar 1",
+    "avatar_2": "Avatar 2",
+    "avatar_3": "Avatar 3",
+    "background": "Background",
+    "foreground": "Foreground",
+    "page_width": "Page width",
+    "page_margin": "Page margin",
+    "input_corner_radius": "Input corner radius",
+    "customer_account_menu": "Customer account menu"
+  },
+  "options": {
+    "page_width": {
+      "narrow": "Narrow",
+      "wide": "Wide"
+    }
   }
 }

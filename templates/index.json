@@ -1,20 +1,33 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "min_height": 860,
+        "menu": "main-menu",
+        "eyebrow": "Wake up stronger. Start every day with intention and momentum.",
+        "heading": "Reclaim your mornings with",
+        "heading_accent": "the MOOV Alarm.",
+        "primary_button_label": "Shop now",
+        "secondary_button_label": "See how it works",
+        "community_label": "Our community",
+        "community_subtitle": "Join the morning movement"
+      }
+    },
+    "product_intro": {
+      "type": "product-intro",
+      "settings": {
+        "eyebrow": "Meet MOOV",
+        "heading": "The alarm that moves with you.",
+        "body": "Most alarms reward you for lying still. MOOV doesn't. It requires physical movement to stop — so instead of winning by pressing snooze, you win by starting your day.",
+        "proof_1": "Detects movement",
+        "proof_2": "Stops when you're up",
+        "cta_label": "Pre-Order Now"
+      }
     }
   },
   "order": [
-    "main"
+    "hero",
+    "product_intro"
   ]
 }

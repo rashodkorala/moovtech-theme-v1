@@ -1,59 +1,184 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
-
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}">
+      <span class="site-header__logo-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="site-header__logo-name">{{ shop.name }}</span>
     </a>
+
+    <nav class="site-header__nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
+      <ul class="site-header__nav-links" role="list">
+        {%- for link in section.settings.menu.links -%}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="site-header__nav-link{% if link.active %} site-header__nav-link--active{% endif %}"
+              {% if link.current %}aria-current="page"{% endif %}
+            >
+              {{- link.title -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__icons">
+      {%- if shop.customer_accounts_enabled -%}
+        <shopify-account
+          menu="{{ section.settings.customer_account_menu }}"
+          class="site-header__icon-btn"
+          aria-label="{{ 'general.accessibility.account' | t }}"
+        >
+          {{ 'icon-account.svg' | inline_asset_content }}
+        </shopify-account>
+      {%- endif -%}
+
+      <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart" aria-label="{{ 'general.accessibility.cart' | t }}">
+        {%- if cart.item_count > 0 -%}
+          <span class="site-header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        {%- endif -%}
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </a>
+    </div>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .site-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 68px;
+    padding: 0 40px;
+    max-width: 1440px;
+    margin: 0 auto;
   }
-  header a {
-    position: relative;
+
+  /* Logo */
+  .site-header__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
-    color: var(--color-foreground);
+    color: #1a1a1a;
+    flex-shrink: 0;
+  }
+
+  .site-header__logo-icon {
+    display: flex;
+    align-items: center;
+    color: #1a1a1a;
+  }
+
+  .site-header__logo-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+  }
+
+  /* Nav links */
+  .site-header__nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-header__nav-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #4a4a4a;
+    text-decoration: none;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+
+  .site-header__nav-link:hover,
+  .site-header__nav-link--active {
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  /* Icons */
+  .site-header__icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .site-header__icon-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: background 0.2s;
+    position: relative;
   }
-  header a sup {
+
+  .site-header__icon-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .site-header__icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .site-header__cart-count {
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+    top: 4px;
+    right: 4px;
+    min-width: 16px;
+    height: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 100px;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .site-header__inner {
+      padding: 0 20px;
+      height: 60px;
+    }
+
+    .site-header__nav {
+      display: none;
+    }
   }
 {% endstylesheet %}
 
@@ -64,7 +189,8 @@
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "t:labels.menu",
+      "default": "main-menu"
     },
     {
       "type": "link_list",

@@ -27,7 +27,9 @@
   </head>
 
   <body>
-    {% sections 'header-group' %}
+    {%- unless template == 'index' -%}
+      {% sections 'header-group' %}
+    {%- endunless -%}
 
     {{ content_for_layout }}
 

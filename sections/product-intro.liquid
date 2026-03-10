@@ -1,0 +1,354 @@
+<div class="product-intro full-width">
+  <div class="product-intro__inner">
+
+    <div class="product-intro__left" data-animate="slide-left">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="product-intro__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      <h2 class="product-intro__heading">{{ section.settings.heading | escape }}</h2>
+
+      {%- if section.settings.body != blank -%}
+        <p class="product-intro__body">{{ section.settings.body | escape }}</p>
+      {%- endif -%}
+
+      <div class="product-intro__proof">
+        {%- if section.settings.proof_1 != blank -%}
+          <span class="product-intro__proof-item">{{ section.settings.proof_1 | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.proof_1 != blank and section.settings.proof_2 != blank -%}
+          <span class="product-intro__proof-divider" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if section.settings.proof_2 != blank -%}
+          <span class="product-intro__proof-item">{{ section.settings.proof_2 | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.cta_label != blank -%}
+        <a
+          href="{{ section.settings.cta_url | default: '#' }}"
+          class="product-intro__cta"
+        >
+          {{- section.settings.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="product-intro__right" data-animate="fade-in">
+      {%- if section.settings.product_image -%}
+        {{
+          section.settings.product_image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'product-intro__render',
+            loading: 'lazy',
+            alt: section.settings.product_image.alt | escape
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'moov-product.jpg' | asset_url }}"
+          alt="MOOV Alarm"
+          class="product-intro__render"
+          loading="lazy"
+          width="600"
+          height="800"
+        >
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-intro {
+    background: #0E0E0E;
+    padding: 160px 40px 120px;
+  }
+
+  .product-intro__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Left column */
+  .product-intro__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .product-intro__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #C8F55A;
+    margin: 0 0 24px;
+  }
+
+  .product-intro__heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1.1;
+    color: #F5F2EE;
+    max-width: 480px;
+    margin: 0 0 28px;
+    letter-spacing: -0.02em;
+  }
+
+  .product-intro__body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.75;
+    color: rgba(245, 242, 238, 0.6);
+    max-width: 400px;
+    margin: 0 0 48px;
+  }
+
+  /* Proof points */
+  .product-intro__proof {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .product-intro__proof-item {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(245, 242, 238, 0.5);
+  }
+
+  .product-intro__proof-divider {
+    display: inline-block;
+    width: 1px;
+    height: 14px;
+    background: rgba(245, 242, 238, 0.15);
+    flex-shrink: 0;
+  }
+
+  /* CTA ghost button */
+  .product-intro__cta {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 14px 32px;
+    border: 1px solid rgba(245, 242, 238, 0.3);
+    color: #F5F2EE;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .product-intro__cta:hover {
+    border-color: #F5F2EE;
+    background: rgba(245, 242, 238, 0.05);
+  }
+
+  /* Right column */
+  .product-intro__right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-20px);
+  }
+
+  .product-intro__render {
+    width: 100%;
+    max-height: 560px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 12px;
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+    transition: transform 0.6s ease;
+  }
+
+  .product-intro__render:hover {
+    transform: scale(1.02);
+  }
+
+  .product-intro__render--placeholder {
+    opacity: 0.15;
+    max-height: 400px;
+  }
+
+  /* Scroll animations */
+  [data-animate] {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="slide-left"] {
+    transform: translateX(-24px);
+  }
+
+  [data-animate="fade-in"] {
+    transform: none;
+    transition-delay: 0.2s;
+  }
+
+  [data-animate].is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .product-intro__inner {
+      grid-template-columns: 45fr 55fr;
+      gap: 48px;
+    }
+
+    .product-intro__heading {
+      font-size: 40px;
+    }
+
+    .product-intro {
+      padding: 100px 40px 80px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .product-intro {
+      padding: 80px 24px 64px;
+    }
+
+    .product-intro__inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .product-intro__right {
+      order: -1;
+      transform: translateY(0);
+    }
+
+    .product-intro__render {
+      max-width: 280px;
+      max-height: 280px;
+      margin: 0 auto;
+    }
+
+    .product-intro__heading {
+      font-size: 32px;
+    }
+
+    .product-intro__body {
+      margin-bottom: 32px;
+    }
+
+    .product-intro__proof {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    const animatedEls = document.querySelectorAll('[data-animate]');
+    if (!animatedEls.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    animatedEls.forEach((el) => observer.observe(el));
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_intro.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "Meet MOOV"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "The alarm that moves with you."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "t:labels.body",
+      "default": "Most alarms reward you for lying still. MOOV doesn't. It requires physical movement to stop — so instead of winning by pressing snooze, you win by starting your day."
+    },
+    {
+      "type": "header",
+      "content": "t:general.proof_points"
+    },
+    {
+      "type": "text",
+      "id": "proof_1",
+      "label": "t:labels.proof_point_1",
+      "default": "Detects movement"
+    },
+    {
+      "type": "text",
+      "id": "proof_2",
+      "label": "t:labels.proof_point_2",
+      "default": "Stops when you're up"
+    },
+    {
+      "type": "header",
+      "content": "t:general.primary_button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label",
+      "default": "Pre-Order Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:general.product_render"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "t:labels.product_render"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_intro.name"
+    }
+  ]
+}
+{% endschema %}
