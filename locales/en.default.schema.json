@@ -50,6 +50,14 @@
     },
     "app_section": {
       "name": "App section"
+    },
+    "faq": {
+      "name": "FAQ",
+      "blocks": {
+        "faq_item": {
+          "name": "FAQ item"
+        }
+      }
     }
   },
   "labels": {
@@ -93,7 +101,9 @@
     "app_store_url": "App Store URL",
     "google_play_url": "Google Play URL",
     "feature_label": "Feature label",
-    "feature_desc": "Feature description"
+    "feature_desc": "Feature description",
+    "question": "Question",
+    "answer": "Answer"
   },
   "options": {
     "alignment": {
