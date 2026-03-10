@@ -63,17 +63,9 @@
         </svg>
       </a>
       <ul class="hero__nav-links" role="list">
-        {%- for link in section.settings.menu.links -%}
-          <li>
-            <a
-              href="{{ link.url }}"
-              class="hero__nav-link{% if link.active %} hero__nav-link--active{% endif %}"
-              {% if link.current %}aria-current="page"{% endif %}
-            >
-              {{- link.title -}}
-            </a>
-          </li>
-        {%- endfor -%}
+        <li><a href="#shopify-section-product_intro" class="hero__nav-link hero__scroll-link">The Alarm</a></li>
+        <li><a href="#shopify-section-app_section" class="hero__nav-link hero__scroll-link">The App</a></li>
+        <li><a href="#shopify-section-faq" class="hero__nav-link hero__scroll-link">FAQ</a></li>
       </ul>
     </div>
   </nav>
@@ -515,6 +507,18 @@
   }
 {% endstylesheet %}
 
+{% javascript %}
+  document.querySelectorAll('.hero__scroll-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 24;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "t:sections.hero.name",
@@ -541,16 +545,6 @@
       "step": 20,
       "unit": "px",
       "default": 860
-    },
-    {
-      "type": "header",
-      "content": "t:general.navigation"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu",
-      "default": "main-menu"
     },
     {
       "type": "header",

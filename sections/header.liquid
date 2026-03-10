@@ -17,17 +17,9 @@
       {%- comment -%} Nav links {%- endcomment -%}
       <nav class="site-header__nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
         <ul class="site-header__nav-links" role="list">
-          {%- for link in section.settings.menu.links -%}
-            <li>
-              <a
-                href="{{ link.url }}"
-                class="site-header__nav-link{% if link.active %} site-header__nav-link--active{% endif %}"
-                {% if link.current %}aria-current="page"{% endif %}
-              >
-                {{- link.title -}}
-              </a>
-            </li>
-          {%- endfor -%}
+          <li><a href="#shopify-section-product_intro" class="site-header__nav-link site-header__scroll-link">The Alarm</a></li>
+          <li><a href="#shopify-section-app_section" class="site-header__nav-link site-header__scroll-link">The App</a></li>
+          <li><a href="#shopify-section-faq" class="site-header__nav-link site-header__scroll-link">FAQ</a></li>
         </ul>
       </nav>
 
@@ -209,16 +201,23 @@
   }
 {% endstylesheet %}
 
+{% javascript %}
+  document.querySelectorAll('.site-header__scroll-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      var headerHeight = document.querySelector('.site-header') ? document.querySelector('.site-header').offsetHeight : 0;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "t:general.header",
   "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu",
-      "default": "main-menu"
-    },
     {
       "type": "link_list",
       "id": "customer_account_menu",
