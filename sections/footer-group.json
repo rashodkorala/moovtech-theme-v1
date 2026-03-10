@@ -13,20 +13,7 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {
-        "community_eyebrow": "Community",
-        "community_heading": "Join the MOOV community.",
-        "community_body": "Connect with early adopters, share your morning wins, and get exclusive updates before anyone else.",
-        "community_cta_label": "Join the Community →",
-        "brand_tagline": "The alarm that moves with you. Wake up stronger, every day.",
-        "company_link_1_label": "About",
-        "company_link_2_label": "How It Works",
-        "company_link_3_label": "Pre-Order",
-        "company_link_4_label": "Contact",
-        "newsletter_heading": "Newsletter",
-        "newsletter_body": "Receive product updates, exclusive pre-order access, and launch news.",
-        "copyright_name": "MOOV Technologies"
-      }
+      "settings": {}
     }
   },
   "order": [
