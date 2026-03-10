@@ -27,8 +27,10 @@
   </head>
 
   <body>
+    {% sections 'header-group' %}
+
     {%- unless template == 'index' -%}
-      {% sections 'header-group' %}
+      <div class="header-spacer"></div>
     {%- endunless -%}
 
     {{ content_for_layout }}
