@@ -1,17 +1,17 @@
 {% if cart.item_count == 0 %}
   <div class="moov-cart moov-cart--empty" data-surface="cream">
     <div class="moov-cart__empty-state">
-      <p class="moov-cart__eyebrow">Nothing here yet</p>
-      <h2 class="moov-cart__empty-heading">{{ 'cart.empty_title' | t }}.</h2>
-      <a href="/" class="moov-cart__solid-btn">{{ 'cart.continue_shopping' | t }}</a>
+      <p class="moov-cart__eyebrow">{{ 'cart.empty_eyebrow' | t }}</p>
+      <h2 class="moov-cart__empty-heading">{{ 'cart.empty_title' | t }}</h2>
+      <a href="{{ routes.root_url }}" class="moov-cart__solid-btn">{{ 'cart.continue_shopping' | t }}</a>
     </div>
   </div>
 {% else %}
   <div class="moov-cart" data-surface="cream">
     <div class="moov-cart__inner">
       <div class="moov-cart__header">
-        <p class="moov-cart__eyebrow">Your bag</p>
-        <h1 class="moov-cart__title">Your order.</h1>
+        <p class="moov-cart__eyebrow">{{ 'cart.bag_eyebrow' | t }}</p>
+        <h1 class="moov-cart__title">{{ 'cart.order_heading' | t }}</h1>
       </div>
 
       <div class="moov-cart__grid">
@@ -31,7 +31,7 @@
                   <p class="moov-cart__item-variant">{{ item.variant.title }}</p>
                 {% endunless %}
 
-                <form action="/cart/change" method="post" class="moov-cart__quantity-form">
+                <form action="{{ routes.cart_change_url }}" method="post" class="moov-cart__quantity-form">
                   <input type="hidden" name="id" value="{{ item.variant.id }}">
                   <div class="moov-cart__quantity-stepper">
                     <button
@@ -56,7 +56,7 @@
                   </div>
                 </form>
 
-                <a href="/cart/change?id={{ item.variant.id }}&quantity=0" class="moov-cart__remove">{{ 'cart.remove' | t }}</a>
+                <a href="{{ routes.cart_change_url }}?id={{ item.variant.id }}&quantity=0" class="moov-cart__remove">{{ 'cart.remove' | t }}</a>
               </div>
 
               <div class="moov-cart__item-price">
@@ -90,15 +90,15 @@
 
             {% if section.settings.preorder_ship_date != blank %}
               <p class="moov-cart__preorder-notice">
-                Estimated to ship {{ section.settings.preorder_ship_date }}. Free shipping included.
+                {{ 'cart.preorder_ship_html' | t: date: section.settings.preorder_ship_date }}
               </p>
             {% endif %}
 
             <a href="/checkout" class="moov-cart__solid-btn moov-cart__solid-btn--full">
-              Proceed to checkout
+              {{ 'cart.checkout_proceed' | t }}
             </a>
 
-            <a href="/" class="moov-cart__ghost-btn">
+            <a href="{{ routes.root_url }}" class="moov-cart__ghost-btn">
               {{ 'cart.continue_shopping' | t }}
             </a>
           </div>
@@ -135,7 +135,7 @@
   .moov-cart__inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 80px 80px 60px;
+    padding: var(--section-block-pad-y) var(--section-inline-pad) clamp(2.5rem, 5vw, 3.75rem);
   }
 
   /* ── Header ── */
@@ -145,7 +145,7 @@
 
   .moov-cart__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -155,7 +155,7 @@
 
   .moov-cart__title {
     font-family: var(--font-display);
-    font-size: 56px;
+    font-size: var(--text-5xl);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     margin: 0;
@@ -176,7 +176,7 @@
 
   .moov-cart__empty-heading {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: var(--text-2xl);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     margin: 0 0 24px;
@@ -223,7 +223,7 @@
 
   .moov-cart__item-name {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     text-decoration: none;
@@ -235,7 +235,7 @@
 
   .moov-cart__item-variant {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
     margin: 0;
@@ -260,7 +260,7 @@
     border: none;
     cursor: pointer;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-primary-light);
     padding: 0;
@@ -272,7 +272,7 @@
 
   .moov-cart__qty-value {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-primary-light);
     min-width: 16px;
@@ -281,7 +281,7 @@
 
   .moov-cart__remove {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     color: var(--moov-text-tertiary-light);
     text-decoration: none;
@@ -293,7 +293,7 @@
 
   .moov-cart__item-price {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: var(--text-xl);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     flex-shrink: 0;
@@ -315,7 +315,7 @@
 
   .moov-cart__summary-label {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -335,20 +335,20 @@
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-primary-light);
     margin-bottom: 12px;
   }
 
   .moov-cart__summary-row--shipping .moov-cart__shipping-value {
-    font-size: 13px;
+    font-size: var(--text-sm);
     color: var(--moov-text-tertiary-light);
   }
 
   .moov-cart__summary-row--total {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: var(--text-xl);
     font-weight: 400;
     margin-bottom: 0;
   }
@@ -356,7 +356,7 @@
   .moov-cart__preorder-notice {
     color: rgba(240, 180, 41, 0.8);
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 400;
     text-align: center;
     margin: 16px 0 0;
@@ -371,7 +371,7 @@
     border-radius: 999px;
     padding: 14px 28px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     text-decoration: none;
@@ -400,7 +400,7 @@
     border-radius: 999px;
     padding: 16px 28px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     color: var(--moov-text-secondary-light);
@@ -423,8 +423,8 @@
     justify-content: center;
     gap: 64px;
     border-top: 0.5px solid var(--moov-border-light);
-    padding: 40px 0;
-    margin-top: 40px;
+    padding: var(--section-block-pad-y-md) 0;
+    margin-top: var(--section-block-pad-y-md);
   }
 
   .moov-cart__trust-item {
@@ -437,14 +437,14 @@
 
   .moov-cart__trust-label {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: var(--moov-text-primary-light);
   }
 
   .moov-cart__trust-sub {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
   }
@@ -452,11 +452,8 @@
   /* ── Mobile ── */
   @media screen and (max-width: 899px) {
     .moov-cart__inner {
-      padding: 40px 24px;
-    }
-
-    .moov-cart__title {
-      font-size: 36px;
+      padding-top: clamp(2rem, 6vw, 2.5rem);
+      padding-bottom: clamp(2rem, 6vw, 2.5rem);
     }
 
     .moov-cart__grid {

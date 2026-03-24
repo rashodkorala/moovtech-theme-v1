@@ -48,7 +48,7 @@
 {% stylesheet %}
   .prod-app {
     background: #080808;
-    padding: 120px 40px;
+    padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
   }
 
   .prod-app__inner {
@@ -69,7 +69,7 @@
 
   .prod-app__eyebrow {
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -79,7 +79,7 @@
 
   .prod-app__heading {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 3vw, 40px);
+    font-size: var(--text-3xl);
     font-weight: 700;
     line-height: 1.1;
     color: #F5F2EE;
@@ -89,7 +89,7 @@
 
   .prod-app__body {
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 200;
     line-height: 1.75;
     color: rgba(245, 242, 238, 0.6);
@@ -98,7 +98,7 @@
 
   .prod-app__compat {
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: rgba(245, 242, 238, 0.4);
     margin: 24px 0 0;
@@ -153,10 +153,6 @@
 
   /* Tablet */
   @media (min-width: 768px) and (max-width: 1279px) {
-    .prod-app {
-      padding: 80px 40px;
-    }
-
     .prod-app__inner {
       gap: 48px;
     }
@@ -168,10 +164,6 @@
 
   /* Mobile */
   @media (max-width: 767px) {
-    .prod-app {
-      padding: 80px 24px;
-    }
-
     .prod-app__inner {
       grid-template-columns: 1fr;
       gap: 48px;

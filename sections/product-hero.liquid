@@ -47,7 +47,7 @@
             <button
               class="product-hero__thumb{%- if forloop.first %} is-active{%- endif -%}"
               data-media-index="{{ forloop.index0 }}"
-              aria-label="View image {{ forloop.index }}"
+              aria-label="{{ 'general.accessibility.view_image' | t: index: forloop.index }}"
               type="button"
             >
               {{
@@ -72,8 +72,8 @@
     <div class="product-hero__details" data-animate="details-load">
 
       {%- comment -%} Breadcrumb {%- endcomment -%}
-      <nav class="product-hero__breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ routes.root_url }}" class="product-hero__breadcrumb-link">Home</a>
+      <nav class="product-hero__breadcrumb" aria-label="{{ 'general.accessibility.breadcrumb' | t }}">
+        <a href="{{ routes.root_url }}" class="product-hero__breadcrumb-link">{{ 'general.nav.home' | t }}</a>
         <span class="product-hero__breadcrumb-sep" aria-hidden="true">/</span>
         <span class="product-hero__breadcrumb-current">{{ product.title | escape }}</span>
       </nav>
@@ -87,7 +87,7 @@
       {%- comment -%} Price {%- endcomment -%}
       <div class="product-hero__price-block">
         <span class="product-hero__price">{{ product.price | money }}</span>
-        <span class="product-hero__preorder-badge" aria-label="Pre-order item">Pre-Order</span>
+        <span class="product-hero__preorder-badge" aria-label="{{ 'general.accessibility.preorder_item' | t }}">{{ 'product.preorder_badge' | t }}</span>
       </div>
 
       {%- if section.settings.shipping_note != blank -%}
@@ -105,22 +105,26 @@
           {%- unless product.available %} disabled aria-disabled="true"{%- endunless -%}
         >
           {%- if product.available -%}
-            {{- section.settings.cta_label | default: 'Pre-Order Now' | escape -}}
+            {%- if section.settings.cta_label != blank -%}
+              {{- section.settings.cta_label | escape -}}
+            {%- else -%}
+              {{- 'product.cta_default' | t -}}
+            {%- endif -%}
           {%- else -%}
-            Sold out
+            {{- 'product.sold_out_button' | t -}}
           {%- endif -%}
         </button>
       {%- endform -%}
 
-      <button class="product-hero__wishlist" type="button">Add to Wishlist</button>
+      <button class="product-hero__wishlist" type="button">{{ 'product.add_to_wishlist' | t }}</button>
 
       {%- comment -%} Trust signals {%- endcomment -%}
       <div class="product-hero__trust">
-        <span>Secure checkout</span>
+        <span>{{ 'product.trust_secure_checkout' | t }}</span>
         <span class="product-hero__trust-dot" aria-hidden="true">·</span>
-        <span>30-day returns</span>
+        <span>{{ 'product.trust_returns' | t }}</span>
         <span class="product-hero__trust-dot" aria-hidden="true">·</span>
-        <span>Ships worldwide</span>
+        <span>{{ 'product.trust_ships_worldwide' | t }}</span>
       </div>
 
       <hr class="product-hero__divider" aria-hidden="true">
@@ -138,7 +142,11 @@
         <svg class="product-hero__app-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M6 18l8.5-6L6 6v12zm13-9.5C19 6.5 17 5 14.5 5H5C3.3 5 2 6.3 2 8v8c0 1.7 1.3 3 3 3h9.5c2.5 0 4.5-1.5 4.5-3.5v-5z"/>
         </svg>
-        {{- section.settings.app_compat_note | default: 'Works with the MOOV app — available on iOS and Android' | escape -}}
+        {%- if section.settings.app_compat_note != blank -%}
+          {{- section.settings.app_compat_note | escape -}}
+        {%- else -%}
+          {{- 'product.app_compat_default' | t -}}
+        {%- endif -%}
       </p>
 
     </div>
@@ -157,7 +165,7 @@
     gap: 80px;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--section-inline-pad);
     align-items: start;
     min-height: 100vh;
   }
@@ -166,8 +174,8 @@
   .product-hero__gallery {
     position: sticky;
     top: 0;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: var(--section-block-pad-y-lg);
+    padding-bottom: var(--section-block-pad-y-lg);
   }
 
   .product-hero__main-frame {
@@ -180,7 +188,7 @@
 
   .product-hero__media {
     position: absolute;
-    inset: 48px;
+    inset: clamp(1.25rem, 4vw, 3rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,7 +250,7 @@
 
   .product-hero__counter {
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     color: rgba(245, 242, 238, 0.3);
     margin: 12px 0 0;
@@ -250,9 +258,9 @@
 
   /* ─── Details ─── */
   .product-hero__details {
-    padding-top: 120px;
-    padding-right: 80px;
-    padding-bottom: 80px;
+    padding-top: var(--section-block-pad-y-xl);
+    padding-right: var(--section-inline-pad);
+    padding-bottom: var(--section-block-pad-y-lg);
   }
 
   /* Breadcrumb */
@@ -266,7 +274,7 @@
   .product-hero__breadcrumb-link,
   .product-hero__breadcrumb-current {
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -285,7 +293,7 @@
   /* Title */
   .product-hero__title {
     font-family: 'Playfair Display', serif;
-    font-size: 44px;
+    font-size: var(--text-3xl);
     font-weight: 700;
     line-height: 1.1;
     color: #F5F2EE;
@@ -296,7 +304,7 @@
   /* Tagline */
   .product-hero__tagline {
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
+    font-size: var(--text-md);
     font-weight: 200;
     line-height: 1.6;
     color: rgba(245, 242, 238, 0.55);
@@ -313,7 +321,7 @@
 
   .product-hero__price {
     font-family: 'DM Sans', sans-serif;
-    font-size: 32px;
+    font-size: var(--text-3xl);
     font-weight: 500;
     color: #F5F2EE;
     line-height: 1;
@@ -327,7 +335,7 @@
     border: 1px solid rgba(200, 245, 90, 0.3);
     border-radius: 100px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -336,7 +344,7 @@
 
   .product-hero__shipping-note {
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: rgba(245, 242, 238, 0.4);
     margin: 0 0 36px;
@@ -359,7 +367,7 @@
     background: #F5F2EE;
     color: #080808;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -391,7 +399,7 @@
     border-radius: 6px;
     color: rgba(245, 242, 238, 0.6);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -416,7 +424,7 @@
 
   .product-hero__trust span:not(.product-hero__trust-dot) {
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -430,7 +438,7 @@
   /* Description */
   .product-hero__description {
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 200;
     line-height: 1.8;
     color: rgba(245, 242, 238, 0.6);
@@ -451,7 +459,7 @@
     align-items: center;
     gap: 6px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: rgba(245, 242, 238, 0.4);
     margin: 0;
@@ -487,13 +495,9 @@
       gap: 48px;
     }
 
-    .product-hero__title {
-      font-size: 36px;
-    }
-
     .product-hero__details {
       padding-right: 0;
-      padding-top: 80px;
+      padding-top: var(--section-block-pad-y-lg);
     }
   }
 
@@ -517,14 +521,14 @@
     }
 
     .product-hero__media {
-      inset: 24px;
+      inset: clamp(1rem, 4vw, 1.5rem);
     }
 
     .product-hero__thumbs {
       flex-wrap: nowrap;
       overflow-x: auto;
       scrollbar-width: none;
-      padding: 0 24px;
+      padding: 0 var(--section-inline-pad);
       margin-top: 12px;
       -webkit-overflow-scrolling: touch;
     }
@@ -534,16 +538,13 @@
     }
 
     .product-hero__counter {
-      padding: 0 24px;
+      padding: 0 var(--section-inline-pad);
     }
 
     .product-hero__details {
-      padding: 32px 24px 64px;
+      padding: var(--section-block-pad-y-sm) var(--section-inline-pad) var(--section-block-pad-y-md);
     }
 
-    .product-hero__title {
-      font-size: 32px;
-    }
   }
 {% endstylesheet %}
 

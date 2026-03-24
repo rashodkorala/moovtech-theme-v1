@@ -48,7 +48,7 @@
 {% stylesheet %}
   .faq {
     background: var(--moov-black);
-    padding: 160px 40px;
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad);
   }
 
   .faq__inner {
@@ -64,7 +64,7 @@
     position: sticky;
     top: 160px;
     font-family: var(--font-display);
-    font-size: 128px;
+    font-size: clamp(4.5rem, 8vw, 8rem);
     font-weight: 400;
     line-height: 1;
     color: var(--moov-text-primary-dark);
@@ -127,7 +127,7 @@
 
   .faq__question-text {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: var(--text-md);
     font-weight: 400;
     color: var(--moov-text-secondary-dark);
     transition: color 0.2s ease, font-weight 0.2s ease;
@@ -145,7 +145,7 @@
   /* Indicator */
   .faq__indicator {
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: var(--text-lg);
     font-weight: 300;
     color: var(--moov-text-tertiary-dark);
     flex-shrink: 0;
@@ -158,7 +158,7 @@
   }
 
   .faq__item--open .faq__indicator {
-    font-size: 20px;
+    font-size: var(--text-lg);
     color: var(--moov-text-secondary-dark);
   }
 
@@ -194,7 +194,7 @@
 
   .faq__answer-text {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 300;
     line-height: 1.75;
     color: var(--moov-text-secondary-dark);
@@ -215,26 +215,17 @@
   }
 
   @media (min-width: 768px) and (max-width: 1279px) {
-    .faq {
-      padding: 100px 40px;
-    }
-
     .faq__inner {
       grid-template-columns: 30fr 70fr;
       gap: 48px;
     }
 
     .faq__label {
-      font-size: 96px;
       top: 100px;
     }
   }
 
   @media (max-width: 767px) {
-    .faq {
-      padding: 80px 24px;
-    }
-
     .faq__inner {
       grid-template-columns: 1fr;
       gap: 40px;
@@ -242,7 +233,6 @@
 
     .faq__label {
       position: static;
-      font-size: 72px;
     }
   }
 {% endstylesheet %}

@@ -112,7 +112,7 @@
   /* ─── Hero ─── */
   .contact-hero {
     background: var(--moov-black);
-    padding: 160px 40px 120px;
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
     text-align: center;
   }
 
@@ -123,7 +123,7 @@
 
   .contact-hero__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -133,7 +133,7 @@
 
   .contact-hero__heading {
     font-family: var(--font-display);
-    font-size: clamp(40px, 5vw, 64px);
+    font-size: var(--text-5xl);
     font-weight: 400;
     line-height: 1.1;
     color: var(--moov-text-primary-dark);
@@ -142,7 +142,7 @@
 
   .contact-hero__body {
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: var(--text-lg);
     font-weight: 300;
     line-height: 1.7;
     color: var(--moov-text-secondary-dark);
@@ -155,7 +155,7 @@
   /* ─── Main ─── */
   .contact-main {
     background: var(--moov-cream);
-    padding: 100px 40px 140px;
+    padding: var(--section-block-pad-y-xl) var(--section-inline-pad) var(--section-block-pad-y-hero);
   }
 
   .contact-main__inner {
@@ -169,7 +169,7 @@
   /* ─── Form ─── */
   .contact-main__form-heading {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: var(--text-2xl);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     margin: 0 0 40px;
@@ -182,7 +182,7 @@
   .contact-main__label {
     display: block;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -198,7 +198,7 @@
     border: 0.5px solid var(--moov-border-light);
     border-radius: 8px;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 300;
     color: var(--moov-text-primary-light);
     outline: none;
@@ -225,7 +225,7 @@
     border: none;
     border-radius: 999px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     cursor: pointer;
@@ -238,7 +238,7 @@
 
   .contact-main__success {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 400;
     color: #2e7d32;
     background: rgba(46, 125, 50, 0.08);
@@ -249,7 +249,7 @@
 
   .contact-main__errors {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     color: #c62828;
     background: rgba(198, 40, 40, 0.06);
     padding: 16px 20px;
@@ -273,7 +273,7 @@
 
   .contact-main__card-label {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -283,7 +283,7 @@
 
   .contact-main__card-value {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     text-decoration: none;
@@ -303,9 +303,6 @@
 
   /* ─── Tablet ─── */
   @media (min-width: 768px) and (max-width: 1279px) {
-    .contact-hero { padding: 120px 40px 80px; }
-    .contact-main { padding: 80px 40px 100px; }
-
     .contact-main__inner {
       gap: 48px;
     }
@@ -313,9 +310,6 @@
 
   /* ─── Mobile ─── */
   @media (max-width: 767px) {
-    .contact-hero { padding: 100px 24px 64px; }
-    .contact-main { padding: 48px 24px 80px; }
-
     .contact-main__inner {
       grid-template-columns: 1fr;
       gap: 48px;

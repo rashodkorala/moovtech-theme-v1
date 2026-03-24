@@ -24,6 +24,11 @@
   },
   "cart": {
     "checkout": "Checkout",
+    "checkout_proceed": "Proceed to checkout",
+    "empty_eyebrow": "Nothing here yet",
+    "bag_eyebrow": "Your bag",
+    "order_heading": "Your order",
+    "preorder_ship_html": "Estimated to ship {{ date }}. Free shipping included.",
     "title": "Cart",
     "update": "Update",
     "remove": "Remove",
@@ -78,9 +83,14 @@
       "account": "Account",
       "cart": "Cart",
       "close": "Close",
-      "menu": "Menu"
+      "menu": "Menu",
+      "skip_to_content": "Skip to content",
+      "breadcrumb": "Breadcrumb",
+      "view_image": "View image {{ index }}",
+      "preorder_item": "Pre-order item"
     },
     "nav": {
+      "home": "Home",
       "shop": "Shop",
       "about": "About",
       "contact": "Contact"
@@ -94,9 +104,18 @@
   "product": {
     "mini_bar": {
       "features": "Features",
-      "specs": "Specs"
+      "specs": "Specs",
+      "nav_label": "On-page product navigation"
     },
     "pre_order": "Pre-order now",
+    "preorder_badge": "Pre-order",
+    "cta_default": "Pre-order now",
+    "sold_out_button": "Sold out",
+    "add_to_wishlist": "Add to wishlist",
+    "trust_secure_checkout": "Secure checkout",
+    "trust_returns": "30-day returns",
+    "trust_ships_worldwide": "Ships worldwide",
+    "app_compat_default": "Works with the MOOV app — available on iOS and Android",
     "ship_notice": "Estimated to ship {{ date }}. Free shipping included.",
     "specs": {
       "title": "Technical specifications",
@@ -157,6 +176,13 @@
   "sections": {
     "hero": {
       "name": "Hero"
+    },
+    "app_section": {
+      "download_app_store": "Download on the App Store",
+      "get_google_play": "Get it on Google Play"
+    },
+    "footer": {
+      "newsletter_submit": "Subscribe"
     }
   },
   "labels": {

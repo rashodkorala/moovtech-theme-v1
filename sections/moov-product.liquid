@@ -7,7 +7,7 @@
       {%- endif -%}
       <span class="moov-mini-bar__name">{{ product.title }}</span>
     </div>
-    <nav class="moov-mini-bar__links">
+    <nav class="moov-mini-bar__links" aria-label="{{ 'product.mini_bar.nav_label' | t }}">
       <a href="#moov-features" class="moov-mini-bar__link">{{ 'product.mini_bar.features' | t }}</a>
       <a href="#moov-specs" class="moov-mini-bar__link">{{ 'product.mini_bar.specs' | t }}</a>
     </nav>
@@ -30,7 +30,7 @@
       {%- if product.images.size > 1 -%}
         <div class="moov-prod-intro__thumbs">
           {%- for image in product.images limit: 5 -%}
-            <button class="moov-prod-intro__thumb {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+            <button class="moov-prod-intro__thumb {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="{{ 'general.accessibility.view_image' | t: index: forloop.index }}">
               {{ image | image_url: width: 120 | image_tag: alt: '' }}
             </button>
           {%- endfor -%}
@@ -277,7 +277,7 @@
   /* ═══ MINI-BAR ═══════════════════════════════ */
   .moov-mini-bar {
     position: fixed;
-    top: 72px;
+    top: var(--header-height);
     left: 0;
     right: 0;
     z-index: 99;
@@ -295,7 +295,7 @@
   .moov-mini-bar__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 48px;
+    padding: 0 var(--section-inline-pad);
     height: 100%;
     display: flex;
     align-items: center;
@@ -314,7 +314,7 @@
   }
   .moov-mini-bar__name {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: var(--moov-text-primary-dark);
   }
@@ -324,7 +324,7 @@
   }
   .moov-mini-bar__link {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-dark);
     text-decoration: none;
@@ -335,7 +335,7 @@
   }
   .moov-mini-bar__cta {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     color: var(--moov-amber);
@@ -353,12 +353,12 @@
   /* ═══ PRODUCT INTRO ══════════════════════════ */
   .moov-prod-intro {
     background: var(--moov-black);
-    padding: 96px 0 80px;
+    padding: clamp(3.5rem, 10vw, 6rem) 0 clamp(3rem, 8vw, 5rem);
   }
   .moov-prod-intro__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 48px;
+    padding: 0 var(--section-inline-pad);
     display: grid;
     grid-template-columns: 55% 45%;
     gap: 48px;
@@ -419,7 +419,7 @@
   /* Details */
   .moov-prod-intro__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -428,7 +428,7 @@
   }
   .moov-prod-intro__title {
     font-family: var(--font-display);
-    font-size: 44px;
+    font-size: var(--text-4xl);
     font-weight: 400;
     line-height: 1.1;
     color: var(--moov-text-primary-dark);
@@ -436,7 +436,7 @@
   }
   .moov-prod-intro__desc {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: var(--text-md);
     font-weight: 300;
     line-height: 1.6;
     color: var(--moov-text-secondary-dark);
@@ -450,13 +450,13 @@
   }
   .moov-prod-intro__price-current {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: var(--text-2xl);
     font-weight: 400;
     color: var(--moov-text-primary-dark);
   }
   .moov-prod-intro__price-compare {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: var(--text-md);
     font-weight: 300;
     color: var(--moov-text-tertiary-dark);
     text-decoration: line-through;
@@ -468,7 +468,7 @@
   }
   .moov-prod-intro__option-label {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     font-weight: 300;
     color: var(--moov-text-tertiary-dark);
     margin: 0 0 10px;
@@ -490,7 +490,7 @@
     border-radius: 999px;
     border: 0.5px solid var(--moov-border-dark);
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-dark);
     background: none;
@@ -512,7 +512,7 @@
     color: var(--moov-amber);
     border-radius: 999px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     cursor: pointer;
@@ -525,7 +525,7 @@
   }
   .moov-prod-intro__ship-notice {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: rgba(240, 180, 41, 0.7);
     text-align: center;
     margin: 0 0 32px;
@@ -546,7 +546,7 @@
   }
   .moov-prod-intro__feat-label {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     letter-spacing: 0.02em;
     color: var(--moov-text-tertiary-dark);
@@ -555,19 +555,19 @@
   /* ═══ FEATURES STRIP ═════════════════════════ */
   .moov-features-strip {
     background: var(--moov-cream);
-    padding: 72px 0;
+    padding: var(--section-block-pad-y-md) 0;
   }
   .moov-features-strip__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 80px;
+    padding: 0 var(--section-inline-pad);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 48px;
   }
   .moov-features-strip__label {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.02em;
     color: var(--moov-text-primary-light);
@@ -575,7 +575,7 @@
   }
   .moov-features-strip__desc {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
     margin: 0;
@@ -595,7 +595,7 @@
   .moov-deepdive__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 80px;
+    padding: 0 var(--section-inline-pad);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 64px;
@@ -607,7 +607,7 @@
   }
   .moov-deepdive__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -619,7 +619,7 @@
   }
   .moov-deepdive__heading {
     font-family: var(--font-display);
-    font-size: 36px;
+    font-size: var(--text-3xl);
     font-weight: 400;
     line-height: 1.15;
     color: var(--moov-text-primary-dark);
@@ -630,7 +630,7 @@
   }
   .moov-deepdive__body {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 300;
     line-height: 1.7;
     color: var(--moov-text-secondary-dark);
@@ -657,16 +657,16 @@
   /* ═══ TECH SPECS ═════════════════════════════ */
   .moov-specs {
     background: var(--moov-cream);
-    padding: 80px 0;
+    padding: var(--section-block-pad-y-lg) 0;
   }
   .moov-specs__inner {
     max-width: 800px;
     margin: 0 auto;
-    padding: 0 48px;
+    padding: 0 var(--section-inline-pad);
   }
   .moov-specs__heading {
     font-family: var(--font-display);
-    font-size: 36px;
+    font-size: var(--text-3xl);
     font-weight: 400;
     line-height: 1.15;
     color: var(--moov-text-primary-light);
@@ -680,7 +680,7 @@
   }
   .moov-specs__tab {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
     background: none;
@@ -716,13 +716,13 @@
   }
   .moov-specs__row dt {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
   }
   .moov-specs__row dd {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     margin: 0;
@@ -732,16 +732,16 @@
   /* ═══ ACCESSORIES ════════════════════════════ */
   .moov-accessories {
     background: var(--moov-black);
-    padding: 80px 0;
+    padding: var(--section-block-pad-y-lg) 0;
   }
   .moov-accessories__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 48px;
+    padding: 0 var(--section-inline-pad);
   }
   .moov-accessories__heading {
     font-family: var(--font-display);
-    font-size: 36px;
+    font-size: var(--text-3xl);
     font-weight: 400;
     line-height: 1.15;
     color: var(--moov-text-primary-dark);
@@ -778,14 +778,14 @@
   }
   .moov-accessories__card-title {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: var(--moov-text-primary-dark);
     margin: 0 0 4px;
   }
   .moov-accessories__card-price {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-dark);
     margin: 0;
@@ -793,21 +793,16 @@
 
   /* ═══ RESPONSIVE ═════════════════════════════ */
   @media (max-width: 899px) {
-    .moov-mini-bar__inner { padding: 0 24px; }
     .moov-mini-bar__links { display: none; }
     .moov-prod-intro__inner {
       grid-template-columns: 1fr;
-      padding: 0 24px;
     }
     .moov-prod-intro__gallery { position: static; }
-    .moov-prod-intro__title { font-size: 32px; }
     .moov-features-strip__inner {
       grid-template-columns: 1fr 1fr;
-      padding: 0 24px;
     }
     .moov-deepdive__inner {
       grid-template-columns: 1fr;
-      padding: 0 24px;
       gap: 32px;
       min-height: auto;
       padding-top: 64px;
@@ -816,16 +811,11 @@
     .moov-deepdive--flipped .moov-deepdive__media {
       order: -1;
     }
-    .moov-specs__inner { padding: 0 24px; }
-    .moov-specs__heading { font-size: 28px; }
-    .moov-accessories__inner { padding: 0 24px; }
-    .moov-accessories__heading { font-size: 28px; }
   }
 
   @media (max-width: 767px) {
     .moov-prod-intro__thumbs { display: none; }
     .moov-features-strip__inner { grid-template-columns: 1fr 1fr; gap: 24px; }
-    .moov-deepdive__heading { font-size: 28px; }
     .moov-specs__tabs { gap: 16px; overflow-x: auto; }
   }
 {% endstylesheet %}

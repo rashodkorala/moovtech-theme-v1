@@ -82,7 +82,7 @@
   /* ─── Header ─── */
   .shop-header {
     background: var(--moov-black);
-    padding: 160px 40px 100px;
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-xl);
     text-align: center;
   }
 
@@ -93,7 +93,7 @@
 
   .shop-header__eyebrow {
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -103,7 +103,7 @@
 
   .shop-header__heading {
     font-family: var(--font-display);
-    font-size: clamp(40px, 5vw, 64px);
+    font-size: var(--text-5xl);
     font-weight: 400;
     line-height: 1.1;
     color: var(--moov-text-primary-dark);
@@ -112,7 +112,7 @@
 
   .shop-header__desc {
     font-family: var(--font-body);
-    font-size: 17px;
+    font-size: var(--text-md);
     font-weight: 300;
     line-height: 1.7;
     color: var(--moov-text-secondary-dark);
@@ -125,7 +125,7 @@
   /* ─── Grid ─── */
   .shop-grid {
     background: var(--moov-cream);
-    padding: 80px 40px 120px;
+    padding: var(--section-block-pad-y-lg) var(--section-inline-pad) var(--section-block-pad-y-xl);
   }
 
   .shop-grid__inner {
@@ -188,7 +188,7 @@
     top: 12px;
     right: 12px;
     font-family: var(--font-body);
-    font-size: 11px;
+    font-size: var(--text-2xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -212,7 +212,7 @@
 
   .shop-card__title {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: var(--text-base);
     font-weight: 400;
     color: var(--moov-text-primary-light);
     margin: 0 0 6px;
@@ -231,14 +231,14 @@
 
   .shop-card__price-current {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: var(--text-lg);
     font-weight: 400;
     color: var(--moov-text-primary-light);
   }
 
   .shop-card__price-compare {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-tertiary-light);
     text-decoration: line-through;
@@ -255,7 +255,7 @@
 
   .shop-grid__page-link {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
     text-decoration: none;
@@ -278,12 +278,12 @@
   /* ─── Empty state ─── */
   .shop-grid__empty {
     text-align: center;
-    padding: 80px 0;
+    padding: var(--section-block-pad-y-lg) 0;
   }
 
   .shop-grid__empty-text {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: var(--text-md);
     font-weight: 300;
     color: var(--moov-text-secondary-light);
     margin: 0 0 24px;
@@ -296,7 +296,7 @@
     color: var(--moov-cream);
     border-radius: 999px;
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 400;
     letter-spacing: 0.03em;
     text-decoration: none;
@@ -309,9 +309,6 @@
 
   /* ─── Tablet ─── */
   @media (min-width: 768px) and (max-width: 1279px) {
-    .shop-header { padding: 120px 40px 80px; }
-    .shop-grid { padding: 64px 40px 100px; }
-
     .shop-grid__products {
       grid-template-columns: repeat(2, 1fr);
       gap: 28px;
@@ -320,9 +317,6 @@
 
   /* ─── Mobile ─── */
   @media (max-width: 767px) {
-    .shop-header { padding: 100px 24px 64px; }
-    .shop-grid { padding: 40px 24px 80px; }
-
     .shop-grid__products {
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
@@ -330,14 +324,6 @@
 
     .shop-card__info {
       padding: 12px 2px 0;
-    }
-
-    .shop-card__title {
-      font-size: 13px;
-    }
-
-    .shop-card__price-current {
-      font-size: 16px;
     }
   }
 {% endstylesheet %}

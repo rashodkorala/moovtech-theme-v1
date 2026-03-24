@@ -1,9 +1,17 @@
 {% style %}
-  {% # Loads all font variantions with display: swap %}
+  {% # Loads all font variations with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+
+  @font-face {
+    font-family: 'Artford';
+    src: url('{{ 'Artford-Regular.otf' | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
   :root {
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
@@ -14,5 +22,55 @@
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+
+    /* Moov brand fonts (sections use these alongside theme settings font) */
+    --font-wordmark: 'Artford', serif;
+    --font-display: 'Times New Roman', Times, serif;
+    --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    --moov-black: #0a0a09;
+    --moov-cream: #f5eedc;
+    --moov-cream-shadow: #ede4c8;
+    --moov-amber: #f0b429;
+    --moov-amber-glow: rgba(240, 180, 41, 0.07);
+
+    --moov-text-primary-dark: #f5eedc;
+    --moov-text-secondary-dark: rgba(245, 238, 220, 0.55);
+    --moov-text-tertiary-dark: rgba(245, 238, 220, 0.3);
+
+    --moov-text-primary-light: #0a0a09;
+    --moov-text-secondary-light: rgba(10, 10, 9, 0.5);
+    --moov-text-tertiary-light: rgba(10, 10, 9, 0.3);
+
+    --moov-border-dark: rgba(245, 238, 220, 0.1);
+    --moov-border-light: rgba(10, 10, 9, 0.1);
+    --moov-border-amber: rgba(240, 180, 41, 0.35);
+
+    /*
+      Fluid type scale — same ratio from mobile to large screens (clamp min / preferred / max).
+      Tuned so body copy stays readable (~15px+) on small viewports.
+    */
+    --text-2xs: clamp(0.6875rem, 0.15vw + 0.58rem, 0.875rem);
+    --text-xs: clamp(0.75rem, 0.15vw + 0.64rem, 0.9375rem);
+    --text-sm: clamp(0.8125rem, 0.2vw + 0.66rem, 1.0625rem);
+    --text-base: clamp(0.9375rem, 0.2vw + 0.78rem, 1.125rem);
+    --text-md: clamp(1rem, 0.2vw + 0.84rem, 1.25rem);
+    --text-lg: clamp(1.125rem, 0.25vw + 0.93rem, 1.375rem);
+    --text-xl: clamp(1.375rem, 0.35vw + 1.1rem, 1.75rem);
+    --text-2xl: clamp(1.75rem, 0.5vw + 1.35rem, 2.25rem);
+    --text-3xl: clamp(2rem, 0.8vw + 1.44rem, 2.75rem);
+    --text-4xl: clamp(2.5rem, 1.2vw + 1.66rem, 3.5rem);
+    --text-5xl: clamp(3rem, 1.5vw + 1.94rem, 4rem);
+
+    --header-height: clamp(4rem, 1vw + 3.5rem, 5.5rem);
+    --section-inline-pad: clamp(1rem, 4vw + 0.75rem, 5rem);
+    /* Vertical rhythm — use together with --section-inline-pad for section padding */
+    --section-block-pad-y: clamp(3rem, 8vw, 7.5rem);
+    --section-block-pad-y-sm: clamp(2.5rem, 5vw, 4rem);
+    --section-block-pad-y-md: clamp(3.5rem, 7vw, 6.25rem);
+    --section-block-pad-y-lg: clamp(4rem, 9vw, 8.75rem);
+    --section-block-pad-y-xl: clamp(5rem, 11vw, 10rem);
+    --section-block-pad-y-hero: clamp(5.5rem, 14vw, 10rem);
+    --section-block-pad-y-hero-bottom: clamp(3.5rem, 8vw, 7.5rem);
   }
 {% endstyle %}
