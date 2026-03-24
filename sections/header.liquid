@@ -419,45 +419,51 @@
     });
 
     /* Nav colour switching via IntersectionObserver.
-       Sections with data-surface="cream" trigger light nav. */
-    var creamSections = document.querySelectorAll('[data-surface="cream"]');
-    if (creamSections.length > 0) {
-      var navObserver = new IntersectionObserver(function(entries) {
-        /* Find which cream section is most visible at the top of the viewport */
-        var isOverCream = false;
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            var rect = entry.boundingClientRect;
-            /* If the cream section's top is near/above the nav bottom (72px) */
-            if (rect.top <= 72 && rect.bottom > 72) {
-              isOverCream = true;
-            }
-          }
-        });
-        /* Also check non-observed state: if no dark section is at the top */
+       Default to dark text (nav--light) on non-index pages so the nav
+       is visible over the header-spacer, then let the observer handle
+       switching to cream text when scrolled over dark sections. */
+    var hasHeroSection = document.querySelector('.moov-hero');
+    var hasHeaderSpacer = document.querySelector('.header-spacer');
+
+    /* On pages with a header-spacer (non-index), start with dark text */
+    if (hasHeaderSpacer) {
+      header.classList.add('nav--light');
+    }
+
+    /* Set up observer for all pages that have data-surface sections */
+    var allSurfaceSections = document.querySelectorAll('[data-surface]');
+    if (allSurfaceSections.length > 0) {
+      function checkNavColor() {
         var headerBottom = 72;
         var elementAtNav = document.elementFromPoint(window.innerWidth / 2, headerBottom + 1);
         if (elementAtNav) {
           var section = elementAtNav.closest('[data-surface]');
-          if (section && section.getAttribute('data-surface') === 'cream') {
-            isOverCream = true;
-          } else if (section && section.getAttribute('data-surface') === 'dark') {
-            isOverCream = false;
+          if (section) {
+            var isOverCream = section.getAttribute('data-surface') === 'cream';
+            header.classList.toggle('nav--light', isOverCream);
           }
         }
-        header.classList.toggle('nav--light', isOverCream);
+      }
+
+      var navObserver = new IntersectionObserver(function() {
+        checkNavColor();
       }, { threshold: [0, 0.1, 0.5, 1], rootMargin: '-1px 0px -90% 0px' });
 
-      creamSections.forEach(function(s) { navObserver.observe(s); });
+      allSurfaceSections.forEach(function(s) { navObserver.observe(s); });
 
-      /* Also observe dark sections for transition back */
-      document.querySelectorAll('[data-surface="dark"]').forEach(function(s) {
-        navObserver.observe(s);
+      /* Also re-check on scroll for smoother transitions */
+      var scrollTicking = false;
+      window.addEventListener('scroll', function() {
+        if (!scrollTicking) {
+          requestAnimationFrame(function() {
+            checkNavColor();
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
       });
-    }
-
-    /* Fallback: if no data-surface sections exist, check if body has light bg */
-    if (creamSections.length === 0 && !document.querySelector('.moov-hero')) {
+    } else if (!hasHeroSection) {
+      /* No data-surface sections and no hero: default to dark text */
       header.classList.add('nav--light');
     }
   }
