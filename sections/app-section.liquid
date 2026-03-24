@@ -1,17 +1,34 @@
+{%- liquid
+  assign app_eyebrow = section.settings.eyebrow
+  if app_eyebrow == blank
+    assign app_eyebrow = 'store_marketing.app_section_eyebrow' | t
+  endif
+
+  assign app_heading = section.settings.heading
+  if app_heading == blank
+    assign app_heading = 'store_marketing.acronym_intro' | t
+  endif
+
+  assign app_body = section.settings.body
+  if app_body == blank
+    assign app_body = 'store_marketing.app_section_body' | t
+  endif
+-%}
+
 <div class="app-section full-width" data-surface="cream">
   <div class="app-section__inner">
 
     {%- comment -%} Left — Text content {%- endcomment -%}
     <div class="app-section__left" data-animate="slide-left">
 
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="app-section__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if app_eyebrow != blank -%}
+        <p class="app-section__eyebrow">{{ app_eyebrow | escape }}</p>
       {%- endif -%}
 
-      <h2 class="app-section__heading">{{ section.settings.heading | escape }}</h2>
+      <h2 class="app-section__heading">{{ app_heading | escape }}</h2>
 
-      {%- if section.settings.body != blank -%}
-        <p class="app-section__body">{{ section.settings.body | escape }}</p>
+      {%- if app_body != blank -%}
+        <p class="app-section__body">{{ app_body | escape }}</p>
       {%- endif -%}
 
       {%- comment -%} Feature list {%- endcomment -%}
@@ -29,6 +46,14 @@
                 assign feat_label = section.settings.feature_3_label
                 assign feat_desc = section.settings.feature_3_desc
             endcase
+            if feat_label == blank
+              assign pk = 'store_marketing.pillar_' | append: i | append: '_title'
+              assign feat_label = pk | t
+            endif
+            if feat_desc == blank
+              assign dk = 'store_marketing.pillar_' | append: i | append: '_body'
+              assign feat_desc = dk | t
+            endif
           -%}
           {%- if feat_label != blank or feat_desc != blank -%}
             <div class="app-section__feature" data-animate="stagger" style="--stagger-delay: {{ i | minus: 1 | times: 100 }}ms;">

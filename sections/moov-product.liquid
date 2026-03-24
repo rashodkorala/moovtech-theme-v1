@@ -1,3 +1,10 @@
+{%- liquid
+  assign product_eyebrow = section.settings.product_eyebrow
+  if product_eyebrow == blank
+    assign product_eyebrow = 'store_marketing.badge_category' | t
+  endif
+-%}
+
 {%- comment -%} ═══ STICKY MINI-BAR ═══ {%- endcomment -%}
 <div class="moov-mini-bar" data-surface="dark">
   <div class="moov-mini-bar__inner">
@@ -40,7 +47,7 @@
 
     {%- comment -%} Right — Product details {%- endcomment -%}
     <div class="moov-prod-intro__details">
-      <p class="moov-prod-intro__eyebrow">{{ section.settings.product_eyebrow | escape }}</p>
+      <p class="moov-prod-intro__eyebrow">{{ product_eyebrow | escape }}</p>
       <h1 class="moov-prod-intro__title">{{ product.title }}</h1>
       {%- if product.description != blank -%}
         <p class="moov-prod-intro__desc">{{ product.description | strip_html | truncate: 120 }}</p>
@@ -52,6 +59,10 @@
           <span class="moov-prod-intro__price-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
         {%- endif -%}
       </div>
+
+      {%- if section.settings.show_price_anchor -%}
+        <p class="moov-prod-intro__price-anchor">{{ 'store_marketing.price_anchor' | t | escape }}</p>
+      {%- endif -%}
 
       {%- comment -%} Variant selectors {%- endcomment -%}
       {%- unless product.has_only_default_variant -%}
@@ -82,6 +93,9 @@
           </button>
         {%- endform -%}
         <p class="moov-prod-intro__ship-notice">{{ 'product.ship_notice' | t: date: section.settings.preorder_date }}</p>
+        {%- if section.settings.show_preorder_note -%}
+          <p class="moov-prod-intro__preorder-note">{{ 'store_marketing.product_preorder_note' | t | escape }}</p>
+        {%- endif -%}
       </div>
 
       {%- comment -%} Feature icons strip {%- endcomment -%}
@@ -91,9 +105,31 @@
           {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
           {%- assign label = section.settings[label_key] -%}
           {%- assign desc = section.settings[desc_key] -%}
+          {%- if label == blank -%}
+            {%- liquid
+              case i
+                when 1
+                  assign bullet_full = 'store_marketing.product_bullet_1' | t
+                when 2
+                  assign bullet_full = 'store_marketing.product_bullet_2' | t
+                when 3
+                  assign bullet_full = 'store_marketing.product_bullet_3' | t
+                when 4
+                  assign bullet_full = 'store_marketing.product_bullet_4' | t
+              endcase
+            -%}
+            {%- assign bullet_parts = bullet_full | split: ' — ' -%}
+            {%- if bullet_parts.size <= 1 -%}
+              {%- assign bullet_parts = bullet_full | split: ' - ' -%}
+            {%- endif -%}
+            {%- assign label = bullet_parts | first -%}
+            {%- if bullet_parts.size > 1 -%}
+              {%- assign desc = bullet_parts | last -%}
+            {%- endif -%}
+          {%- endif -%}
           {%- if label != blank -%}
             <div class="moov-prod-intro__feat">
-              <span class="moov-prod-intro__feat-label">{{ label }}</span>
+              <span class="moov-prod-intro__feat-label">{{ label | escape }}</span>
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -110,10 +146,32 @@
       {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
       {%- assign label = section.settings[label_key] -%}
       {%- assign desc = section.settings[desc_key] -%}
+      {%- if label == blank -%}
+        {%- liquid
+          case i
+            when 1
+              assign bullet_full = 'store_marketing.product_bullet_1' | t
+            when 2
+              assign bullet_full = 'store_marketing.product_bullet_2' | t
+            when 3
+              assign bullet_full = 'store_marketing.product_bullet_3' | t
+            when 4
+              assign bullet_full = 'store_marketing.product_bullet_4' | t
+          endcase
+        -%}
+        {%- assign bullet_parts = bullet_full | split: ' — ' -%}
+        {%- if bullet_parts.size <= 1 -%}
+          {%- assign bullet_parts = bullet_full | split: ' - ' -%}
+        {%- endif -%}
+        {%- assign label = bullet_parts | first -%}
+        {%- if bullet_parts.size > 1 -%}
+          {%- assign desc = bullet_parts | last -%}
+        {%- endif -%}
+      {%- endif -%}
       {%- if label != blank -%}
         <div class="moov-features-strip__item">
-          <p class="moov-features-strip__label">{{ label }}</p>
-          <p class="moov-features-strip__desc">{{ desc }}</p>
+          <p class="moov-features-strip__label">{{ label | escape }}</p>
+          <p class="moov-features-strip__desc">{{ desc | escape }}</p>
         </div>
       {%- endif -%}
     {%- endfor -%}
@@ -528,7 +586,27 @@
     font-size: var(--text-xs);
     color: rgba(240, 180, 41, 0.7);
     text-align: center;
+    margin: 0 0 8px;
+  }
+
+  .moov-prod-intro__preorder-note {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--moov-text-tertiary-dark);
+    text-align: center;
     margin: 0 0 32px;
+  }
+
+  .moov-prod-intro__price-anchor {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--moov-text-tertiary-dark);
+    margin: 0 0 20px;
+    max-width: 28rem;
   }
 
   /* Feature icons */
@@ -877,17 +955,20 @@
 {
   "name": "MOOV Product",
   "settings": [
-    { "type": "text", "id": "product_eyebrow", "label": "Product eyebrow", "default": "Smart alarm technology" },
+    { "type": "text", "id": "product_eyebrow", "label": "Product eyebrow", "info": "Leave blank for store_marketing.badge_category" },
     { "type": "text", "id": "preorder_date", "label": "Pre-order ship date", "default": "March 31, 2026" },
+    { "type": "checkbox", "id": "show_price_anchor", "label": "Show price anchor line", "default": true },
+    { "type": "checkbox", "id": "show_preorder_note", "label": "Show pre-order reassurance note", "default": true },
     { "type": "header", "content": "Feature strip" },
-    { "type": "text", "id": "feature_1_label", "label": "Feature 1 label", "default": "24-hour battery" },
-    { "type": "text", "id": "feature_1_desc", "label": "Feature 1 description", "default": "All-day playback on a single charge." },
-    { "type": "text", "id": "feature_2_label", "label": "Feature 2 label", "default": "IP67 waterproof" },
-    { "type": "text", "id": "feature_2_desc", "label": "Feature 2 description", "default": "Dustproof and submerge-resistant." },
-    { "type": "text", "id": "feature_3_label", "label": "Feature 3 label", "default": "Smart wake" },
-    { "type": "text", "id": "feature_3_desc", "label": "Feature 3 description", "default": "Wakes you at the optimal moment in your cycle." },
-    { "type": "text", "id": "feature_4_label", "label": "Feature 4 label", "default": "WiFi + Bluetooth" },
-    { "type": "text", "id": "feature_4_desc", "label": "Feature 4 description", "default": "Full ecosystem or standalone Bluetooth." },
+    { "type": "paragraph", "content": "Leave labels empty to use store_marketing.product_bullet_1–4 (split on em dash)." },
+    { "type": "text", "id": "feature_1_label", "label": "Feature 1 label" },
+    { "type": "text", "id": "feature_1_desc", "label": "Feature 1 description" },
+    { "type": "text", "id": "feature_2_label", "label": "Feature 2 label" },
+    { "type": "text", "id": "feature_2_desc", "label": "Feature 2 description" },
+    { "type": "text", "id": "feature_3_label", "label": "Feature 3 label" },
+    { "type": "text", "id": "feature_3_desc", "label": "Feature 3 description" },
+    { "type": "text", "id": "feature_4_label", "label": "Feature 4 label" },
+    { "type": "text", "id": "feature_4_desc", "label": "Feature 4 description" },
     { "type": "header", "content": "Deep-dive A (dark)" },
     { "type": "text", "id": "deepdive_a_eyebrow", "label": "Deep-dive A eyebrow" },
     { "type": "text", "id": "deepdive_a_headline", "label": "Deep-dive A headline" },

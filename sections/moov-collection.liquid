@@ -1,10 +1,22 @@
+{%- liquid
+  assign shop_eyebrow = section.settings.eyebrow
+  if shop_eyebrow == blank
+    assign shop_eyebrow = 'store_marketing.collection_heading' | t
+  endif
+
+  assign shop_desc = collection.description | strip_html | strip
+  if shop_desc == blank
+    assign shop_desc = 'store_marketing.collection_subheading' | t
+  endif
+-%}
+
 {%- comment -%} ═══ SHOP — HEADER ═══ {%- endcomment -%}
 <div class="shop-header full-width" data-surface="dark">
   <div class="shop-header__inner">
-    <p class="shop-header__eyebrow">{{ section.settings.eyebrow | default: 'Shop' | escape }}</p>
+    <p class="shop-header__eyebrow">{{ shop_eyebrow | escape }}</p>
     <h1 class="shop-header__heading">{{ collection.title | default: 'All products' }}</h1>
-    {%- if collection.description != blank -%}
-      <p class="shop-header__desc">{{ collection.description | strip_html }}</p>
+    {%- if shop_desc != blank -%}
+      <p class="shop-header__desc">{{ shop_desc | escape }}</p>
     {%- endif -%}
   </div>
 </div>
@@ -69,7 +81,7 @@
 
       {%- else -%}
         <div class="shop-grid__empty">
-          <p class="shop-grid__empty-text">{{ 'shop.empty' | t }}</p>
+          <p class="shop-grid__empty-text">{{ 'store_marketing.collection_empty' | t }}</p>
           <a href="{{ routes.root_url }}" class="shop-grid__empty-btn">{{ 'shop.back_home' | t }}</a>
         </div>
       {%- endif -%}

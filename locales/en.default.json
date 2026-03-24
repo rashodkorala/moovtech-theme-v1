@@ -45,7 +45,13 @@
     "note_label": "Order note",
     "quantity": "Quantity",
     "decrease": "Decrease quantity",
-    "increase": "Increase quantity"
+    "increase": "Increase quantity",
+    "trust_col1_label": "30-day satisfaction",
+    "trust_col1_sub": "Cancel before fulfilment — no questions asked",
+    "trust_col2_label": "Secure checkout",
+    "trust_col2_sub": "Encrypted payment processing",
+    "trust_col3_label": "US & Canada shipping",
+    "trust_col3_sub": "Rates confirmed at checkout"
   },
   "customers": {
     "login": {
@@ -100,7 +106,8 @@
     "primary_button": "Primary button",
     "secondary_button": "Secondary button",
     "community": "Community",
-    "company": "Company"
+    "company": "Company",
+    "socials": "Socials"
   },
   "product": {
     "mini_bar": {
@@ -108,9 +115,9 @@
       "specs": "Specs",
       "nav_label": "On-page product navigation"
     },
-    "pre_order": "Pre-order now",
+    "pre_order": "Reserve your MOOV",
     "preorder_badge": "Pre-order",
-    "cta_default": "Pre-order now",
+    "cta_default": "Reserve your MOOV",
     "sold_out_button": "Sold out",
     "add_to_wishlist": "Add to wishlist",
     "trust_secure_checkout": "Secure checkout",
@@ -205,6 +212,9 @@
     "acronym_vitality": "Vitality — Energy that comes from alignment, not adrenaline alone.",
     "acronym_closing": "One system. Four commitments. Fewer reactive starts.",
     "collection_heading": "Shop MOOV",
+    "product_intro_heading": "Three parts. One morning.",
+    "app_section_eyebrow": "The MOOV app",
+    "app_section_body": "Pair MOOV hardware with the app: morning app boundaries, adaptive routines, and progress you can feel—not generic hustle scripts.",
     "collection_subheading": "Hardware and digital tools for a steadier first hour—built for people who want agency over attention.",
     "collection_empty": "New drops land here first. Pre-order to hold your place.",
     "product_bullet_1": "Up in five minutes, committed for years — peel-and-stick mount; no tools, no holes, no excuses.",
@@ -238,7 +248,9 @@
       "get_google_play": "Get it on Google Play"
     },
     "footer": {
-      "newsletter_submit": "Subscribe"
+      "newsletter_submit": "Subscribe",
+      "newsletter_email_label": "Email address",
+      "newsletter_placeholder": "Your email"
     }
   },
   "labels": {

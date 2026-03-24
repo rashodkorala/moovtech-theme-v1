@@ -15,41 +15,59 @@
         "hero_video_mp4": "",
         "hero_video_webm": "",
         "hero_overlay_opacity": 55,
-        "hero_eyebrow": "Smart alarm technology",
-        "hero_headline": "Begin well.",
-        "hero_subheadline": "Wake at the right moment, every morning. Calm, unhurried, and ready.",
-        "cta_primary_label": "Pre-order now",
-        "cta_primary_url": "",
-        "cta_ghost_label": "Learn more",
-        "cta_ghost_url": ""
+        "show_social_proof": true,
+        "hero_social_proof": "",
+        "hero_eyebrow": "",
+        "hero_headline": "",
+        "hero_subheadline": "",
+        "cta_primary_label": "",
+        "cta_primary_url": "/collections/all",
+        "cta_ghost_label": "",
+        "cta_ghost_url": "/pages/how-it-works",
+        "hero_micro_trust": ""
+      }
+    },
+    "store_marketing_bands": {
+      "type": "store-marketing-bands",
+      "settings": {
+        "show_problem": true,
+        "problem_heading": "",
+        "problem_body": "",
+        "show_who_for": true,
+        "who_heading": "",
+        "show_about_teaser": true,
+        "about_heading": "",
+        "about_body": "",
+        "about_cta_label": "",
+        "about_cta_url": "/pages/about"
       }
     },
     "product_intro": {
       "type": "product-intro",
       "settings": {
-        "eyebrow": "Meet MOOV",
-        "heading": "The alarm that moves with you.",
-        "body": "Most alarms reward you for lying still. MOOV doesn't. It requires physical movement to stop — so instead of winning by pressing snooze, you win by starting your day.",
-        "proof_1": "Detects movement",
-        "proof_2": "Stops when you're up",
-        "cta_label": "Pre-Order Now",
-        "cta_url": "shopify://products/t"
+        "eyebrow": "",
+        "heading": "",
+        "body": "Stand to silence the alarm. Let the app hold distracting feeds at bay. Finish with a routine that fits 10 minutes—or 60.",
+        "proof_1": "",
+        "proof_2": "",
+        "cta_label": "",
+        "cta_url": "/collections/all"
       }
     },
     "app_section": {
       "type": "app-section",
       "settings": {
-        "eyebrow": "The App",
-        "heading": "Lorem ipsum dolor sit amet consectetur.",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-        "feature_1_label": "AI routine generator",
-        "feature_1_desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.",
-        "feature_2_label": "App blocker",
-        "feature_2_desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.",
-        "feature_3_label": "Progress tracking",
-        "feature_3_desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.",
-        "cta_label": "Download the App",
-        "cta_url": "",
+        "eyebrow": "",
+        "heading": "",
+        "body": "",
+        "feature_1_label": "",
+        "feature_1_desc": "",
+        "feature_2_label": "",
+        "feature_2_desc": "",
+        "feature_3_label": "",
+        "feature_3_desc": "",
+        "cta_label": "Reserve your MOOV",
+        "cta_url": "/collections/all",
         "app_store_url": "",
         "google_play_url": ""
       }
@@ -60,43 +78,57 @@
         "faq-1": {
           "type": "faq_item",
           "settings": {
-            "question": "How does MOOV actually stop the alarm?",
-            "answer": "MOOV uses a built-in motion sensor to detect physical movement. When your alarm goes off, you need to get up and move — shake it, walk with it, or complete a short movement — before it stops. Pressing a button or tapping your phone won't work. The only way to silence it is to actually move your body."
+            "question": "Is MOOV just an alarm clock?",
+            "answer": "No. MOOV is a morning system: movement-based disarm, optional app boundaries for your first minutes awake, and short routines that adapt to you. The hardware is only one part of the sequence."
           }
         },
         "faq-2": {
           "type": "faq_item",
           "settings": {
-            "question": "When will my order ship?",
-            "answer": "MOOV is currently in the pre-order phase. Estimated shipping begins in Q3 2025. You'll receive email updates with your tracking information as your order gets closer to dispatch. Pre-order customers are first in line."
+            "question": "Do I need the app?",
+            "answer": "Yes, for full setup and features like app boundaries and adaptive routines. The app connects to your MOOV device and is available on iOS and Android. You can check compatibility in the product specs on this page."
           }
         },
         "faq-3": {
           "type": "faq_item",
           "settings": {
-            "question": "What phones is the MOOV App compatible with?",
-            "answer": "The MOOV App is available on iOS (iPhone 12 and later, iOS 15+) and Android (Android 10+). The app connects to your MOOV device via Bluetooth and is required to set alarms, configure your routine, and enable the app blocker."
+            "question": "What if I share a bedroom?",
+            "answer": "MOOV is designed for real bedrooms. Volume, timing, and routine length are adjustable in the app. If you need a specific setup for a partner or light sleeper, contact us and we will help you configure what works."
           }
         },
         "faq-4": {
           "type": "faq_item",
           "settings": {
-            "question": "How long does the battery last?",
-            "answer": "MOOV is designed to last up to 30 days on a single charge with regular daily use. Charging takes approximately 90 minutes via the included magnetic USB-C cable. A low battery notification is sent to your phone before it runs out."
+            "question": "How does pre-order billing work?",
+            "answer": "You will see exact payment timing and policies at checkout. In general, we communicate estimated ship windows clearly and you can cancel before fulfilment according to our pre-order terms."
           }
         },
         "faq-5": {
           "type": "faq_item",
           "settings": {
             "question": "What is your return policy?",
-            "answer": "We offer a 30-day return window from the date of delivery. If MOOV isn't the right fit, return it in its original condition for a full refund — no questions asked. Pre-orders can be cancelled at any time before your unit ships."
+            "answer": "We offer a 30-day satisfaction window from delivery. If MOOV is not the right fit, return it in its original condition for a refund according to our policy. Pre-orders can typically be cancelled before your unit ships—confirm details at checkout."
           }
         },
         "faq-6": {
           "type": "faq_item",
           "settings": {
-            "question": "How is MOOV different from a regular alarm?",
-            "answer": "A standard alarm rewards passivity — you press snooze and stay in bed. MOOV is the opposite. It requires your body to be in motion before it stops, which means the act of dismissing the alarm is itself the first step of your morning. Pair it with the MOOV App and that first step becomes a full routine."
+            "question": "Is this going to change my mornings or become another gadget I stop using?",
+            "answer": "MOOV is built for sustainability, not a one-week spike: snooze-resistant disarm, optional app boundaries, and short routines you can keep. If it is not working for you within 30 days of delivery, use our return policy—no guilt, no runaround."
+          }
+        },
+        "faq-7": {
+          "type": "faq_item",
+          "settings": {
+            "question": "I have tried morning routines before and they never stick. Why is this different?",
+            "answer": "Because MOOV addresses the environment, not just motivation. Standing to disarm breaks the snooze loop; app boundaries reduce the first-scroll hijack; routines are short and adaptive rather than a rigid script. Small honest wins stack better than intensity that flames out."
+          }
+        },
+        "faq-8": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What does the app block, and can I override it?",
+            "answer": "You choose which apps are limited during your morning window. The goal is protected attention until you decide to engage—settings are yours to adjust, and you stay in control of what counts as a distraction for you."
           }
         }
       },
@@ -106,15 +138,18 @@
         "faq-3",
         "faq-4",
         "faq-5",
-        "faq-6"
+        "faq-6",
+        "faq-7",
+        "faq-8"
       ],
       "settings": {
-        "heading": "FAQs"
+        "heading": "Questions, answered"
       }
     }
   },
   "order": [
     "hero",
+    "store_marketing_bands",
     "product_intro",
     "app_section",
     "faq"

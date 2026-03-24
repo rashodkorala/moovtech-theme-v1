@@ -1,35 +1,67 @@
+{%- liquid
+  assign intro_eyebrow = section.settings.eyebrow
+  if intro_eyebrow == blank
+    assign intro_eyebrow = 'store_marketing.badge_category' | t
+  endif
+
+  assign intro_heading = section.settings.heading
+  if intro_heading == blank
+    assign intro_heading = 'store_marketing.product_intro_heading' | t
+  endif
+
+  assign intro_body = section.settings.body
+  if intro_body == blank
+    assign intro_body = 'store_marketing.hero_subheading' | t
+  endif
+
+  assign intro_proof_1 = section.settings.proof_1
+  if intro_proof_1 == blank
+    assign intro_proof_1 = 'store_marketing.badge_social_proof' | t
+  endif
+
+  assign intro_proof_2 = section.settings.proof_2
+  if intro_proof_2 == blank
+    assign intro_proof_2 = 'store_marketing.badge_30_day' | t
+  endif
+
+  assign intro_cta_label = section.settings.cta_label
+  if intro_cta_label == blank
+    assign intro_cta_label = 'store_marketing.hero_cta_primary' | t
+  endif
+-%}
+
 <div class="product-intro full-width" data-surface="dark">
   <div class="product-intro__inner">
 
     <div class="product-intro__left" data-animate="slide-left">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="product-intro__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if intro_eyebrow != blank -%}
+        <p class="product-intro__eyebrow">{{ intro_eyebrow | escape }}</p>
       {%- endif -%}
 
-      <h2 class="product-intro__heading">{{ section.settings.heading | escape }}</h2>
+      <h2 class="product-intro__heading">{{ intro_heading | escape }}</h2>
 
-      {%- if section.settings.body != blank -%}
-        <p class="product-intro__body">{{ section.settings.body | escape }}</p>
+      {%- if intro_body != blank -%}
+        <p class="product-intro__body">{{ intro_body | escape }}</p>
       {%- endif -%}
 
       <div class="product-intro__proof">
-        {%- if section.settings.proof_1 != blank -%}
-          <span class="product-intro__proof-item">{{ section.settings.proof_1 | escape }}</span>
+        {%- if intro_proof_1 != blank -%}
+          <span class="product-intro__proof-item">{{ intro_proof_1 | escape }}</span>
         {%- endif -%}
-        {%- if section.settings.proof_1 != blank and section.settings.proof_2 != blank -%}
+        {%- if intro_proof_1 != blank and intro_proof_2 != blank -%}
           <span class="product-intro__proof-divider" aria-hidden="true"></span>
         {%- endif -%}
-        {%- if section.settings.proof_2 != blank -%}
-          <span class="product-intro__proof-item">{{ section.settings.proof_2 | escape }}</span>
+        {%- if intro_proof_2 != blank -%}
+          <span class="product-intro__proof-item">{{ intro_proof_2 | escape }}</span>
         {%- endif -%}
       </div>
 
-      {%- if section.settings.cta_label != blank -%}
+      {%- if intro_cta_label != blank -%}
         <a
-          href="{{ section.settings.cta_url | default: '#' }}"
+          href="{{ section.settings.cta_url | default: routes.root_url }}"
           class="product-intro__cta"
         >
-          {{- section.settings.cta_label | escape -}}
+          {{- intro_cta_label | escape -}}
         </a>
       {%- endif -%}
     </div>

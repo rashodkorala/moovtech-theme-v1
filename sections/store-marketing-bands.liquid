@@ -1,0 +1,246 @@
+{% comment %}
+  Homepage marketing: problem band, who-it's-for, about teaser. Empty fields use store_marketing translations.
+{% endcomment %}
+
+{%- liquid
+  assign problem_heading = section.settings.problem_heading
+  if problem_heading == blank
+    assign problem_heading = 'store_marketing.section_problem_heading' | t
+  endif
+
+  assign problem_body = section.settings.problem_body
+  if problem_body == blank
+    assign problem_body = 'store_marketing.section_problem_body' | t
+  endif
+
+  assign who_heading = section.settings.who_heading
+  if who_heading == blank
+    assign who_heading = 'store_marketing.who_for_heading' | t
+  endif
+
+  assign about_heading = section.settings.about_heading
+  if about_heading == blank
+    assign about_heading = 'store_marketing.about_teaser_heading' | t
+  endif
+
+  assign about_body = section.settings.about_body
+  if about_body == blank
+    assign about_body = 'store_marketing.about_teaser_body' | t
+  endif
+
+  assign about_cta = section.settings.about_cta_label
+  if about_cta == blank
+    assign about_cta = 'store_marketing.about_teaser_cta' | t
+  endif
+
+  assign about_url = section.settings.about_cta_url | default: '/pages/about'
+-%}
+
+{%- if section.settings.show_problem -%}
+  <div class="store-marketing-bands store-marketing-bands--problem full-width" data-surface="dark">
+    <div class="store-marketing-bands__inner">
+      <h2 class="store-marketing-bands__heading">{{ problem_heading | escape }}</h2>
+      <p class="store-marketing-bands__body">{{ problem_body | escape | newline_to_br }}</p>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if section.settings.show_who_for -%}
+  <div class="store-marketing-bands store-marketing-bands--who full-width" data-surface="cream">
+    <div class="store-marketing-bands__inner">
+      <h2 class="store-marketing-bands__heading store-marketing-bands__heading--dark">{{ who_heading | escape }}</h2>
+      <ul class="store-marketing-bands__list" role="list">
+        <li>{{ 'store_marketing.who_for_1' | t | escape }}</li>
+        <li>{{ 'store_marketing.who_for_2' | t | escape }}</li>
+        <li>{{ 'store_marketing.who_for_3' | t | escape }}</li>
+      </ul>
+      <p class="store-marketing-bands__not">{{ 'store_marketing.who_for_not' | t | escape }}</p>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if section.settings.show_about_teaser -%}
+  <div class="store-marketing-bands store-marketing-bands--about full-width" data-surface="dark">
+    <div class="store-marketing-bands__inner store-marketing-bands__inner--about">
+      <h2 class="store-marketing-bands__heading">{{ about_heading | escape }}</h2>
+      <p class="store-marketing-bands__about-body">{{ about_body | escape }}</p>
+      <a href="{{ about_url }}" class="store-marketing-bands__cta">{{ about_cta | escape }} →</a>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .store-marketing-bands {
+    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
+  }
+
+  .store-marketing-bands__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .store-marketing-bands__inner--about {
+    max-width: 640px;
+  }
+
+  .store-marketing-bands__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .store-marketing-bands__heading--dark {
+    color: var(--moov-text-primary-light);
+  }
+
+  .store-marketing-bands__body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+
+  .store-marketing-bands__body strong {
+    font-weight: 500;
+    color: var(--moov-text-primary-dark);
+  }
+
+  .store-marketing-bands--who .store-marketing-bands__list {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-light);
+  }
+
+  .store-marketing-bands--who .store-marketing-bands__list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .store-marketing-bands__not {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--moov-text-tertiary-light);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .store-marketing-bands__about-body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 0 clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .store-marketing-bands__cta {
+    display: inline-flex;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    letter-spacing: 0.03em;
+    color: var(--moov-amber);
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(240, 180, 41, 0.4);
+    padding-bottom: 2px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .store-marketing-bands__cta:hover {
+    color: var(--moov-cream);
+    border-color: var(--moov-cream);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Store marketing bands",
+  "tag": "section",
+  "class": "store-marketing-bands-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Problem band"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_problem",
+      "label": "Show problem band",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "problem_heading",
+      "label": "Heading",
+      "info": "Leave blank to use theme translation (store_marketing.section_problem_heading)."
+    },
+    {
+      "type": "textarea",
+      "id": "problem_body",
+      "label": "Body",
+      "info": "Leave blank to use theme translation. You may use bold in the rich sense via HTML is not supported—plain text only."
+    },
+    {
+      "type": "header",
+      "content": "Who it's for"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_who_for",
+      "label": "Show who it's for",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "who_heading",
+      "label": "Heading",
+      "info": "Leave blank for store_marketing.who_for_heading"
+    },
+    {
+      "type": "header",
+      "content": "About teaser"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_about_teaser",
+      "label": "Show about teaser",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "about_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "about_body",
+      "label": "Body"
+    },
+    {
+      "type": "text",
+      "id": "about_cta_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "about_cta_url",
+      "label": "About page URL",
+      "info": "Default: /pages/about"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store marketing bands"
+    }
+  ]
+}
+{% endschema %}

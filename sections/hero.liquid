@@ -6,6 +6,41 @@
   if section.settings.hero_video_mp4 != blank
     assign video_src = section.settings.hero_video_mp4
   endif
+
+  assign hero_social_proof = section.settings.hero_social_proof
+  if hero_social_proof == blank
+    assign hero_social_proof = 'store_marketing.hero_social_proof' | t
+  endif
+
+  assign hero_eyebrow = section.settings.hero_eyebrow
+  if hero_eyebrow == blank
+    assign hero_eyebrow = 'store_marketing.hero_eyebrow' | t
+  endif
+
+  assign hero_headline = section.settings.hero_headline
+  if hero_headline == blank
+    assign hero_headline = 'store_marketing.hero_heading' | t
+  endif
+
+  assign hero_subheadline = section.settings.hero_subheadline
+  if hero_subheadline == blank
+    assign hero_subheadline = 'store_marketing.hero_subheading' | t
+  endif
+
+  assign cta_primary_label = section.settings.cta_primary_label
+  if cta_primary_label == blank
+    assign cta_primary_label = 'store_marketing.hero_cta_primary' | t
+  endif
+
+  assign cta_ghost_label = section.settings.cta_ghost_label
+  if cta_ghost_label == blank
+    assign cta_ghost_label = 'store_marketing.hero_cta_secondary' | t
+  endif
+
+  assign hero_micro_trust = section.settings.hero_micro_trust
+  if hero_micro_trust == blank
+    assign hero_micro_trust = 'store_marketing.hero_micro_trust' | t
+  endif
 -%}
 
 <section class="moov-hero full-width" style="--hero-overlay: rgba(10, 10, 9, {{ overlay_decimal }});">
@@ -33,37 +68,45 @@
 
   {%- comment -%} Layer 3 — Content {%- endcomment -%}
   <div class="moov-hero__content">
-    {%- if section.settings.hero_eyebrow != blank -%}
-      <p class="moov-hero__eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+    {%- if section.settings.show_social_proof and hero_social_proof != blank -%}
+      <p class="moov-hero__social-proof">{{ hero_social_proof | escape }}</p>
+    {%- endif -%}
+
+    {%- if hero_eyebrow != blank -%}
+      <p class="moov-hero__eyebrow">{{ hero_eyebrow | escape }}</p>
     {%- endif -%}
 
     <h1 class="moov-hero__heading">
-      {{- section.settings.hero_headline | escape -}}
+      {{- hero_headline | escape -}}
     </h1>
 
-    {%- if section.settings.hero_subheadline != blank -%}
-      <p class="moov-hero__subheadline">{{ section.settings.hero_subheadline | escape }}</p>
+    {%- if hero_subheadline != blank -%}
+      <p class="moov-hero__subheadline">{{ hero_subheadline | escape }}</p>
     {%- endif -%}
 
     <div class="moov-hero__ctas">
-      {%- if section.settings.cta_primary_label != blank -%}
+      {%- if cta_primary_label != blank -%}
         <a
           href="{{ section.settings.cta_primary_url | default: routes.root_url }}"
           class="moov-hero__btn moov-hero__btn--primary"
         >
-          {{- section.settings.cta_primary_label | escape -}}
+          {{- cta_primary_label | escape -}}
         </a>
       {%- endif -%}
 
-      {%- if section.settings.cta_ghost_label != blank -%}
+      {%- if cta_ghost_label != blank -%}
         <a
           href="{{ section.settings.cta_ghost_url | default: '#' }}"
           class="moov-hero__btn moov-hero__btn--ghost"
         >
-          {{- section.settings.cta_ghost_label | escape -}}
+          {{- cta_ghost_label | escape -}}
         </a>
       {%- endif -%}
     </div>
+
+    {%- if hero_micro_trust != blank -%}
+      <p class="moov-hero__micro-trust">{{ hero_micro_trust | escape }}</p>
+    {%- endif -%}
   </div>
 </section>
 
@@ -102,6 +145,15 @@
     z-index: 2;
     padding: 0 var(--section-inline-pad);
     max-width: 700px;
+  }
+
+  .moov-hero__social-proof {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-dark);
+    letter-spacing: 0.02em;
+    margin: 0 0 clamp(10px, 1.2vw, 16px);
   }
 
   .moov-hero__eyebrow {
@@ -180,6 +232,16 @@
     color: var(--moov-text-primary-dark);
   }
 
+  .moov-hero__micro-trust {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--moov-text-tertiary-dark);
+    margin: clamp(16px, 2vw, 24px) 0 0;
+    max-width: 420px;
+  }
+
   /* Responsive */
   @media (max-width: 767px) {
     .moov-hero__overlay {
@@ -231,6 +293,18 @@
       "content": "Content"
     },
     {
+      "type": "checkbox",
+      "id": "show_social_proof",
+      "label": "Show social proof line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hero_social_proof",
+      "label": "Social proof line",
+      "info": "Leave blank to use theme translation (store_marketing.hero_social_proof)."
+    },
+    {
       "type": "text",
       "id": "hero_eyebrow",
       "label": "Eyebrow text",
@@ -256,7 +330,7 @@
       "type": "text",
       "id": "cta_primary_label",
       "label": "Primary CTA label",
-      "default": "Pre-order MOOV"
+      "default": "Reserve your MOOV"
     },
     {
       "type": "url",
@@ -272,13 +346,19 @@
       "type": "text",
       "id": "cta_ghost_label",
       "label": "Ghost CTA label",
-      "default": "How it works"
+      "default": "See how it works"
     },
     {
       "type": "url",
       "id": "cta_ghost_url",
       "label": "Ghost CTA link",
       "info": "Link to an anchor or page, e.g. /pages/how-it-works"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_micro_trust",
+      "label": "Trust line under CTAs",
+      "info": "Leave blank for store_marketing.hero_micro_trust"
     }
   ],
   "presets": [

@@ -220,8 +220,17 @@ Before publishing: reconcile **impact pledge** wording and **pre-order terms** w
 
 ## Implementation
 
-1. Wire high-traffic sections (`hero`, `product-intro`, `footer`) to `store_marketing.*` keys.
-2. Keep product-specific facts (price, ship month, in-box list) in **section settings** or **metafields** so merchandisers can edit without deploys.
+1. **Wired in theme:** `store_marketing.*` is used as fallbacks when section fields are left blank (or via toggles) in:
+   - `sections/hero.liquid` — social proof, headline stack, CTAs, micro-trust
+   - `sections/store-marketing-bands.liquid` — problem, who-for, about teaser (on `templates/index.json`)
+   - `sections/product-intro.liquid` — intro line + proof chips + CTA defaults
+   - `sections/app-section.liquid` — eyebrow, headline, body, three pillars
+   - `sections/moov-product.liquid` — eyebrow, price anchor, pre-order note, feature strip from `product_bullet_1–4` (split on em dash)
+   - `sections/moov-collection.liquid` — collection subheading + empty state
+   - `sections/cart.liquid` — protected line + trust strip copy
+   - `sections/footer.liquid` — newsletter + impact line + `general.socials`
+   - `snippets/meta-tags.liquid` — homepage meta description when shop description is empty
+2. Keep product-specific facts (ship date, specs, deep-dives) in **section settings** or **metafields** so merchandisers can edit without deploys.
 3. Refresh this file when positioning shifts; keep `en.default.json` in sync for any key you reference in Liquid.
 
 ### Internal page map (Shopify replaces both legacy sites)

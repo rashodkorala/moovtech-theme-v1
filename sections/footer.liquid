@@ -1,5 +1,15 @@
 {%- liquid
   assign current_year = 'now' | date: '%Y'
+
+  assign newsletter_heading = section.settings.newsletter_heading
+  if newsletter_heading == blank
+    assign newsletter_heading = 'store_marketing.newsletter_heading' | t
+  endif
+
+  assign newsletter_body = section.settings.newsletter_body
+  if newsletter_body == blank
+    assign newsletter_body = 'store_marketing.newsletter_body' | t
+  endif
 -%}
 
 <footer class="footer full-width" data-surface="dark">
@@ -89,7 +99,7 @@
 
       {%- comment -%} Column 3 — Socials {%- endcomment -%}
       <div class="footer__col">
-        <p class="footer__col-heading">Socials</p>
+        <p class="footer__col-heading">{{ 'general.socials' | t }}</p>
         <ul class="footer__links">
           {%- if section.settings.instagram_url != blank -%}
             <li>
@@ -124,20 +134,20 @@
 
       {%- comment -%} Column 4 — Newsletter {%- endcomment -%}
       <div class="footer__col footer__col--newsletter">
-        <p class="footer__col-heading">{{ section.settings.newsletter_heading | default: 'Newsletter' | escape }}</p>
-        {%- if section.settings.newsletter_body != blank -%}
-          <p class="footer__newsletter-body">{{ section.settings.newsletter_body | escape }}</p>
+        <p class="footer__col-heading">{{ newsletter_heading | escape }}</p>
+        {%- if newsletter_body != blank -%}
+          <p class="footer__newsletter-body">{{ newsletter_body | escape }}</p>
         {%- endif -%}
         {% form 'customer' %}
           <input type="hidden" name="contact[tags]" value="newsletter">
           <div class="footer__newsletter-field">
-            <label for="footer-email-{{ section.id }}" class="footer__newsletter-label">Email address</label>
+            <label for="footer-email-{{ section.id }}" class="footer__newsletter-label">{{ 'sections.footer.newsletter_email_label' | t }}</label>
             <input
               type="email"
               id="footer-email-{{ section.id }}"
               name="contact[email]"
               class="footer__newsletter-input"
-              placeholder="Enter your email..."
+              placeholder="{{ 'sections.footer.newsletter_placeholder' | t }}"
               autocomplete="email"
               required
             >
@@ -152,6 +162,12 @@
 
     </div>
   </div>
+
+  {%- if section.settings.show_impact_line -%}
+    <div class="footer__impact-wrapper">
+      <p class="footer__impact">{{ 'store_marketing.impact_micro_line' | t }}</p>
+    </div>
+  {%- endif -%}
 
   {%- comment -%} Part 3 — Legal bar {%- endcomment -%}
   <div class="footer__legal-wrapper">
@@ -183,11 +199,31 @@
 
   .footer__outer,
   .footer__columns-wrapper,
+  .footer__impact-wrapper,
   .footer__legal-wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding-left: var(--section-inline-pad);
     padding-right: var(--section-inline-pad);
+  }
+
+  .footer__impact-wrapper {
+    padding-top: var(--section-block-pad-y-sm);
+    padding-bottom: var(--section-block-pad-y-sm);
+    border-top: 0.5px solid var(--moov-border-dark);
+  }
+
+  .footer__impact {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--moov-text-tertiary-dark);
+    text-align: center;
+    margin: 0;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   /* ─── Part 1: Community card ─── */
@@ -664,6 +700,13 @@
       "type": "url",
       "id": "linkedin_url",
       "label": "t:labels.linkedin_url"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_impact_line",
+      "label": "Show impact / giving line",
+      "default": true,
+      "info": "Uses store_marketing.impact_micro_line"
     },
     {
       "type": "header",
