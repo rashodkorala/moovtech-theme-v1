@@ -61,7 +61,7 @@
 
       {%- comment -%} Column 2 — Company {%- endcomment -%}
       <div class="footer__col">
-        <p class="footer__col-heading">Company</p>
+        <p class="footer__col-heading">{{ 'general.company' | t }}</p>
         <ul class="footer__links">
           {%- for i in (1..4) -%}
             {%- liquid
@@ -553,30 +553,31 @@
       "type": "text",
       "id": "community_eyebrow",
       "label": "t:labels.eyebrow_text",
-      "default": "Community"
+      "default": "MOOVment"
     },
     {
       "type": "text",
       "id": "community_heading",
       "label": "t:labels.heading",
-      "default": "Join the MOOV community."
+      "default": "Be part of something bigger."
     },
     {
       "type": "textarea",
       "id": "community_body",
       "label": "t:labels.body",
-      "default": "Connect with early adopters, share your morning wins, and get exclusive updates before anyone else."
+      "default": "Join early adopters committed to reclaiming their mornings. Get exclusive updates, honest ship dates, and first access to new products."
     },
     {
       "type": "text",
       "id": "community_cta_label",
       "label": "t:labels.button_label",
-      "default": "Join the Community →"
+      "default": "Join the MOOVment →"
     },
     {
       "type": "url",
       "id": "community_cta_url",
-      "label": "t:labels.button_url"
+      "label": "t:labels.button_url",
+      "info": "Link to your community page or newsletter signup, e.g. /pages/community"
     },
     {
       "type": "header",
@@ -586,7 +587,7 @@
       "type": "textarea",
       "id": "brand_tagline",
       "label": "t:labels.tagline",
-      "default": "The alarm that moves with you. Wake up stronger, every day."
+      "default": "Better mornings, better minds. The morning system built for intentional living."
     },
     {
       "type": "header",
@@ -601,29 +602,32 @@
     {
       "type": "url",
       "id": "company_link_1_url",
-      "label": "t:labels.link_url"
+      "label": "t:labels.link_url",
+      "info": "e.g. /pages/about"
     },
     {
       "type": "text",
       "id": "company_link_2_label",
       "label": "t:labels.link_label",
-      "default": "How It Works"
+      "default": "How it works"
     },
     {
       "type": "url",
       "id": "company_link_2_url",
-      "label": "t:labels.link_url"
+      "label": "t:labels.link_url",
+      "info": "e.g. /pages/how-it-works"
     },
     {
       "type": "text",
       "id": "company_link_3_label",
       "label": "t:labels.link_label",
-      "default": "Pre-Order"
+      "default": "Pre-order"
     },
     {
       "type": "url",
       "id": "company_link_3_url",
-      "label": "t:labels.link_url"
+      "label": "t:labels.link_url",
+      "info": "e.g. /products/moov-alarm"
     },
     {
       "type": "text",
@@ -634,7 +638,8 @@
     {
       "type": "url",
       "id": "company_link_4_url",
-      "label": "t:labels.link_url"
+      "label": "t:labels.link_url",
+      "info": "e.g. /pages/contact"
     },
     {
       "type": "header",
@@ -668,13 +673,13 @@
       "type": "text",
       "id": "newsletter_heading",
       "label": "t:labels.heading",
-      "default": "Newsletter"
+      "default": "First to know"
     },
     {
       "type": "textarea",
       "id": "newsletter_body",
       "label": "t:labels.body",
-      "default": "Receive product updates, exclusive pre-order access, and launch news."
+      "default": "Early access, honest ship dates, and product education—no daily spam."
     },
     {
       "type": "header",
