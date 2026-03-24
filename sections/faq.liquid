@@ -1,4 +1,4 @@
-<div class="faq full-width">
+<div class="faq full-width" data-surface="dark">
   <div class="faq__inner">
 
     {%- comment -%} Left — section label {%- endcomment -%}
@@ -27,7 +27,7 @@
               <span class="faq__question-text">{{ block.settings.question | escape }}</span>
               <span class="faq__indicator" aria-hidden="true">
                 <span class="faq__indicator-plus">+</span>
-                <span class="faq__indicator-times">×</span>
+                <span class="faq__indicator-times">&times;</span>
               </span>
             </button>
             <div
@@ -47,7 +47,7 @@
 
 {% stylesheet %}
   .faq {
-    background: #080808;
+    background: var(--moov-black);
     padding: 160px 40px;
   }
 
@@ -60,31 +60,25 @@
     margin: 0 auto;
   }
 
-  /* Left — sticky label */
-  .faq__label-col {
-    /* height determined by right column — sticky needs this */
-  }
-
   .faq__label {
     position: sticky;
     top: 160px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-display);
     font-size: 128px;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1;
-    color: #F5F2EE;
+    color: var(--moov-text-primary-dark);
     margin: 0;
     letter-spacing: -0.03em;
   }
 
-  /* Right — accordion */
   .faq__accordion {
     width: 100%;
   }
 
   /* FAQ item — base */
   .faq__item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 0.5px solid var(--moov-border-dark);
     border-radius: 0;
     background: transparent;
     transition:
@@ -106,7 +100,7 @@
 
   /* FAQ item — open */
   .faq__item--open {
-    background: #161616;
+    background: rgba(245, 238, 220, 0.04);
     border-radius: 12px;
     border-bottom: none;
     margin: -1px 0;
@@ -132,40 +126,40 @@
   }
 
   .faq__question-text {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
     font-weight: 400;
-    color: rgba(245, 242, 238, 0.5);
+    color: var(--moov-text-secondary-dark);
     transition: color 0.2s ease, font-weight 0.2s ease;
   }
 
   .faq__item:hover .faq__question-text {
-    color: rgba(245, 242, 238, 0.8);
+    color: rgba(245, 238, 220, 0.8);
   }
 
   .faq__item--open .faq__question-text {
     font-weight: 500;
-    color: #F5F2EE;
+    color: var(--moov-text-primary-dark);
   }
 
   /* Indicator */
   .faq__indicator {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 18px;
     font-weight: 300;
-    color: rgba(245, 242, 238, 0.3);
+    color: var(--moov-text-tertiary-dark);
     flex-shrink: 0;
     line-height: 1;
     transition: color 0.2s ease;
   }
 
   .faq__item:hover .faq__indicator {
-    color: rgba(245, 242, 238, 0.6);
+    color: var(--moov-text-secondary-dark);
   }
 
   .faq__item--open .faq__indicator {
     font-size: 20px;
-    color: rgba(245, 242, 238, 0.5);
+    color: var(--moov-text-secondary-dark);
   }
 
   .faq__indicator-times {
@@ -199,11 +193,11 @@
   }
 
   .faq__answer-text {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 15px;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 1.75;
-    color: rgba(245, 242, 238, 0.6);
+    color: var(--moov-text-secondary-dark);
     max-width: 520px;
     margin: 12px 0 0;
   }
@@ -220,7 +214,6 @@
     transform: none;
   }
 
-  /* Tablet */
   @media (min-width: 768px) and (max-width: 1279px) {
     .faq {
       padding: 100px 40px;
@@ -237,7 +230,6 @@
     }
   }
 
-  /* Mobile */
   @media (max-width: 767px) {
     .faq {
       padding: 80px 24px;
@@ -249,7 +241,7 @@
     }
 
     .faq__label {
-      position: static; /* no sticky on mobile */
+      position: static;
       font-size: 72px;
     }
   }
@@ -257,25 +249,22 @@
 
 {% javascript %}
   (function () {
-    /* Accordion */
-    const accordion = document.querySelector('.faq__accordion');
+    var accordion = document.querySelector('.faq__accordion');
     if (!accordion) return;
 
-    const items = Array.from(accordion.querySelectorAll('.faq__item'));
+    var items = Array.from(accordion.querySelectorAll('.faq__item'));
 
-    items.forEach((item) => {
-      const btn = item.querySelector('.faq__question');
+    items.forEach(function (item) {
+      var btn = item.querySelector('.faq__question');
 
-      btn.addEventListener('click', () => {
-        const isOpen = item.classList.contains('faq__item--open');
+      btn.addEventListener('click', function () {
+        var isOpen = item.classList.contains('faq__item--open');
 
-        /* Close all */
-        items.forEach((i) => {
+        items.forEach(function (i) {
           i.classList.remove('faq__item--open');
           i.querySelector('.faq__question').setAttribute('aria-expanded', 'false');
         });
 
-        /* Open clicked (if it was closed) */
         if (!isOpen) {
           item.classList.add('faq__item--open');
           btn.setAttribute('aria-expanded', 'true');
@@ -283,15 +272,14 @@
       });
     });
 
-    /* Scroll animations */
-    const animatedEls = document.querySelectorAll(
+    var animatedEls = document.querySelectorAll(
       '.faq [data-animate="faq-label"], .faq [data-animate="faq-item"]'
     );
     if (!animatedEls.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
@@ -301,7 +289,7 @@
       { threshold: 0.1 }
     );
 
-    animatedEls.forEach((el) => observer.observe(el));
+    animatedEls.forEach(function (el) { observer.observe(el); });
   })();
 {% endjavascript %}
 

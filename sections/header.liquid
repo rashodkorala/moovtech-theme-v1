@@ -42,10 +42,9 @@
 
     {%- comment -%} Centre — Nav links (desktop) {%- endcomment -%}
     <ul class="moov-nav__links" role="list">
-      <li><a href="#shopify-section-product_intro" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.shop' | t }}</a></li>
-      <li><a href="#shopify-section-app_section" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.features' | t }}</a></li>
-      <li><a href="#shopify-section-faq" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.support' | t }}</a></li>
-      <li><a href="#" class="moov-nav__link">{{ 'general.nav.about' | t }}</a></li>
+      <li><a href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" class="moov-nav__link">{{ 'general.nav.shop' | t }}</a></li>
+      <li><a href="{{ section.settings.about_url | default: '/pages/about' }}" class="moov-nav__link">{{ 'general.nav.about' | t }}</a></li>
+      <li><a href="{{ section.settings.contact_url | default: '/pages/contact' }}" class="moov-nav__link">{{ 'general.nav.contact' | t }}</a></li>
     </ul>
 
     {%- comment -%} Right — Icons + Pre-order pill {%- endcomment -%}
@@ -105,10 +104,9 @@
       </button>
     </div>
     <nav class="moov-drawer__nav">
-      <a href="#shopify-section-product_intro" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.shop' | t }}</a>
-      <a href="#shopify-section-app_section" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.features' | t }}</a>
-      <a href="#shopify-section-faq" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.support' | t }}</a>
-      <a href="#" class="moov-drawer__link">{{ 'general.nav.about' | t }}</a>
+      <a href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" class="moov-drawer__link">{{ 'general.nav.shop' | t }}</a>
+      <a href="{{ section.settings.about_url | default: '/pages/about' }}" class="moov-drawer__link">{{ 'general.nav.about' | t }}</a>
+      <a href="{{ section.settings.contact_url | default: '/pages/contact' }}" class="moov-drawer__link">{{ 'general.nav.contact' | t }}</a>
     </nav>
     <a
       href="{{ section.settings.preorder_url | default: routes.root_url }}"
@@ -511,6 +509,29 @@
 {
   "name": "MOOV Header",
   "settings": [
+    {
+      "type": "header",
+      "content": "t:general.navigation"
+    },
+    {
+      "type": "url",
+      "id": "shop_url",
+      "label": "Shop link"
+    },
+    {
+      "type": "url",
+      "id": "about_url",
+      "label": "About link"
+    },
+    {
+      "type": "url",
+      "id": "contact_url",
+      "label": "Contact link"
+    },
+    {
+      "type": "header",
+      "content": "t:general.primary_button"
+    },
     {
       "type": "text",
       "id": "preorder_label",

@@ -1,0 +1,383 @@
+{%- comment -%} ═══ SHOP — HEADER ═══ {%- endcomment -%}
+<div class="shop-header full-width" data-surface="dark">
+  <div class="shop-header__inner">
+    <p class="shop-header__eyebrow">{{ section.settings.eyebrow | default: 'Shop' | escape }}</p>
+    <h1 class="shop-header__heading">{{ collection.title | default: 'All products' }}</h1>
+    {%- if collection.description != blank -%}
+      <p class="shop-header__desc">{{ collection.description | strip_html }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- comment -%} ═══ SHOP — PRODUCT GRID ═══ {%- endcomment -%}
+<div class="shop-grid full-width" data-surface="cream">
+  <div class="shop-grid__inner">
+
+    {%- paginate collection.products by 12 -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="shop-grid__products">
+          {%- for product in collection.products -%}
+            <a href="{{ product.url }}" class="shop-card" data-animate="shop-card" style="--card-delay: {{ forloop.index0 | times: 60 }}ms;">
+              <div class="shop-card__image-wrap">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 640, height: 640, crop: 'center' | image_tag: class: 'shop-card__image', loading: 'lazy', alt: product.title | escape }}
+                {%- else -%}
+                  <div class="shop-card__placeholder">
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  </div>
+                {%- endif -%}
+
+                {%- if product.available == false -%}
+                  <span class="shop-card__badge shop-card__badge--sold-out">{{ 'shop.sold_out' | t }}</span>
+                {%- elsif product.compare_at_price > product.price -%}
+                  <span class="shop-card__badge shop-card__badge--sale">{{ 'shop.sale' | t }}</span>
+                {%- endif -%}
+              </div>
+
+              <div class="shop-card__info">
+                <h3 class="shop-card__title">{{ product.title }}</h3>
+                <div class="shop-card__price">
+                  <span class="shop-card__price-current">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="shop-card__price-compare">{{ product.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="shop-grid__pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="shop-grid__page-link">&larr; {{ 'shop.previous' | t }}</a>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="shop-grid__page-link">{{ part.title }}</a>
+              {%- else -%}
+                <span class="shop-grid__page-link shop-grid__page-link--current">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="shop-grid__page-link">{{ 'shop.next' | t }} &rarr;</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="shop-grid__empty">
+          <p class="shop-grid__empty-text">{{ 'shop.empty' | t }}</p>
+          <a href="{{ routes.root_url }}" class="shop-grid__empty-btn">{{ 'shop.back_home' | t }}</a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Header ─── */
+  .shop-header {
+    background: var(--moov-black);
+    padding: 160px 40px 100px;
+    text-align: center;
+  }
+
+  .shop-header__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .shop-header__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 20px;
+  }
+
+  .shop-header__heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 20px;
+  }
+
+  .shop-header__desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── Grid ─── */
+  .shop-grid {
+    background: var(--moov-cream);
+    padding: 80px 40px 120px;
+  }
+
+  .shop-grid__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .shop-grid__products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  /* ─── Product card ─── */
+  .shop-card {
+    display: block;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    transition-delay: var(--card-delay, 0ms);
+  }
+
+  .shop-card.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .shop-card__image-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--moov-cream-shadow);
+    aspect-ratio: 1 / 1;
+  }
+
+  .shop-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .shop-card:hover .shop-card__image {
+    transform: scale(1.04);
+  }
+
+  .shop-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.15;
+  }
+
+  .shop-card__badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  .shop-card__badge--sold-out {
+    background: var(--moov-black);
+    color: var(--moov-cream);
+  }
+
+  .shop-card__badge--sale {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+
+  .shop-card__info {
+    padding: 16px 4px 0;
+  }
+
+  .shop-card__title {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 6px;
+    transition: color 0.2s ease;
+  }
+
+  .shop-card:hover .shop-card__title {
+    color: var(--moov-amber);
+  }
+
+  .shop-card__price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .shop-card__price-current {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+  }
+
+  .shop-card__price-compare {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-tertiary-light);
+    text-decoration: line-through;
+  }
+
+  /* ─── Pagination ─── */
+  .shop-grid__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 64px;
+  }
+
+  .shop-grid__page-link {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .shop-grid__page-link:hover {
+    background: var(--moov-cream-shadow);
+    color: var(--moov-text-primary-light);
+  }
+
+  .shop-grid__page-link--current {
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    font-weight: 400;
+  }
+
+  /* ─── Empty state ─── */
+  .shop-grid__empty {
+    text-align: center;
+    padding: 80px 0;
+  }
+
+  .shop-grid__empty-text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 24px;
+  }
+
+  .shop-grid__empty-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .shop-grid__empty-btn:hover {
+    opacity: 0.85;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .shop-header { padding: 120px 40px 80px; }
+    .shop-grid { padding: 64px 40px 100px; }
+
+    .shop-grid__products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .shop-header { padding: 100px 24px 64px; }
+    .shop-grid { padding: 40px 24px 80px; }
+
+    .shop-grid__products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .shop-card__info {
+      padding: 12px 2px 0;
+    }
+
+    .shop-card__title {
+      font-size: 13px;
+    }
+
+    .shop-card__price-current {
+      font-size: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var cards = document.querySelectorAll('[data-animate="shop-card"]');
+    if (!cards.length) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+
+    cards.forEach(function (el) { observer.observe(el); });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "MOOV Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MOOV Collection"
+    }
+  ]
+}
+{% endschema %}

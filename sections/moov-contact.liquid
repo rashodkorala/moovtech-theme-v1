@@ -1,0 +1,399 @@
+{%- comment -%} ═══ CONTACT — HERO ═══ {%- endcomment -%}
+<div class="contact-hero full-width" data-surface="dark">
+  <div class="contact-hero__inner">
+    <p class="contact-hero__eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+    <h1 class="contact-hero__heading">{{ section.settings.hero_heading | escape }}</h1>
+    <p class="contact-hero__body">{{ section.settings.hero_body | escape }}</p>
+  </div>
+</div>
+
+{%- comment -%} ═══ CONTACT — FORM + INFO ═══ {%- endcomment -%}
+<div class="contact-main full-width" data-surface="cream">
+  <div class="contact-main__inner">
+
+    {%- comment -%} Left — Contact form {%- endcomment -%}
+    <div class="contact-main__form-wrap">
+      <h2 class="contact-main__form-heading">{{ section.settings.form_heading | escape }}</h2>
+
+      {% form 'contact' %}
+        {%- if form.posted_successfully? -%}
+          <p class="contact-main__success">{{ 'contact.success' | t }}</p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <div class="contact-main__errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="contact-main__field">
+          <label for="contact-name-{{ section.id }}" class="contact-main__label">{{ 'contact.name' | t }}</label>
+          <input
+            type="text"
+            id="contact-name-{{ section.id }}"
+            name="contact[name]"
+            class="contact-main__input"
+            required
+          >
+        </div>
+
+        <div class="contact-main__field">
+          <label for="contact-email-{{ section.id }}" class="contact-main__label">{{ 'contact.email' | t }}</label>
+          <input
+            type="email"
+            id="contact-email-{{ section.id }}"
+            name="contact[email]"
+            class="contact-main__input"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="contact-main__field">
+          <label for="contact-subject-{{ section.id }}" class="contact-main__label">{{ 'contact.subject' | t }}</label>
+          <input
+            type="text"
+            id="contact-subject-{{ section.id }}"
+            name="contact[subject]"
+            class="contact-main__input"
+          >
+        </div>
+
+        <div class="contact-main__field">
+          <label for="contact-message-{{ section.id }}" class="contact-main__label">{{ 'contact.message' | t }}</label>
+          <textarea
+            id="contact-message-{{ section.id }}"
+            name="contact[body]"
+            class="contact-main__textarea"
+            rows="6"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="contact-main__submit">{{ 'contact.send' | t }}</button>
+      {% endform %}
+    </div>
+
+    {%- comment -%} Right — Contact info cards {%- endcomment -%}
+    <div class="contact-main__info">
+      {%- if section.settings.email != blank -%}
+        <div class="contact-main__card">
+          <p class="contact-main__card-label">{{ 'contact.email_label' | t }}</p>
+          <a href="mailto:{{ section.settings.email }}" class="contact-main__card-value">{{ section.settings.email }}</a>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.phone != blank -%}
+        <div class="contact-main__card">
+          <p class="contact-main__card-label">{{ 'contact.phone_label' | t }}</p>
+          <a href="tel:{{ section.settings.phone | remove: ' ' }}" class="contact-main__card-value">{{ section.settings.phone }}</a>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.address != blank -%}
+        <div class="contact-main__card">
+          <p class="contact-main__card-label">{{ 'contact.address_label' | t }}</p>
+          <p class="contact-main__card-value contact-main__card-value--static">{{ section.settings.address | escape }}</p>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.hours != blank -%}
+        <div class="contact-main__card">
+          <p class="contact-main__card-label">{{ 'contact.hours_label' | t }}</p>
+          <p class="contact-main__card-value contact-main__card-value--static">{{ section.settings.hours | escape }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Hero ─── */
+  .contact-hero {
+    background: var(--moov-black);
+    padding: 160px 40px 120px;
+    text-align: center;
+  }
+
+  .contact-hero__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .contact-hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 20px;
+  }
+
+  .contact-hero__heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 28px;
+  }
+
+  .contact-hero__body {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── Main ─── */
+  .contact-main {
+    background: var(--moov-cream);
+    padding: 100px 40px 140px;
+  }
+
+  .contact-main__inner {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ─── Form ─── */
+  .contact-main__form-heading {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 40px;
+  }
+
+  .contact-main__field {
+    margin-bottom: 24px;
+  }
+
+  .contact-main__label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--moov-text-tertiary-light);
+    margin-bottom: 8px;
+  }
+
+  .contact-main__input,
+  .contact-main__textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: transparent;
+    border: 0.5px solid var(--moov-border-light);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--moov-text-primary-light);
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+
+  .contact-main__input:focus,
+  .contact-main__textarea:focus {
+    border-color: var(--moov-border-amber);
+  }
+
+  .contact-main__textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  .contact-main__submit {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 14px 36px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border: none;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .contact-main__submit:hover {
+    opacity: 0.85;
+  }
+
+  .contact-main__success {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    color: #2e7d32;
+    background: rgba(46, 125, 50, 0.08);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  .contact-main__errors {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #c62828;
+    background: rgba(198, 40, 40, 0.06);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+
+  /* ─── Info cards ─── */
+  .contact-main__info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 68px;
+  }
+
+  .contact-main__card {
+    padding: 28px;
+    background: var(--moov-cream-shadow);
+    border-radius: 12px;
+  }
+
+  .contact-main__card-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-text-tertiary-light);
+    margin: 0 0 8px;
+  }
+
+  .contact-main__card-value {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    margin: 0;
+  }
+
+  a.contact-main__card-value:hover {
+    color: var(--moov-amber);
+  }
+
+  .contact-main__card-value--static {
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    line-height: 1.6;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .contact-hero { padding: 120px 40px 80px; }
+    .contact-main { padding: 80px 40px 100px; }
+
+    .contact-main__inner {
+      gap: 48px;
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .contact-hero { padding: 100px 24px 64px; }
+    .contact-main { padding: 48px 24px 80px; }
+
+    .contact-main__inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .contact-main__info {
+      padding-top: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "MOOV Contact",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Eyebrow",
+      "default": "Get in touch"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "We'd love to hear from you."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_body",
+      "label": "Body",
+      "default": "Have a question about MOOV, your order, or just want to say hello? Drop us a message and we'll get back to you within 24 hours."
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send us a message."
+    },
+    {
+      "type": "header",
+      "content": "Contact details"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "hello@moov.tech"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Support hours",
+      "default": "Mon – Fri, 9am – 6pm GMT"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MOOV Contact"
+    }
+  ]
+}
+{% endschema %}

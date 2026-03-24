@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "moov-about",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

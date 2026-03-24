@@ -1,0 +1,647 @@
+{%- comment -%} ═══ ABOUT — HERO BANNER ═══ {%- endcomment -%}
+<div class="about-hero full-width" data-surface="dark">
+  <div class="about-hero__inner">
+    <p class="about-hero__eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+    <h1 class="about-hero__heading">{{ section.settings.hero_heading | escape }}</h1>
+    <p class="about-hero__body">{{ section.settings.hero_body | escape }}</p>
+  </div>
+</div>
+
+{%- comment -%} ═══ ABOUT — MISSION ═══ {%- endcomment -%}
+<div class="about-mission full-width" data-surface="cream">
+  <div class="about-mission__inner">
+    <div class="about-mission__text" data-animate="about-slide">
+      <p class="about-mission__eyebrow">{{ section.settings.mission_eyebrow | escape }}</p>
+      <h2 class="about-mission__heading">{{ section.settings.mission_heading | escape }}</h2>
+      <p class="about-mission__body">{{ section.settings.mission_body | escape }}</p>
+    </div>
+    <div class="about-mission__media" data-animate="about-fade">
+      {%- if section.settings.mission_image -%}
+        {{ section.settings.mission_image | image_url: width: 960 | image_tag: class: 'about-mission__img', loading: 'lazy' }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'about-mission__placeholder' }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══ ABOUT — VALUES ═══ {%- endcomment -%}
+<div class="about-values full-width" data-surface="dark">
+  <div class="about-values__inner">
+    <h2 class="about-values__heading">{{ section.settings.values_heading | escape }}</h2>
+    <div class="about-values__grid">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign v_title = section.settings.value_1_title
+              assign v_desc = section.settings.value_1_desc
+            when 2
+              assign v_title = section.settings.value_2_title
+              assign v_desc = section.settings.value_2_desc
+            when 3
+              assign v_title = section.settings.value_3_title
+              assign v_desc = section.settings.value_3_desc
+            when 4
+              assign v_title = section.settings.value_4_title
+              assign v_desc = section.settings.value_4_desc
+          endcase
+        -%}
+        {%- if v_title != blank -%}
+          <div class="about-values__card" data-animate="about-stagger" style="--stagger: {{ i | minus: 1 | times: 100 }}ms;">
+            <span class="about-values__number">0{{ i }}</span>
+            <h3 class="about-values__card-title">{{ v_title | escape }}</h3>
+            <p class="about-values__card-body">{{ v_desc | escape }}</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══ ABOUT — TEAM / STORY ═══ {%- endcomment -%}
+<div class="about-story full-width" data-surface="cream">
+  <div class="about-story__inner">
+    <div class="about-story__media" data-animate="about-fade">
+      {%- if section.settings.story_image -%}
+        {{ section.settings.story_image | image_url: width: 960 | image_tag: class: 'about-story__img', loading: 'lazy' }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'about-story__placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="about-story__text" data-animate="about-slide">
+      <p class="about-story__eyebrow">{{ section.settings.story_eyebrow | escape }}</p>
+      <h2 class="about-story__heading">{{ section.settings.story_heading | escape }}</h2>
+      <p class="about-story__body">{{ section.settings.story_body | escape }}</p>
+      {%- if section.settings.story_cta_label != blank -%}
+        <a href="{{ section.settings.story_cta_url | default: '#' }}" class="about-story__cta">
+          {{- section.settings.story_cta_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══ ABOUT — CTA BANNER ═══ {%- endcomment -%}
+<div class="about-cta full-width" data-surface="dark">
+  <div class="about-cta__inner" data-animate="about-fade">
+    <h2 class="about-cta__heading">{{ section.settings.cta_heading | escape }}</h2>
+    <p class="about-cta__body">{{ section.settings.cta_body | escape }}</p>
+    {%- if section.settings.cta_button_label != blank -%}
+      <a href="{{ section.settings.cta_button_url | default: '#' }}" class="about-cta__btn">
+        {{- section.settings.cta_button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Hero ─── */
+  .about-hero {
+    background: var(--moov-black);
+    padding: 160px 40px 120px;
+    text-align: center;
+  }
+
+  .about-hero__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .about-hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 20px;
+  }
+
+  .about-hero__heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 28px;
+  }
+
+  .about-hero__body {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── Mission ─── */
+  .about-mission {
+    background: var(--moov-cream);
+    padding: 140px 40px;
+  }
+
+  .about-mission__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-mission__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 16px;
+  }
+
+  .about-mission__heading {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 24px;
+  }
+
+  .about-mission__body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    max-width: 440px;
+  }
+
+  .about-mission__img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  /* ─── Values ─── */
+  .about-values {
+    background: var(--moov-black);
+    padding: 140px 40px;
+  }
+
+  .about-values__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-values__heading {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 64px;
+    text-align: center;
+  }
+
+  .about-values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .about-values__card {
+    padding: 36px 28px;
+    border: 0.5px solid var(--moov-border-dark);
+    border-radius: 12px;
+    transition: background 0.2s ease;
+  }
+
+  .about-values__card:hover {
+    background: rgba(245, 238, 220, 0.03);
+  }
+
+  .about-values__number {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--moov-amber);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .about-values__card-title {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 12px;
+  }
+
+  .about-values__card-body {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+
+  /* ─── Story ─── */
+  .about-story {
+    background: var(--moov-cream);
+    padding: 140px 40px;
+  }
+
+  .about-story__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-story__img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .about-story__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 16px;
+  }
+
+  .about-story__heading {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 24px;
+  }
+
+  .about-story__body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    max-width: 440px;
+  }
+
+  .about-story__cta {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 14px 28px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .about-story__cta:hover {
+    opacity: 0.85;
+  }
+
+  /* ─── CTA Banner ─── */
+  .about-cta {
+    background: var(--moov-black);
+    padding: 120px 40px;
+    text-align: center;
+  }
+
+  .about-cta__inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .about-cta__heading {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 20px;
+  }
+
+  .about-cta__body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 0 36px;
+  }
+
+  .about-cta__btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border: 0.5px solid var(--moov-border-amber);
+    border-radius: 999px;
+    color: var(--moov-amber);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .about-cta__btn:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+
+  /* ─── Animations ─── */
+  [data-animate="about-slide"] {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="about-fade"] {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+    transition-delay: 0.15s;
+  }
+
+  [data-animate="about-stagger"] {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition-delay: var(--stagger, 0ms);
+  }
+
+  [data-animate="about-slide"].is-visible,
+  [data-animate="about-fade"].is-visible,
+  [data-animate="about-stagger"].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .about-hero { padding: 120px 40px 80px; }
+    .about-mission { padding: 100px 40px; }
+    .about-values { padding: 100px 40px; }
+    .about-story { padding: 100px 40px; }
+    .about-cta { padding: 80px 40px; }
+
+    .about-mission__inner,
+    .about-story__inner {
+      gap: 48px;
+    }
+
+    .about-values__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .about-hero { padding: 100px 24px 64px; }
+    .about-mission { padding: 80px 24px; }
+    .about-values { padding: 80px 24px; }
+    .about-story { padding: 80px 24px; }
+    .about-cta { padding: 64px 24px; }
+
+    .about-mission__inner,
+    .about-story__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .about-story__media {
+      order: -1;
+    }
+
+    .about-values__grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var els = document.querySelectorAll('[data-animate^="about-"]');
+    if (!els.length) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    els.forEach(function (el) { observer.observe(el); });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "MOOV About",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Eyebrow",
+      "default": "Our story"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "Built to move you forward."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_body",
+      "label": "Body",
+      "default": "MOOV was born from a simple idea — your alarm should help you start, not make you stop. We design products that turn the hardest moment of the day into the first win."
+    },
+    {
+      "type": "header",
+      "content": "Mission"
+    },
+    {
+      "type": "text",
+      "id": "mission_eyebrow",
+      "label": "Eyebrow",
+      "default": "Our mission"
+    },
+    {
+      "type": "text",
+      "id": "mission_heading",
+      "label": "Heading",
+      "default": "Mornings that matter."
+    },
+    {
+      "type": "textarea",
+      "id": "mission_body",
+      "label": "Body",
+      "default": "We believe how you start determines how you finish. MOOV exists to replace dread with momentum — a single product that bridges the gap between sleep and an intentional day."
+    },
+    {
+      "type": "image_picker",
+      "id": "mission_image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Values"
+    },
+    {
+      "type": "text",
+      "id": "values_heading",
+      "label": "Heading",
+      "default": "What we stand for."
+    },
+    {
+      "type": "text",
+      "id": "value_1_title",
+      "label": "Value 1 title",
+      "default": "Movement first"
+    },
+    {
+      "type": "textarea",
+      "id": "value_1_desc",
+      "label": "Value 1 description",
+      "default": "Every feature starts with one question: does this get people moving? If the answer is no, we don't build it."
+    },
+    {
+      "type": "text",
+      "id": "value_2_title",
+      "label": "Value 2 title",
+      "default": "Intentional design"
+    },
+    {
+      "type": "textarea",
+      "id": "value_2_desc",
+      "label": "Value 2 description",
+      "default": "No unnecessary buttons. No feature bloat. MOOV does one thing exceptionally well so you can focus on everything else."
+    },
+    {
+      "type": "text",
+      "id": "value_3_title",
+      "label": "Value 3 title",
+      "default": "Built to last"
+    },
+    {
+      "type": "textarea",
+      "id": "value_3_desc",
+      "label": "Value 3 description",
+      "default": "IP67 rated, drop-tested, and designed for daily use. We build products that earn their place on your nightstand for years."
+    },
+    {
+      "type": "text",
+      "id": "value_4_title",
+      "label": "Value 4 title",
+      "default": "Community driven"
+    },
+    {
+      "type": "textarea",
+      "id": "value_4_desc",
+      "label": "Value 4 description",
+      "default": "Our best ideas come from the people who use MOOV every morning. Feedback shapes everything from firmware updates to new hardware."
+    },
+    {
+      "type": "header",
+      "content": "Story"
+    },
+    {
+      "type": "text",
+      "id": "story_eyebrow",
+      "label": "Eyebrow",
+      "default": "The team"
+    },
+    {
+      "type": "text",
+      "id": "story_heading",
+      "label": "Heading",
+      "default": "From idea to nightstand."
+    },
+    {
+      "type": "textarea",
+      "id": "story_body",
+      "label": "Body",
+      "default": "MOOV started in a flat in London when two designers couldn't stop pressing snooze. Three years, 47 prototypes, and one successful Kickstarter later — we're shipping worldwide."
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "story_cta_label",
+      "label": "Button label",
+      "default": "Meet the team"
+    },
+    {
+      "type": "url",
+      "id": "story_cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Bottom CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "Heading",
+      "default": "Ready to start moving?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_body",
+      "label": "Body",
+      "default": "Join thousands of early risers who replaced snooze with momentum."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "Button label",
+      "default": "Pre-order now"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MOOV About"
+    }
+  ]
+}
+{% endschema %}

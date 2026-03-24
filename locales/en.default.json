@@ -82,9 +82,8 @@
     },
     "nav": {
       "shop": "Shop",
-      "features": "Features",
-      "support": "Support",
-      "about": "About"
+      "about": "About",
+      "contact": "Contact"
     },
     "content": "Content",
     "navigation": "Navigation",
@@ -134,6 +133,26 @@
     "accessories": {
       "title": "Accessories"
     }
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send message",
+    "success": "Thank you for your message. We'll be in touch soon.",
+    "email_label": "Email",
+    "phone_label": "Phone",
+    "address_label": "Address",
+    "hours_label": "Support hours"
+  },
+  "shop": {
+    "sold_out": "Sold out",
+    "sale": "Sale",
+    "previous": "Previous",
+    "next": "Next",
+    "empty": "No products found in this collection.",
+    "back_home": "Back to home"
   },
   "sections": {
     "hero": {
