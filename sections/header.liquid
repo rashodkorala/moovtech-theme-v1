@@ -268,11 +268,19 @@
   /* ── Sticky modifier ──
      Sticky must be on the Shopify wrapper (.shopify-section) since
      the header element is a child of a grid container. We use :has()
-     to bubble the sticky positioning up to the wrapper. */
-  .shopify-section-group-header-group:has(.moov-header--sticky),
-  .shopify-section-group-header-group:has(.moov-header--sticky) > .shopify-section {
+     to bubble the sticky positioning up to the wrapper.
+     Skip when transparent is active — fixed positioning handles it. */
+  .shopify-section-group-header-group:has(.moov-header--sticky:not(.moov-header--transparent)),
+  .shopify-section-group-header-group:has(.moov-header--sticky:not(.moov-header--transparent)) > .shopify-section {
     position: sticky;
     top: 0;
+    z-index: 100;
+  }
+
+  /* Transparent header: wrapper must not interfere with fixed positioning */
+  .shopify-section-group-header-group:has(.moov-header--transparent),
+  .shopify-section-group-header-group:has(.moov-header--transparent) > .shopify-section {
+    position: relative;
     z-index: 100;
   }
 
