@@ -1,0 +1,922 @@
+{%- comment -%} ═══ STICKY MINI-BAR ═══ {%- endcomment -%}
+<div class="moov-mini-bar" data-surface="dark">
+  <div class="moov-mini-bar__inner">
+    <div class="moov-mini-bar__left">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 80 | image_tag: class: 'moov-mini-bar__img', alt: product.title | escape }}
+      {%- endif -%}
+      <span class="moov-mini-bar__name">{{ product.title }}</span>
+    </div>
+    <nav class="moov-mini-bar__links">
+      <a href="#moov-features" class="moov-mini-bar__link">{{ 'product.mini_bar.features' | t }}</a>
+      <a href="#moov-specs" class="moov-mini-bar__link">{{ 'product.mini_bar.specs' | t }}</a>
+    </nav>
+    <a href="#moov-product-cta" class="moov-mini-bar__cta">{{ 'product.pre_order' | t }}</a>
+  </div>
+</div>
+
+{%- comment -%} ═══ SECTION 1: PRODUCT INTRO (dark surface) ═══ {%- endcomment -%}
+<div class="moov-prod-intro full-width" data-surface="dark" id="moov-product-hero">
+  <div class="moov-prod-intro__inner">
+    {%- comment -%} Left — Image carousel {%- endcomment -%}
+    <div class="moov-prod-intro__gallery">
+      <div class="moov-prod-intro__main-image">
+        {%- for image in product.images limit: 5 -%}
+          <div class="moov-prod-intro__slide {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}">
+            {{ image | image_url: width: 900 | image_tag: loading: 'eager', alt: image.alt | default: product.title | escape }}
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if product.images.size > 1 -%}
+        <div class="moov-prod-intro__thumbs">
+          {%- for image in product.images limit: 5 -%}
+            <button class="moov-prod-intro__thumb {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+              {{ image | image_url: width: 120 | image_tag: alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Right — Product details {%- endcomment -%}
+    <div class="moov-prod-intro__details">
+      <p class="moov-prod-intro__eyebrow">{{ section.settings.product_eyebrow | escape }}</p>
+      <h1 class="moov-prod-intro__title">{{ product.title }}</h1>
+      {%- if product.description != blank -%}
+        <p class="moov-prod-intro__desc">{{ product.description | strip_html | truncate: 120 }}</p>
+      {%- endif -%}
+
+      <div class="moov-prod-intro__price">
+        <span class="moov-prod-intro__price-current">{{ product.selected_or_first_available_variant.price | money }}</span>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          <span class="moov-prod-intro__price-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Variant selectors {%- endcomment -%}
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          <div class="moov-prod-intro__option">
+            <p class="moov-prod-intro__option-label">{{ option.name }} — <strong>{{ option.selected_value }}</strong></p>
+            <div class="moov-prod-intro__option-pills">
+              {%- for value in option.values -%}
+                <button
+                  class="moov-colour-pill {% if value == option.selected_value %}is-selected{% endif %}"
+                  data-option="{{ option.name }}"
+                  data-value="{{ value }}"
+                >
+                  {{ value }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      {%- comment -%} Add to cart / Pre-order {%- endcomment -%}
+      <div id="moov-product-cta">
+        {%- form 'product', product -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit" class="moov-prod-intro__add-btn">
+            {{ 'product.pre_order' | t }}
+          </button>
+        {%- endform -%}
+        <p class="moov-prod-intro__ship-notice">{{ 'product.ship_notice' | t: date: section.settings.preorder_date }}</p>
+      </div>
+
+      {%- comment -%} Feature icons strip {%- endcomment -%}
+      <div class="moov-prod-intro__features">
+        {%- for i in (1..4) -%}
+          {%- assign label_key = 'feature_' | append: i | append: '_label' -%}
+          {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
+          {%- assign label = section.settings[label_key] -%}
+          {%- assign desc = section.settings[desc_key] -%}
+          {%- if label != blank -%}
+            <div class="moov-prod-intro__feat">
+              <span class="moov-prod-intro__feat-label">{{ label }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══ SECTION 2: FEATURES STRIP (cream surface) ═══ {%- endcomment -%}
+<div class="moov-features-strip full-width" data-surface="cream" id="moov-features">
+  <div class="moov-features-strip__inner">
+    {%- for i in (1..4) -%}
+      {%- assign label_key = 'feature_' | append: i | append: '_label' -%}
+      {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
+      {%- assign label = section.settings[label_key] -%}
+      {%- assign desc = section.settings[desc_key] -%}
+      {%- if label != blank -%}
+        <div class="moov-features-strip__item">
+          <p class="moov-features-strip__label">{{ label }}</p>
+          <p class="moov-features-strip__desc">{{ desc }}</p>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- comment -%} ═══ SECTION 3: DEEP-DIVE A (dark surface) ═══ {%- endcomment -%}
+{%- if section.settings.deepdive_a_headline != blank -%}
+  <div class="moov-deepdive moov-deepdive--a full-width" data-surface="dark">
+    <div class="moov-deepdive__inner">
+      <div class="moov-deepdive__text">
+        <p class="moov-deepdive__eyebrow">{{ section.settings.deepdive_a_eyebrow | escape }}</p>
+        <h2 class="moov-deepdive__heading">{{ section.settings.deepdive_a_headline | escape }}</h2>
+        <p class="moov-deepdive__body">{{ section.settings.deepdive_a_body | escape }}</p>
+      </div>
+      <div class="moov-deepdive__media">
+        {%- if section.settings.deepdive_a_video != blank -%}
+          <video autoplay muted loop playsinline class="moov-deepdive__video">
+            <source src="{{ section.settings.deepdive_a_video }}" type="video/mp4">
+          </video>
+        {%- elsif section.settings.deepdive_a_image -%}
+          {{ section.settings.deepdive_a_image | image_url: width: 960 | image_tag: class: 'moov-deepdive__img' }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'moov-deepdive__placeholder' }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ═══ SECTION 4: DEEP-DIVE B (cream surface, flipped) ═══ {%- endcomment -%}
+{%- if section.settings.deepdive_b_headline != blank -%}
+  <div class="moov-deepdive moov-deepdive--b moov-deepdive--flipped full-width" data-surface="cream">
+    <div class="moov-deepdive__inner">
+      <div class="moov-deepdive__media">
+        {%- if section.settings.deepdive_b_video != blank -%}
+          <video autoplay muted loop playsinline class="moov-deepdive__video">
+            <source src="{{ section.settings.deepdive_b_video }}" type="video/mp4">
+          </video>
+        {%- elsif section.settings.deepdive_b_image -%}
+          {{ section.settings.deepdive_b_image | image_url: width: 960 | image_tag: class: 'moov-deepdive__img' }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'moov-deepdive__placeholder' }}
+        {%- endif -%}
+      </div>
+      <div class="moov-deepdive__text">
+        <p class="moov-deepdive__eyebrow moov-deepdive__eyebrow--light">{{ section.settings.deepdive_b_eyebrow | escape }}</p>
+        <h2 class="moov-deepdive__heading moov-deepdive__heading--light">{{ section.settings.deepdive_b_headline | escape }}</h2>
+        <p class="moov-deepdive__body moov-deepdive__body--light">{{ section.settings.deepdive_b_body | escape }}</p>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ═══ SECTION 5: DEEP-DIVE C (dark surface) ═══ {%- endcomment -%}
+{%- if section.settings.deepdive_c_headline != blank -%}
+  <div class="moov-deepdive moov-deepdive--c full-width" data-surface="dark">
+    <div class="moov-deepdive__inner">
+      <div class="moov-deepdive__text">
+        <p class="moov-deepdive__eyebrow">{{ section.settings.deepdive_c_eyebrow | escape }}</p>
+        <h2 class="moov-deepdive__heading">{{ section.settings.deepdive_c_headline | escape }}</h2>
+        <p class="moov-deepdive__body">{{ section.settings.deepdive_c_body | escape }}</p>
+      </div>
+      <div class="moov-deepdive__media">
+        {%- if section.settings.deepdive_c_video != blank -%}
+          <video autoplay muted loop playsinline class="moov-deepdive__video">
+            <source src="{{ section.settings.deepdive_c_video }}" type="video/mp4">
+          </video>
+        {%- elsif section.settings.deepdive_c_image -%}
+          {{ section.settings.deepdive_c_image | image_url: width: 960 | image_tag: class: 'moov-deepdive__img' }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'moov-deepdive__placeholder' }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ═══ SECTION 6: TECH SPECS (cream surface) ═══ {%- endcomment -%}
+<div class="moov-specs full-width" data-surface="cream" id="moov-specs">
+  <div class="moov-specs__inner">
+    <h2 class="moov-specs__heading">{{ 'product.specs.title' | t }}</h2>
+    <div class="moov-specs__tabs" role="tablist">
+      <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="audio">{{ 'product.specs.audio' | t }}</button>
+      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
+      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
+      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
+    </div>
+
+    <div class="moov-specs__panel is-active" data-panel="audio">
+      <dl class="moov-specs__list">
+        <div class="moov-specs__row"><dt>{{ 'product.specs.amplifiers' | t }}</dt><dd>{{ 'product.specs.amplifiers_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.tweeters' | t }}</dt><dd>{{ 'product.specs.tweeters_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.woofer' | t }}</dt><dd>{{ 'product.specs.woofer_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.eq' | t }}</dt><dd>{{ 'product.specs.eq_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.trueplay' | t }}</dt><dd>{{ 'product.specs.trueplay_val' | t }}</dd></div>
+      </dl>
+    </div>
+
+    <div class="moov-specs__panel" data-panel="dimensions">
+      <dl class="moov-specs__list">
+        <div class="moov-specs__row"><dt>{{ 'product.specs.height' | t }}</dt><dd>192.3mm</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.width' | t }}</dt><dd>112.5mm</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.depth' | t }}</dt><dd>76.7mm</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.weight' | t }}</dt><dd>1.3kg</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.finish' | t }}</dt><dd>{{ 'product.specs.finish_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.colours' | t }}</dt><dd>{{ 'product.specs.colours_val' | t }}</dd></div>
+      </dl>
+    </div>
+
+    <div class="moov-specs__panel" data-panel="connectivity">
+      <dl class="moov-specs__list">
+        <div class="moov-specs__row"><dt>{{ 'product.specs.battery' | t }}</dt><dd>{{ 'product.specs.battery_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>WiFi</dt><dd>802.11a/b/g/n/ac/ax 2.4GHz / 5GHz</dd></div>
+        <div class="moov-specs__row"><dt>Bluetooth</dt><dd>5.3</dd></div>
+        <div class="moov-specs__row"><dt>USB-C</dt><dd>{{ 'product.specs.usbc_val' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>{{ 'product.specs.water' | t }}</dt><dd>IP67</dd></div>
+      </dl>
+    </div>
+
+    <div class="moov-specs__panel" data-panel="inbox">
+      <dl class="moov-specs__list">
+        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_alarm' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_charger' | t }}</dd></div>
+        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_guide' | t }}</dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ═══ SECTION 7: ACCESSORIES (dark surface) ═══ {%- endcomment -%}
+{%- if product.collections.size > 0 -%}
+  {%- assign related = product.collections.first.products -%}
+  {%- if related.size > 1 -%}
+    <div class="moov-accessories full-width" data-surface="dark">
+      <div class="moov-accessories__inner">
+        <h2 class="moov-accessories__heading">{{ 'product.accessories.title' | t }}</h2>
+        <div class="moov-accessories__scroll">
+          {%- for item in related limit: 8 -%}
+            {%- if item.handle != product.handle -%}
+              <a href="{{ item.url }}" class="moov-accessories__card">
+                <div class="moov-accessories__card-img">
+                  {%- if item.featured_image -%}
+                    {{ item.featured_image | image_url: width: 520 | image_tag: loading: 'lazy', alt: item.title | escape }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  {%- endif -%}
+                </div>
+                <p class="moov-accessories__card-title">{{ item.title }}</p>
+                <p class="moov-accessories__card-price">{{ item.price | money }}</p>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  /* ═══ MINI-BAR ═══════════════════════════════ */
+  .moov-mini-bar {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    height: 56px;
+    background: var(--moov-black);
+    border-bottom: 0.5px solid var(--moov-border-dark);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .moov-mini-bar.mini-bar--visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .moov-mini-bar__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .moov-mini-bar__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .moov-mini-bar__img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+  .moov-mini-bar__name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+  }
+  .moov-mini-bar__links {
+    display: flex;
+    gap: 32px;
+  }
+  .moov-mini-bar__link {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .moov-mini-bar__link:hover {
+    color: var(--moov-text-primary-dark);
+  }
+  .moov-mini-bar__cta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--moov-amber);
+    border: 0.5px solid var(--moov-border-amber);
+    border-radius: 999px;
+    padding: 7px 18px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .moov-mini-bar__cta:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+
+  /* ═══ PRODUCT INTRO ══════════════════════════ */
+  .moov-prod-intro {
+    background: var(--moov-black);
+    padding: 96px 0 80px;
+  }
+  .moov-prod-intro__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 48px;
+    align-items: start;
+  }
+  .moov-prod-intro__gallery {
+    position: sticky;
+    top: 140px;
+  }
+  .moov-prod-intro__main-image {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--moov-black);
+  }
+  .moov-prod-intro__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .moov-prod-intro__slide.is-active {
+    opacity: 1;
+  }
+  .moov-prod-intro__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .moov-prod-intro__thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .moov-prod-intro__thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s, border-color 0.2s;
+  }
+  .moov-prod-intro__thumb.is-active {
+    opacity: 1;
+    border-color: var(--moov-text-primary-dark);
+  }
+  .moov-prod-intro__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Details */
+  .moov-prod-intro__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 16px;
+  }
+  .moov-prod-intro__title {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 12px;
+  }
+  .moov-prod-intro__desc {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 0 24px;
+  }
+  .moov-prod-intro__price {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .moov-prod-intro__price-current {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+  }
+  .moov-prod-intro__price-compare {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--moov-text-tertiary-dark);
+    text-decoration: line-through;
+  }
+
+  /* Options */
+  .moov-prod-intro__option {
+    margin-bottom: 24px;
+  }
+  .moov-prod-intro__option-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--moov-text-tertiary-dark);
+    margin: 0 0 10px;
+  }
+  .moov-prod-intro__option-label strong {
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+  }
+  .moov-prod-intro__option-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .moov-colour-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 0.5px solid var(--moov-border-dark);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-dark);
+    background: none;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .moov-colour-pill.is-selected {
+    border-color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-dark);
+  }
+
+  /* CTA */
+  .moov-prod-intro__add-btn {
+    display: block;
+    width: 100%;
+    height: 52px;
+    background: transparent;
+    border: 0.5px solid var(--moov-border-amber);
+    color: var(--moov-amber);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-bottom: 12px;
+  }
+  .moov-prod-intro__add-btn:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+  .moov-prod-intro__ship-notice {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(240, 180, 41, 0.7);
+    text-align: center;
+    margin: 0 0 32px;
+  }
+
+  /* Feature icons */
+  .moov-prod-intro__features {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 0.5px solid var(--moov-border-dark);
+  }
+  .moov-prod-intro__feat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .moov-prod-intro__feat-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  /* ═══ FEATURES STRIP ═════════════════════════ */
+  .moov-features-strip {
+    background: var(--moov-cream);
+    padding: 72px 0;
+  }
+  .moov-features-strip__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+  }
+  .moov-features-strip__label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 6px;
+  }
+  .moov-features-strip__desc {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ═══ DEEP-DIVES ═════════════════════════════ */
+  .moov-deepdive {
+    min-height: 600px;
+  }
+  .moov-deepdive--a, .moov-deepdive--c {
+    background: var(--moov-black);
+  }
+  .moov-deepdive--b {
+    background: var(--moov-cream);
+  }
+  .moov-deepdive__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    min-height: 600px;
+  }
+  .moov-deepdive__text {
+    max-width: 480px;
+  }
+  .moov-deepdive__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(240, 180, 41, 0.7);
+    margin: 0 0 16px;
+  }
+  .moov-deepdive__eyebrow--light {
+    color: var(--moov-text-tertiary-light);
+  }
+  .moov-deepdive__heading {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 24px;
+  }
+  .moov-deepdive__heading--light {
+    color: var(--moov-text-primary-light);
+  }
+  .moov-deepdive__body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+  .moov-deepdive__body--light {
+    color: var(--moov-text-secondary-light);
+  }
+  .moov-deepdive__media {
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .moov-deepdive__video, .moov-deepdive__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .moov-deepdive__placeholder {
+    width: 100%;
+    height: 400px;
+  }
+
+  /* ═══ TECH SPECS ═════════════════════════════ */
+  .moov-specs {
+    background: var(--moov-cream);
+    padding: 80px 0;
+  }
+  .moov-specs__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .moov-specs__heading {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 32px;
+  }
+  .moov-specs__tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 0.5px solid var(--moov-border-light);
+    margin-bottom: 0;
+  }
+  .moov-specs__tab {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    background: none;
+    border: none;
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -0.5px;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .moov-specs__tab.is-active {
+    color: var(--moov-text-primary-light);
+    border-bottom-color: var(--moov-black);
+  }
+  .moov-specs__panel {
+    display: none;
+  }
+  .moov-specs__panel.is-active {
+    display: block;
+  }
+  .moov-specs__list {
+    margin: 0;
+  }
+  .moov-specs__row {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 0.5px solid var(--moov-border-light);
+  }
+  .moov-specs__row:last-child {
+    border-bottom: none;
+  }
+  .moov-specs__row dt {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+  }
+  .moov-specs__row dd {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+    text-align: right;
+  }
+
+  /* ═══ ACCESSORIES ════════════════════════════ */
+  .moov-accessories {
+    background: var(--moov-black);
+    padding: 80px 0;
+  }
+  .moov-accessories__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .moov-accessories__heading {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 32px;
+  }
+  .moov-accessories__scroll {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+  .moov-accessories__scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .moov-accessories__card {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+    text-decoration: none;
+  }
+  .moov-accessories__card-img {
+    width: 260px;
+    height: 260px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(245, 238, 220, 0.05);
+    margin-bottom: 12px;
+  }
+  .moov-accessories__card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .moov-accessories__card-title {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 4px;
+  }
+  .moov-accessories__card-price {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+
+  /* ═══ RESPONSIVE ═════════════════════════════ */
+  @media (max-width: 899px) {
+    .moov-mini-bar__inner { padding: 0 24px; }
+    .moov-mini-bar__links { display: none; }
+    .moov-prod-intro__inner {
+      grid-template-columns: 1fr;
+      padding: 0 24px;
+    }
+    .moov-prod-intro__gallery { position: static; }
+    .moov-prod-intro__title { font-size: 32px; }
+    .moov-features-strip__inner {
+      grid-template-columns: 1fr 1fr;
+      padding: 0 24px;
+    }
+    .moov-deepdive__inner {
+      grid-template-columns: 1fr;
+      padding: 0 24px;
+      gap: 32px;
+      min-height: auto;
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+    .moov-deepdive--flipped .moov-deepdive__media {
+      order: -1;
+    }
+    .moov-specs__inner { padding: 0 24px; }
+    .moov-specs__heading { font-size: 28px; }
+    .moov-accessories__inner { padding: 0 24px; }
+    .moov-accessories__heading { font-size: 28px; }
+  }
+
+  @media (max-width: 767px) {
+    .moov-prod-intro__thumbs { display: none; }
+    .moov-features-strip__inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .moov-deepdive__heading { font-size: 28px; }
+    .moov-specs__tabs { gap: 16px; overflow-x: auto; }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /* Mini-bar visibility */
+  var hero = document.getElementById('moov-product-hero');
+  var miniBar = document.querySelector('.moov-mini-bar');
+  if (hero && miniBar) {
+    var miniObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        miniBar.classList.toggle('mini-bar--visible', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    miniObserver.observe(hero);
+  }
+
+  /* Image carousel */
+  document.querySelectorAll('.moov-prod-intro__thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      var idx = this.getAttribute('data-index');
+      var gallery = this.closest('.moov-prod-intro__gallery');
+      gallery.querySelectorAll('.moov-prod-intro__slide').forEach(function(s) {
+        s.classList.toggle('is-active', s.getAttribute('data-index') === idx);
+      });
+      gallery.querySelectorAll('.moov-prod-intro__thumb').forEach(function(t) {
+        t.classList.toggle('is-active', t.getAttribute('data-index') === idx);
+      });
+    });
+  });
+
+  /* Spec tabs */
+  document.querySelectorAll('.moov-specs__tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = this.getAttribute('data-tab');
+      document.querySelectorAll('.moov-specs__tab').forEach(function(t) {
+        t.classList.toggle('is-active', t.getAttribute('data-tab') === target);
+        t.setAttribute('aria-selected', t.getAttribute('data-tab') === target ? 'true' : 'false');
+      });
+      document.querySelectorAll('.moov-specs__panel').forEach(function(p) {
+        p.classList.toggle('is-active', p.getAttribute('data-panel') === target);
+      });
+    });
+  });
+
+  /* Smooth scroll for mini-bar links */
+  document.querySelectorAll('.moov-mini-bar__link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 140;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "MOOV Product",
+  "settings": [
+    { "type": "text", "id": "product_eyebrow", "label": "Product eyebrow", "default": "Smart alarm technology" },
+    { "type": "text", "id": "preorder_date", "label": "Pre-order ship date", "default": "March 31, 2026" },
+    { "type": "header", "content": "Feature strip" },
+    { "type": "text", "id": "feature_1_label", "label": "Feature 1 label", "default": "24-hour battery" },
+    { "type": "text", "id": "feature_1_desc", "label": "Feature 1 description", "default": "All-day playback on a single charge." },
+    { "type": "text", "id": "feature_2_label", "label": "Feature 2 label", "default": "IP67 waterproof" },
+    { "type": "text", "id": "feature_2_desc", "label": "Feature 2 description", "default": "Dustproof and submerge-resistant." },
+    { "type": "text", "id": "feature_3_label", "label": "Feature 3 label", "default": "Smart wake" },
+    { "type": "text", "id": "feature_3_desc", "label": "Feature 3 description", "default": "Wakes you at the optimal moment in your cycle." },
+    { "type": "text", "id": "feature_4_label", "label": "Feature 4 label", "default": "WiFi + Bluetooth" },
+    { "type": "text", "id": "feature_4_desc", "label": "Feature 4 description", "default": "Full ecosystem or standalone Bluetooth." },
+    { "type": "header", "content": "Deep-dive A (dark)" },
+    { "type": "text", "id": "deepdive_a_eyebrow", "label": "Deep-dive A eyebrow" },
+    { "type": "text", "id": "deepdive_a_headline", "label": "Deep-dive A headline" },
+    { "type": "textarea", "id": "deepdive_a_body", "label": "Deep-dive A body" },
+    { "type": "image_picker", "id": "deepdive_a_image", "label": "Deep-dive A image" },
+    { "type": "text", "id": "deepdive_a_video", "label": "Deep-dive A video URL (MP4)" },
+    { "type": "header", "content": "Deep-dive B (cream)" },
+    { "type": "text", "id": "deepdive_b_eyebrow", "label": "Deep-dive B eyebrow" },
+    { "type": "text", "id": "deepdive_b_headline", "label": "Deep-dive B headline" },
+    { "type": "textarea", "id": "deepdive_b_body", "label": "Deep-dive B body" },
+    { "type": "image_picker", "id": "deepdive_b_image", "label": "Deep-dive B image" },
+    { "type": "text", "id": "deepdive_b_video", "label": "Deep-dive B video URL (MP4)" },
+    { "type": "header", "content": "Deep-dive C (dark)" },
+    { "type": "text", "id": "deepdive_c_eyebrow", "label": "Deep-dive C eyebrow" },
+    { "type": "text", "id": "deepdive_c_headline", "label": "Deep-dive C headline" },
+    { "type": "textarea", "id": "deepdive_c_body", "label": "Deep-dive C body" },
+    { "type": "image_picker", "id": "deepdive_c_image", "label": "Deep-dive C image" },
+    { "type": "text", "id": "deepdive_c_video", "label": "Deep-dive C video URL (MP4)" }
+  ],
+  "presets": [{ "name": "MOOV Product" }]
+}
+{% endschema %}

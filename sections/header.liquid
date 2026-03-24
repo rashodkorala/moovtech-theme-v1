@@ -1,179 +1,232 @@
-<header class="site-header full-width">
-  <div class="site-header__pill-wrap">
-    <div class="site-header__pill">
+<style>
+  @font-face {
+    font-family: 'Artford';
+    src: url('{{ 'Artford-Regular.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'Artford-Regular.otf' | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
-      {%- comment -%} Logo {%- endcomment -%}
-      <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }}">
-        <img
-          src="{{ 'moov-logo.png' | asset_url }}"
-          alt="{{ shop.name }}"
-          class="site-header__logo-img"
-          width="90"
-          height="30"
-          loading="eager"
-        >
+  :root {
+    --font-wordmark:   'Artford', serif;
+    --font-display:    'Times New Roman', Times, serif;
+    --font-body:       'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    --moov-black:        #0A0A09;
+    --moov-cream:        #F5EEDC;
+    --moov-cream-shadow: #EDE4C8;
+    --moov-amber:        #F0B429;
+    --moov-amber-glow:   rgba(240, 180, 41, 0.07);
+
+    --moov-text-primary-dark:    #F5EEDC;
+    --moov-text-secondary-dark:  rgba(245, 238, 220, 0.55);
+    --moov-text-tertiary-dark:   rgba(245, 238, 220, 0.30);
+
+    --moov-text-primary-light:   #0A0A09;
+    --moov-text-secondary-light: rgba(10, 10, 9, 0.50);
+    --moov-text-tertiary-light:  rgba(10, 10, 9, 0.30);
+
+    --moov-border-dark:  rgba(245, 238, 220, 0.10);
+    --moov-border-light: rgba(10, 10, 9, 0.10);
+    --moov-border-amber: rgba(240, 180, 41, 0.35);
+  }
+</style>
+
+<header class="moov-header full-width">
+  <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
+    {%- comment -%} Left — Wordmark {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="moov-nav__wordmark" aria-label="{{ shop.name }}">
+      MOOV
+    </a>
+
+    {%- comment -%} Centre — Nav links (desktop) {%- endcomment -%}
+    <ul class="moov-nav__links" role="list">
+      <li><a href="#shopify-section-product_intro" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.shop' | t }}</a></li>
+      <li><a href="#shopify-section-app_section" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.features' | t }}</a></li>
+      <li><a href="#shopify-section-faq" class="moov-nav__link moov-nav__scroll-link">{{ 'general.nav.support' | t }}</a></li>
+      <li><a href="#" class="moov-nav__link">{{ 'general.nav.about' | t }}</a></li>
+    </ul>
+
+    {%- comment -%} Right — Icons + Pre-order pill {%- endcomment -%}
+    <div class="moov-nav__right">
+      <a href="{{ routes.cart_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.cart' | t }}">
+        {%- if cart.item_count > 0 -%}
+          <span class="moov-nav__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        {%- endif -%}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
       </a>
 
-      {%- comment -%} Nav links {%- endcomment -%}
-      <nav class="site-header__nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
-        <ul class="site-header__nav-links" role="list">
-          <li><a href="#shopify-section-product_intro" class="site-header__nav-link site-header__scroll-link">The Alarm</a></li>
-          <li><a href="#shopify-section-app_section" class="site-header__nav-link site-header__scroll-link">The App</a></li>
-          <li><a href="#shopify-section-faq" class="site-header__nav-link site-header__scroll-link">FAQ</a></li>
-        </ul>
-      </nav>
-
-      {%- comment -%} Icons {%- endcomment -%}
-      <div class="site-header__icons">
-        {%- if shop.customer_accounts_enabled -%}
-          <shopify-account
-            menu="{{ section.settings.customer_account_menu }}"
-            class="site-header__icon-btn"
-            aria-label="{{ 'general.accessibility.account' | t }}"
-          >
-            {{ 'icon-account.svg' | inline_asset_content }}
-          </shopify-account>
-        {%- endif -%}
-
-        <a href="{{ routes.cart_url }}" class="site-header__icon-btn site-header__cart" aria-label="{{ 'general.accessibility.cart' | t }}">
-          {%- if cart.item_count > 0 -%}
-            <span class="site-header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
-          {%- endif -%}
-          {{ 'icon-cart.svg' | inline_asset_content }}
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{{ routes.account_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.account' | t }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
         </a>
-      </div>
+      {%- endif -%}
 
+      <a
+        href="{{ section.settings.preorder_url | default: routes.root_url }}"
+        class="moov-nav__preorder"
+      >
+        {{- section.settings.preorder_label | default: 'Pre-order' | escape -}}
+      </a>
     </div>
+
+    {%- comment -%} Mobile hamburger {%- endcomment -%}
+    <button
+      class="moov-nav__hamburger"
+      aria-label="{{ 'general.accessibility.menu' | t }}"
+      aria-expanded="false"
+      aria-controls="moov-mobile-drawer"
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </nav>
+
+  {%- comment -%} Mobile drawer {%- endcomment -%}
+  <div id="moov-mobile-drawer" class="moov-drawer" aria-hidden="true">
+    <div class="moov-drawer__header">
+      <span class="moov-drawer__wordmark">MOOV</span>
+      <button class="moov-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="moov-drawer__nav">
+      <a href="#shopify-section-product_intro" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.shop' | t }}</a>
+      <a href="#shopify-section-app_section" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.features' | t }}</a>
+      <a href="#shopify-section-faq" class="moov-drawer__link moov-nav__scroll-link">{{ 'general.nav.support' | t }}</a>
+      <a href="#" class="moov-drawer__link">{{ 'general.nav.about' | t }}</a>
+    </nav>
+    <a
+      href="{{ section.settings.preorder_url | default: routes.root_url }}"
+      class="moov-drawer__preorder"
+    >
+      {{- section.settings.preorder_label | default: 'Pre-order' | escape -}}
+    </a>
   </div>
 </header>
 
 {% stylesheet %}
-  .site-header {
+  .moov-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    padding: 16px 24px;
-    pointer-events: none; /* let clicks pass through the gap around the pill */
+    height: 72px;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    border-bottom: 0.5px solid transparent;
   }
 
-  .site-header__pill-wrap {
-    max-width: 840px;
-    margin: 0 auto;
-    pointer-events: auto;
+  .moov-header.is-scrolled {
+    background: var(--moov-black);
+    border-bottom-color: var(--moov-border-dark);
   }
 
-  .site-header__pill {
+  .moov-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 40px;
-    padding: 14px 24px;
-    background: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    padding: 0 48px;
   }
 
-  /* Logo */
-  .site-header__logo {
-    display: flex;
-    align-items: center;
+  /* Wordmark */
+  .moov-nav__wordmark {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--moov-text-primary-dark);
     text-decoration: none;
     flex-shrink: 0;
     transition: opacity 0.2s;
   }
 
-  .site-header__logo:hover {
+  .moov-nav__wordmark:hover {
     opacity: 0.7;
   }
 
-  .site-header__logo-img {
-    height: 28px;
-    width: auto;
-    display: block;
-    /* moov-logo.png is white — invert for light backgrounds */
-    filter: invert(1);
-  }
-
-  /* Nav */
-  .site-header__nav {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-
-  .site-header__nav-links {
+  /* Centre links */
+  .moov-nav__links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 36px;
     list-style: none;
     margin: 0;
     padding: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  .site-header__nav-link {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    color: #1a1a1a;
+  .moov-nav__link {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    color: var(--moov-text-secondary-dark);
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
     white-space: nowrap;
   }
 
-  .site-header__nav-link:hover {
-    opacity: 0.6;
+  .moov-nav__link:hover {
+    color: var(--moov-text-primary-dark);
   }
 
-  .site-header__nav-link--active {
-    font-weight: 500;
-  }
-
-  /* Icons */
-  .site-header__icons {
+  /* Right group */
+  .moov-nav__right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 16px;
     flex-shrink: 0;
   }
 
-  .site-header__icon-btn {
+  .moov-nav__icon {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    color: #1a1a1a;
+    color: var(--moov-text-secondary-dark);
     text-decoration: none;
-    transition: background 0.2s;
+    transition: color 0.2s;
     position: relative;
+    border-radius: 50%;
   }
 
-  .site-header__icon-btn:hover {
-    background: rgba(0, 0, 0, 0.06);
+  .moov-nav__icon:hover {
+    color: var(--moov-text-primary-dark);
   }
 
-  .site-header__icon-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .site-header__cart-count {
+  .moov-nav__cart-count {
     position: absolute;
     top: 2px;
     right: 2px;
     min-width: 16px;
     height: 16px;
-    background: #1a1a1a;
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    font-family: var(--font-body);
     font-size: 10px;
-    font-weight: 500;
+    font-weight: 400;
     border-radius: 100px;
     display: flex;
     align-items: center;
@@ -182,49 +235,292 @@
     line-height: 1;
   }
 
-  /* Mobile */
+  /* Pre-order pill */
+  .moov-nav__preorder {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    color: var(--moov-amber);
+    text-decoration: none;
+    border: 0.5px solid var(--moov-border-amber);
+    border-radius: 999px;
+    padding: 9px 20px;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .moov-nav__preorder:hover {
+    opacity: 0.7;
+  }
+
+  /* Hamburger — mobile only */
+  .moov-nav__hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--moov-text-primary-dark);
+    cursor: pointer;
+  }
+
+  /* ── Light nav state (over cream sections) ── */
+  .moov-header.nav--light {
+    background: var(--moov-cream);
+    border-bottom-color: var(--moov-border-light);
+  }
+
+  .moov-header.nav--light.is-scrolled {
+    background: var(--moov-cream);
+    border-bottom-color: var(--moov-border-light);
+  }
+
+  .moov-header.nav--light .moov-nav__wordmark {
+    color: var(--moov-text-primary-light);
+  }
+
+  .moov-header.nav--light .moov-nav__link {
+    color: var(--moov-text-secondary-light);
+  }
+
+  .moov-header.nav--light .moov-nav__link:hover {
+    color: var(--moov-text-primary-light);
+  }
+
+  .moov-header.nav--light .moov-nav__icon {
+    color: var(--moov-text-secondary-light);
+  }
+
+  .moov-header.nav--light .moov-nav__icon:hover {
+    color: var(--moov-text-primary-light);
+  }
+
+  .moov-header.nav--light .moov-nav__preorder {
+    color: var(--moov-text-primary-light);
+    border-color: rgba(10, 10, 9, 0.25);
+  }
+
+  .moov-header.nav--light .moov-nav__hamburger {
+    color: var(--moov-text-primary-light);
+  }
+
+  /* ── Mobile drawer ─────────────────────────── */
+  .moov-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 360px;
+    background: var(--moov-black);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .moov-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .moov-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  .moov-drawer__wordmark {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--moov-text-primary-dark);
+  }
+
+  .moov-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--moov-text-primary-dark);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .moov-drawer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    flex: 1;
+  }
+
+  .moov-drawer__link {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 24px;
+    color: var(--moov-text-secondary-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .moov-drawer__link:hover {
+    color: var(--moov-text-primary-dark);
+  }
+
+  .moov-drawer__preorder {
+    display: block;
+    text-align: center;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    color: var(--moov-amber);
+    text-decoration: none;
+    border: 0.5px solid var(--moov-border-amber);
+    border-radius: 999px;
+    padding: 14px 28px;
+    margin-top: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .moov-drawer__preorder:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+
+  /* ── Responsive ────────────────────────────── */
   @media (max-width: 767px) {
-    .site-header {
-      padding: 12px 16px;
+    .moov-nav {
+      padding: 0 24px;
     }
 
-    .site-header__pill {
-      padding: 12px 18px;
-      gap: 16px;
-    }
-
-    .site-header__nav {
+    .moov-nav__links,
+    .moov-nav__preorder {
       display: none;
     }
 
-    .site-header__logo-img {
-      height: 24px;
+    .moov-nav__hamburger {
+      display: flex;
     }
   }
 {% endstylesheet %}
 
 {% javascript %}
-  document.querySelectorAll('.site-header__scroll-link').forEach(function(link) {
+  var header = document.querySelector('.moov-header');
+
+  if (header) {
+    /* Scroll state */
+    window.addEventListener('scroll', function() {
+      header.classList.toggle('is-scrolled', window.scrollY > 20);
+    });
+
+    /* Nav colour switching via IntersectionObserver.
+       Sections with data-surface="cream" trigger light nav. */
+    var creamSections = document.querySelectorAll('[data-surface="cream"]');
+    if (creamSections.length > 0) {
+      var navObserver = new IntersectionObserver(function(entries) {
+        /* Find which cream section is most visible at the top of the viewport */
+        var isOverCream = false;
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var rect = entry.boundingClientRect;
+            /* If the cream section's top is near/above the nav bottom (72px) */
+            if (rect.top <= 72 && rect.bottom > 72) {
+              isOverCream = true;
+            }
+          }
+        });
+        /* Also check non-observed state: if no dark section is at the top */
+        var headerBottom = 72;
+        var elementAtNav = document.elementFromPoint(window.innerWidth / 2, headerBottom + 1);
+        if (elementAtNav) {
+          var section = elementAtNav.closest('[data-surface]');
+          if (section && section.getAttribute('data-surface') === 'cream') {
+            isOverCream = true;
+          } else if (section && section.getAttribute('data-surface') === 'dark') {
+            isOverCream = false;
+          }
+        }
+        header.classList.toggle('nav--light', isOverCream);
+      }, { threshold: [0, 0.1, 0.5, 1], rootMargin: '-1px 0px -90% 0px' });
+
+      creamSections.forEach(function(s) { navObserver.observe(s); });
+
+      /* Also observe dark sections for transition back */
+      document.querySelectorAll('[data-surface="dark"]').forEach(function(s) {
+        navObserver.observe(s);
+      });
+    }
+
+    /* Fallback: if no data-surface sections exist, check if body has light bg */
+    if (creamSections.length === 0 && !document.querySelector('.moov-hero')) {
+      header.classList.add('nav--light');
+    }
+  }
+
+  /* Smooth scroll for nav links */
+  document.querySelectorAll('.moov-nav__scroll-link').forEach(function(link) {
     link.addEventListener('click', function(e) {
       var target = document.querySelector(this.getAttribute('href'));
       if (!target) return;
       e.preventDefault();
-      var headerHeight = document.querySelector('.site-header') ? document.querySelector('.site-header').offsetHeight : 0;
+      var headerHeight = 72;
       var top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
       window.scrollTo({ top: top, behavior: 'smooth' });
+
+      var drawer = document.getElementById('moov-mobile-drawer');
+      if (drawer && drawer.classList.contains('is-open')) {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
     });
   });
+
+  /* Mobile drawer toggle */
+  var hamburger = document.querySelector('.moov-nav__hamburger');
+  var drawer = document.getElementById('moov-mobile-drawer');
+  var drawerClose = document.querySelector('.moov-drawer__close');
+
+  if (hamburger && drawer) {
+    hamburger.addEventListener('click', function() {
+      var isOpen = drawer.classList.toggle('is-open');
+      drawer.setAttribute('aria-hidden', String(!isOpen));
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+  }
+
+  if (drawerClose && drawer) {
+    drawerClose.addEventListener('click', function() {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  }
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "MOOV Header",
   "settings": [
     {
-      "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "type": "text",
+      "id": "preorder_label",
+      "label": "Pre-order button label",
+      "default": "Pre-order"
+    },
+    {
+      "type": "url",
+      "id": "preorder_url",
+      "label": "Pre-order button link"
     }
   ]
 }

@@ -1,110 +1,31 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "product_hero": {
-      "type": "product-hero",
+    "main": {
+      "type": "moov-product",
       "settings": {
-        "tagline": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        "shipping_note": "Free shipping · Ships Q3 2025",
-        "cta_label": "Pre-Order Now",
-        "app_compat_note": "Works with the MOOV app — available on iOS and Android"
+        "product_eyebrow": "Smart alarm technology",
+        "preorder_date": "March 31, 2026",
+        "feature_1_label": "24-hour battery",
+        "feature_1_desc": "All-day playback on a single charge.",
+        "feature_2_label": "IP67 waterproof",
+        "feature_2_desc": "Dustproof and submerge-resistant.",
+        "feature_3_label": "Smart wake",
+        "feature_3_desc": "Wakes you at the optimal moment in your cycle.",
+        "feature_4_label": "WiFi + Bluetooth",
+        "feature_4_desc": "Full ecosystem or standalone Bluetooth.",
+        "deepdive_a_eyebrow": "Intelligent sleep tracking",
+        "deepdive_a_headline": "Wakes you at the perfect moment.",
+        "deepdive_a_body": "MOOV analyses your movement through the night and identifies the lightest phase of your sleep cycle — so your alarm never pulls you from deep sleep again.",
+        "deepdive_b_eyebrow": "Designed for daily life",
+        "deepdive_b_headline": "Calm by design.",
+        "deepdive_b_body": "A single quiet tone. No jarring beeps. MOOV eases you into the morning with a gentle light sequence and soft chime that rises over 90 seconds.",
+        "deepdive_c_eyebrow": "Always connected",
+        "deepdive_c_headline": "Your whole home, in sync.",
+        "deepdive_c_body": "Connect to WiFi and bring MOOV into your Sonos ecosystem, or switch to Bluetooth for standalone use anywhere."
       }
-    },
-    "product_features": {
-      "type": "product-features",
-      "settings": {
-        "eyebrow": "What it does"
-      },
-      "blocks": {
-        "feat-1": {
-          "type": "feature",
-          "settings": {
-            "number": "01",
-            "title": "Motion-activated dismissal",
-            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
-          }
-        },
-        "feat-2": {
-          "type": "feature",
-          "settings": {
-            "number": "02",
-            "title": "30-day battery life",
-            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
-          }
-        },
-        "feat-3": {
-          "type": "feature",
-          "settings": {
-            "number": "03",
-            "title": "Bluetooth sync",
-            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
-          }
-        },
-        "feat-4": {
-          "type": "feature",
-          "settings": {
-            "number": "04",
-            "title": "App-controlled routines",
-            "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna."
-          }
-        }
-      },
-      "block_order": ["feat-1", "feat-2", "feat-3", "feat-4"]
-    },
-    "product_app_compat": {
-      "type": "product-app-compat",
-      "settings": {
-        "eyebrow": "The App",
-        "heading": "Lorem ipsum dolor sit amet consectetur.",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.",
-        "compat_note": "iOS 14+ and Android 10+"
-      }
-    },
-    "product_shipping": {
-      "type": "product-shipping",
-      "settings": {
-        "label_heading": "Shipping & Delivery"
-      },
-      "blocks": {
-        "row-1": {
-          "type": "shipping_row",
-          "settings": {
-            "label": "Estimated ship date",
-            "value": "Q3 2025"
-          }
-        },
-        "row-2": {
-          "type": "shipping_row",
-          "settings": {
-            "label": "Shipping",
-            "value": "Free worldwide shipping"
-          }
-        },
-        "row-3": {
-          "type": "shipping_row",
-          "settings": {
-            "label": "Returns",
-            "value": "30-day hassle-free returns"
-          }
-        },
-        "row-4": {
-          "type": "shipping_row",
-          "settings": {
-            "label": "Questions",
-            "value": "hello@moovtech.ca"
-          }
-        }
-      },
-      "block_order": ["row-1", "row-2", "row-3", "row-4"]
     }
   },
-  "order": ["product_hero", "product_features", "product_app_compat", "product_shipping"]
+  "order": [
+    "main"
+  ]
 }

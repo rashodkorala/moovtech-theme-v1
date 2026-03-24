@@ -94,6 +94,12 @@
           "name": "Shipping row"
         }
       }
+    },
+    "moov_product": {
+      "name": "MOOV product"
+    },
+    "moov_cart": {
+      "name": "MOOV cart"
     }
   },
   "labels": {

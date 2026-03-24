@@ -1,37 +1,516 @@
-{% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
+{% if cart.item_count == 0 %}
+  <div class="moov-cart moov-cart--empty" data-surface="cream">
+    <div class="moov-cart__empty-state">
+      <p class="moov-cart__eyebrow">Nothing here yet</p>
+      <h2 class="moov-cart__empty-heading">{{ 'cart.empty_title' | t }}.</h2>
+      <a href="/" class="moov-cart__solid-btn">{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  </div>
+{% else %}
+  <div class="moov-cart" data-surface="cream">
+    <div class="moov-cart__inner">
+      <div class="moov-cart__header">
+        <p class="moov-cart__eyebrow">Your bag</p>
+        <h1 class="moov-cart__title">Your order.</h1>
+      </div>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
-{% endcomment %}
+      <div class="moov-cart__grid">
+        <div class="moov-cart__items">
+          {% for item in cart.items %}
+            <div class="moov-cart__item">
+              <a href="{{ item.url }}" class="moov-cart__item-image-link">
+                {% if item.image %}
+                  {{ item.image | image_url: width: 176, height: 176, crop: 'center' | image_tag: class: 'moov-cart__item-image' }}
+                {% endif %}
+              </a>
 
-<h1>{{ 'cart.title' | t }}</h1>
+              <div class="moov-cart__item-details">
+                <a href="{{ item.url }}" class="moov-cart__item-name">{{ item.product.title }}</a>
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+                {% unless item.variant.title == 'Default Title' %}
+                  <p class="moov-cart__item-variant">{{ item.variant.title }}</p>
+                {% endunless %}
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+                <form action="/cart/change" method="post" class="moov-cart__quantity-form">
+                  <input type="hidden" name="id" value="{{ item.variant.id }}">
+                  <div class="moov-cart__quantity-stepper">
+                    <button
+                      type="submit"
+                      name="quantity"
+                      value="{{ item.quantity | minus: 1 }}"
+                      class="moov-cart__qty-btn"
+                      aria-label="{{ 'cart.decrease' | t }}"
+                    >
+                      &minus;
+                    </button>
+                    <span class="moov-cart__qty-value">{{ item.quantity }}</span>
+                    <button
+                      type="submit"
+                      name="quantity"
+                      value="{{ item.quantity | plus: 1 }}"
+                      class="moov-cart__qty-btn"
+                      aria-label="{{ 'cart.increase' | t }}"
+                    >
+                      &plus;
+                    </button>
+                  </div>
+                </form>
+
+                <a href="/cart/change?id={{ item.variant.id }}&quantity=0" class="moov-cart__remove">{{ 'cart.remove' | t }}</a>
+              </div>
+
+              <div class="moov-cart__item-price">
+                {{ item.final_line_price | money }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="moov-cart__summary">
+          <div class="moov-cart__summary-inner">
+            <p class="moov-cart__summary-label">{{ 'cart.order_summary' | t }}</p>
+            <div class="moov-cart__summary-divider"></div>
+
+            <div class="moov-cart__summary-row">
+              <span>{{ 'cart.subtotal' | t }}</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+
+            <div class="moov-cart__summary-row moov-cart__summary-row--shipping">
+              <span>{{ 'cart.shipping_label' | t }}</span>
+              <span class="moov-cart__shipping-value">{{ 'cart.shipping_value' | t }}</span>
+            </div>
+
+            <div class="moov-cart__summary-divider"></div>
+
+            <div class="moov-cart__summary-row moov-cart__summary-row--total">
+              <span>{{ 'cart.total' | t }}</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+
+            {% if section.settings.preorder_ship_date != blank %}
+              <p class="moov-cart__preorder-notice">
+                Estimated to ship {{ section.settings.preorder_ship_date }}. Free shipping included.
+              </p>
+            {% endif %}
+
+            <a href="/checkout" class="moov-cart__solid-btn moov-cart__solid-btn--full">
+              Proceed to checkout
+            </a>
+
+            <a href="/" class="moov-cart__ghost-btn">
+              {{ 'cart.continue_shopping' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {% if section.settings.show_trust_strip %}
+        <div class="moov-cart__trust-strip">
+          <div class="moov-cart__trust-item">
+            <span class="moov-cart__trust-label">Free shipping</span>
+            <span class="moov-cart__trust-sub">On all orders, always.</span>
+          </div>
+          <div class="moov-cart__trust-item">
+            <span class="moov-cart__trust-label">30-day returns</span>
+            <span class="moov-cart__trust-sub">No questions asked.</span>
+          </div>
+          <div class="moov-cart__trust-item">
+            <span class="moov-cart__trust-label">Price match</span>
+            <span class="moov-cart__trust-sub">Find it cheaper? We'll match it.</span>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  /* ── Cart base ── */
+  .moov-cart {
+    width: 100%;
+    min-height: 80vh;
+  }
+
+  .moov-cart__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 80px 60px;
+  }
+
+  /* ── Header ── */
+  .moov-cart__header {
+    margin-bottom: 56px;
+  }
+
+  .moov-cart__eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-text-tertiary-light);
+    margin: 0 0 8px;
+  }
+
+  .moov-cart__title {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  /* ── Empty state ── */
+  .moov-cart--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+  }
+
+  .moov-cart__empty-state {
+    text-align: center;
+  }
+
+  .moov-cart__empty-heading {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 24px;
+  }
+
+  /* ── Grid layout ── */
+  .moov-cart__grid {
+    display: grid;
+    grid-template-columns: 65% 35%;
+    gap: 40px;
+  }
+
+  /* ── Cart items ── */
+  .moov-cart__item {
+    display: flex;
+    align-items: flex-start;
+    padding: 28px 0;
+    border-bottom: 0.5px solid var(--moov-border-light);
+    gap: 16px;
+  }
+
+  .moov-cart__item:first-child {
+    padding-top: 0;
+  }
+
+  .moov-cart__item-image-link {
+    flex-shrink: 0;
+  }
+
+  .moov-cart__item-image {
+    width: 88px;
+    height: 88px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .moov-cart__item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .moov-cart__item-name {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    text-decoration: none;
+  }
+
+  .moov-cart__item-name:hover {
+    text-decoration: underline;
+  }
+
+  .moov-cart__item-variant {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+  }
+
+  /* ── Quantity stepper ── */
+  .moov-cart__quantity-form {
+    margin: 0;
+  }
+
+  .moov-cart__quantity-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 0.5px solid var(--moov-border-light);
+    border-radius: 999px;
+    padding: 6px 16px;
+    gap: 12px;
+  }
+
+  .moov-cart__qty-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-primary-light);
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .moov-cart__qty-value {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-primary-light);
+    min-width: 16px;
+    text-align: center;
+  }
+
+  .moov-cart__remove {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--moov-text-tertiary-light);
+    text-decoration: none;
+  }
+
+  .moov-cart__remove:hover {
+    text-decoration: underline;
+  }
+
+  .moov-cart__item-price {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  /* ── Order summary ── */
+  .moov-cart__summary {
+    position: relative;
+  }
+
+  .moov-cart__summary-inner {
+    position: sticky;
+    top: 100px;
+    background: var(--moov-cream-shadow);
+    border-radius: 12px;
+    padding: 32px;
+  }
+
+  .moov-cart__summary-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-text-tertiary-light);
+    margin: 0;
+  }
+
+  .moov-cart__summary-divider {
+    height: 0;
+    border: none;
+    border-top: 0.5px solid var(--moov-border-light);
+    margin: 16px 0;
+  }
+
+  .moov-cart__summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--moov-text-primary-light);
+    margin-bottom: 12px;
+  }
+
+  .moov-cart__summary-row--shipping .moov-cart__shipping-value {
+    font-size: 13px;
+    color: var(--moov-text-tertiary-light);
+  }
+
+  .moov-cart__summary-row--total {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+
+  .moov-cart__preorder-notice {
+    color: rgba(240, 180, 41, 0.8);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    margin: 16px 0 0;
+  }
+
+  /* ── Buttons ── */
+  .moov-cart__solid-btn {
+    display: inline-block;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border: none;
+    border-radius: 999px;
+    padding: 14px 28px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .moov-cart__solid-btn:hover {
+    opacity: 0.85;
+  }
+
+  .moov-cart__solid-btn--full {
+    display: block;
+    width: 100%;
+    padding: 16px 28px;
+    margin-top: 20px;
+    box-sizing: border-box;
+  }
+
+  .moov-cart__ghost-btn {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 0.5px solid rgba(10, 10, 9, 0.25);
+    border-radius: 999px;
+    padding: 16px 28px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--moov-text-secondary-light);
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .moov-cart__ghost-btn:hover {
+    border-color: rgba(10, 10, 9, 0.5);
+    color: var(--moov-text-primary-light);
+  }
+
+  /* ── Trust strip ── */
+  .moov-cart__trust-strip {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    border-top: 0.5px solid var(--moov-border-light);
+    padding: 40px 0;
+    margin-top: 40px;
+  }
+
+  .moov-cart__trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .moov-cart__trust-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--moov-text-primary-light);
+  }
+
+  .moov-cart__trust-sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--moov-text-secondary-light);
+  }
+
+  /* ── Mobile ── */
+  @media screen and (max-width: 899px) {
+    .moov-cart__inner {
+      padding: 40px 24px;
+    }
+
+    .moov-cart__title {
+      font-size: 36px;
+    }
+
+    .moov-cart__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .moov-cart__summary-inner {
+      position: static;
+    }
+
+    .moov-cart__trust-strip {
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function () {
+    var qtyButtons = document.querySelectorAll('.moov-cart__qty-btn');
+    qtyButtons.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var form = btn.closest('form');
+        if (form) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'quantity';
+          input.value = btn.value;
+          form.appendChild(input);
+          form.submit();
+        }
+      });
+    });
+  });
+{% endjavascript %}
 
 {% schema %}
 {
-  "name": "t:general.cart",
-  "settings": []
+  "name": "MOOV Cart",
+  "settings": [
+    {
+      "type": "text",
+      "id": "preorder_ship_date",
+      "label": "Pre-order ship date",
+      "default": "March 31, 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_strip",
+      "label": "Show trust strip",
+      "default": true
+    }
+  ]
 }
 {% endschema %}

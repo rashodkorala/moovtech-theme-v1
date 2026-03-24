@@ -1,4 +1,4 @@
-<div class="product-intro full-width">
+<div class="product-intro full-width" data-surface="dark">
   <div class="product-intro__inner">
 
     <div class="product-intro__left" data-animate="slide-left">
@@ -61,7 +61,7 @@
 
 {% stylesheet %}
   .product-intro {
-    background: #0E0E0E;
+    background: var(--moov-black);
     padding: 160px 40px 120px;
   }
 
@@ -82,33 +82,33 @@
   }
 
   .product-intro__eyebrow {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: #C8F55A;
+    color: rgba(240, 180, 41, 0.7);
     margin: 0 0 24px;
   }
 
   .product-intro__heading {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
     font-size: clamp(32px, 4vw, 56px);
     font-weight: 700;
     font-style: normal;
     line-height: 1.1;
-    color: #F5F2EE;
+    color: var(--moov-text-primary-dark);
     max-width: 480px;
     margin: 0 0 28px;
     letter-spacing: -0.02em;
   }
 
   .product-intro__body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
     font-weight: 200;
     line-height: 1.75;
-    color: rgba(245, 242, 238, 0.6);
+    color: var(--moov-text-secondary-dark);
     max-width: 400px;
     margin: 0 0 48px;
   }
@@ -121,17 +121,17 @@
   }
 
   .product-intro__proof-item {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: 13px;
     font-weight: 300;
-    color: rgba(245, 242, 238, 0.5);
+    color: var(--moov-text-secondary-dark);
   }
 
   .product-intro__proof-divider {
     display: inline-block;
     width: 1px;
     height: 14px;
-    background: rgba(245, 242, 238, 0.15);
+    background: var(--moov-border-dark);
     flex-shrink: 0;
   }
 
@@ -140,20 +140,22 @@
     display: inline-block;
     margin-top: 40px;
     padding: 14px 32px;
-    border: 1px solid rgba(245, 242, 238, 0.3);
-    color: #F5F2EE;
-    font-family: 'DM Sans', sans-serif;
+    border: 1px solid var(--moov-border-amber);
+    color: var(--moov-text-primary-dark);
+    font-family: var(--font-body);
     font-size: 13px;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     text-decoration: none;
+    border-radius: 999px;
     transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
   }
 
   .product-intro__cta:hover {
-    border-color: #F5F2EE;
-    background: rgba(245, 242, 238, 0.05);
+    border-color: var(--moov-amber);
+    background: var(--moov-amber);
+    color: var(--moov-black);
   }
 
   /* Right column */

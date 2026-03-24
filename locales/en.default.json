@@ -26,7 +26,21 @@
     "checkout": "Checkout",
     "title": "Cart",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "empty_title": "Your cart is empty",
+    "empty_text": "Looks like you haven't added anything yet.",
+    "continue_shopping": "Continue shopping",
+    "item_count": "{{ count }} items",
+    "subtotal": "Sub Total",
+    "total": "Total",
+    "order_summary": "Order summary",
+    "shipping_label": "Shipping",
+    "shipping_value": "Calculated at checkout",
+    "tax_note": "Taxes and shipping calculated at checkout.",
+    "note_label": "Order note",
+    "quantity": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity"
   },
   "customers": {
     "login": {
@@ -62,13 +76,64 @@
     "accessibility": {
       "nav_label": "Main navigation",
       "account": "Account",
-      "cart": "Cart"
+      "cart": "Cart",
+      "close": "Close",
+      "menu": "Menu"
+    },
+    "nav": {
+      "shop": "Shop",
+      "features": "Features",
+      "support": "Support",
+      "about": "About"
     },
     "content": "Content",
     "navigation": "Navigation",
     "primary_button": "Primary button",
     "secondary_button": "Secondary button",
     "community": "Community"
+  },
+  "product": {
+    "mini_bar": {
+      "features": "Features",
+      "specs": "Specs"
+    },
+    "pre_order": "Pre-order now",
+    "ship_notice": "Estimated to ship {{ date }}. Free shipping included.",
+    "specs": {
+      "title": "Technical specifications",
+      "audio": "Audio",
+      "dimensions": "Dimensions",
+      "connectivity": "Connectivity",
+      "in_the_box": "In the box",
+      "amplifiers": "Amplifiers",
+      "amplifiers_val": "Class-D digital",
+      "tweeters": "Tweeters",
+      "tweeters_val": "1× tweeter",
+      "woofer": "Woofer",
+      "woofer_val": "1× mid-woofer",
+      "eq": "EQ",
+      "eq_val": "3-band adaptive",
+      "trueplay": "Trueplay",
+      "trueplay_val": "Software tuning",
+      "height": "Height",
+      "width": "Width",
+      "depth": "Depth",
+      "weight": "Weight",
+      "finish": "Finish",
+      "finish_val": "Matte soft-touch",
+      "colours": "Colours",
+      "colours_val": "Stone, Midnight, Sage",
+      "battery": "Battery",
+      "battery_val": "Up to 24 hours",
+      "usbc_val": "Charging & audio",
+      "water": "Water resistance",
+      "inbox_alarm": "MOOV smart alarm",
+      "inbox_charger": "USB-C charging cable",
+      "inbox_guide": "Quick-start guide"
+    },
+    "accessories": {
+      "title": "Accessories"
+    }
   },
   "sections": {
     "hero": {
