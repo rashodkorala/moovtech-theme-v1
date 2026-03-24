@@ -13,10 +13,16 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "shop_url": "shopify://products/t",
+        "about_url": "shopify://pages/about",
+        "contact_url": "shopify://pages/contact",
+        "preorder_label": "Pre-order",
+        "preorder_url": "shopify://products/t"
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }
