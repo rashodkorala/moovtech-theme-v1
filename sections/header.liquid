@@ -33,7 +33,9 @@
   }
 </style>
 
-<header class="moov-header full-width">
+<header class="moov-header full-width{% if section.settings.transparent_header %} moov-header--transparent{% endif %}"
+  data-transparent="{{ section.settings.transparent_header }}"
+>
   <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
     {%- comment -%} Left — Wordmark {%- endcomment -%}
     <a href="{{ routes.root_url }}" class="moov-nav__wordmark" aria-label="{{ shop.name }}">
@@ -118,8 +120,9 @@
 </header>
 
 {% stylesheet %}
+  /* ── Default: Solid header (cream bg, dark text) ── */
   .moov-header {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -127,14 +130,9 @@
     height: 72px;
     display: flex;
     align-items: center;
-    background: transparent;
+    background: var(--moov-cream);
+    border-bottom: 0.5px solid var(--moov-border-light);
     transition: background 0.3s ease, border-color 0.3s ease;
-    border-bottom: 0.5px solid transparent;
-  }
-
-  .moov-header.is-scrolled {
-    background: var(--moov-black);
-    border-bottom-color: var(--moov-border-dark);
   }
 
   .moov-nav {
@@ -151,7 +149,7 @@
     font-weight: 400;
     font-size: 22px;
     letter-spacing: 0.05em;
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
     text-decoration: none;
     flex-shrink: 0;
     transition: opacity 0.2s;
@@ -179,14 +177,14 @@
     font-weight: 300;
     font-size: 13px;
     letter-spacing: 0.03em;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     text-decoration: none;
     transition: color 0.2s;
     white-space: nowrap;
   }
 
   .moov-nav__link:hover {
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
   }
 
   /* Right group */
@@ -203,7 +201,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     text-decoration: none;
     transition: color 0.2s;
     position: relative;
@@ -211,7 +209,7 @@
   }
 
   .moov-nav__icon:hover {
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
   }
 
   .moov-nav__cart-count {
@@ -239,9 +237,9 @@
     font-weight: 400;
     font-size: 13px;
     letter-spacing: 0.03em;
-    color: var(--moov-amber);
+    color: var(--moov-text-primary-light);
     text-decoration: none;
-    border: 0.5px solid var(--moov-border-amber);
+    border: 0.5px solid rgba(10, 10, 9, 0.25);
     border-radius: 999px;
     padding: 9px 20px;
     transition: opacity 0.2s;
@@ -260,47 +258,84 @@
     background: none;
     border: none;
     padding: 0;
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
     cursor: pointer;
   }
 
-  /* ── Light nav state (over cream sections) ── */
-  .moov-header.nav--light {
+  /* ── Transparent modifier (homepage) ── */
+  .moov-header--transparent {
+    position: fixed;
+    background: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .moov-header--transparent .moov-nav__wordmark {
+    color: var(--moov-text-primary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__link {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__link:hover {
+    color: var(--moov-text-primary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__icon {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__icon:hover {
+    color: var(--moov-text-primary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__preorder {
+    color: var(--moov-amber);
+    border-color: var(--moov-border-amber);
+  }
+
+  .moov-header--transparent .moov-nav__hamburger {
+    color: var(--moov-text-primary-dark);
+  }
+
+  /* Transparent + scrolled: solid dark bg */
+  .moov-header--transparent.is-scrolled {
+    background: var(--moov-black);
+    border-bottom-color: var(--moov-border-dark);
+  }
+
+  /* Transparent + over cream section: flip to cream bg with dark text */
+  .moov-header--transparent.nav--light {
     background: var(--moov-cream);
     border-bottom-color: var(--moov-border-light);
   }
 
-  .moov-header.nav--light.is-scrolled {
-    background: var(--moov-cream);
-    border-bottom-color: var(--moov-border-light);
-  }
-
-  .moov-header.nav--light .moov-nav__wordmark {
+  .moov-header--transparent.nav--light .moov-nav__wordmark {
     color: var(--moov-text-primary-light);
   }
 
-  .moov-header.nav--light .moov-nav__link {
+  .moov-header--transparent.nav--light .moov-nav__link {
     color: var(--moov-text-secondary-light);
   }
 
-  .moov-header.nav--light .moov-nav__link:hover {
+  .moov-header--transparent.nav--light .moov-nav__link:hover {
     color: var(--moov-text-primary-light);
   }
 
-  .moov-header.nav--light .moov-nav__icon {
+  .moov-header--transparent.nav--light .moov-nav__icon {
     color: var(--moov-text-secondary-light);
   }
 
-  .moov-header.nav--light .moov-nav__icon:hover {
+  .moov-header--transparent.nav--light .moov-nav__icon:hover {
     color: var(--moov-text-primary-light);
   }
 
-  .moov-header.nav--light .moov-nav__preorder {
+  .moov-header--transparent.nav--light .moov-nav__preorder {
     color: var(--moov-text-primary-light);
     border-color: rgba(10, 10, 9, 0.25);
   }
 
-  .moov-header.nav--light .moov-nav__hamburger {
+  .moov-header--transparent.nav--light .moov-nav__hamburger {
     color: var(--moov-text-primary-light);
   }
 
@@ -413,58 +448,47 @@
   var header = document.querySelector('.moov-header');
 
   if (header) {
-    /* Scroll state */
-    window.addEventListener('scroll', function() {
-      header.classList.toggle('is-scrolled', window.scrollY > 20);
-    });
+    var isTransparent = header.getAttribute('data-transparent') === 'true';
 
-    /* Nav colour switching via IntersectionObserver.
-       Default to dark text (nav--light) on non-index pages so the nav
-       is visible over the header-spacer, then let the observer handle
-       switching to cream text when scrolled over dark sections. */
-    var hasHeroSection = document.querySelector('.moov-hero');
-    var hasHeaderSpacer = document.querySelector('.header-spacer');
+    if (isTransparent) {
+      /* Scroll state — only needed for transparent header */
+      window.addEventListener('scroll', function() {
+        header.classList.toggle('is-scrolled', window.scrollY > 20);
+      });
 
-    /* On pages with a header-spacer (non-index), start with dark text */
-    if (hasHeaderSpacer) {
-      header.classList.add('nav--light');
-    }
-
-    /* Set up observer for all pages that have data-surface sections */
-    var allSurfaceSections = document.querySelectorAll('[data-surface]');
-    if (allSurfaceSections.length > 0) {
-      function checkNavColor() {
-        var headerBottom = 72;
-        var elementAtNav = document.elementFromPoint(window.innerWidth / 2, headerBottom + 1);
-        if (elementAtNav) {
-          var section = elementAtNav.closest('[data-surface]');
-          if (section) {
-            var isOverCream = section.getAttribute('data-surface') === 'cream';
-            header.classList.toggle('nav--light', isOverCream);
+      /* Nav colour switching for transparent header.
+         Detects data-surface sections and flips nav colours accordingly. */
+      var allSurfaceSections = document.querySelectorAll('[data-surface]');
+      if (allSurfaceSections.length > 0) {
+        function checkNavColor() {
+          var headerBottom = 72;
+          var elementAtNav = document.elementFromPoint(window.innerWidth / 2, headerBottom + 1);
+          if (elementAtNav) {
+            var section = elementAtNav.closest('[data-surface]');
+            if (section) {
+              var isOverCream = section.getAttribute('data-surface') === 'cream';
+              header.classList.toggle('nav--light', isOverCream);
+            }
           }
         }
+
+        var navObserver = new IntersectionObserver(function() {
+          checkNavColor();
+        }, { threshold: [0, 0.1, 0.5, 1], rootMargin: '-1px 0px -90% 0px' });
+
+        allSurfaceSections.forEach(function(s) { navObserver.observe(s); });
+
+        var scrollTicking = false;
+        window.addEventListener('scroll', function() {
+          if (!scrollTicking) {
+            requestAnimationFrame(function() {
+              checkNavColor();
+              scrollTicking = false;
+            });
+            scrollTicking = true;
+          }
+        });
       }
-
-      var navObserver = new IntersectionObserver(function() {
-        checkNavColor();
-      }, { threshold: [0, 0.1, 0.5, 1], rootMargin: '-1px 0px -90% 0px' });
-
-      allSurfaceSections.forEach(function(s) { navObserver.observe(s); });
-
-      /* Also re-check on scroll for smoother transitions */
-      var scrollTicking = false;
-      window.addEventListener('scroll', function() {
-        if (!scrollTicking) {
-          requestAnimationFrame(function() {
-            checkNavColor();
-            scrollTicking = false;
-          });
-          scrollTicking = true;
-        }
-      });
-    } else if (!hasHeroSection) {
-      /* No data-surface sections and no hero: default to dark text */
-      header.classList.add('nav--light');
     }
   }
 
@@ -515,6 +539,13 @@
 {
   "name": "MOOV Header",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "label": "Transparent header",
+      "info": "Use a transparent header that overlaps page content. Recommended for pages with a full-width hero image.",
+      "default": false
+    },
     {
       "type": "header",
       "content": "t:general.navigation"

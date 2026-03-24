@@ -29,10 +29,6 @@
   <body>
     {% sections 'header-group' %}
 
-    {%- unless template == 'index' -%}
-      <div class="header-spacer"></div>
-    {%- endunless -%}
-
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
