@@ -33,8 +33,12 @@
   }
 </style>
 
-<header class="moov-header full-width{% if section.settings.transparent_header %} moov-header--transparent{% endif %}"
-  data-transparent="{{ section.settings.transparent_header }}"
+{%- assign is_transparent = false -%}
+{%- if section.settings.transparent_header and template == 'index' -%}
+  {%- assign is_transparent = true -%}
+{%- endif -%}
+<header class="moov-header full-width{% if is_transparent %} moov-header--transparent{% endif %}"
+  data-transparent="{{ is_transparent }}"
 >
   <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
     {%- comment -%} Left — Wordmark {%- endcomment -%}
@@ -543,7 +547,7 @@
       "type": "checkbox",
       "id": "transparent_header",
       "label": "Transparent header",
-      "info": "Use a transparent header that overlaps page content. Recommended for pages with a full-width hero image.",
+      "info": "Make the header transparent on the homepage only. Other pages always use a solid header.",
       "default": false
     },
     {
