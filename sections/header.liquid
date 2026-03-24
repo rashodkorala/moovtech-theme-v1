@@ -37,7 +37,7 @@
 {%- if section.settings.transparent_header and template == 'index' -%}
   {%- assign is_transparent = true -%}
 {%- endif -%}
-<header class="moov-header full-width{% if is_transparent %} moov-header--transparent{% endif %}"
+<header class="moov-header full-width{% if is_transparent %} moov-header--transparent{% endif %}{% if section.settings.sticky_header %} moov-header--sticky{% endif %}"
   data-transparent="{{ is_transparent }}"
 >
   <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
@@ -126,8 +126,7 @@
 {% stylesheet %}
   /* ── Default: Solid header (cream bg, dark text) ── */
   .moov-header {
-    position: sticky;
-    top: 0;
+    position: relative;
     left: 0;
     right: 0;
     z-index: 100;
@@ -264,6 +263,12 @@
     padding: 0;
     color: var(--moov-text-primary-light);
     cursor: pointer;
+  }
+
+  /* ── Sticky modifier ── */
+  .moov-header--sticky {
+    position: sticky;
+    top: 0;
   }
 
   /* ── Transparent modifier (homepage) ── */
@@ -549,6 +554,13 @@
       "label": "Transparent header",
       "info": "Make the header transparent on the homepage only. Other pages always use a solid header.",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "info": "Keep the header fixed at the top of the page when scrolling.",
+      "default": true
     },
     {
       "type": "header",
