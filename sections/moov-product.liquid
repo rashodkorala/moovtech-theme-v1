@@ -68,7 +68,7 @@
       {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
           <div class="moov-prod-intro__option">
-            <p class="moov-prod-intro__option-label">{{ option.name }} — <strong>{{ option.selected_value }}</strong></p>
+            <p class="moov-prod-intro__option-label">{{ option.name }}: <strong>{{ option.selected_value }}</strong></p>
             <div class="moov-prod-intro__option-pills">
               {%- for value in option.values -%}
                 <button
