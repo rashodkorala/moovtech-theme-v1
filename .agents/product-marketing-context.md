@@ -1,7 +1,7 @@
 # Product Marketing Context
 
 *Last updated: 2026-03-25*
-*Auto-drafted from codebase: docs/shopify-store-marketing-copy.md, docs/moov-sites-overview.md, locales/en.default.json, theme sections*
+*Auto-drafted from codebase + confirmed by founder 2026-03-25*
 
 ---
 
@@ -15,9 +15,20 @@
 
 **Product type:** Hardware + software bundle (physical device + mobile app subscription)
 
-**Business model:** Pre-order e-commerce (direct to consumer). Hardware: one-time purchase. App: included — lifetime access noted in early-bird offer. 2% of profits to mental health associations and young entrepreneurship programs.
+**Business model:** Pre-order e-commerce (direct to consumer). Hardware: one-time purchase. 2% of profits pledged to mental health associations and young entrepreneurship programs.
 
-**Current pricing:** Early-bird ~$59 (vs $99 MSRP) — confirm live before publishing. Free US & Canada shipping. No charge until ship. 30-day money-back.
+**Confirmed pricing (LOCKED):**
+- Regular price: **$99**
+- Early Bird Special: **$59** (40% off) — LIMITED TIME offer
+- Early Bird includes:
+  - MOOV Smart Alarm Device
+  - MOOV Mobile App — Lifetime Access
+  - AI-Powered Routine Builder — 30-day trial
+  - 30-Day Money-Back Guarantee
+  - Free shipping in US & Canada
+- No charge until ship. Cancel anytime before fulfilment.
+
+**Live pre-order count:** Not yet available — do not publish a specific number. Use qualitative social proof only (e.g. "Join early adopters" or "Limited Early Bird spots").
 
 ---
 
@@ -200,12 +211,29 @@
 ## Proof Points
 
 **Metrics:**
-- 2,400+ pre-orders reserved (use as social proof — update when real)
+- Pre-order count: NOT YET AVAILABLE — do not use a specific number publicly
 - 70–80% of people check phone within first 10 minutes of waking (cited narratively from research)
 - Sleep inertia from snooze can last hours (behavioral science reference)
 
+**Impact pledge (confirmed):**
+> We pledge to give **2% of our profits** to mental health associations and young entrepreneurship programs. Success isn't just about building a profitable business — it's about making a meaningful impact on the communities and causes that align with our values of mental wellness and entrepreneurial spirit.
+
 **Expert quote (from site):**
 > Dr. Leah Jones, Head of Behavioural Insights at Bupa Global & UK — on consistent morning routine and tackling demands with energy and clarity.
+
+**Placeholder testimonials (FICTIONAL — replace with real customer quotes before launch):**
+
+> "I've been a chronic snoozer my whole life. After two weeks with MOOV I haven't hit snooze once. The fact that I have to physically get up to turn it off sounds simple, but it genuinely broke a habit I'd had for years."
+> — Sarah M., Toronto
+
+> "The app blocker is the feature I didn't know I needed. I used to pick up my phone before I was even fully awake. Now my first 45 minutes are completely mine. It's changed how I feel going into every single workday."
+> — James T., Austin
+
+> "I've tried every morning routine app out there and they all rely on me being motivated. MOOV doesn't. It forces the first step and then everything else follows naturally. Genuinely different from anything I've tried."
+> — Priya K., Vancouver
+
+> "Skeptical at first — I thought it was just a fancy alarm. After 30 days my mornings are unrecognizable. I'm calmer, more focused, and actually getting things done before 9am for the first time in my adult life."
+> — Alex R., New York
 
 **Value themes:**
 | Theme | Proof |
