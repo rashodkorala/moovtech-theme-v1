@@ -34,10 +34,17 @@
   endif
 
   assign about_url = section.settings.about_cta_url | default: '/pages/about'
+
+  assign problem_surface = section.settings.problem_surface | default: 'dark'
+  assign who_surface = section.settings.who_surface | default: 'cream'
+  assign about_surface = section.settings.about_surface | default: 'dark'
 -%}
 
 {%- if section.settings.show_problem -%}
-  <div class="store-marketing-bands store-marketing-bands--problem full-width" data-surface="dark">
+  <div
+    class="store-marketing-bands store-marketing-bands--problem store-marketing-bands--surface-{{ problem_surface }} full-width"
+    data-surface="{{ problem_surface }}"
+  >
     <div class="store-marketing-bands__inner">
       <h2 class="store-marketing-bands__heading">{{ problem_heading | escape }}</h2>
       <p class="store-marketing-bands__body">{{ problem_body | escape | newline_to_br }}</p>
@@ -46,9 +53,12 @@
 {%- endif -%}
 
 {%- if section.settings.show_who_for -%}
-  <div class="store-marketing-bands store-marketing-bands--who full-width" data-surface="cream">
+  <div
+    class="store-marketing-bands store-marketing-bands--who store-marketing-bands--surface-{{ who_surface }} full-width"
+    data-surface="{{ who_surface }}"
+  >
     <div class="store-marketing-bands__inner">
-      <h2 class="store-marketing-bands__heading store-marketing-bands__heading--dark">{{ who_heading | escape }}</h2>
+      <h2 class="store-marketing-bands__heading">{{ who_heading | escape }}</h2>
       <ul class="store-marketing-bands__list" role="list">
         <li>{{ 'store_marketing.who_for_1' | t | escape }}</li>
         <li>{{ 'store_marketing.who_for_2' | t | escape }}</li>
@@ -60,7 +70,10 @@
 {%- endif -%}
 
 {%- if section.settings.show_about_teaser -%}
-  <div class="store-marketing-bands store-marketing-bands--about full-width" data-surface="dark">
+  <div
+    class="store-marketing-bands store-marketing-bands--about store-marketing-bands--surface-{{ about_surface }} full-width"
+    data-surface="{{ about_surface }}"
+  >
     <div class="store-marketing-bands__inner store-marketing-bands__inner--about">
       <h2 class="store-marketing-bands__heading">{{ about_heading | escape }}</h2>
       <p class="store-marketing-bands__about-body">{{ about_body | escape }}</p>
@@ -74,6 +87,15 @@
     padding: var(--section-block-pad-y-md) var(--section-inline-pad);
   }
 
+  /* Surfaces — matches theme `data-surface` convention (header nav uses this) */
+  .store-marketing-bands--surface-dark {
+    background: var(--moov-black);
+  }
+
+  .store-marketing-bands--surface-cream {
+    background: var(--moov-cream);
+  }
+
   .store-marketing-bands__inner {
     max-width: 720px;
     margin: 0 auto;
@@ -83,7 +105,7 @@
     max-width: 640px;
   }
 
-  .store-marketing-bands__heading {
+  .store-marketing-bands--surface-dark .store-marketing-bands__heading {
     font-family: var(--font-display);
     font-size: var(--text-3xl);
     font-weight: 400;
@@ -92,11 +114,16 @@
     margin: 0 0 clamp(1rem, 2vw, 1.5rem);
   }
 
-  .store-marketing-bands__heading--dark {
+  .store-marketing-bands--surface-cream .store-marketing-bands__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 400;
+    line-height: 1.2;
     color: var(--moov-text-primary-light);
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
   }
 
-  .store-marketing-bands__body {
+  .store-marketing-bands--surface-dark .store-marketing-bands__body {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 300;
@@ -105,12 +132,36 @@
     margin: 0;
   }
 
-  .store-marketing-bands__body strong {
+  .store-marketing-bands--surface-cream .store-marketing-bands__body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+  }
+
+  .store-marketing-bands--surface-dark .store-marketing-bands__body strong {
     font-weight: 500;
     color: var(--moov-text-primary-dark);
   }
 
-  .store-marketing-bands--who .store-marketing-bands__list {
+  .store-marketing-bands--surface-cream .store-marketing-bands__body strong {
+    font-weight: 500;
+    color: var(--moov-text-primary-light);
+  }
+
+  .store-marketing-bands--surface-dark .store-marketing-bands__list {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .store-marketing-bands--surface-cream .store-marketing-bands__list {
     margin: 0 0 1.25rem;
     padding-left: 1.25rem;
     font-family: var(--font-body);
@@ -120,11 +171,21 @@
     color: var(--moov-text-secondary-light);
   }
 
-  .store-marketing-bands--who .store-marketing-bands__list li {
+  .store-marketing-bands__list li {
     margin-bottom: 0.5rem;
   }
 
-  .store-marketing-bands__not {
+  .store-marketing-bands--surface-dark .store-marketing-bands__not {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--moov-text-tertiary-dark);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .store-marketing-bands--surface-cream .store-marketing-bands__not {
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
@@ -134,7 +195,7 @@
     font-style: italic;
   }
 
-  .store-marketing-bands__about-body {
+  .store-marketing-bands--surface-dark .store-marketing-bands__about-body {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 300;
@@ -143,21 +204,47 @@
     margin: 0 0 clamp(1.25rem, 2vw, 1.75rem);
   }
 
-  .store-marketing-bands__cta {
+  .store-marketing-bands--surface-cream .store-marketing-bands__about-body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .store-marketing-bands--surface-dark .store-marketing-bands__cta {
     display: inline-flex;
     font-family: var(--font-body);
     font-size: var(--text-sm);
     letter-spacing: 0.03em;
     color: var(--moov-amber);
     text-decoration: none;
-    border-bottom: 0.5px solid rgba(240, 180, 41, 0.4);
+    border-bottom: 0.5px solid var(--moov-border-amber);
     padding-bottom: 2px;
     transition: color 0.2s ease, border-color 0.2s ease;
   }
 
-  .store-marketing-bands__cta:hover {
+  .store-marketing-bands--surface-dark .store-marketing-bands__cta:hover {
     color: var(--moov-cream);
     border-color: var(--moov-cream);
+  }
+
+  .store-marketing-bands--surface-cream .store-marketing-bands__cta {
+    display: inline-flex;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    letter-spacing: 0.03em;
+    color: var(--moov-text-primary-light);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--moov-border-light);
+    padding-bottom: 2px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .store-marketing-bands--surface-cream .store-marketing-bands__cta:hover {
+    color: var(--moov-amber);
+    border-color: var(--moov-border-amber);
   }
 {% endstylesheet %}
 
@@ -176,6 +263,17 @@
       "id": "show_problem",
       "label": "Show problem band",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "problem_surface",
+      "label": "Background & text",
+      "options": [
+        { "value": "dark", "label": "Dark (charcoal background, cream text)" },
+        { "value": "cream", "label": "Cream (warm background, dark text)" }
+      ],
+      "default": "dark",
+      "info": "Dark and cream use the theme MOOV palette. Also drives header bar contrast when you scroll over this section."
     },
     {
       "type": "text",
@@ -200,6 +298,16 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "who_surface",
+      "label": "Background & text",
+      "options": [
+        { "value": "dark", "label": "Dark (charcoal background, cream text)" },
+        { "value": "cream", "label": "Cream (warm background, dark text)" }
+      ],
+      "default": "cream"
+    },
+    {
       "type": "text",
       "id": "who_heading",
       "label": "Heading",
@@ -214,6 +322,16 @@
       "id": "show_about_teaser",
       "label": "Show about teaser",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "about_surface",
+      "label": "Background & text",
+      "options": [
+        { "value": "dark", "label": "Dark (charcoal background, cream text)" },
+        { "value": "cream", "label": "Cream (warm background, dark text)" }
+      ],
+      "default": "dark"
     },
     {
       "type": "text",

@@ -222,7 +222,7 @@ Before publishing: reconcile **impact pledge** wording and **pre-order terms** w
 
 1. **Wired in theme:** `store_marketing.*` is used as fallbacks when section fields are left blank (or via toggles) in:
    - `sections/hero.liquid` — social proof, headline stack, CTAs, micro-trust
-   - `sections/store-marketing-bands.liquid` — problem, who-for, about teaser (on `templates/index.json`)
+   - `sections/store-marketing-bands.liquid` — problem, who-for, about teaser (on `templates/index.json`). Each sub-band has a **Background & text** control: **Dark** (`--moov-black` + cream-toned type) or **Cream** (`--moov-cream` + dark type), matching `data-surface` elsewhere in the theme.
    - `sections/product-intro.liquid` — intro line + proof chips + CTA defaults
    - `sections/app-section.liquid` — eyebrow, headline, body, three pillars
    - `sections/moov-product.liquid` — eyebrow, price anchor, pre-order note, feature strip from `product_bullet_1–4` (split on em dash)
