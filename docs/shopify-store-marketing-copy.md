@@ -6,7 +6,6 @@ Original, store-ready messaging synthesised from the MOOV mission and product st
 
 Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.default.json`. Longer or experimental variants live only in this file.
 
----
 
 ## Voice & rules
 
@@ -14,7 +13,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 - **Avoid:** Medical claims, guaranteed outcomes, fake urgency, guilt.
 - **Lead with:** Outcome (clarity, momentum, agency) → mechanism (alarm + app + routines) → proof/risk reversal (guarantee, shipping, impact).
 
----
 
 ## SEO & sharing
 
@@ -26,7 +24,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 *Keys:* `store_marketing.seo_title_suffix`, `store_marketing.seo_description`, `store_marketing.social_teaser`
 
----
 
 ## Homepage hero (primary)
 
@@ -44,14 +41,12 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 *Keys:* `hero_*` in `store_marketing`
 
----
 
 ## Hero variant B (shorter)
 
 - **Headline:** Wake with momentum, not momentum-killing scroll.
 - **Subhead:** Stand to silence the alarm. Let the app hold social feeds at bay. Finish with a routine that fits 10 minutes—or 60.
 
----
 
 ## "The problem" band (homepage or about teaser)
 
@@ -61,7 +56,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 **Body:** Snooze buys minutes but sells focus. The first glance at a phone can hijack the whole morning. MOOV isn't another louder alarm; it's a **system** that restores a sane sequence: **up → protected attention → intentional action.**
 
----
 
 ## "Who this is for" block (homepage or product intro)
 
@@ -74,7 +68,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 **MOOV is not for you if** you're looking for a louder alarm or a basic timer. This is a system.
 
----
 
 ## Three pillars (icon row / feature strip)
 
@@ -86,7 +79,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 *Keys:* `pillar_1_title`, `pillar_1_body`, … `pillar_3_*`
 
----
 
 ## "What MOOV stands for" (acronym block—fresh wording)
 
@@ -99,7 +91,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 **Closing line:** One system. Four commitments. Fewer reactive starts.
 
----
 
 ## Collection page intro
 
@@ -109,7 +100,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 **Empty state (if needed):** New drops land here first. Join the list or pre-order to hold your place.
 
----
 
 ## Product page (above the fold support bullets)
 
@@ -127,7 +117,6 @@ Use **`{{ 'store_marketing.KEY' | t }}`** for strings that exist in `locales/en.
 
 > **Why this change:** The original ("We'll confirm timing as production milestones lock") introduced uncertainty at the payment moment — the worst place for doubt. This version answers the three silent objections: *When do I pay? When does it arrive? What if I change my mind?*
 
----
 
 ## Price anchoring (near product price)
 
@@ -139,7 +128,6 @@ Or, if competitor pricing is known:
 
 > Comparable smart alarm hardware runs $150–$400. MOOV includes the app layer.
 
----
 
 ## Cart & checkout adjacent
 
@@ -155,7 +143,6 @@ Or, if competitor pricing is known:
 
 *Align exact % and legal language with your approved source before publishing.*
 
----
 
 ## About teaser (homepage → full about page)
 
@@ -165,7 +152,6 @@ Or, if competitor pricing is known:
 
 **CTA:** Read our story → (link to `/pages/about`)
 
----
 
 ## Newsletter / footer hook
 
@@ -179,7 +165,6 @@ Or, if competitor pricing is known:
 
 > **Why this change:** "First to know" + "Notify me" offered no immediate reward. Adding a tangible deliverable (the guide) creates reciprocity, gives a reason to sign up today rather than later, and starts the commitment ladder toward a purchase.
 
----
 
 ## FAQ hooks (questions as H2s—answers in theme blocks)
 
@@ -196,7 +181,6 @@ Or, if competitor pricing is known:
 
 *(Draft answers in the theme editor; keep answers short and policy-accurate.)*
 
----
 
 ## One-liners (buttons, badges, banners)
 
@@ -210,13 +194,11 @@ Or, if competitor pricing is known:
 
 > **Change:** "Designed with behavioral science in mind" was too academic. "Built on behavioral science" is shorter and more confident. "Social proof (soft)" is new — update the number when real data is available.
 
----
 
 ## Legal-adjacent reminder
 
 Before publishing: reconcile **impact pledge** wording and **pre-order terms** with legal-approved copy (your storefront policy pages and live flagship terms). This document is **marketing draft**, not legal text.
 
----
 
 ## Implementation
 
@@ -245,7 +227,6 @@ Before publishing: reconcile **impact pledge** wording and **pre-order terms** w
 
 All footer, hero, and about CTA links should use the Shopify-internal paths above.
 
----
 
 ### Translation keys (`store_marketing.*`)
 

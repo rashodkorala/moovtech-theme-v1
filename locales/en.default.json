@@ -191,7 +191,7 @@
     "hero_subheading": "MOOV combines a wall-mounted alarm you physically disarm, a companion app that shields distracting apps at wake, and short routines that adapt to your goals—so you start clear, not reactive.",
     "hero_cta_primary": "Reserve your MOOV",
     "hero_cta_secondary": "See how it works",
-    "hero_micro_trust": "30-day satisfaction promise · US and Canada shipping",
+    "hero_micro_trust": "30-day satisfaction promise · US & Canada shipping",
     "section_problem_heading": "Most alarms don't fail you—your morning environment does.",
     "section_problem_body": "Snooze buys minutes but sells focus. The first glance at a phone can hijack the whole morning. MOOV isn't another louder alarm; it's a system that restores a sane sequence: up, protected attention, then intentional action.",
     "who_for_heading": "Built for people who know the first hour matters.",
@@ -237,7 +237,11 @@
     "badge_community": "Join the MOOVment",
     "badge_category": "Smart morning system",
     "badge_social_proof": "2,400+ mornings reclaimed",
-    "badge_ownership": "Reserve yours"
+    "badge_ownership": "Reserve yours",
+    "cart_trust_line_v2": "Your order is protected — 30-day satisfaction promise. Cancel before fulfilment, no questions asked.",
+    "newsletter_guide_heading": "Get the morning system guide — free",
+    "newsletter_guide_body": "Drop your email and we'll send our 5-day morning reset framework instantly. You'll also get early pricing and honest ship updates—no daily spam.",
+    "newsletter_guide_cta": "Send it to me"
   },
   "sections": {
     "hero": {
@@ -248,9 +252,9 @@
       "get_google_play": "Get it on Google Play"
     },
     "footer": {
-      "newsletter_submit": "Subscribe",
+      "newsletter_submit": "Send it to me",
       "newsletter_email_label": "Email address",
-      "newsletter_placeholder": "Your email"
+      "newsletter_placeholder": "Your email address"
     }
   },
   "labels": {
