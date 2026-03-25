@@ -27,7 +27,7 @@
 
 {% stylesheet %}
   .prod-ship {
-    background: #0e0e0e;
+    background: var(--moov-black);
     padding: var(--section-block-pad-y) var(--section-inline-pad);
   }
 
@@ -48,19 +48,19 @@
   .prod-ship__label {
     position: sticky;
     top: 120px;
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
     font-size: var(--text-4xl);
-    font-weight: 700;
+    font-weight: 400;
     font-style: italic;
     line-height: 1.15;
-    color: #F5F2EE;
+    color: var(--moov-text-primary-dark);
     margin: 0;
     letter-spacing: -0.01em;
   }
 
   /* Right — rows */
   .prod-ship__rows {
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid var(--moov-surface-dark-divider);
   }
 
   .prod-ship__row {
@@ -69,23 +69,23 @@
     gap: 24px;
     align-items: baseline;
     padding: 28px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid var(--moov-surface-dark-divider);
   }
 
   .prod-ship__row-label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(245, 242, 238, 0.4);
+    color: var(--moov-text-tertiary-dark);
   }
 
   .prod-ship__row-value {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: var(--text-base);
     font-weight: 300;
-    color: #F5F2EE;
+    color: var(--moov-text-primary-dark);
   }
 
   /* Tablet */

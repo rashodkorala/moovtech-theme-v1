@@ -160,7 +160,7 @@
     font-family: var(--font-body);
     font-weight: 400;
     font-size: var(--text-2xs);
-    color: rgba(240, 180, 41, 0.7);
+    color: var(--moov-eyebrow-accent);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     margin: 0 0 clamp(12px, 1.5vw, 20px);
@@ -197,7 +197,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 999px;
+    border-radius: var(--style-border-radius-buttons);
     padding: 14px 28px;
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -221,14 +221,14 @@
 
   .moov-hero__btn--ghost {
     background: transparent;
-    border: 0.5px solid rgba(245, 238, 220, 0.20);
+    border: 0.5px solid var(--moov-text-quaternary-dark);
     color: var(--moov-text-secondary-dark);
     font-weight: 300;
     transition: border-color 0.2s ease, color 0.2s ease;
   }
 
   .moov-hero__btn--ghost:hover {
-    border-color: rgba(245, 238, 220, 0.55);
+    border-color: var(--moov-text-secondary-dark);
     color: var(--moov-text-primary-dark);
   }
 

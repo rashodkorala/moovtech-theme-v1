@@ -69,6 +69,13 @@
         "label": "t:labels.foreground"
       },
       {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#f0b429",
+        "label": "Accent colour",
+        "info": "Used for eyebrows, badges, hover highlights, and CTAs across the theme."
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
@@ -77,6 +84,17 @@
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      },
+      {
+        "type": "range",
+        "id": "button_corner_radius",
+        "min": 0,
+        "max": 999,
+        "step": 1,
+        "unit": "px",
+        "label": "Button corner radius",
+        "default": 999,
+        "info": "999 = pill shape. Use lower values for rounded rectangles."
       }
     ]
   }
