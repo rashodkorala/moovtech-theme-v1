@@ -33,7 +33,7 @@
 
 {% stylesheet %}
   .product-features {
-    background: #0e0e0e;
+    background: var(--moov-black);
     padding: var(--section-block-pad-y) var(--section-inline-pad);
   }
 
@@ -43,12 +43,12 @@
   }
 
   .product-features__eyebrow {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: #C8F55A;
+    color: var(--moov-eyebrow-accent);
     margin: 0 0 64px;
   }
 
@@ -59,34 +59,34 @@
   }
 
   .product-features__item {
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    border-top: 1px solid var(--moov-surface-dark-divider);
     padding-top: 24px;
   }
 
   .product-features__num {
     display: block;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 300;
     text-transform: uppercase;
-    color: rgba(245, 242, 238, 0.3);
+    color: var(--moov-text-tertiary-dark);
   }
 
   .product-features__title {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
     font-size: var(--text-xl);
-    font-weight: 700;
-    color: #F5F2EE;
+    font-weight: 400;
+    color: var(--moov-text-primary-dark);
     line-height: 1.2;
     margin: 12px 0 0;
   }
 
   .product-features__body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 200;
     line-height: 1.7;
-    color: rgba(245, 242, 238, 0.55);
+    color: var(--moov-text-secondary-dark);
     margin: 10px 0 0;
   }
 

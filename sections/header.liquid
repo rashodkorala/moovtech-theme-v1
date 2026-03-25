@@ -86,6 +86,7 @@
       {{- section.settings.preorder_label | default: 'Pre-order' | escape -}}
     </a>
   </div>
+  <div class="moov-drawer__backdrop" aria-hidden="true"></div>
 </header>
 
 {% stylesheet %}
@@ -213,14 +214,16 @@
     color: var(--moov-text-primary-light);
     text-decoration: none;
     border: 0.5px solid rgba(10, 10, 9, 0.25);
-    border-radius: 999px;
+    border-radius: var(--style-border-radius-buttons);
     padding: clamp(8px, 0.6vw, 12px) clamp(18px, 1.4vw, 28px);
-    transition: opacity 0.2s;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     white-space: nowrap;
   }
 
   .moov-nav__preorder:hover {
-    opacity: 0.7;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-color: var(--moov-black);
   }
 
   /* Hamburger — mobile only */
@@ -355,6 +358,22 @@
 
   .moov-drawer.is-open {
     transform: translateX(0);
+  }
+
+  /* Backdrop overlay — dims content behind drawer */
+  .moov-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 9, 0.5);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .moov-drawer.is-open ~ .moov-drawer__backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .moov-drawer__header {
@@ -522,13 +541,22 @@
     });
   }
 
-  if (drawerClose && drawer) {
-    drawerClose.addEventListener('click', function() {
-      drawer.classList.remove('is-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  if (drawerClose) {
+    drawerClose.addEventListener('click', closeDrawer);
+  }
+
+  /* Close drawer when clicking backdrop */
+  var backdrop = document.querySelector('.moov-drawer__backdrop');
+  if (backdrop) {
+    backdrop.addEventListener('click', closeDrawer);
   }
 {% endjavascript %}
 

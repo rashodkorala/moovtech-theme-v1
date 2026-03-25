@@ -23,6 +23,8 @@
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --style-border-radius-buttons: {{ settings.button_corner_radius }}px;
+    --color-accent: {{ settings.accent_color | default: '#f0b429' }};
 
     /* Moov brand fonts (sections use these alongside theme settings font) */
     --font-wordmark: 'Artford', serif;
@@ -33,11 +35,20 @@
     --moov-cream: #f5eedc;
     --moov-cream-shadow: #ede4c8;
     --moov-amber: #f0b429;
+    --moov-amber-hover: #e5a520;
     --moov-amber-glow: rgba(240, 180, 41, 0.07);
+
+    /* Eyebrow accent — used for labels, badges, subtle highlights */
+    --moov-eyebrow-accent: rgba(240, 180, 41, 0.7);
+
+    /* Surface fills — subtle tinted backgrounds for cards & panels */
+    --moov-surface-dark-raised: rgba(245, 238, 220, 0.04);
+    --moov-surface-dark-divider: rgba(255, 255, 255, 0.07);
 
     --moov-text-primary-dark: #f5eedc;
     --moov-text-secondary-dark: rgba(245, 238, 220, 0.55);
     --moov-text-tertiary-dark: rgba(245, 238, 220, 0.3);
+    --moov-text-quaternary-dark: rgba(245, 238, 220, 0.2);
 
     --moov-text-primary-light: #0a0a09;
     --moov-text-secondary-light: rgba(10, 10, 9, 0.5);
@@ -46,6 +57,12 @@
     --moov-border-dark: rgba(245, 238, 220, 0.1);
     --moov-border-light: rgba(10, 10, 9, 0.1);
     --moov-border-amber: rgba(240, 180, 41, 0.35);
+
+    /* Feedback colours — success / error states */
+    --moov-success: #2e7d32;
+    --moov-success-bg: rgba(46, 125, 50, 0.08);
+    --moov-error: #c62828;
+    --moov-error-bg: rgba(198, 40, 40, 0.06);
 
     /*
       Fluid type scale — same ratio from mobile to large screens (clamp min / preferred / max).
