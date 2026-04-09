@@ -54,6 +54,8 @@
   </div>
 
   {%- comment -%} ── 4. STORY SECTION ── {%- endcomment -%}
+  {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
+  {%- if step_blocks.size > 0 -%}
   <div class="about-story">
     <div class="about-story__inner">
       <div class="about-story__layout">
@@ -63,88 +65,54 @@
           <h2 class="about-story__section-title">{{ 'sections.about_page.our_story' | t | default: 'Our Story' | upcase }}</h2>
           <div class="about-story__sidebar-rule"></div>
           <div class="about-story__sidebar-items">
-            <button class="about-story__sidebar-item about-story__sidebar-item--active" data-story-index="0" aria-pressed="true">
-              {%- if section.settings.story_vision_label != blank -%}
-                <p class="about-story__sidebar-label">{{ section.settings.story_vision_label | upcase }}</p>
-              {%- endif -%}
-              {%- if section.settings.story_vision_body != blank -%}
-                <p class="about-story__sidebar-body">{{ section.settings.story_vision_body }}</p>
-              {%- endif -%}
-            </button>
-            <button class="about-story__sidebar-item" data-story-index="1" aria-pressed="false">
-              {%- if section.settings.story_journey_label != blank -%}
-                <p class="about-story__sidebar-label">{{ section.settings.story_journey_label | upcase }}</p>
-              {%- endif -%}
-              {%- if section.settings.story_journey_body != blank -%}
-                <p class="about-story__sidebar-body">{{ section.settings.story_journey_body }}</p>
-              {%- endif -%}
-            </button>
-            <button class="about-story__sidebar-item" data-story-index="2" aria-pressed="false">
-              {%- if section.settings.story_promise_label != blank -%}
-                <p class="about-story__sidebar-label">{{ section.settings.story_promise_label | upcase }}</p>
-              {%- endif -%}
-              {%- if section.settings.story_promise_body != blank -%}
-                <p class="about-story__sidebar-body">{{ section.settings.story_promise_body }}</p>
-              {%- endif -%}
-            </button>
+            {%- for block in step_blocks -%}
+              <button
+                class="about-story__sidebar-item{% if forloop.first %} about-story__sidebar-item--active{% endif %}"
+                data-story-index="{{ forloop.index0 }}"
+                aria-pressed="{{ forloop.first | json }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.label != blank -%}
+                  <p class="about-story__sidebar-label">{{ block.settings.label | upcase }}</p>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <p class="about-story__sidebar-body">{{ block.settings.body }}</p>
+                {%- endif -%}
+              </button>
+            {%- endfor -%}
           </div>
         </aside>
 
         {%- comment -%} Right slides {%- endcomment -%}
         <div class="about-story__slides" id="about-story-images-{{ section.id }}">
-
-          <div class="about-story__slide about-story__slide--active" data-story-block="0">
-            {%- if section.settings.story_image_1 != blank -%}
-              {{ section.settings.story_image_1 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
-            {%- else -%}
-              <div class="about-story__img-placeholder"></div>
-            {%- endif -%}
-            <div class="about-story__caption">
-              {%- if section.settings.story_vision_caption_headline != blank -%}
-                <h3 class="about-story__caption-headline">{{ section.settings.story_vision_caption_headline }}</h3>
+          {%- for block in step_blocks -%}
+            <div
+              class="about-story__slide{% if forloop.first %} about-story__slide--active{% endif %}"
+              data-story-block="{{ forloop.index0 }}"
+            >
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
+              {%- else -%}
+                <div class="about-story__img-placeholder"></div>
               {%- endif -%}
-              {%- if section.settings.story_vision_caption_body != blank -%}
-                <p class="about-story__caption-body">{{ section.settings.story_vision_caption_body }}</p>
-              {%- endif -%}
-            </div>
-          </div>
-
-          <div class="about-story__slide" data-story-block="1">
-            {%- if section.settings.story_image_2 != blank -%}
-              {{ section.settings.story_image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
-            {%- else -%}
-              <div class="about-story__img-placeholder"></div>
-            {%- endif -%}
-            <div class="about-story__caption">
-              {%- if section.settings.story_journey_caption_headline != blank -%}
-                <h3 class="about-story__caption-headline">{{ section.settings.story_journey_caption_headline }}</h3>
-              {%- endif -%}
-              {%- if section.settings.story_journey_caption_body != blank -%}
-                <p class="about-story__caption-body">{{ section.settings.story_journey_caption_body }}</p>
+              {%- if block.settings.caption_headline != blank or block.settings.caption_body != blank -%}
+                <div class="about-story__caption">
+                  {%- if block.settings.caption_headline != blank -%}
+                    <h3 class="about-story__caption-headline">{{ block.settings.caption_headline }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.caption_body != blank -%}
+                    <p class="about-story__caption-body">{{ block.settings.caption_body }}</p>
+                  {%- endif -%}
+                </div>
               {%- endif -%}
             </div>
-          </div>
-
-          <div class="about-story__slide" data-story-block="2">
-            {%- if section.settings.story_image_3 != blank -%}
-              {{ section.settings.story_image_3 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
-            {%- else -%}
-              <div class="about-story__img-placeholder"></div>
-            {%- endif -%}
-            <div class="about-story__caption">
-              {%- if section.settings.story_promise_caption_headline != blank -%}
-                <h3 class="about-story__caption-headline">{{ section.settings.story_promise_caption_headline }}</h3>
-              {%- endif -%}
-              {%- if section.settings.story_promise_caption_body != blank -%}
-                <p class="about-story__caption-body">{{ section.settings.story_promise_caption_body }}</p>
-              {%- endif -%}
-            </div>
-          </div>
-
+          {%- endfor -%}
         </div>
+
       </div>
     </div>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── 5. STATS BAND ── {%- endcomment -%}
   {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
@@ -875,109 +843,6 @@
     },
     {
       "type": "header",
-      "content": "Story — sidebar labels"
-    },
-    {
-      "type": "text",
-      "id": "story_vision_label",
-      "label": "Item 1 label",
-      "default": "Vision"
-    },
-    {
-      "type": "textarea",
-      "id": "story_vision_body",
-      "label": "Item 1 body",
-      "default": "Creating sportswear that pushes every active moment with quality and innovation."
-    },
-    {
-      "type": "text",
-      "id": "story_journey_label",
-      "label": "Item 2 label",
-      "default": "Journey"
-    },
-    {
-      "type": "textarea",
-      "id": "story_journey_body",
-      "label": "Item 2 body",
-      "default": "From humble beginnings to a trusted brand, driven by passion and excellence."
-    },
-    {
-      "type": "text",
-      "id": "story_promise_label",
-      "label": "Item 3 label",
-      "default": "Promise"
-    },
-    {
-      "type": "textarea",
-      "id": "story_promise_body",
-      "label": "Item 3 body",
-      "default": "Delivering comfort, performance, and style you can count on every step."
-    },
-    {
-      "type": "header",
-      "content": "Story — image 1"
-    },
-    {
-      "type": "image_picker",
-      "id": "story_image_1",
-      "label": "Story image 1"
-    },
-    {
-      "type": "text",
-      "id": "story_vision_caption_headline",
-      "label": "Image 1 caption headline",
-      "default": "Empowering every move"
-    },
-    {
-      "type": "textarea",
-      "id": "story_vision_caption_body",
-      "label": "Image 1 caption body",
-      "default": "Our mission is to craft sportswear that supports and enhances your active lifestyle. Through quality and innovation, we're dedicated to helping you perform at your best in every moment."
-    },
-    {
-      "type": "header",
-      "content": "Story — image 2"
-    },
-    {
-      "type": "image_picker",
-      "id": "story_image_2",
-      "label": "Story image 2"
-    },
-    {
-      "type": "text",
-      "id": "story_journey_caption_headline",
-      "label": "Image 2 caption headline",
-      "default": "Built on passion"
-    },
-    {
-      "type": "textarea",
-      "id": "story_journey_caption_body",
-      "label": "Image 2 caption body",
-      "default": "From a small start to a well-loved brand, our journey reflects resilience, hard work, and an unbreakable commitment to quality. Each step forward is driven by a passion for excellence in every product."
-    },
-    {
-      "type": "header",
-      "content": "Story — image 3"
-    },
-    {
-      "type": "image_picker",
-      "id": "story_image_3",
-      "label": "Story image 3"
-    },
-    {
-      "type": "text",
-      "id": "story_promise_caption_headline",
-      "label": "Image 3 caption headline",
-      "default": "Comfort meets performance"
-    },
-    {
-      "type": "textarea",
-      "id": "story_promise_caption_body",
-      "label": "Image 3 caption body",
-      "default": "We're committed to providing sportswear that balances comfort, durability, and style. Count on our products to support you in every stride, so you can focus on what matters most — your performance."
-    },
-    {
-      "type": "header",
       "content": "Career CTA"
     },
     {
@@ -1031,6 +896,41 @@
     }
   ],
   "blocks": [
+    {
+      "type": "step",
+      "name": "Story step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Step label",
+          "default": "Vision"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Step description",
+          "default": "A short description of this chapter of the MOOV story."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Step image"
+        },
+        {
+          "type": "text",
+          "id": "caption_headline",
+          "label": "Caption headline",
+          "default": "Owning the morning"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_body",
+          "label": "Caption body",
+          "default": "We built MOOV to help people reclaim their first hour — turning the hardest moment of the day into the most powerful."
+        }
+      ]
+    },
     {
       "type": "stat",
       "name": "Stat card",
@@ -1094,6 +994,33 @@
     {
       "name": "About page",
       "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "label": "Vision",
+            "body": "We saw a world drowning in snooze buttons. MOOV was built to change the first moment of every day.",
+            "caption_headline": "Owning the morning",
+            "caption_body": "The alarm goes off. Most people lose the first battle of the day before they're even awake. We built MOOV to flip that."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "Journey",
+            "body": "From a late-night idea to a product that thousands of early risers now rely on every morning.",
+            "caption_headline": "Built from frustration",
+            "caption_body": "Our founders were chronic snoozers. They tried everything. Nothing worked — until they realised the solution was physical, not digital."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "Promise",
+            "body": "Simple hardware, smart routines, and zero guilt. MOOV is designed to get you up and into your life.",
+            "caption_headline": "The MOOV promise",
+            "caption_body": "No gamification. No streaks. No pressure. Just a system that quietly makes getting up easier, every single day."
+          }
+        },
         {
           "type": "stat",
           "settings": {
