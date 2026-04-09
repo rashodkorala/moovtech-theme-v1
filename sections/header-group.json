@@ -17,6 +17,8 @@
         "transparent_header": false,
         "sticky_header": true,
         "announcement_enabled": true,
+        "announcement_text": "",
+        "announcement_url": "",
         "logo_text": "MOOV",
         "nav_1_label": "How it works",
         "nav_1_url": "shopify://pages/how-it-works",
@@ -25,7 +27,7 @@
         "nav_3_label": "Our story",
         "nav_3_url": "shopify://pages/our-story",
         "nav_4_label": "Get MOOV",
-        "nav_4_url": "shopify://products/moov",
+        "nav_4_url": "shopify://products/t",
         "show_nav_cta": true,
         "get_moov_label": "Get MOOV",
         "get_moov_url": "shopify://products/moov"
