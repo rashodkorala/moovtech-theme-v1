@@ -1,10 +1,11 @@
 {
   "sections": {
-    "moov_about": {
-      "type": "moov-about"
+    "main": {
+      "type": "about-page",
+      "settings": {}
     }
   },
   "order": [
-    "moov_about"
+    "main"
   ]
 }
