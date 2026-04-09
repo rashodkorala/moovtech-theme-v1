@@ -1,258 +1,219 @@
-{%- liquid
-  assign stat_blocks = section.blocks | where: 'type', 'stat'
-  assign article_blocks = section.blocks | where: 'type', 'article'
--%}
+<div class="about-page" id="about-page-{{ section.id }}">
 
-<div class="about-page full-width" data-about-page data-section-id="{{ section.id }}">
-
-  <section class="about-hero" aria-labelledby="about-heading-{{ section.id }}">
+  {%- comment -%} ── 1. HERO ── {%- endcomment -%}
+  <div class="about-hero">
     <div class="about-hero__inner">
       {%- if section.settings.hero_eyebrow != blank -%}
-        <p class="about-hero__eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+        <p class="about-hero__eyebrow">{{ section.settings.hero_eyebrow }}</p>
       {%- endif -%}
       {%- if section.settings.hero_headline != blank -%}
-        <h1 id="about-heading-{{ section.id }}" class="about-hero__headline">
-          {{ section.settings.hero_headline | escape }}
-        </h1>
+        <h1 class="about-hero__headline">{{ section.settings.hero_headline }}</h1>
       {%- endif -%}
     </div>
-  </section>
+  </div>
 
-  <section class="about-images">
-    <div class="about-images__inner">
-      <div class="about-images__left">
+  {%- comment -%} ── 2. TWO-COLUMN IMAGE GRID ── {%- endcomment -%}
+  <div class="about-image-grid">
+    <div class="about-image-grid__inner">
+      <div class="about-image-grid__left">
         {%- if section.settings.feature_image_left != blank -%}
-          {{
-            section.settings.feature_image_left
-            | image_url: width: 900
-            | image_tag:
-              loading: 'lazy',
-              class: 'about-images__img',
-              sizes: '(min-width: 768px) 50vw, 100vw',
-              widths: '400, 600, 800, 900'
-          }}
+          {{ section.settings.feature_image_left | image_url: width: 900 | image_tag: loading: 'lazy', class: 'about-image-grid__img' }}
         {%- else -%}
-          <div class="about-images__placeholder"></div>
+          <div class="about-image-grid__placeholder about-image-grid__placeholder--tall"></div>
         {%- endif -%}
       </div>
-      <div class="about-images__right">
+      <div class="about-image-grid__right">
         {%- if section.settings.feature_image_right != blank -%}
-          {{
-            section.settings.feature_image_right
-            | image_url: width: 900
-            | image_tag:
-              loading: 'lazy',
-              class: 'about-images__img',
-              sizes: '(min-width: 768px) 50vw, 100vw',
-              widths: '400, 600, 800, 900'
-          }}
+          {{ section.settings.feature_image_right | image_url: width: 900 | image_tag: loading: 'lazy', class: 'about-image-grid__img' }}
         {%- else -%}
-          <div class="about-images__placeholder"></div>
+          <div class="about-image-grid__placeholder about-image-grid__placeholder--wide"></div>
         {%- endif -%}
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="about-feature">
+  {%- comment -%} ── 3. FEATURE BLOCK ── {%- endcomment -%}
+  <div class="about-feature">
     <div class="about-feature__inner">
-      {%- if section.settings.feature_headline != blank -%}
-        <h2 class="about-feature__headline">{{ section.settings.feature_headline | escape }}</h2>
-      {%- endif -%}
-      <div class="about-feature__columns">
-        {%- if section.settings.feature_body_1 != blank -%}
-          <p class="about-feature__body">{{ section.settings.feature_body_1 | escape }}</p>
-        {%- endif -%}
-        {%- if section.settings.feature_body_2 != blank -%}
-          <p class="about-feature__body">{{ section.settings.feature_body_2 | escape }}</p>
+      <div class="about-feature__left">
+        {%- if section.settings.feature_headline != blank -%}
+          <h2 class="about-feature__headline">{{ section.settings.feature_headline }}</h2>
         {%- endif -%}
       </div>
-    </div>
-  </section>
-
-  <section class="about-story" data-about-story>
-    <div class="about-story__inner">
-      {%- if section.settings.story_heading != blank -%}
-        <h2 class="about-story__heading">{{ section.settings.story_heading | escape }}</h2>
-      {%- endif -%}
-      <div class="about-story__layout">
-        <aside class="about-story__sidebar" aria-label="{{ 'sections.about_page.story_nav_label' | t }}">
-          <div class="about-story__sidebar-item is-active" data-story-item="0">
-            {%- if section.settings.story_vision_label != blank -%}
-              <span class="about-story__sidebar-label">{{ section.settings.story_vision_label | escape }}</span>
-            {%- endif -%}
-            {%- if section.settings.story_vision_body != blank -%}
-              <p class="about-story__sidebar-body">{{ section.settings.story_vision_body | escape }}</p>
-            {%- endif -%}
-          </div>
-          <div class="about-story__sidebar-item" data-story-item="1">
-            {%- if section.settings.story_journey_label != blank -%}
-              <span class="about-story__sidebar-label">{{ section.settings.story_journey_label | escape }}</span>
-            {%- endif -%}
-            {%- if section.settings.story_journey_body != blank -%}
-              <p class="about-story__sidebar-body">{{ section.settings.story_journey_body | escape }}</p>
-            {%- endif -%}
-          </div>
-          <div class="about-story__sidebar-item" data-story-item="2">
-            {%- if section.settings.story_promise_label != blank -%}
-              <span class="about-story__sidebar-label">{{ section.settings.story_promise_label | escape }}</span>
-            {%- endif -%}
-            {%- if section.settings.story_promise_body != blank -%}
-              <p class="about-story__sidebar-body">{{ section.settings.story_promise_body | escape }}</p>
-            {%- endif -%}
-          </div>
-        </aside>
-        <div class="about-story__panels">
-          <div class="about-story__panel" data-story-panel="0">
-            {%- if section.settings.story_image_1 != blank -%}
-              <div class="about-story__panel-image">
-                {{
-                  section.settings.story_image_1
-                  | image_url: width: 1200
-                  | image_tag:
-                    loading: 'lazy',
-                    class: 'about-story__img',
-                    sizes: '(min-width: 768px) 65vw, 100vw',
-                    widths: '600, 800, 1000, 1200'
-                }}
-              </div>
-            {%- endif -%}
-            {%- if section.settings.story_title_1 != blank -%}
-              <div class="about-story__panel-text">
-                <h3 class="about-story__panel-title">{{ section.settings.story_title_1 | escape }}</h3>
-                {%- if section.settings.story_text_1 != blank -%}
-                  <p class="about-story__panel-body">{{ section.settings.story_text_1 | escape }}</p>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </div>
-
-          <div class="about-story__panel" data-story-panel="1">
-            {%- if section.settings.story_image_2 != blank -%}
-              <div class="about-story__panel-image">
-                {{
-                  section.settings.story_image_2
-                  | image_url: width: 1200
-                  | image_tag:
-                    loading: 'lazy',
-                    class: 'about-story__img',
-                    sizes: '(min-width: 768px) 65vw, 100vw',
-                    widths: '600, 800, 1000, 1200'
-                }}
-              </div>
-            {%- endif -%}
-            {%- if section.settings.story_title_2 != blank -%}
-              <div class="about-story__panel-text">
-                <h3 class="about-story__panel-title">{{ section.settings.story_title_2 | escape }}</h3>
-                {%- if section.settings.story_text_2 != blank -%}
-                  <p class="about-story__panel-body">{{ section.settings.story_text_2 | escape }}</p>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </div>
-
-          <div class="about-story__panel" data-story-panel="2">
-            {%- if section.settings.story_image_3 != blank -%}
-              <div class="about-story__panel-image">
-                {{
-                  section.settings.story_image_3
-                  | image_url: width: 1200
-                  | image_tag:
-                    loading: 'lazy',
-                    class: 'about-story__img',
-                    sizes: '(min-width: 768px) 65vw, 100vw',
-                    widths: '600, 800, 1000, 1200'
-                }}
-              </div>
-            {%- endif -%}
-            {%- if section.settings.story_title_3 != blank -%}
-              <div class="about-story__panel-text">
-                <h3 class="about-story__panel-title">{{ section.settings.story_title_3 | escape }}</h3>
-                {%- if section.settings.story_text_3 != blank -%}
-                  <p class="about-story__panel-body">{{ section.settings.story_text_3 | escape }}</p>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </div>
+      <div class="about-feature__right">
+        <div class="about-feature__body-cols">
+          {%- if section.settings.feature_body_1 != blank -%}
+            <p class="about-feature__body">{{ section.settings.feature_body_1 }}</p>
+          {%- endif -%}
+          {%- if section.settings.feature_body_2 != blank -%}
+            <p class="about-feature__body">{{ section.settings.feature_body_2 }}</p>
+          {%- endif -%}
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
+  {%- comment -%} ── 4. STORY SECTION ── {%- endcomment -%}
+  <div class="about-story">
+    <div class="about-story__inner">
+      <div class="about-story__header">
+        <h2 class="about-story__section-title">{{ 'sections.about_page.our_story' | t | default: 'Our story' | upcase }}</h2>
+      </div>
+      <div class="about-story__layout">
+        <aside class="about-story__sidebar" id="about-story-sidebar-{{ section.id }}">
+          <div class="about-story__sidebar-rule"></div>
+          <div class="about-story__sidebar-items">
+            <div class="about-story__sidebar-item about-story__sidebar-item--active" data-story-index="0">
+              {%- if section.settings.story_vision_label != blank -%}
+                <p class="about-story__sidebar-label">{{ section.settings.story_vision_label | upcase }}</p>
+              {%- endif -%}
+              {%- if section.settings.story_vision_body != blank -%}
+                <p class="about-story__sidebar-body">{{ section.settings.story_vision_body }}</p>
+              {%- endif -%}
+            </div>
+            <div class="about-story__sidebar-item" data-story-index="1">
+              {%- if section.settings.story_journey_label != blank -%}
+                <p class="about-story__sidebar-label">{{ section.settings.story_journey_label | upcase }}</p>
+              {%- endif -%}
+              {%- if section.settings.story_journey_body != blank -%}
+                <p class="about-story__sidebar-body">{{ section.settings.story_journey_body }}</p>
+              {%- endif -%}
+            </div>
+            <div class="about-story__sidebar-item" data-story-index="2">
+              {%- if section.settings.story_promise_label != blank -%}
+                <p class="about-story__sidebar-label">{{ section.settings.story_promise_label | upcase }}</p>
+              {%- endif -%}
+              {%- if section.settings.story_promise_body != blank -%}
+                <p class="about-story__sidebar-body">{{ section.settings.story_promise_body }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </aside>
+        <div class="about-story__images" id="about-story-images-{{ section.id }}">
+
+          <div class="about-story__image-block" data-story-block="0">
+            {%- if section.settings.story_image_1 != blank -%}
+              {{ section.settings.story_image_1 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
+            {%- else -%}
+              <div class="about-story__img-placeholder"></div>
+            {%- endif -%}
+            <div class="about-story__caption">
+              {%- if section.settings.story_vision_caption_headline != blank -%}
+                <h3 class="about-story__caption-headline">{{ section.settings.story_vision_caption_headline }}</h3>
+              {%- endif -%}
+              {%- if section.settings.story_vision_caption_body != blank -%}
+                <p class="about-story__caption-body">{{ section.settings.story_vision_caption_body }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="about-story__image-block" data-story-block="1">
+            {%- if section.settings.story_image_2 != blank -%}
+              {{ section.settings.story_image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
+            {%- else -%}
+              <div class="about-story__img-placeholder"></div>
+            {%- endif -%}
+            <div class="about-story__caption">
+              {%- if section.settings.story_journey_caption_headline != blank -%}
+                <h3 class="about-story__caption-headline">{{ section.settings.story_journey_caption_headline }}</h3>
+              {%- endif -%}
+              {%- if section.settings.story_journey_caption_body != blank -%}
+                <p class="about-story__caption-body">{{ section.settings.story_journey_caption_body }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="about-story__image-block" data-story-block="2">
+            {%- if section.settings.story_image_3 != blank -%}
+              {{ section.settings.story_image_3 | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
+            {%- else -%}
+              <div class="about-story__img-placeholder"></div>
+            {%- endif -%}
+            <div class="about-story__caption">
+              {%- if section.settings.story_promise_caption_headline != blank -%}
+                <h3 class="about-story__caption-headline">{{ section.settings.story_promise_caption_headline }}</h3>
+              {%- endif -%}
+              {%- if section.settings.story_promise_caption_body != blank -%}
+                <p class="about-story__caption-body">{{ section.settings.story_promise_caption_body }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── 5. STATS BAND ── {%- endcomment -%}
+  {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
   {%- if stat_blocks.size > 0 -%}
-    <section class="about-stats">
+    <div class="about-stats">
       <div class="about-stats__inner">
         {%- for block in stat_blocks -%}
           <div class="about-stats__card" {{ block.shopify_attributes }}>
             <div class="about-stats__card-top">
               {%- if block.settings.number != blank -%}
-                <span class="about-stats__number">{{ block.settings.number | escape }}</span>
+                <p class="about-stats__number">{{ block.settings.number }}</p>
               {%- endif -%}
               {%- if block.settings.label != blank -%}
-                <span class="about-stats__label">{{ block.settings.label | escape }}</span>
+                <p class="about-stats__label">{{ block.settings.label | upcase }}</p>
               {%- endif -%}
             </div>
             {%- if block.settings.description != blank -%}
-              <p class="about-stats__description">{{ block.settings.description | escape }}</p>
+              <p class="about-stats__description">{{ block.settings.description }}</p>
             {%- endif -%}
           </div>
         {%- endfor -%}
       </div>
-    </section>
+    </div>
   {%- endif -%}
 
-  <section class="about-career">
+  {%- comment -%} ── 6. CAREER CTA ── {%- endcomment -%}
+  <div class="about-career">
     <div class="about-career__inner">
       <div class="about-career__image-col">
         {%- if section.settings.career_image != blank -%}
-          {{
-            section.settings.career_image
-            | image_url: width: 800
-            | image_tag:
-              loading: 'lazy',
-              class: 'about-career__img',
-              sizes: '(min-width: 768px) 50vw, 100vw',
-              widths: '400, 600, 800'
-          }}
+          {{ section.settings.career_image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'about-career__img' }}
         {%- else -%}
-          <div class="about-career__placeholder"></div>
+          <div class="about-career__img-placeholder"></div>
         {%- endif -%}
       </div>
-      <div class="about-career__content">
-        {%- if section.settings.career_label != blank -%}
-          <span class="about-career__label">{{ section.settings.career_label | escape }}</span>
-        {%- endif -%}
-        {%- if section.settings.career_headline != blank -%}
-          <h2 class="about-career__headline">{{ section.settings.career_headline | escape }}</h2>
-        {%- endif -%}
-        {%- if section.settings.career_body != blank -%}
-          <p class="about-career__body">{{ section.settings.career_body | escape }}</p>
-        {%- endif -%}
-        {%- if section.settings.career_button_label != blank -%}
-          <a href="{{ section.settings.career_button_url | default: '#' }}" class="about-career__btn">
-            {{ section.settings.career_button_label | escape }}
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="2" y1="12" x2="12" y2="2"/>
-              <polyline points="5,2 12,2 12,9"/>
-            </svg>
-          </a>
-        {%- endif -%}
+      <div class="about-career__content-col">
+        <div class="about-career__content">
+          {%- if section.settings.career_label != blank -%}
+            <p class="about-career__label">{{ section.settings.career_label | upcase }}</p>
+          {%- endif -%}
+          {%- if section.settings.career_headline != blank -%}
+            <h2 class="about-career__headline">{{ section.settings.career_headline | upcase }}</h2>
+          {%- endif -%}
+          {%- if section.settings.career_body != blank -%}
+            <p class="about-career__body">{{ section.settings.career_body }}</p>
+          {%- endif -%}
+          {%- if section.settings.career_button_label != blank -%}
+            <a href="{{ section.settings.career_button_url | default: '#' }}" class="about-career__btn">
+              {{ section.settings.career_button_label }}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 
+  {%- comment -%} ── 7. BLOG GRID ── {%- endcomment -%}
+  {%- assign article_blocks = section.blocks | where: 'type', 'article' -%}
   {%- if article_blocks.size > 0 -%}
-    <section class="about-blog">
+    <div class="about-blog">
       <div class="about-blog__inner">
         <div class="about-blog__header">
-          {%- if section.settings.blog_heading != blank -%}
-            <h2 class="about-blog__heading">{{ section.settings.blog_heading | escape }}</h2>
-          {%- endif -%}
-          {%- if section.settings.blog_read_all_label != blank -%}
-            <a href="{{ section.settings.blog_read_all_url | default: '#' }}" class="about-blog__read-all">
-              {{ section.settings.blog_read_all_label | escape }}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="2" y1="12" x2="12" y2="2"/>
-                <polyline points="5,2 12,2 12,9"/>
+          <h2 class="about-blog__heading">{{ 'sections.about_page.blog_heading' | t | default: 'Blog' | upcase }}</h2>
+          {%- if section.settings.blog_read_all_url != blank -%}
+            <a href="{{ section.settings.blog_read_all_url }}" class="about-blog__read-all">
+              {{ section.settings.blog_read_all_label | default: 'Read all' }}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
           {%- endif -%}
@@ -260,958 +221,854 @@
         <div class="about-blog__grid">
           {%- for block in article_blocks -%}
             <article class="about-blog__card" {{ block.shopify_attributes }}>
-              {%- if block.settings.image != blank -%}
-                <div class="about-blog__card-image">
-                  {{
-                    block.settings.image
-                    | image_url: width: 600
-                    | image_tag:
-                      loading: 'lazy',
-                      class: 'about-blog__card-img',
-                      sizes: '(min-width: 768px) 33vw, 100vw',
-                      widths: '300, 400, 600'
-                  }}
-                </div>
-              {%- endif -%}
-              <div class="about-blog__card-body">
-                <div class="about-blog__card-meta">
-                  {%- if block.settings.category != blank -%}
-                    <span>{{ block.settings.category | escape }}</span>
-                  {%- endif -%}
-                  {%- if block.settings.category != blank -%}
-                    {%- if block.settings.date != blank -%}
-                      <span aria-hidden="true">~</span>
-                    {%- endif -%}
-                  {%- endif -%}
-                  {%- if block.settings.date != blank -%}
-                    <span>{{ block.settings.date | escape }}</span>
+              <a href="{{ block.settings.url | default: '#' }}" class="about-blog__card-image-link">
+                <div class="about-blog__card-image-wrap">
+                  {%- if block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'about-blog__card-img' }}
+                  {%- else -%}
+                    <div class="about-blog__card-img-placeholder"></div>
                   {%- endif -%}
                 </div>
-                {%- if block.settings.title != blank -%}
-                  <h3 class="about-blog__card-title">{{ block.settings.title | escape }}</h3>
+              </a>
+              <div class="about-blog__card-meta">
+                {%- if block.settings.category != blank -%}
+                  <span class="about-blog__card-category">{{ block.settings.category }}</span>
+                  <span class="about-blog__card-sep">&ndash;</span>
                 {%- endif -%}
-                <a href="{{ block.settings.url | default: '#' }}" class="about-blog__card-link">
-                  <span class="about-blog__card-link-arrow" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="3" y1="7" x2="11" y2="7"/>
-                      <polyline points="7,3 11,7 7,11"/>
-                    </svg>
-                  </span>
-                  {{ 'sections.about_page.read_article' | t }}
-                </a>
+                {%- if block.settings.date != blank -%}
+                  <span class="about-blog__card-date">{{ block.settings.date }}</span>
+                {%- endif -%}
               </div>
+              {%- if block.settings.title != blank -%}
+                <h3 class="about-blog__card-title">{{ block.settings.title | upcase }}</h3>
+              {%- endif -%}
+              <a href="{{ block.settings.url | default: '#' }}" class="about-blog__card-link">
+                <span class="about-blog__card-link-icon">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                {{ 'sections.about_page.read_article' | t | default: 'Read article' }}
+              </a>
             </article>
           {%- endfor -%}
         </div>
       </div>
-    </section>
+    </div>
   {%- endif -%}
 
 </div>
 
 {% stylesheet %}
-  .about-page {
-    --about-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    --about-black: #111111;
-    --about-white: #ffffff;
-    --about-off-white: #f5f5f3;
-    --about-grey: #e8e8e6;
-    --about-panel: #f0f0ee;
-    --about-muted: #999;
-    --about-body-color: #666;
-    --about-radius: 16px;
-    --about-pad: var(--section-inline-pad, clamp(1rem, 4vw, 5rem));
-    --about-max: var(--page-width, 1400px);
-    font-family: var(--about-font);
-    color: var(--about-black);
-  }
 
-  .about-page h1,
-  .about-page h2,
-  .about-page h3,
-  .about-page p,
-  .about-page span,
-  .about-page a {
-    font-family: var(--about-font);
-  }
+.about-page {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #111111;
+  background: #ffffff;
+}
+
+/* ── 1. Hero ── */
+.about-hero {
+  padding: 80px 48px 64px;
+  text-align: center;
+}
+.about-hero__inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.about-hero__eyebrow {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+.about-hero__headline {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0;
+  color: #111111;
+}
+
+/* ── 2. Image Grid ── */
+.about-image-grid {
+  padding: 0 48px 64px;
+}
+.about-image-grid__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.about-image-grid__left .about-image-grid__img,
+.about-image-grid__left .about-image-grid__placeholder {
+  border-radius: 16px;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+.about-image-grid__right .about-image-grid__img,
+.about-image-grid__right .about-image-grid__placeholder {
+  border-radius: 16px;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.about-image-grid__placeholder {
+  background: #e8e8e6;
+}
+
+/* ── 3. Feature Block ── */
+.about-feature {
+  padding: 64px 48px 80px;
+}
+.about-feature__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.about-feature__headline {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+  color: #111111;
+}
+.about-feature__body-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.about-feature__body {
+  font-size: 15px;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── 4. Story Section ── */
+.about-story {
+  padding: 0 48px 80px;
+}
+.about-story__section-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #111111;
+  margin: 0 0 40px;
+}
+.about-story__layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.about-story__sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  gap: 0;
+}
+.about-story__sidebar-rule {
+  width: 2px;
+  background: #e8e8e6;
+  flex-shrink: 0;
+  margin-right: 24px;
+  border-radius: 2px;
+}
+.about-story__sidebar-items {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  flex: 1;
+}
+.about-story__sidebar-item {
+  opacity: 0.3;
+  transition: opacity 0.35s ease;
+}
+.about-story__sidebar-item--active {
+  opacity: 1;
+}
+.about-story__sidebar-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #111111;
+  margin: 0 0 8px;
+}
+.about-story__sidebar-body {
+  font-size: 14px;
+  font-weight: 300;
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
+}
+.about-story__images {
+  display: flex;
+  flex-direction: column;
+}
+.about-story__image-block {
+  margin-bottom: 48px;
+}
+.about-story__image-block:last-child {
+  margin-bottom: 0;
+}
+.about-story__img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+.about-story__img-placeholder {
+  width: 100%;
+  height: 600px;
+  background: #e8e8e6;
+  border-radius: 16px;
+}
+.about-story__caption {
+  padding: 28px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.about-story__caption-headline {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+  color: #111111;
+}
+.about-story__caption-body {
+  font-size: 15px;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+  padding-top: 4px;
+}
+
+/* ── 5. Stats Band ── */
+.about-stats {
+  background: #111111;
+  padding: 48px;
+}
+.about-stats__inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.about-stats__card {
+  background: #e8e8e6;
+  border-radius: 16px;
+  padding: 36px 32px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.about-stats__card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.about-stats__number {
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+  color: #111111;
+}
+.about-stats__label {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+  color: #111111;
+}
+.about-stats__description {
+  font-size: 13px;
+  font-weight: 300;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── 6. Career CTA ── */
+.about-career {
+  padding: 80px 48px;
+}
+.about-career__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+.about-career__image-col {
+  border-radius: 16px;
+  overflow: hidden;
+}
+.about-career__img {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+.about-career__img-placeholder {
+  width: 100%;
+  min-height: 500px;
+  background: #e8e8e6;
+}
+.about-career__content-col {
+  background: #f0f0ee;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 48px;
+}
+.about-career__content {
+  text-align: center;
+  max-width: 420px;
+}
+.about-career__label {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 16px;
+}
+.about-career__headline {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0 0 20px;
+  color: #111111;
+}
+.about-career__body {
+  font-size: 15px;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.65;
+  margin: 0 0 32px;
+}
+.about-career__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111111;
+  color: #ffffff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+  transition: background 0.2s ease;
+}
+.about-career__btn:hover {
+  background: #333333;
+}
+
+/* ── 7. Blog Grid ── */
+.about-blog {
+  padding: 0 48px 80px;
+}
+.about-blog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+.about-blog__heading {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin: 0;
+  color: #111111;
+}
+.about-blog__read-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111111;
+  color: #ffffff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+  transition: background 0.2s ease;
+}
+.about-blog__read-all:hover {
+  background: #333333;
+}
+.about-blog__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.about-blog__card {
+  display: flex;
+  flex-direction: column;
+}
+.about-blog__card-image-link {
+  display: block;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+.about-blog__card-image-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.about-blog__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.about-blog__card-image-link:hover .about-blog__card-img {
+  transform: scale(1.03);
+}
+.about-blog__card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #e8e8e6;
+}
+.about-blog__card-meta {
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.about-blog__card-sep {
+  color: #ccc;
+}
+.about-blog__card-title {
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  margin: 0 0 14px;
+  color: #111111;
+  flex: 1;
+}
+.about-blog__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #111111;
+  text-decoration: none;
+  margin-top: auto;
+}
+.about-blog__card-link:hover {
+  color: #555;
+}
+.about-blog__card-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #111111;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.about-blog__card-link:hover .about-blog__card-link-icon {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .about-hero { padding: 56px 24px 48px; }
+  .about-image-grid { padding: 0 24px 48px; }
+  .about-image-grid__inner { grid-template-columns: 1fr; }
+  .about-image-grid__left .about-image-grid__img,
+  .about-image-grid__left .about-image-grid__placeholder { aspect-ratio: 4 / 3; }
+  .about-feature { padding: 48px 24px 64px; }
+  .about-feature__inner { grid-template-columns: 1fr; gap: 24px; }
+  .about-feature__body-cols { grid-template-columns: 1fr; gap: 16px; }
+  .about-story { padding: 0 24px 56px; }
+  .about-story__layout { grid-template-columns: 1fr; }
+  .about-story__sidebar { position: static; }
+  .about-story__caption { grid-template-columns: 1fr; gap: 16px; }
+  .about-stats { padding: 32px 24px; }
+  .about-stats__inner { grid-template-columns: 1fr; }
+  .about-stats__card { min-height: 220px; }
+  .about-career { padding: 56px 24px; }
+  .about-career__inner { grid-template-columns: 1fr; }
+  .about-career__img,
+  .about-career__img-placeholder { min-height: 320px; }
+  .about-blog { padding: 0 24px 56px; }
+  .about-blog__grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .about-blog__grid { grid-template-columns: repeat(2, 1fr); }
+  .about-stats__inner { grid-template-columns: repeat(2, 1fr); }
+}
 
-  /* ── 1. Hero ── */
-
-  .about-hero {
-    text-align: center;
-    padding: clamp(3rem, 8vw, 6rem) var(--about-pad) clamp(2rem, 4vw, 3rem);
-  }
-
-  .about-hero__inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .about-hero__eyebrow {
-    margin: 0 0 1.5rem;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--about-body-color);
-    line-height: 1.5;
-  }
-
-  .about-hero__headline {
-    margin: 0;
-    font-size: clamp(2.25rem, 5vw, 3.75rem);
-    font-weight: 900;
-    line-height: 1.08;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-  }
-
-  /* ── 2. Two-column image grid ── */
-
-  .about-images {
-    padding: 0 var(--about-pad);
-  }
-
-  .about-images__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  @media (min-width: 768px) {
-    .about-images__inner {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .about-images__left {
-    border-radius: var(--about-radius);
-    overflow: hidden;
-    aspect-ratio: 3 / 4;
-  }
-
-  .about-images__right {
-    border-radius: var(--about-radius);
-    overflow: hidden;
-    aspect-ratio: 4 / 3;
-  }
-
-  .about-images__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .about-images__placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 280px;
-    background: var(--about-grey);
-  }
-
-  /* ── 3. Feature block ── */
-
-  .about-feature {
-    padding: clamp(4rem, 8vw, 7rem) var(--about-pad);
-  }
-
-  .about-feature__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(2rem, 4vw, 3rem);
-  }
-
-  @media (min-width: 768px) {
-    .about-feature__inner {
-      grid-template-columns: 1fr 1.2fr;
-      gap: clamp(3rem, 5vw, 6rem);
-      align-items: start;
-    }
-  }
-
-  .about-feature__headline {
-    margin: 0;
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-weight: 900;
-    line-height: 1.08;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-  }
-
-  .about-feature__columns {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  @media (min-width: 768px) {
-    .about-feature__columns {
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-  }
-
-  .about-feature__body {
-    margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--about-body-color);
-  }
-
-  /* ── 4. Story section ── */
-
-  .about-story {
-    padding: clamp(4rem, 8vw, 7rem) var(--about-pad);
-    border-top: 1px solid var(--about-grey);
-  }
-
-  .about-story__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-  }
-
-  .about-story__heading {
-    margin: 0 0 clamp(2rem, 4vw, 3.5rem);
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-  }
-
-  .about-story__layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(2rem, 4vw, 3rem);
-  }
-
-  @media (min-width: 768px) {
-    .about-story__layout {
-      grid-template-columns: 280px 1fr;
-      gap: clamp(2rem, 4vw, 4rem);
-    }
-  }
-
-  .about-story__sidebar {
-    display: flex;
-    flex-direction: column;
-  }
-
-  @media (min-width: 768px) {
-    .about-story__sidebar {
-      position: sticky;
-      top: 80px;
-      align-self: start;
-    }
-  }
-
-  .about-story__sidebar-item {
-    padding: 1.25rem 0 1.25rem 1.5rem;
-    border-left: 2px solid var(--about-grey);
-    transition: opacity 0.35s ease, border-color 0.35s ease;
-    opacity: 0.3;
-  }
-
-  .about-story__sidebar-item.is-active {
-    opacity: 1;
-    border-left-color: var(--about-black);
-  }
-
-  .about-story__sidebar-label {
-    display: block;
-    font-size: 0.8125rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--about-black);
-    margin-bottom: 0.4rem;
-  }
-
-  .about-story__sidebar-body {
-    margin: 0;
-    font-size: 0.8125rem;
-    font-weight: 300;
-    line-height: 1.6;
-    color: var(--about-body-color);
-  }
-
-  .about-story__panels {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(3rem, 6vw, 5rem);
-  }
-
-  .about-story__panel-image {
-    border-radius: var(--about-radius);
-    overflow: hidden;
-  }
-
-  .about-story__img {
-    width: 100%;
-    height: auto;
-    min-height: 360px;
-    max-height: 600px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .about-story__panel-text {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  }
-
-  @media (min-width: 768px) {
-    .about-story__panel-text {
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(2rem, 4vw, 4rem);
-    }
-  }
-
-  .about-story__panel-title {
-    margin: 0;
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 900;
-    line-height: 1.08;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-  }
-
-  .about-story__panel-body {
-    margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--about-body-color);
-  }
-
-  /* ── 5. Stats band ── */
-
-  .about-stats {
-    background: var(--about-black);
-    padding: clamp(3rem, 6vw, 5rem) var(--about-pad);
-  }
-
-  .about-stats__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  @media (min-width: 768px) {
-    .about-stats__inner {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .about-stats__card {
-    background: var(--about-grey);
-    border-radius: var(--about-radius);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  @media (min-width: 768px) {
-    .about-stats__card {
-      min-height: 320px;
-    }
-  }
-
-  .about-stats__card-top {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .about-stats__number {
-    display: block;
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-weight: 900;
-    line-height: 1.1;
-    text-transform: uppercase;
-    color: var(--about-black);
-  }
-
-  .about-stats__label {
-    display: block;
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 900;
-    line-height: 1.1;
-    text-transform: uppercase;
-    color: var(--about-black);
-  }
-
-  .about-stats__description {
-    margin: 0;
-    font-size: 0.8125rem;
-    font-weight: 300;
-    line-height: 1.6;
-    color: var(--about-body-color);
-    max-width: 280px;
-  }
-
-  /* ── 6. Career CTA ── */
-
-  .about-career {
-    padding: clamp(3rem, 6vw, 5rem) var(--about-pad);
-  }
-
-  .about-career__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  @media (min-width: 768px) {
-    .about-career__inner {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .about-career__image-col {
-    border-radius: var(--about-radius);
-    overflow: hidden;
-  }
-
-  .about-career__img {
-    width: 100%;
-    height: 100%;
-    min-height: 320px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .about-career__placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 320px;
-    background: var(--about-grey);
-  }
-
-  .about-career__content {
-    background: var(--about-panel);
-    border-radius: var(--about-radius);
-    padding: clamp(2rem, 4vw, 4rem);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .about-career__label {
-    display: block;
-    margin-bottom: 1.25rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--about-muted);
-  }
-
-  .about-career__headline {
-    margin: 0 0 1.25rem;
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    font-weight: 900;
-    line-height: 1.08;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-    max-width: 380px;
-  }
-
-  .about-career__body {
-    margin: 0 0 2rem;
-    font-size: 0.875rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--about-body-color);
-    max-width: 380px;
-  }
-
-  .about-career__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    border-radius: 999px;
-    background: var(--about-black);
-    color: var(--about-white);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    text-decoration: none;
-    transition: background 0.2s ease, transform 0.15s ease;
-  }
-
-  .about-career__btn:hover {
-    background: #333;
-    transform: translateY(-1px);
-  }
-
-  /* ── 7. Blog grid ── */
-
-  .about-blog {
-    padding: clamp(3rem, 6vw, 5rem) var(--about-pad);
-    border-top: 1px solid var(--about-grey);
-  }
-
-  .about-blog__inner {
-    max-width: var(--about-max);
-    margin: 0 auto;
-  }
-
-  .about-blog__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  }
-
-  .about-blog__heading {
-    margin: 0;
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.015em;
-    color: var(--about-black);
-  }
-
-  .about-blog__read-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 22px;
-    border-radius: 999px;
-    border: 1.5px solid var(--about-black);
-    background: transparent;
-    color: var(--about-black);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    text-decoration: none;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-
-  .about-blog__read-all:hover {
-    background: var(--about-black);
-    color: var(--about-white);
-  }
-
-  .about-blog__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(1.5rem, 3vw, 2rem);
-  }
-
-  @media (min-width: 768px) {
-    .about-blog__grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .about-blog__card {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .about-blog__card-image {
-    border-radius: var(--about-radius);
-    overflow: hidden;
-    aspect-ratio: 4 / 3;
-    margin-bottom: 1rem;
-  }
-
-  .about-blog__card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.35s ease;
-  }
-
-  .about-blog__card:hover .about-blog__card-img {
-    transform: scale(1.03);
-  }
-
-  .about-blog__card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .about-blog__card-meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--about-muted);
-  }
-
-  .about-blog__card-title {
-    margin: 0;
-    font-size: clamp(0.875rem, 1.2vw, 1rem);
-    font-weight: 800;
-    line-height: 1.3;
-    text-transform: uppercase;
-    color: var(--about-black);
-  }
-
-  .about-blog__card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: var(--about-black);
-    text-decoration: none;
-    margin-top: 0.25rem;
-    transition: opacity 0.2s;
-  }
-
-  .about-blog__card-link:hover {
-    opacity: 0.6;
-  }
-
-  .about-blog__card-link-arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1.5px solid var(--about-black);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
 {% endstylesheet %}
 
 {% javascript %}
-  (function () {
-    document.querySelectorAll('[data-about-story]').forEach(function (story) {
-      var panels = story.querySelectorAll('[data-story-panel]');
-      var items = story.querySelectorAll('[data-story-item]');
-      if (panels.length === 0 || items.length === 0) return;
+(function () {
+  var sectionId = '{{ section.id }}';
+  var sidebar = document.getElementById('about-story-sidebar-' + sectionId);
+  var imagesContainer = document.getElementById('about-story-images-' + sectionId);
 
-      var observer = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) return;
-            var idx = entry.target.getAttribute('data-story-panel');
-            items.forEach(function (item) {
-              item.classList.toggle(
-                'is-active',
-                item.getAttribute('data-story-item') === idx
-              );
-            });
-          });
-        },
-        { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
-      );
+  if (!sidebar || !imagesContainer) return;
 
-      panels.forEach(function (panel) {
-        observer.observe(panel);
-      });
+  var sidebarItems = sidebar.querySelectorAll('.about-story__sidebar-item');
+  var imageBlocks = imagesContainer.querySelectorAll('.about-story__image-block');
+
+  if (!sidebarItems.length || !imageBlocks.length) return;
+
+  function setActive(index) {
+    sidebarItems.forEach(function (item, i) {
+      if (i === index) {
+        item.classList.add('about-story__sidebar-item--active');
+      } else {
+        item.classList.remove('about-story__sidebar-item--active');
+      }
     });
-  })();
+  }
+
+  var observer = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var idx = parseInt(entry.target.getAttribute('data-story-block'), 10);
+          if (!isNaN(idx)) setActive(idx);
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: '-30% 0px -60% 0px',
+      threshold: 0
+    }
+  );
+
+  imageBlocks.forEach(function (block) {
+    observer.observe(block);
+  });
+})();
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "t:sections.about_page.name",
-  "tag": "section",
-  "class": "section-about-page",
+  "name": "About page",
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.about_page.hero_header"
+      "content": "Hero"
     },
     {
       "type": "text",
       "id": "hero_eyebrow",
-      "label": "t:sections.about_page.hero_eyebrow",
+      "label": "Eyebrow text",
       "default": "Empowering your active life with quality sportswear for every journey"
     },
     {
       "type": "textarea",
       "id": "hero_headline",
-      "label": "t:sections.about_page.hero_headline",
+      "label": "Headline",
       "default": "Passionate about performance and dedicated to innovation, we create sportswear that supports your goals."
     },
     {
       "type": "header",
-      "content": "t:sections.about_page.images_header"
+      "content": "Image grid"
     },
     {
       "type": "image_picker",
       "id": "feature_image_left",
-      "label": "t:sections.about_page.feature_image_left"
+      "label": "Left image (tall, 3:4)"
     },
     {
       "type": "image_picker",
       "id": "feature_image_right",
-      "label": "t:sections.about_page.feature_image_right"
+      "label": "Right image (wide, 4:3)"
     },
     {
       "type": "header",
-      "content": "t:sections.about_page.feature_header"
+      "content": "Feature block"
     },
     {
       "type": "textarea",
       "id": "feature_headline",
-      "label": "t:sections.about_page.feature_headline",
+      "label": "Headline",
       "default": "Crafted for performance, designed for you"
     },
     {
       "type": "textarea",
       "id": "feature_body_1",
-      "label": "t:sections.about_page.feature_body_1",
-      "default": "We believe that every detail matters. From breathable fabrics to ergonomic fits, our sportswear is built to keep up with you—wherever you go. Crafted with high-quality materials and advanced design."
+      "label": "Body copy — left column",
+      "default": "We believe that every detail matters. From breathable fabrics to ergonomic fits, our sportswear is built to keep up with you wherever you go. Crafted with high-quality materials and advanced design."
     },
     {
       "type": "textarea",
       "id": "feature_body_2",
-      "label": "t:sections.about_page.feature_body_2",
+      "label": "Body copy — right column",
       "default": "Each piece is designed to enhance your experience, whether you're hitting the trails or the gym. Our gear isn't just functional; it's a part of your journey, providing the support and freedom you need to perform at your best."
     },
     {
       "type": "header",
-      "content": "t:sections.about_page.story_header"
-    },
-    {
-      "type": "text",
-      "id": "story_heading",
-      "label": "t:sections.about_page.story_heading",
-      "default": "Our story"
+      "content": "Story — sidebar labels"
     },
     {
       "type": "text",
       "id": "story_vision_label",
-      "label": "t:sections.about_page.story_vision_label",
+      "label": "Item 1 label",
       "default": "Vision"
     },
     {
       "type": "textarea",
       "id": "story_vision_body",
-      "label": "t:sections.about_page.story_vision_body",
+      "label": "Item 1 body",
       "default": "Creating sportswear that pushes every active moment with quality and innovation."
     },
     {
       "type": "text",
       "id": "story_journey_label",
-      "label": "t:sections.about_page.story_journey_label",
+      "label": "Item 2 label",
       "default": "Journey"
     },
     {
       "type": "textarea",
       "id": "story_journey_body",
-      "label": "t:sections.about_page.story_journey_body",
+      "label": "Item 2 body",
       "default": "From humble beginnings to a trusted brand, driven by passion and excellence."
     },
     {
       "type": "text",
       "id": "story_promise_label",
-      "label": "t:sections.about_page.story_promise_label",
+      "label": "Item 3 label",
       "default": "Promise"
     },
     {
       "type": "textarea",
       "id": "story_promise_body",
-      "label": "t:sections.about_page.story_promise_body",
+      "label": "Item 3 body",
       "default": "Delivering comfort, performance, and style you can count on every step."
+    },
+    {
+      "type": "header",
+      "content": "Story — image 1"
     },
     {
       "type": "image_picker",
       "id": "story_image_1",
-      "label": "t:sections.about_page.story_image_1"
+      "label": "Story image 1"
     },
     {
       "type": "text",
-      "id": "story_title_1",
-      "label": "t:sections.about_page.story_title_1",
+      "id": "story_vision_caption_headline",
+      "label": "Image 1 caption headline",
       "default": "Empowering every move"
     },
     {
       "type": "textarea",
-      "id": "story_text_1",
-      "label": "t:sections.about_page.story_text_1",
+      "id": "story_vision_caption_body",
+      "label": "Image 1 caption body",
       "default": "Our mission is to craft sportswear that supports and enhances your active lifestyle. Through quality and innovation, we're dedicated to helping you perform at your best in every moment."
+    },
+    {
+      "type": "header",
+      "content": "Story — image 2"
     },
     {
       "type": "image_picker",
       "id": "story_image_2",
-      "label": "t:sections.about_page.story_image_2"
+      "label": "Story image 2"
     },
     {
       "type": "text",
-      "id": "story_title_2",
-      "label": "t:sections.about_page.story_title_2",
+      "id": "story_journey_caption_headline",
+      "label": "Image 2 caption headline",
       "default": "Built on passion"
     },
     {
       "type": "textarea",
-      "id": "story_text_2",
-      "label": "t:sections.about_page.story_text_2",
+      "id": "story_journey_caption_body",
+      "label": "Image 2 caption body",
       "default": "From a small start to a well-loved brand, our journey reflects resilience, hard work, and an unbreakable commitment to quality. Each step forward is driven by a passion for excellence in every product."
+    },
+    {
+      "type": "header",
+      "content": "Story — image 3"
     },
     {
       "type": "image_picker",
       "id": "story_image_3",
-      "label": "t:sections.about_page.story_image_3"
+      "label": "Story image 3"
     },
     {
       "type": "text",
-      "id": "story_title_3",
-      "label": "t:sections.about_page.story_title_3",
+      "id": "story_promise_caption_headline",
+      "label": "Image 3 caption headline",
       "default": "Comfort meets performance"
     },
     {
       "type": "textarea",
-      "id": "story_text_3",
-      "label": "t:sections.about_page.story_text_3",
-      "default": "We're committed to providing sportswear that balances comfort, durability, and style. Count on our products to support you in every stride, so you can focus on what matters most—your performance."
+      "id": "story_promise_caption_body",
+      "label": "Image 3 caption body",
+      "default": "We're committed to providing sportswear that balances comfort, durability, and style. Count on our products to support you in every stride, so you can focus on what matters most — your performance."
     },
     {
       "type": "header",
-      "content": "t:sections.about_page.career_header"
+      "content": "Career CTA"
+    },
+    {
+      "type": "image_picker",
+      "id": "career_image",
+      "label": "Career image"
     },
     {
       "type": "text",
       "id": "career_label",
-      "label": "t:sections.about_page.career_label",
+      "label": "Eyebrow label",
       "default": "Career"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "career_headline",
-      "label": "t:sections.about_page.career_headline",
+      "label": "Headline",
       "default": "Join to shape the future of activewear"
     },
     {
       "type": "textarea",
       "id": "career_body",
-      "label": "t:sections.about_page.career_body",
+      "label": "Body",
       "default": "Help us lead the way in sportswear innovation with exciting career opportunities. Join a team passionate about creating gear that supports every adventure and empowers every journey."
     },
     {
       "type": "text",
       "id": "career_button_label",
-      "label": "t:labels.button_label",
+      "label": "Button label",
       "default": "Learn more"
     },
     {
       "type": "url",
       "id": "career_button_url",
-      "label": "t:labels.button_url"
-    },
-    {
-      "type": "image_picker",
-      "id": "career_image",
-      "label": "t:sections.about_page.career_image"
+      "label": "Button URL"
     },
     {
       "type": "header",
-      "content": "t:sections.about_page.blog_header"
-    },
-    {
-      "type": "text",
-      "id": "blog_heading",
-      "label": "t:labels.heading",
-      "default": "Blog"
+      "content": "Blog grid"
     },
     {
       "type": "text",
       "id": "blog_read_all_label",
-      "label": "t:sections.about_page.blog_read_all_label",
+      "label": "Read all button label",
       "default": "Read all"
     },
     {
       "type": "url",
       "id": "blog_read_all_url",
-      "label": "t:sections.about_page.blog_read_all_url"
+      "label": "Read all button URL"
     }
   ],
   "blocks": [
     {
       "type": "stat",
-      "name": "t:sections.about_page.blocks.stat.name",
+      "name": "Stat card",
       "settings": [
         {
           "type": "text",
           "id": "number",
-          "label": "t:sections.about_page.blocks.stat.number",
+          "label": "Number",
           "default": "10,000+"
         },
         {
           "type": "text",
           "id": "label",
-          "label": "t:sections.about_page.blocks.stat.label",
+          "label": "Label",
           "default": "Happy customers"
         },
         {
           "type": "textarea",
           "id": "description",
-          "label": "t:sections.about_page.blocks.stat.description",
+          "label": "Description",
           "default": "Trusted by over 10,000 customers who rely on our sportswear for quality, performance, and style."
         }
       ]
     },
     {
       "type": "article",
-      "name": "t:sections.about_page.blocks.article.name",
+      "name": "Blog article",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:labels.background"
+          "label": "Article image"
         },
         {
           "type": "text",
           "id": "category",
-          "label": "t:sections.about_page.blocks.article.category",
+          "label": "Category",
           "default": "Route"
         },
         {
           "type": "text",
           "id": "date",
-          "label": "t:sections.about_page.blocks.article.date",
-          "default": "Nov 20 2024, By Sam Smith"
+          "label": "Date",
+          "default": "Nov 20 2024"
         },
         {
           "type": "text",
           "id": "title",
-          "label": "t:labels.heading",
+          "label": "Title",
           "default": "Top benefits of investing in quality sportswear"
         },
         {
           "type": "url",
           "id": "url",
-          "label": "t:labels.link_url"
+          "label": "Article URL"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.about_page.name",
+      "name": "About page",
       "blocks": [
         {
           "type": "stat",
@@ -1241,7 +1098,7 @@
           "type": "article",
           "settings": {
             "category": "Route",
-            "date": "Nov 20 2024, By Sam Smith",
+            "date": "Nov 20 2024",
             "title": "Top benefits of investing in quality sportswear"
           }
         },
@@ -1249,7 +1106,7 @@
           "type": "article",
           "settings": {
             "category": "Interview",
-            "date": "Nov 20 2024, By Sam Smith",
+            "date": "Nov 20 2024",
             "title": "How to care for and extend the life of your sports clothing"
           }
         },
@@ -1257,7 +1114,7 @@
           "type": "article",
           "settings": {
             "category": "Community",
-            "date": "Nov 20 2024, By Sam Smith",
+            "date": "Nov 20 2024",
             "title": "The evolution of sportswear: from function to fashion"
           }
         }
