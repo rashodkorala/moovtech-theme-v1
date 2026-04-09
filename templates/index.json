@@ -27,6 +27,16 @@
         "hero_micro_trust": ""
       }
     },
+    "featured_split_showcase": {
+      "type": "featured-split-showcase",
+      "settings": {
+        "promo_eyebrow": "Designed with adventurous cyclists in mind",
+        "promo_heading": "Best for rocky roads",
+        "promo_cta_label": "Shop now",
+        "promo_cta_url": "/collections/all",
+        "products_eyebrow": "Performance-driven apparel"
+      }
+    },
     "store_marketing_bands": {
       "type": "store-marketing-bands",
       "settings": {
@@ -149,6 +159,7 @@
   },
   "order": [
     "hero",
+    "featured_split_showcase",
     "store_marketing_bands",
     "product_intro",
     "app_section",

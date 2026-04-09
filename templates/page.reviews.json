@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "hero_eyebrow": "Real people. Real mornings.",
+        "hero_headline": "What MOOVers are saying",
+        "hero_subheadline": "Early adopters share how MOOV changed the first hour of their day.",
+        "hero_overlay_opacity": 65,
+        "cta_primary_label": "Get MOOV",
+        "cta_ghost_label": "How it works"
+      }
+    }
+  },
+  "order": [
+    "hero"
+  ]
+}

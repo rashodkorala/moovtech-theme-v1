@@ -7,15 +7,7 @@
     assign video_src = section.settings.hero_video_mp4
   endif
 
-  assign hero_social_proof = section.settings.hero_social_proof
-  if hero_social_proof == blank
-    assign hero_social_proof = 'store_marketing.hero_social_proof' | t
-  endif
-
-  assign hero_eyebrow = section.settings.hero_eyebrow
-  if hero_eyebrow == blank
-    assign hero_eyebrow = 'store_marketing.hero_eyebrow' | t
-  endif
+  assign hero_overline = section.settings.hero_eyebrow
 
   assign hero_headline = section.settings.hero_headline
   if hero_headline == blank
@@ -37,43 +29,91 @@
     assign cta_ghost_label = 'store_marketing.hero_cta_secondary' | t
   endif
 
-  assign hero_micro_trust = section.settings.hero_micro_trust
-  if hero_micro_trust == blank
-    assign hero_micro_trust = 'store_marketing.hero_micro_trust' | t
+  assign hero_tagline_left = section.settings.hero_tagline_left
+  if hero_tagline_left == blank
+    assign hero_tagline_left = 'store_marketing.hero_tagline_left' | t
+  endif
+
+  assign has_slides = false
+  if section.blocks.size > 0
+    assign has_slides = true
   endif
 -%}
 
-<section class="moov-hero full-width" style="--hero-overlay: rgba(10, 10, 9, {{ overlay_decimal }});">
-  {%- comment -%} Layer 1 — Video background {%- endcomment -%}
-  <video
-    class="moov-hero__video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-    {%- if section.settings.hero_poster -%}
-      poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
-    {%- endif -%}
-    aria-hidden="true"
-  >
-    <source src="{{ video_src }}" type="video/mp4">
-    {%- if section.settings.hero_video_webm != blank -%}
-      <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
-    {%- endif -%}
-  </video>
+<section
+  class="moov-hero full-width{% unless section.settings.hero_desaturate_video == false %} moov-hero--desaturated{% endunless %}"
+  data-surface="dark"
+  style="--hero-overlay: rgba(10, 10, 9, {{ overlay_decimal }});"
+>
+  {%- comment -%} Video / slide layer {%- endcomment -%}
+  {%- if has_slides -%}
+    <div class="moov-hero__slides">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign slide_video = block.settings.video_mp4
+          if slide_video == blank
+            assign slide_video = video_src
+          endif
+          assign slide_overlay = block.settings.overlay_opacity | default: overlay_opacity
+          assign slide_overlay_decimal = slide_overlay | times: 1.0 | divided_by: 100.0
+        -%}
+        <div
+          class="moov-hero__slide{% if forloop.first %} is-active{% endif %}"
+          data-slide-index="{{ forloop.index0 }}"
+          {{ block.shopify_attributes }}
+        >
+          <video
+            class="moov-hero__video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            {%- if block.settings.poster != blank -%}
+              poster="{{ block.settings.poster | image_url: width: 1920 }}"
+            {%- elsif section.settings.hero_poster != blank -%}
+              poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
+            {%- endif -%}
+            aria-hidden="true"
+          >
+            <source src="{{ slide_video }}" type="video/mp4">
+            {%- if block.settings.video_webm != blank -%}
+              <source src="{{ block.settings.video_webm }}" type="video/webm">
+            {%- endif -%}
+          </video>
+          <div
+            class="moov-hero__overlay"
+            aria-hidden="true"
+            style="--hero-overlay: rgba(10, 10, 9, {{ slide_overlay_decimal }});"
+          ></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <video
+      class="moov-hero__video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      {%- if section.settings.hero_poster -%}
+        poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
+      {%- endif -%}
+      aria-hidden="true"
+    >
+      <source src="{{ video_src }}" type="video/mp4">
+      {%- if section.settings.hero_video_webm != blank -%}
+        <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
+      {%- endif -%}
+    </video>
+    <div class="moov-hero__overlay" aria-hidden="true"></div>
+  {%- endif -%}
 
-  {%- comment -%} Layer 2 — Dark overlay {%- endcomment -%}
-  <div class="moov-hero__overlay" aria-hidden="true"></div>
-
-  {%- comment -%} Layer 3 — Content {%- endcomment -%}
+  {%- comment -%} Centre content {%- endcomment -%}
   <div class="moov-hero__content">
-    {%- if section.settings.show_social_proof and hero_social_proof != blank -%}
-      <p class="moov-hero__social-proof">{{ hero_social_proof | escape }}</p>
-    {%- endif -%}
-
-    {%- if hero_eyebrow != blank -%}
-      <p class="moov-hero__eyebrow">{{ hero_eyebrow | escape }}</p>
+    {%- if hero_overline != blank -%}
+      <p class="moov-hero__overline">{{ hero_overline | escape }}</p>
     {%- endif -%}
 
     <h1 class="moov-hero__heading">
@@ -88,26 +128,45 @@
       {%- if cta_primary_label != blank -%}
         <a
           href="{{ section.settings.cta_primary_url | default: routes.root_url }}"
-          class="moov-hero__btn moov-hero__btn--primary"
+          class="moov-hero__btn"
         >
           {{- cta_primary_label | escape -}}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="2" y1="12" x2="12" y2="2"/>
+            <polyline points="5,2 12,2 12,9"/>
+          </svg>
         </a>
       {%- endif -%}
 
       {%- if cta_ghost_label != blank -%}
         <a
           href="{{ section.settings.cta_ghost_url | default: '#' }}"
-          class="moov-hero__btn moov-hero__btn--ghost"
+          class="moov-hero__btn"
         >
           {{- cta_ghost_label | escape -}}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="2" y1="12" x2="12" y2="2"/>
+            <polyline points="5,2 12,2 12,9"/>
+          </svg>
         </a>
       {%- endif -%}
     </div>
-
-    {%- if hero_micro_trust != blank -%}
-      <p class="moov-hero__micro-trust">{{ hero_micro_trust | escape }}</p>
-    {%- endif -%}
   </div>
+
+  {%- comment -%} Carousel dots {%- endcomment -%}
+  {%- if has_slides and section.blocks.size > 1 -%}
+    <div class="moov-hero__dots" role="tablist" aria-label="{{ 'sections.hero.carousel_label' | t }}">
+      {%- for block in section.blocks -%}
+        <button
+          class="moov-hero__dot{% if forloop.first %} is-active{% endif %}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-label="{{ 'general.accessibility.view_image' | t: index: forloop.index }}"
+          data-dot-index="{{ forloop.index0 }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </section>
 
 {% stylesheet %}
@@ -117,10 +176,28 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    justify-content: center;
     background: var(--moov-black);
   }
 
-  /* Layer 1 — Video / poster */
+  /* Slides container */
+  .moov-hero__slides {
+    position: absolute;
+    inset: 0;
+  }
+
+  .moov-hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .moov-hero__slide.is-active {
+    opacity: 1;
+  }
+
+  /* Video */
   .moov-hero__video {
     position: absolute;
     inset: 0;
@@ -131,7 +208,11 @@
     z-index: 0;
   }
 
-  /* Layer 2 — Overlay */
+  .moov-hero--desaturated .moov-hero__video {
+    filter: grayscale(1);
+  }
+
+  /* Overlay */
   .moov-hero__overlay {
     position: absolute;
     inset: 0;
@@ -139,125 +220,237 @@
     z-index: 1;
   }
 
-  /* Layer 3 — Content */
-  .moov-hero__content {
-    position: relative;
-    z-index: 2;
-    padding: 0 var(--section-inline-pad);
-    max-width: 700px;
-  }
-
-  .moov-hero__social-proof {
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: var(--text-xs);
-    color: var(--moov-text-secondary-dark);
-    letter-spacing: 0.02em;
-    margin: 0 0 clamp(10px, 1.2vw, 16px);
-  }
-
-  .moov-hero__eyebrow {
+  /* Left tagline */
+  .moov-hero__tagline-left {
+    position: absolute;
+    bottom: clamp(3.5rem, 8vw, 5.5rem);
+    left: var(--section-inline-pad);
+    max-width: 260px;
     font-family: var(--font-body);
     font-weight: 400;
     font-size: var(--text-2xs);
-    color: var(--moov-eyebrow-accent);
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin: 0 0 clamp(12px, 1.5vw, 20px);
+    color: var(--moov-text-tertiary-dark);
+    line-height: 1.7;
+    z-index: 2;
   }
 
+  /* Centre content */
+  .moov-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 var(--section-inline-pad);
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .moov-hero__overline {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-sm);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 clamp(10px, 1.2vw, 16px);
+  }
+
+  /* Headline — white on media (reference storefront) */
   .moov-hero__heading {
     font-family: var(--font-display);
-    font-weight: 400;
-    font-size: var(--text-5xl);
-    line-height: 1.1;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 clamp(20px, 2.5vw, 32px);
+    font-weight: 500;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    line-height: var(--heading-line-height, 1.05);
+    letter-spacing: 0.1px;
+    text-transform: var(--heading-text-transform, uppercase);
+    color: #ffffff;
+    margin: 0 0 clamp(20px, 3vw, 36px);
   }
 
   .moov-hero__subheadline {
     font-family: var(--font-body);
-    font-weight: 300;
-    font-size: var(--text-lg);
+    font-weight: 400;
+    font-size: var(--text-base);
     line-height: 1.7;
-    color: var(--moov-text-secondary-dark);
+    color: rgba(255, 255, 255, 0.92);
     margin: 0 0 clamp(24px, 3vw, 40px);
     max-width: 520px;
   }
 
-  /* CTAs */
+  /* CTAs — white pill buttons */
   .moov-hero__ctas {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .moov-hero__btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    border-radius: var(--style-border-radius-buttons);
-    padding: 14px 28px;
+    gap: 8px;
+    border-radius: 999px;
+    padding: clamp(13px, 1.2vw, 18px) clamp(28px, 3vw, 42px);
     font-family: var(--font-body);
-    font-size: var(--text-sm);
-    letter-spacing: 0.03em;
+    font-size: var(--text-base);
+    font-weight: 500;
+    letter-spacing: 0.02em;
     text-decoration: none;
     white-space: nowrap;
+    background: #ffffff;
+    color: #0a0a09;
+    border: none;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 0 rgba(10, 10, 9, 0.06);
   }
 
-  .moov-hero__btn--primary {
-    background: transparent;
-    border: 0.5px solid var(--moov-border-amber);
-    color: var(--moov-amber);
-    font-weight: 400;
-    transition: background 0.2s ease, color 0.2s ease;
+  .moov-hero__btn:hover {
+    background: #f5f5f4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   }
 
-  .moov-hero__btn--primary:hover {
-    background: var(--moov-amber);
-    color: var(--moov-black);
+  /* Carousel dots */
+  .moov-hero__dots {
+    position: absolute;
+    bottom: clamp(1.5rem, 3vw, 2.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
   }
 
-  .moov-hero__btn--ghost {
-    background: transparent;
-    border: 0.5px solid var(--moov-text-quaternary-dark);
-    color: var(--moov-text-secondary-dark);
-    font-weight: 300;
-    transition: border-color 0.2s ease, color 0.2s ease;
+  .moov-hero__dot {
+    height: 3px;
+    width: 40px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.32);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.25s ease;
   }
 
-  .moov-hero__btn--ghost:hover {
-    border-color: var(--moov-text-secondary-dark);
-    color: var(--moov-text-primary-dark);
-  }
-
-  .moov-hero__micro-trust {
-    font-family: var(--font-body);
-    font-weight: 300;
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--moov-text-tertiary-dark);
-    margin: clamp(16px, 2vw, 24px) 0 0;
-    max-width: 420px;
+  .moov-hero__dot.is-active {
+    background: #ffffff;
   }
 
   /* Responsive */
   @media (max-width: 767px) {
+    .moov-hero__tagline-left {
+      display: none;
+    }
+
     .moov-hero__overlay {
-      background: rgba(10, 10, 9, 0.60);
+      background: rgba(10, 10, 9, 0.65);
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    var hero = document.querySelector('.moov-hero');
+    if (!hero) return;
+
+    var slides = hero.querySelectorAll('.moov-hero__slide');
+    var dots = hero.querySelectorAll('.moov-hero__dot');
+    if (slides.length <= 1) return;
+
+    var currentIndex = 0;
+    var autoAdvanceTimer = null;
+
+    function goToSlide(index) {
+      slides[currentIndex].classList.remove('is-active');
+      dots[currentIndex].classList.remove('is-active');
+      dots[currentIndex].setAttribute('aria-selected', 'false');
+
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides[currentIndex].classList.add('is-active');
+      dots[currentIndex].classList.add('is-active');
+      dots[currentIndex].setAttribute('aria-selected', 'true');
+
+      /* Pause and play the active slide video */
+      slides.forEach(function(slide, i) {
+        var video = slide.querySelector('video');
+        if (!video) return;
+        if (i === currentIndex) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      });
+    }
+
+    function startAutoAdvance() {
+      autoAdvanceTimer = setInterval(function() {
+        goToSlide(currentIndex + 1);
+      }, 6000);
+    }
+
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        clearInterval(autoAdvanceTimer);
+        goToSlide(parseInt(this.getAttribute('data-dot-index'), 10));
+        startAutoAdvance();
+      });
+    });
+
+    startAutoAdvance();
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "MOOV Hero",
   "tag": "section",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_mp4",
+          "label": "Slide video URL (MP4)",
+          "info": "Upload to Shopify Files and paste the URL here."
+        },
+        {
+          "type": "text",
+          "id": "video_webm",
+          "label": "Slide video URL (WebM)",
+          "info": "Optional smaller-file alternative for Chrome/Firefox."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Slide poster image",
+          "info": "Shown before video loads."
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 20,
+          "max": 80,
+          "step": 5,
+          "default": 55,
+          "unit": "%"
+        }
+      ]
+    }
+  ],
   "settings": [
     {
       "type": "header",
-      "content": "Video background"
+      "content": "Default video (used when no slides are added)"
     },
     {
       "type": "text",
@@ -274,8 +467,8 @@
     {
       "type": "image_picker",
       "id": "hero_poster",
-      "label": "Hero video poster image",
-      "info": "Shown before the video loads and on devices where autoplay is blocked."
+      "label": "Video poster image",
+      "info": "Shown before the video loads."
     },
     {
       "type": "range",
@@ -285,42 +478,42 @@
       "max": 80,
       "step": 5,
       "default": 55,
-      "unit": "%",
-      "info": "Controls how dark the overlay sits over the video. Higher = more readable text, less visible video."
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "hero_desaturate_video",
+      "label": "Black and white video",
+      "info": "Applies a grayscale look to the hero video (like the reference storefront).",
+      "default": true
     },
     {
       "type": "header",
       "content": "Content"
     },
     {
-      "type": "checkbox",
-      "id": "show_social_proof",
-      "label": "Show social proof line",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "hero_social_proof",
-      "label": "Social proof line",
-      "info": "Leave blank to use theme translation (store_marketing.hero_social_proof)."
-    },
-    {
       "type": "text",
       "id": "hero_eyebrow",
-      "label": "Eyebrow text",
-      "default": "Morning wellness, engineered"
+      "label": "Overline text"
     },
     {
       "type": "text",
       "id": "hero_headline",
       "label": "Headline",
-      "default": "Lead the first hour of your day."
+      "default": "Reclaim your morning"
     },
     {
       "type": "textarea",
       "id": "hero_subheadline",
       "label": "Subheadline",
-      "default": "MOOV combines a wall-mounted alarm you physically disarm, a companion app that shields distracting apps at wake, and short routines that adapt to your goals. Start clear, not reactive."
+      "default": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_tagline_left",
+      "label": "Left side tagline",
+      "info": "Small uppercase text positioned at the bottom-left of the hero.",
+      "default": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action."
     },
     {
       "type": "header",
@@ -330,35 +523,27 @@
       "type": "text",
       "id": "cta_primary_label",
       "label": "Primary CTA label",
-      "default": "Reserve your MOOV"
+      "default": "Shop now"
     },
     {
       "type": "url",
       "id": "cta_primary_url",
-      "label": "Primary CTA link",
-      "info": "Link to your pre-order product page, e.g. /products/moov-alarm"
+      "label": "Primary CTA link"
     },
     {
       "type": "header",
-      "content": "Ghost CTA"
+      "content": "Secondary CTA"
     },
     {
       "type": "text",
       "id": "cta_ghost_label",
-      "label": "Ghost CTA label",
-      "default": "See how it works"
+      "label": "Secondary CTA label",
+      "default": "Explore sale"
     },
     {
       "type": "url",
       "id": "cta_ghost_url",
-      "label": "Ghost CTA link",
-      "info": "Link to an anchor or page, e.g. /pages/how-it-works"
-    },
-    {
-      "type": "textarea",
-      "id": "hero_micro_trust",
-      "label": "Trust line under CTAs",
-      "info": "Leave blank for store_marketing.hero_micro_trust"
+      "label": "Secondary CTA link"
     }
   ],
   "presets": [

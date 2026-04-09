@@ -90,16 +90,24 @@
       "cart": "Cart",
       "close": "Close",
       "menu": "Menu",
+      "search": "Search",
+      "dark_mode": "Toggle dark mode",
+      "currency_selector": "Select currency",
       "skip_to_content": "Skip to content",
       "breadcrumb": "Breadcrumb",
       "view_image": "View image {{ index }}",
       "preorder_item": "Pre-order item"
     },
+    "announcement_bar": "Memorial Day Sale - Save Up To 20%",
     "nav": {
       "home": "Home",
       "shop": "Shop",
+      "sale": "Sale",
       "about": "About",
-      "contact": "Contact"
+      "features": "Features",
+      "how_it_works": "How it works",
+      "reviews": "Reviews",
+      "our_story": "Our story"
     },
     "content": "Content",
     "navigation": "Navigation",
@@ -186,12 +194,13 @@
     "seo_description": "MOOV is a morning system: a movement-based alarm, app blocking for early hours, and AI routines that adapt to your life. Pre-order the smart wake experience.",
     "social_teaser": "The first hour belongs to you again.",
     "hero_social_proof": "Limited Early Bird spots. 40% off while available.",
-    "hero_eyebrow": "Morning wellness, engineered",
-    "hero_heading": "Lead the first hour of your day",
-    "hero_subheading": "MOOV combines a wall-mounted alarm you physically disarm, a companion app that shields distracting apps at wake, and short routines that adapt to your goals. Start clear, not reactive.",
-    "hero_cta_primary": "Reserve your MOOV",
-    "hero_cta_secondary": "See how it works",
+    "hero_eyebrow": "Reclaim your morning",
+    "hero_heading": "Reclaim your morning",
+    "hero_subheading": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action.",
+    "hero_cta_primary": "Shop now",
+    "hero_cta_secondary": "Explore sale",
     "hero_micro_trust": "30-day satisfaction promise · US & Canada shipping",
+    "hero_tagline_left": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action.",
     "section_problem_heading": "Most alarms don't fail you. Your morning environment does.",
     "section_problem_body": "Snooze buys minutes but sells focus. The first glance at a phone can hijack the whole morning. MOOV isn't another louder alarm; it's a system that restores a sane sequence: up, protected attention, then intentional action.",
     "who_for_heading": "Built for people who know the first hour matters.",
@@ -256,7 +265,21 @@
   },
   "sections": {
     "hero": {
-      "name": "Hero"
+      "name": "Hero",
+      "carousel_label": "Hero slides"
+    },
+    "featured_split": {
+      "default_promo_eyebrow": "Designed with adventurous cyclists in mind",
+      "default_promo_heading": "Best for rocky roads",
+      "default_promo_cta": "Shop now",
+      "default_products_eyebrow": "Performance-driven apparel",
+      "carousel_label": "Featured products",
+      "empty_products": "Choose up to eight products in the theme editor to show in this carousel.",
+      "image_placeholder_label": "Promotional image placeholder"
+    },
+    "about_page": {
+      "read_article": "Read article",
+      "story_nav_label": "Story navigation"
     },
     "app_section": {
       "download_app_store": "Download on the App Store",

@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "hero_eyebrow": "How MOOV works",
+        "hero_headline": "Three steps. One better morning.",
+        "hero_subheadline": "MOOV combines a movement-based alarm, app protection, and adaptive routines into one simple system.",
+        "hero_overlay_opacity": 60,
+        "cta_primary_label": "Get MOOV",
+        "cta_ghost_label": "See the product"
+      }
+    },
+    "product_features": {
+      "type": "product-features"
+    },
+    "app_section": {
+      "type": "app-section"
+    },
+    "faq": {
+      "type": "faq"
+    }
+  },
+  "order": [
+    "hero",
+    "product_features",
+    "app_section",
+    "faq"
+  ]
+}

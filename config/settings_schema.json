@@ -23,6 +23,106 @@
     ]
   },
   {
+    "name": "Headings",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "default": "syne_n4",
+        "label": "Font"
+      },
+      {
+        "type": "range",
+        "id": "heading_hero_scale",
+        "label": "Hero font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 120
+      },
+      {
+        "type": "range",
+        "id": "heading_xl_scale",
+        "label": "Extra large font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 122
+      },
+      {
+        "type": "range",
+        "id": "heading_lg_scale",
+        "label": "Large font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 110
+      },
+      {
+        "type": "range",
+        "id": "heading_md_scale",
+        "label": "Medium font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 113
+      },
+      {
+        "type": "range",
+        "id": "heading_sm_scale",
+        "label": "Small font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 110
+      },
+      {
+        "type": "range",
+        "id": "heading_xs_scale",
+        "label": "Extra small font size scale",
+        "min": 75,
+        "max": 175,
+        "step": 1,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "label": "Headings letter spacing",
+        "min": -1,
+        "max": 1,
+        "step": 0.1,
+        "default": -0.2
+      },
+      {
+        "type": "range",
+        "id": "heading_line_height",
+        "label": "Headings line height",
+        "min": 0.8,
+        "max": 2.5,
+        "step": 0.1,
+        "default": 1.1
+      },
+      {
+        "type": "select",
+        "id": "heading_text_transform",
+        "label": "Text transform",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "uppercase", "label": "Uppercase" },
+          { "value": "capitalize", "label": "Capitalize" }
+        ],
+        "default": "uppercase"
+      }
+    ]
+  },
+  {
     "name": "t:general.layout",
     "settings": [
       {
@@ -89,12 +189,12 @@
         "type": "range",
         "id": "button_corner_radius",
         "min": 0,
-        "max": 999,
-        "step": 1,
+        "max": 1000,
+        "step": 10,
         "unit": "px",
         "label": "Button corner radius",
-        "default": 999,
-        "info": "999 = pill shape. Use lower values for rounded rectangles."
+        "default": 1000,
+        "info": "1000 = pill shape. Use lower values for rounded rectangles."
       }
     ]
   }

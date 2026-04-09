@@ -14,13 +14,17 @@
     "header": {
       "type": "header",
       "settings": {
-        "transparent_header": true,
+        "transparent_header": false,
         "sticky_header": true,
-        "shop_url": "shopify://products/t",
-        "about_url": "shopify://pages/about",
-        "contact_url": "shopify://pages/contact",
-        "preorder_label": "Pre-order",
-        "preorder_url": "shopify://products/t"
+        "announcement_enabled": true,
+        "logo_text": "MOOV",
+        "nav_1_url": "shopify://collections/all",
+        "nav_2_url": "shopify://collections/sale",
+        "nav_3_url": "shopify://pages/about",
+        "nav_4_url": "shopify://pages/how-it-works",
+        "show_nav_cta": false,
+        "get_moov_label": "Get MOOV",
+        "get_moov_url": "shopify://products/t"
       }
     }
   },

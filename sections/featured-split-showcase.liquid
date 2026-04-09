@@ -1,0 +1,601 @@
+{%- liquid
+  assign promo_eyebrow = section.settings.promo_eyebrow
+  if promo_eyebrow == blank
+    assign promo_eyebrow = 'sections.featured_split.default_promo_eyebrow' | t
+  endif
+
+  assign promo_heading = section.settings.promo_heading
+  if promo_heading == blank
+    assign promo_heading = 'sections.featured_split.default_promo_heading' | t
+  endif
+
+  assign promo_cta_label = section.settings.promo_cta_label
+  if promo_cta_label == blank
+    assign promo_cta_label = 'sections.featured_split.default_promo_cta' | t
+  endif
+
+  assign promo_cta_url = section.settings.promo_cta_url | default: routes.collections_url
+
+  assign products_eyebrow = section.settings.products_eyebrow
+  if products_eyebrow == blank
+    assign products_eyebrow = 'sections.featured_split.default_products_eyebrow' | t
+  endif
+
+  assign products = section.settings.products
+  assign product_count = 0
+  if products != blank
+    assign product_count = products.size
+  endif
+-%}
+
+<section
+  class="featured-split full-width"
+  data-featured-split
+  aria-labelledby="featured-split-heading-{{ section.id }}"
+>
+  <div class="featured-split__inner">
+    <div class="featured-split__grid">
+      <article class="featured-split__promo">
+        <div class="featured-split__promo-media">
+          {%- if section.settings.promo_image != blank -%}
+            {%- liquid
+              assign promo_img_alt = section.settings.promo_image.alt | default: promo_heading
+            -%}
+            {{
+              section.settings.promo_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                class: 'featured-split__promo-img',
+                alt: promo_img_alt,
+                sizes: '(min-width: 990px) 50vw, 100vw',
+                widths: '550, 720, 990, 1100, 1500, 1600'
+            }}
+          {%- else -%}
+            <div class="featured-split__promo-placeholder" role="img" aria-label="{{ 'sections.featured_split.image_placeholder_label' | t }}"></div>
+          {%- endif -%}
+          <div class="featured-split__promo-scrim" aria-hidden="true"></div>
+        </div>
+        <div class="featured-split__promo-body">
+          <p class="featured-split__promo-eyebrow">{{ promo_eyebrow | escape }}</p>
+          <div class="featured-split__promo-bottom">
+            <h2 id="featured-split-heading-{{ section.id }}" class="featured-split__promo-heading">
+              {{ promo_heading | escape }}
+            </h2>
+            <a href="{{ promo_cta_url }}" class="featured-split__promo-cta">
+              {{- promo_cta_label | escape -}}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="2" y1="12" x2="12" y2="2"/>
+                <polyline points="5,2 12,2 12,9"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <div class="featured-split__products-panel">
+        <p class="featured-split__products-eyebrow">{{ products_eyebrow | escape }}</p>
+
+        {%- if product_count > 0 -%}
+          <div class="featured-split__carousel">
+            {%- for product in products limit: 8 -%}
+              <div
+                class="featured-split__slide{% if forloop.first %} is-active{% endif %}"
+                data-slide-index="{{ forloop.index0 }}"
+              >
+                <div class="featured-split__product-visual">
+                  {%- unless product.available -%}
+                    <span class="featured-split__badge">{{ 'shop.sold_out' | t }}</span>
+                  {%- endunless -%}
+                  <a href="{{ product.url }}" class="featured-split__product-image-link" tabindex="-1" aria-hidden="true">
+                    {%- if product.featured_image != blank -%}
+                      {%- assign product_img_alt = product.featured_image.alt | default: product.title -%}
+                      {{
+                        product.featured_image
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          class: 'featured-split__product-img',
+                          alt: product_img_alt
+                      }}
+                    {%- else -%}
+                      <span class="featured-split__product-img featured-split__product-img--empty"></span>
+                    {%- endif -%}
+                  </a>
+                </div>
+                <a href="{{ product.url }}" class="featured-split__product-title">{{ product.title | escape }}</a>
+                <div class="featured-split__product-prices">
+                  <span class="featured-split__price">{{ product.price | money }}</span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="featured-split__compare">{{ product.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if product_count > 1 -%}
+            <div class="featured-split__dots" role="tablist" aria-label="{{ 'sections.featured_split.carousel_label' | t }}">
+              {%- for product in products limit: 8 -%}
+                <button
+                  type="button"
+                  class="featured-split__dot{% if forloop.first %} is-active{% endif %}"
+                  role="tab"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-label="{{ 'general.accessibility.view_image' | t: index: forloop.index }}"
+                  data-dot-index="{{ forloop.index0 }}"
+                ></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="featured-split__empty">
+            <p>{{ 'sections.featured_split.empty_products' | t }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .featured-split {
+    --split-radius: clamp(16px, 2vw, 22px);
+    --split-gap: clamp(16px, 2vw, 24px);
+    background: #ebebeb;
+    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
+  }
+
+  .featured-split__inner {
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+  }
+
+  .featured-split__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--split-gap);
+    align-items: stretch;
+  }
+
+  @media (min-width: 990px) {
+    .featured-split__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Left — lifestyle card */
+  .featured-split__promo {
+    position: relative;
+    border-radius: var(--split-radius);
+    overflow: hidden;
+    min-height: clamp(320px, 55vw, 520px);
+    background: #c8c8c8;
+  }
+
+  .featured-split__promo-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .featured-split__promo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .featured-split__promo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #b0b0b0 0%, #8a8a8a 100%);
+  }
+
+  .featured-split__promo-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 10, 9, 0.72) 0%, rgba(10, 10, 9, 0.15) 45%, rgba(10, 10, 9, 0.35) 100%);
+    pointer-events: none;
+  }
+
+  .featured-split__promo-body {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .featured-split__promo-eyebrow {
+    margin: 0;
+    max-width: 280px;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.5;
+  }
+
+  .featured-split__promo-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(14px, 2vw, 20px);
+  }
+
+  .featured-split__promo-heading {
+    margin: 0;
+    max-width: 340px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .featured-split__promo-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 12px 26px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: #0a0a09;
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 1px 0 rgba(10, 10, 9, 0.06);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .featured-split__promo-cta:hover {
+    background: #f5f5f4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Right — product panel */
+  .featured-split__products-panel {
+    border-radius: var(--split-radius);
+    background: #ffffff;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    display: flex;
+    flex-direction: column;
+    min-height: clamp(320px, 55vw, 520px);
+    box-shadow: 0 1px 0 rgba(10, 10, 9, 0.04);
+  }
+
+  .featured-split__products-eyebrow {
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0a0a09;
+  }
+
+  .featured-split__carousel {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .featured-split__slide {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    animation: featured-split-fade 0.35s ease;
+  }
+
+  .featured-split__slide.is-active {
+    display: flex;
+  }
+
+  @keyframes featured-split-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .featured-split__product-visual {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    border-radius: calc(var(--split-radius) - 4px);
+    background: #e8e8e8;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    margin-bottom: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .featured-split__badge {
+    position: absolute;
+    top: clamp(10px, 1.5vw, 14px);
+    left: clamp(10px, 1.5vw, 14px);
+    z-index: 1;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #0a0a09;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(10, 10, 9, 0.08);
+  }
+
+  .featured-split__product-image-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .featured-split__product-img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .featured-split__product-img--empty {
+    display: block;
+    min-height: 200px;
+    background: repeating-linear-gradient(
+      -45deg,
+      #dedede,
+      #dedede 8px,
+      #e8e8e8 8px,
+      #e8e8e8 16px
+    );
+  }
+
+  .featured-split__product-title {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: #0a0a09;
+    text-decoration: none;
+    margin-bottom: 0.35rem;
+    line-height: 1.35;
+    max-width: 280px;
+    transition: opacity 0.2s;
+  }
+
+  .featured-split__product-title:hover {
+    opacity: 0.65;
+  }
+
+  .featured-split__product-prices {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .featured-split__price {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: #0a0a09;
+  }
+
+  .featured-split__compare {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: rgba(10, 10, 9, 0.4);
+    text-decoration: line-through;
+  }
+
+  .featured-split__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .featured-split__dot {
+    width: 40px;
+    height: 3px;
+    border-radius: 2px;
+    border: 1px solid #0a0a09;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .featured-split__dot.is-active {
+    background: #0a0a09;
+    border-color: #0a0a09;
+  }
+
+  .featured-split__dot:focus-visible {
+    outline: 2px solid #0a0a09;
+    outline-offset: 2px;
+  }
+
+  .featured-split__empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    border-radius: calc(var(--split-radius) - 4px);
+    background: #f5f5f5;
+  }
+
+  .featured-split__empty p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: rgba(10, 10, 9, 0.55);
+    max-width: 280px;
+    line-height: 1.5;
+  }
+
+  [data-theme="dark"] .featured-split {
+    background: #1a1a18;
+  }
+
+  [data-theme="dark"] .featured-split__products-panel {
+    background: #111110;
+    border: 1px solid var(--moov-border-dark);
+    box-shadow: none;
+  }
+
+  [data-theme="dark"] .featured-split__products-eyebrow,
+  [data-theme="dark"] .featured-split__product-title,
+  [data-theme="dark"] .featured-split__price {
+    color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .featured-split__compare {
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  [data-theme="dark"] .featured-split__product-visual {
+    background: var(--moov-surface-dark-raised);
+  }
+
+  [data-theme="dark"] .featured-split__badge {
+    background: var(--moov-text-primary-dark);
+    color: var(--moov-black);
+  }
+
+  [data-theme="dark"] .featured-split__dot {
+    border-color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .featured-split__dot.is-active {
+    background: var(--moov-text-primary-dark);
+    border-color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .featured-split__empty {
+    background: var(--moov-surface-dark-raised);
+  }
+
+  [data-theme="dark"] .featured-split__empty p {
+    color: var(--moov-text-secondary-dark);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    document.querySelectorAll('[data-featured-split]').forEach(function(root) {
+      var slides = root.querySelectorAll('.featured-split__slide');
+      var dots = root.querySelectorAll('.featured-split__dot');
+      if (slides.length <= 1) return;
+
+      var current = 0;
+
+      function goTo(index) {
+        var i = (index + slides.length) % slides.length;
+        slides[current].classList.remove('is-active');
+        dots[current].classList.remove('is-active');
+        dots[current].setAttribute('aria-selected', 'false');
+
+        current = i;
+
+        slides[current].classList.add('is-active');
+        dots[current].classList.add('is-active');
+        dots[current].setAttribute('aria-selected', 'true');
+      }
+
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          var idx = parseInt(dot.getAttribute('data-dot-index'), 10);
+          if (!isNaN(idx)) goTo(idx);
+        });
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.featured_split.name",
+  "tag": "section",
+  "class": "section-featured-split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.featured_split.promo_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image",
+      "label": "t:sections.featured_split.promo_image"
+    },
+    {
+      "type": "text",
+      "id": "promo_eyebrow",
+      "label": "t:sections.featured_split.promo_eyebrow",
+      "default": "Designed with adventurous cyclists in mind"
+    },
+    {
+      "type": "text",
+      "id": "promo_heading",
+      "label": "t:sections.featured_split.promo_heading",
+      "default": "Best for rocky roads"
+    },
+    {
+      "type": "text",
+      "id": "promo_cta_label",
+      "label": "t:labels.button_label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "promo_cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured_split.products_header"
+    },
+    {
+      "type": "text",
+      "id": "products_eyebrow",
+      "label": "t:sections.featured_split.products_eyebrow",
+      "default": "Performance-driven apparel"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "t:sections.featured_split.products_label",
+      "limit": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_split.name"
+    }
+  ]
+}
+{% endschema %}

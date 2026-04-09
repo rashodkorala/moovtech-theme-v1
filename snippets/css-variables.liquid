@@ -5,11 +5,60 @@
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
+  {% # Heading font %}
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+
   @font-face {
     font-family: 'Artford';
     src: url('{{ 'Artford-Regular.woff2' | asset_url }}') format('woff2'),
       url('{{ 'Artford-Regular.otf' | asset_url }}') format('opentype');
     font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Grift';
+    src: url('{{ 'grift/Web-TT/Grift-Light.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'grift/Web-TT/Grift-Light.woff' | asset_url }}') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Grift';
+    src: url('{{ 'grift/Web-TT/Grift-Regular.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'grift/Web-TT/Grift-Regular.woff' | asset_url }}') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Grift';
+    src: url('{{ 'grift/Web-TT/Grift-Medium.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'grift/Web-TT/Grift-Medium.woff' | asset_url }}') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Grift';
+    src: url('{{ 'grift/Web-TT/Grift-SemiBold.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'grift/Web-TT/Grift-SemiBold.woff' | asset_url }}') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Grift';
+    src: url('{{ 'grift/Web-TT/Grift-Bold.woff2' | asset_url }}') format('woff2'),
+         url('{{ 'grift/Web-TT/Grift-Bold.woff' | asset_url }}') format('woff');
+    font-weight: 700;
     font-style: normal;
     font-display: swap;
   }
@@ -26,14 +75,33 @@
     --style-border-radius-buttons: {{ settings.button_corner_radius }}px;
     --color-accent: {{ settings.accent_color | default: '#f0b429' }};
 
-    /* Moov brand fonts (sections use these alongside theme settings font) */
+    /* Moov brand fonts */
     --font-wordmark: 'Artford', serif;
-    --font-display: 'Times New Roman', Times, serif;
-    --font-body: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-display: {{ settings.type_heading_font.family }}, 'Syne', 'Helvetica Neue', sans-serif;
+    --font-body: 'Grift', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    /* Heading settings */
+    --heading-letter-spacing: {{ settings.heading_letter_spacing }}em;
+    --heading-line-height: {{ settings.heading_line_height }};
+    --heading-text-transform: {{ settings.heading_text_transform }};
+
+    /* Heading size scales (base sizes × scale factor) */
+    {%- assign s_hero = settings.heading_hero_scale | divided_by: 100.0 -%}
+    {%- assign s_xl   = settings.heading_xl_scale   | divided_by: 100.0 -%}
+    {%- assign s_lg   = settings.heading_lg_scale   | divided_by: 100.0 -%}
+    {%- assign s_md   = settings.heading_md_scale   | divided_by: 100.0 -%}
+    {%- assign s_sm   = settings.heading_sm_scale   | divided_by: 100.0 -%}
+    {%- assign s_xs   = settings.heading_xs_scale   | divided_by: 100.0 -%}
+    --text-heading-hero: clamp({{ 2.25 | times: s_hero }}rem, {{ 5 | times: s_hero }}vw, {{ 4.5 | times: s_hero }}rem);
+    --text-heading-xl:   clamp({{ 1.75 | times: s_xl }}rem,  {{ 3 | times: s_xl }}vw,  {{ 3.5 | times: s_xl }}rem);
+    --text-heading-lg:   clamp({{ 1.5  | times: s_lg }}rem,  {{ 2 | times: s_lg }}vw,  {{ 2.75 | times: s_lg }}rem);
+    --text-heading-md:   clamp({{ 1.25 | times: s_md }}rem,  {{ 1.5 | times: s_md }}vw, {{ 2 | times: s_md }}rem);
+    --text-heading-sm:   clamp({{ 1.125 | times: s_sm }}rem, {{ 1 | times: s_sm }}vw,  {{ 1.5 | times: s_sm }}rem);
+    --text-heading-xs:   clamp({{ 1.0 | times: s_xs }}rem,   {{ 0.5 | times: s_xs }}vw, {{ 1.25 | times: s_xs }}rem);
 
     --moov-black: #0a0a09;
-    --moov-cream: #f5eedc;
-    --moov-cream-shadow: #ede4c8;
+    --moov-cream: #faf8f2;
+    --moov-cream-shadow: #f0ede3;
     --moov-amber: #f0b429;
     --moov-amber-hover: #e5a520;
     --moov-amber-glow: rgba(240, 180, 41, 0.07);
@@ -42,19 +110,19 @@
     --moov-eyebrow-accent: rgba(240, 180, 41, 0.7);
 
     /* Surface fills — subtle tinted backgrounds for cards & panels */
-    --moov-surface-dark-raised: rgba(245, 238, 220, 0.04);
+    --moov-surface-dark-raised: rgba(250, 248, 242, 0.04);
     --moov-surface-dark-divider: rgba(255, 255, 255, 0.07);
 
-    --moov-text-primary-dark: #f5eedc;
-    --moov-text-secondary-dark: rgba(245, 238, 220, 0.55);
-    --moov-text-tertiary-dark: rgba(245, 238, 220, 0.3);
-    --moov-text-quaternary-dark: rgba(245, 238, 220, 0.2);
+    --moov-text-primary-dark: #faf8f2;
+    --moov-text-secondary-dark: rgba(250, 248, 242, 0.55);
+    --moov-text-tertiary-dark: rgba(250, 248, 242, 0.3);
+    --moov-text-quaternary-dark: rgba(250, 248, 242, 0.2);
 
     --moov-text-primary-light: #0a0a09;
     --moov-text-secondary-light: rgba(10, 10, 9, 0.5);
     --moov-text-tertiary-light: rgba(10, 10, 9, 0.3);
 
-    --moov-border-dark: rgba(245, 238, 220, 0.1);
+    --moov-border-dark: rgba(250, 248, 242, 0.1);
     --moov-border-light: rgba(10, 10, 9, 0.1);
     --moov-border-amber: rgba(240, 180, 41, 0.35);
 
@@ -81,6 +149,7 @@
     --text-5xl: clamp(3rem, 1.5vw + 1.94rem, 4rem);
 
     --header-height: clamp(4rem, 1vw + 3.5rem, 5.5rem);
+    --announcement-height: 2.25rem;
     --section-inline-pad: clamp(1rem, 4vw + 0.75rem, 5rem);
     /* Vertical rhythm — use together with --section-inline-pad for section padding */
     --section-block-pad-y: clamp(3rem, 8vw, 7.5rem);
@@ -90,5 +159,20 @@
     --section-block-pad-y-xl: clamp(5rem, 11vw, 10rem);
     --section-block-pad-y-hero: clamp(5.5rem, 14vw, 10rem);
     --section-block-pad-y-hero-bottom: clamp(3.5rem, 8vw, 7.5rem);
+  }
+  /* ── Smooth theme transitions ── */
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* ── Dark mode overrides ── */
+  [data-theme="dark"] {
+    --color-background: #0a0a09;
+    --color-foreground: #faf8f2;
+  }
+
+  [data-theme="dark"] body {
+    background-color: #0a0a09;
+    color: #faf8f2;
   }
 {% endstyle %}

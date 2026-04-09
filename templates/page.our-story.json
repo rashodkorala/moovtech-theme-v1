@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "moov_about": {
+      "type": "moov-about"
+    }
+  },
+  "order": [
+    "moov_about"
+  ]
+}

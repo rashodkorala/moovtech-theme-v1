@@ -2,50 +2,174 @@
 {%- if section.settings.transparent_header and template == 'index' -%}
   {%- assign is_transparent = true -%}
 {%- endif -%}
-<header class="moov-header full-width{% if is_transparent %} moov-header--transparent{% endif %}{% if section.settings.sticky_header %} moov-header--sticky{% endif %}"
+
+{%- assign announcement_text = section.settings.announcement_text -%}
+{%- if announcement_text == blank -%}
+  {%- assign announcement_text = 'general.announcement_bar' | t -%}
+{%- endif -%}
+
+{%- assign get_moov_label = section.settings.get_moov_label -%}
+{%- if get_moov_label == blank -%}
+  {%- assign get_moov_label = 'Get MOOV' -%}
+{%- endif -%}
+
+<header
+  class="moov-header full-width{% if is_transparent %} moov-header--transparent{% endif %}{% if section.settings.sticky_header %} moov-header--sticky{% endif %}"
   data-transparent="{{ is_transparent }}"
 >
-  <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
-    {%- comment -%} Left — Wordmark {%- endcomment -%}
-    <a href="{{ routes.root_url }}" class="moov-nav__wordmark" aria-label="{{ shop.name }}">
-      MOOV
-    </a>
+  {%- comment -%} Announcement bar {%- endcomment -%}
+  {%- if section.settings.announcement_enabled and announcement_text != blank -%}
+    <div class="moov-announcement">
+      {%- if section.settings.announcement_url != blank -%}
+        <a href="{{ section.settings.announcement_url }}" class="moov-announcement__link">
+          {{- announcement_text | escape -}}
+        </a>
+      {%- else -%}
+        <span>{{- announcement_text | escape -}}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 
-    {%- comment -%} Centre — Nav links (desktop) {%- endcomment -%}
+  <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
+    {%- comment -%} Left — Nav links (Shop-style row) {%- endcomment -%}
     <ul class="moov-nav__links" role="list">
-      <li><a href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" class="moov-nav__link">{{ 'general.nav.shop' | t }}</a></li>
-      <li><a href="{{ section.settings.about_url | default: '/pages/about' }}" class="moov-nav__link">{{ 'general.nav.about' | t }}</a></li>
-      <li><a href="{{ section.settings.contact_url | default: '/pages/contact' }}" class="moov-nav__link">{{ 'general.nav.contact' | t }}</a></li>
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign nav_lbl = section.settings.nav_1_label
+              assign nav_url = section.settings.nav_1_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.shop' | t
+              endif
+            when 2
+              assign nav_lbl = section.settings.nav_2_label
+              assign nav_url = section.settings.nav_2_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.sale' | t
+              endif
+            when 3
+              assign nav_lbl = section.settings.nav_3_label
+              assign nav_url = section.settings.nav_3_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.about' | t
+              endif
+            when 4
+              assign nav_lbl = section.settings.nav_4_label
+              assign nav_url = section.settings.nav_4_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.features' | t
+              endif
+          endcase
+        -%}
+        {%- if nav_lbl != blank -%}
+          <li>
+            <a
+              href="{{ nav_url | default: routes.root_url }}"
+              class="moov-nav__link"
+            >
+              {{- nav_lbl | escape -}}
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
     </ul>
 
-    {%- comment -%} Right — Icons + Pre-order pill {%- endcomment -%}
+    {%- comment -%} Centre — Wordmark {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="moov-nav__wordmark" aria-label="{{ shop.name }}">
+      {{- section.settings.logo_text | default: 'MOOV' | escape -}}
+    </a>
+
+    {%- comment -%} Right — Utilities + optional CTA {%- endcomment -%}
     <div class="moov-nav__right">
-      <a href="{{ routes.cart_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.cart' | t }}">
-        {%- if cart.item_count > 0 -%}
-          <span class="moov-nav__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
-        {%- endif -%}
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
+      {%- comment -%} Currency / country {%- endcomment -%}
+      {%- if localization.available_countries.size > 1 -%}
+        <div class="moov-nav__currency">
+          {%- form 'localization', class: 'moov-currency-form' -%}
+            <button type="button" class="moov-nav__currency-btn" aria-label="{{ 'general.accessibility.currency_selector' | t }}" aria-expanded="false" aria-haspopup="listbox">
+              <span class="moov-nav__currency-label">
+                {{- localization.country.name | escape }} ({{ localization.country.currency.iso_code }}&nbsp;{{ localization.country.currency.symbol }})
+              </span>
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M1 1l4 4 4-4"/>
+              </svg>
+            </button>
+            <ul class="moov-currency-dropdown" role="listbox" aria-label="{{ 'general.accessibility.currency_selector' | t }}">
+              {%- for country in localization.available_countries -%}
+                {%- if country.iso_code == localization.country.iso_code -%}
+                  {%- assign is_current_country = true -%}
+                {%- else -%}
+                  {%- assign is_current_country = false -%}
+                {%- endif -%}
+                <li role="option" aria-selected="{{ is_current_country }}">
+                  <button type="submit" name="country_code" value="{{ country.iso_code }}" class="moov-currency-option{% if is_current_country %} is-selected{% endif %}">
+                    {{- country.name | escape }} ({{ country.currency.iso_code -}})
+                  </button>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endform -%}
+        </div>
+      {%- else -%}
+        <span class="moov-nav__currency-static">
+          {{- localization.country.name | escape }} ({{ localization.country.currency.iso_code }}&nbsp;{{ localization.country.currency.symbol }})
+        </span>
+      {%- endif -%}
+
+      {%- comment -%} Dark mode toggle {%- endcomment -%}
+      <button class="moov-nav__icon moov-nav__dark-mode" aria-label="{{ 'general.accessibility.dark_mode' | t }}" type="button">
+        <svg class="moov-theme-icon moov-theme-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <svg class="moov-theme-icon moov-theme-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+
+      {%- comment -%} Search {%- endcomment -%}
+      <a href="{{ routes.search_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.search' | t }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </a>
 
+      {%- comment -%} Account {%- endcomment -%}
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ routes.account_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.account' | t }}">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
         </a>
       {%- endif -%}
 
-      <a
-        href="{{ section.settings.preorder_url | default: routes.root_url }}"
-        class="moov-nav__preorder"
-      >
-        {{- section.settings.preorder_label | default: 'Pre-order' | escape -}}
+      {%- comment -%} Cart — bag icon + count badge {%- endcomment -%}
+      <a href="{{ routes.cart_url }}" class="moov-nav__cart" aria-label="{{ 'general.accessibility.cart' | t }}">
+        <svg class="moov-nav__cart-bag" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="moov-nav__cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
       </a>
+
+      {%- if section.settings.show_nav_cta -%}
+        <a
+          href="{{ section.settings.get_moov_url | default: routes.root_url }}"
+          class="moov-nav__get-moov"
+        >
+          {{- get_moov_label | escape -}}
+        </a>
+      {%- endif -%}
     </div>
 
     {%- comment -%} Mobile hamburger {%- endcomment -%}
@@ -66,7 +190,7 @@
   {%- comment -%} Mobile drawer {%- endcomment -%}
   <div id="moov-mobile-drawer" class="moov-drawer" aria-hidden="true">
     <div class="moov-drawer__header">
-      <span class="moov-drawer__wordmark">MOOV</span>
+      <span class="moov-drawer__wordmark">{{ section.settings.logo_text | default: 'MOOV' | escape }}</span>
       <button class="moov-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"/>
@@ -75,52 +199,108 @@
       </button>
     </div>
     <nav class="moov-drawer__nav">
-      <a href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" class="moov-drawer__link">{{ 'general.nav.shop' | t }}</a>
-      <a href="{{ section.settings.about_url | default: '/pages/about' }}" class="moov-drawer__link">{{ 'general.nav.about' | t }}</a>
-      <a href="{{ section.settings.contact_url | default: '/pages/contact' }}" class="moov-drawer__link">{{ 'general.nav.contact' | t }}</a>
+      {%- for i in (1..4) -%}
+        {%- liquid
+          case i
+            when 1
+              assign nav_lbl = section.settings.nav_1_label
+              assign nav_url = section.settings.nav_1_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.shop' | t
+              endif
+            when 2
+              assign nav_lbl = section.settings.nav_2_label
+              assign nav_url = section.settings.nav_2_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.sale' | t
+              endif
+            when 3
+              assign nav_lbl = section.settings.nav_3_label
+              assign nav_url = section.settings.nav_3_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.about' | t
+              endif
+            when 4
+              assign nav_lbl = section.settings.nav_4_label
+              assign nav_url = section.settings.nav_4_url
+              if nav_lbl == blank
+                assign nav_lbl = 'general.nav.features' | t
+              endif
+          endcase
+        -%}
+        {%- if nav_lbl != blank -%}
+          <a href="{{ nav_url | default: routes.root_url }}" class="moov-drawer__link">{{ nav_lbl | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
     </nav>
-    <a
-      href="{{ section.settings.preorder_url | default: routes.root_url }}"
-      class="moov-drawer__preorder"
-    >
-      {{- section.settings.preorder_label | default: 'Pre-order' | escape -}}
-    </a>
+    {%- if section.settings.show_nav_cta -%}
+      <a
+        href="{{ section.settings.get_moov_url | default: routes.root_url }}"
+        class="moov-drawer__get-moov"
+      >
+        {{- get_moov_label | escape -}}
+      </a>
+    {%- endif -%}
   </div>
   <div class="moov-drawer__backdrop" aria-hidden="true"></div>
 </header>
 
 {% stylesheet %}
-  /* ── Default: Solid header (cream bg, dark text) ── */
+  /* ── Announcement bar ── */
+  .moov-announcement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px var(--section-inline-pad);
+    background: #0a0a09;
+    font-family: var(--font-body);
+    font-size: clamp(0.8125rem, 0.2vw + 0.72rem, 0.9375rem);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    color: #ffffff;
+  }
+
+  .moov-announcement__link {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .moov-announcement__link:hover {
+    opacity: 0.75;
+  }
+
+  /* ── Header ── */
   .moov-header {
     position: relative;
     left: 0;
     right: 0;
     z-index: 100;
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    background: var(--moov-cream);
-    border-bottom: 0.5px solid var(--moov-border-light);
+    background: #ffffff;
+    border-bottom: 1px solid rgba(10, 10, 9, 0.08);
     transition: background 0.3s ease, border-color 0.3s ease;
   }
 
   .moov-nav {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    height: var(--header-height);
     padding: 0 clamp(24px, 3vw, 64px);
   }
 
-  /* Wordmark */
+  /* Wordmark — center column (bold sans, reference style) */
   .moov-nav__wordmark {
-    font-family: var(--font-wordmark);
-    font-weight: 400;
-    font-size: var(--text-xl);
-    letter-spacing: 0.05em;
-    color: var(--moov-text-primary-light);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1.5vw, 1.625rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0a0a09;
     text-decoration: none;
-    flex-shrink: 0;
+    justify-self: center;
     transition: opacity 0.2s;
   }
 
@@ -128,99 +308,191 @@
     opacity: 0.7;
   }
 
-  /* Centre links */
+  /* Left nav links */
   .moov-nav__links {
     display: flex;
     align-items: center;
-    gap: clamp(24px, 2.5vw, 48px);
+    gap: clamp(20px, 2vw, 40px);
     list-style: none;
     margin: 0;
     padding: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   .moov-nav__link {
     font-family: var(--font-body);
-    font-weight: 300;
+    font-weight: 500;
     font-size: var(--text-sm);
-    letter-spacing: 0.03em;
-    color: var(--moov-text-secondary-light);
+    letter-spacing: 0.02em;
+    color: #0a0a09;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: opacity 0.2s;
     white-space: nowrap;
   }
 
   .moov-nav__link:hover {
-    color: var(--moov-text-primary-light);
+    opacity: 0.55;
   }
 
-  /* Right group */
+  /* Right utilities group */
   .moov-nav__right {
     display: flex;
     align-items: center;
-    gap: clamp(12px, 1vw, 20px);
+    gap: clamp(8px, 0.75vw, 16px);
+    justify-content: flex-end;
     flex-shrink: 0;
+  }
+
+  .moov-nav__currency-static {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #0a0a09;
+    white-space: nowrap;
+    opacity: 0.75;
   }
 
   .moov-nav__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(36px, 2.5vw, 44px);
-    height: clamp(36px, 2.5vw, 44px);
-    color: var(--moov-text-secondary-light);
+    width: 36px;
+    height: 36px;
+    color: #0a0a09;
     text-decoration: none;
-    transition: color 0.2s;
-    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    padding: 0;
     border-radius: 50%;
   }
 
-  .moov-nav__icon svg {
-    width: clamp(18px, 1.2vw, 24px);
-    height: clamp(18px, 1.2vw, 24px);
-  }
-
   .moov-nav__icon:hover {
-    color: var(--moov-text-primary-light);
+    opacity: 0.55;
   }
 
-  .moov-nav__cart-count {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    min-width: 16px;
-    height: 16px;
-    background: var(--moov-amber);
-    color: var(--moov-black);
-    font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 400;
-    border-radius: 100px;
+  /* Cart — bag + circular count (reference style) */
+  .moov-nav__cart {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
-    line-height: 1;
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+    color: #0a0a09;
+    transition: opacity 0.2s;
   }
 
-  /* Pre-order pill */
-  .moov-nav__preorder {
+  .moov-nav__cart:hover {
+    opacity: 0.55;
+  }
+
+  .moov-nav__cart-bag {
+    flex-shrink: 0;
+  }
+
+  .moov-nav__cart-badge {
+    position: absolute;
+    top: 2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    border: 1px solid #0a0a09;
+    background: #ffffff;
     font-family: var(--font-body);
-    font-weight: 400;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+    color: #0a0a09;
+    box-sizing: border-box;
+  }
+
+  /* Currency selector */
+  .moov-nav__currency {
+    position: relative;
+  }
+
+  .moov-nav__currency-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0a0a09;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    padding: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+
+  .moov-nav__currency-btn:hover {
+    opacity: 0.55;
+  }
+
+  .moov-currency-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: var(--moov-cream);
+    border: 0.5px solid var(--moov-border-light);
+    border-radius: 6px;
+    padding: 6px 0;
+    min-width: 180px;
+    z-index: 200;
+    list-style: none;
+    margin: 0;
+    box-shadow: 0 4px 20px rgba(10, 10, 9, 0.08);
+  }
+
+  .moov-currency-dropdown.is-open {
+    display: block;
+  }
+
+  .moov-currency-option {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-light);
+    text-align: left;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .moov-currency-option:hover,
+  .moov-currency-option.is-selected {
+    background: var(--moov-cream-shadow);
+    color: var(--moov-text-primary-light);
+  }
+
+  /* Get MOOV pill */
+  .moov-nav__get-moov {
+    font-family: var(--font-body);
+    font-weight: 500;
     font-size: var(--text-sm);
     letter-spacing: 0.03em;
-    color: var(--moov-text-primary-light);
+    color: #0a0a09;
     text-decoration: none;
-    border: 0.5px solid rgba(10, 10, 9, 0.25);
+    border: 1px solid rgba(10, 10, 9, 0.2);
     border-radius: var(--style-border-radius-buttons);
     padding: clamp(8px, 0.6vw, 12px) clamp(18px, 1.4vw, 28px);
     transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     white-space: nowrap;
   }
 
-  .moov-nav__preorder:hover {
+  .moov-nav__get-moov:hover {
     background: var(--moov-black);
     color: var(--moov-cream);
     border-color: var(--moov-black);
@@ -243,11 +515,7 @@
     height: clamp(22px, 1.5vw, 28px);
   }
 
-  /* ── Sticky modifier ──
-     Sticky must be on the Shopify wrapper (.shopify-section) since
-     the header element is a child of a grid container. We use :has()
-     to bubble the sticky positioning up to the wrapper.
-     Skip when transparent is active — fixed positioning handles it. */
+  /* ── Sticky modifier ── */
   .shopify-section-group-header-group:has(.moov-header--sticky:not(.moov-header--transparent)),
   .shopify-section-group-header-group:has(.moov-header--sticky:not(.moov-header--transparent)) > .shopify-section {
     position: sticky;
@@ -265,8 +533,13 @@
   /* ── Transparent modifier (homepage) ── */
   .moov-header--transparent {
     position: fixed;
+    width: 100%;
     background: transparent;
     border-bottom-color: transparent;
+  }
+
+  .moov-header--transparent .moov-announcement {
+    background: rgba(10, 10, 9, 0.7);
   }
 
   .moov-header--transparent .moov-nav__wordmark {
@@ -289,9 +562,34 @@
     color: var(--moov-text-primary-dark);
   }
 
-  .moov-header--transparent .moov-nav__preorder {
+  .moov-header--transparent .moov-nav__cart {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__cart-badge {
+    background: #ffffff;
+    color: #0a0a09;
+    border-color: rgba(250, 248, 242, 0.45);
+  }
+
+  .moov-header--transparent .moov-nav__currency-static {
+    color: var(--moov-text-secondary-dark);
+    opacity: 0.9;
+  }
+
+  .moov-header--transparent .moov-nav__currency-btn {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .moov-header--transparent .moov-nav__get-moov {
     color: var(--moov-amber);
     border-color: var(--moov-border-amber);
+  }
+
+  .moov-header--transparent .moov-nav__get-moov:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    border-color: var(--moov-amber);
   }
 
   .moov-header--transparent .moov-nav__hamburger {
@@ -304,10 +602,18 @@
     border-bottom-color: var(--moov-border-dark);
   }
 
+  .moov-header--transparent.is-scrolled .moov-announcement {
+    background: var(--moov-black);
+  }
+
   /* Transparent + over cream section: flip to cream bg with dark text */
   .moov-header--transparent.nav--light {
     background: var(--moov-cream);
     border-bottom-color: var(--moov-border-light);
+  }
+
+  .moov-header--transparent.nav--light .moov-announcement {
+    background: var(--moov-black);
   }
 
   .moov-header--transparent.nav--light .moov-nav__wordmark {
@@ -330,7 +636,26 @@
     color: var(--moov-text-primary-light);
   }
 
-  .moov-header--transparent.nav--light .moov-nav__preorder {
+  .moov-header--transparent.nav--light .moov-nav__cart {
+    color: var(--moov-text-secondary-light);
+  }
+
+  .moov-header--transparent.nav--light .moov-nav__cart-badge {
+    background: #ffffff;
+    color: #0a0a09;
+    border-color: #0a0a09;
+  }
+
+  .moov-header--transparent.nav--light .moov-nav__currency-static {
+    color: #0a0a09;
+    opacity: 0.75;
+  }
+
+  .moov-header--transparent.nav--light .moov-nav__currency-btn {
+    color: var(--moov-text-secondary-light);
+  }
+
+  .moov-header--transparent.nav--light .moov-nav__get-moov {
     color: var(--moov-text-primary-light);
     border-color: rgba(10, 10, 9, 0.25);
   }
@@ -339,7 +664,7 @@
     color: var(--moov-text-primary-light);
   }
 
-  /* ── Mobile drawer ─────────────────────────── */
+  /* ── Mobile drawer ── */
   .moov-drawer {
     position: fixed;
     top: 0;
@@ -360,7 +685,6 @@
     transform: translateX(0);
   }
 
-  /* Backdrop overlay — dims content behind drawer */
   .moov-drawer__backdrop {
     position: fixed;
     inset: 0;
@@ -384,10 +708,11 @@
   }
 
   .moov-drawer__wordmark {
-    font-family: var(--font-wordmark);
-    font-weight: 400;
-    font-size: var(--text-xl);
-    letter-spacing: 0.05em;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--moov-text-primary-dark);
   }
 
@@ -422,7 +747,7 @@
     color: var(--moov-text-primary-dark);
   }
 
-  .moov-drawer__preorder {
+  .moov-drawer__get-moov {
     display: block;
     text-align: center;
     font-family: var(--font-body);
@@ -438,24 +763,109 @@
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  .moov-drawer__preorder:hover {
+  .moov-drawer__get-moov:hover {
     background: var(--moov-amber);
     color: var(--moov-black);
   }
 
-  /* ── Responsive ────────────────────────────── */
+  /* ── Theme toggle icons ── */
+  .moov-theme-icon--sun { display: none; }
+
+  [data-theme="dark"] .moov-theme-icon--moon { display: none; }
+  [data-theme="dark"] .moov-theme-icon--sun  { display: block; }
+
+  /* ── Dark mode — header ── */
+  [data-theme="dark"] .moov-header {
+    background: #111110;
+    border-bottom-color: var(--moov-border-dark);
+  }
+
+  [data-theme="dark"] .moov-announcement {
+    background: #0a0a09;
+    border-bottom: 0.5px solid var(--moov-border-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__wordmark {
+    color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__link {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__link:hover {
+    color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__icon {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__icon:hover {
+    color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__cart {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__cart-badge {
+    background: #ffffff;
+    color: #0a0a09;
+    border-color: rgba(250, 248, 242, 0.35);
+  }
+
+  [data-theme="dark"] .moov-nav__currency-static {
+    color: var(--moov-text-secondary-dark);
+    opacity: 0.9;
+  }
+
+  [data-theme="dark"] .moov-nav__currency-btn {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .moov-currency-dropdown {
+    background: #111110;
+    border-color: var(--moov-border-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  [data-theme="dark"] .moov-currency-option {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  [data-theme="dark"] .moov-currency-option:hover,
+  [data-theme="dark"] .moov-currency-option.is-selected {
+    background: rgba(250, 248, 242, 0.06);
+    color: var(--moov-text-primary-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__get-moov {
+    color: var(--moov-text-primary-dark);
+    border-color: var(--moov-border-dark);
+  }
+
+  [data-theme="dark"] .moov-nav__get-moov:hover {
+    background: var(--moov-text-primary-dark);
+    color: var(--moov-black);
+    border-color: var(--moov-text-primary-dark);
+  }
+
+  /* ── Responsive ── */
   @media (max-width: 767px) {
     .moov-nav {
       padding: 0 var(--section-inline-pad);
     }
 
     .moov-nav__links,
-    .moov-nav__preorder {
+    .moov-nav__right {
       display: none;
     }
 
     .moov-nav__hamburger {
       display: flex;
+      grid-column: 3;
+      justify-self: end;
     }
   }
 {% endstylesheet %}
@@ -467,13 +877,10 @@
     var isTransparent = header.getAttribute('data-transparent') === 'true';
 
     if (isTransparent) {
-      /* Scroll state — only needed for transparent header */
       window.addEventListener('scroll', function() {
         header.classList.toggle('is-scrolled', window.scrollY > 20);
       });
 
-      /* Nav colour switching for transparent header.
-         Detects data-surface sections and flips nav colours accordingly. */
       var allSurfaceSections = document.querySelectorAll('[data-surface]');
       if (allSurfaceSections.length > 0) {
         function checkNavColor() {
@@ -508,24 +915,37 @@
     }
   }
 
-  /* Smooth scroll for nav links */
-  document.querySelectorAll('.moov-nav__scroll-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      var headerHeight = document.querySelector('.moov-header').offsetHeight;
-      var top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
-      window.scrollTo({ top: top, behavior: 'smooth' });
+  /* Currency dropdown */
+  var currencyBtn = document.querySelector('.moov-nav__currency-btn');
+  var currencyDropdown = document.querySelector('.moov-currency-dropdown');
 
-      var drawer = document.getElementById('moov-mobile-drawer');
-      if (drawer && drawer.classList.contains('is-open')) {
-        drawer.classList.remove('is-open');
-        drawer.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+  if (currencyBtn && currencyDropdown) {
+    currencyBtn.addEventListener('click', function() {
+      var isOpen = currencyDropdown.classList.toggle('is-open');
+      currencyBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.moov-nav__currency')) {
+        currencyDropdown.classList.remove('is-open');
+        currencyBtn.setAttribute('aria-expanded', 'false');
       }
     });
-  });
+  }
+
+  /* Dark mode toggle */
+  var darkModeBtn = document.querySelector('.moov-nav__dark-mode');
+  if (darkModeBtn) {
+    var savedTheme = localStorage.getItem('moov-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+    darkModeBtn.addEventListener('click', function() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('moov-theme', next);
+    });
+  }
 
   /* Mobile drawer toggle */
   var hamburger = document.querySelector('.moov-nav__hamburger');
@@ -549,15 +969,10 @@
     document.body.style.overflow = '';
   }
 
-  if (drawerClose) {
-    drawerClose.addEventListener('click', closeDrawer);
-  }
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
 
-  /* Close drawer when clicking backdrop */
   var backdrop = document.querySelector('.moov-drawer__backdrop');
-  if (backdrop) {
-    backdrop.addEventListener('click', closeDrawer);
-  }
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
 {% endjavascript %}
 
 {% schema %}
@@ -568,49 +983,113 @@
       "type": "checkbox",
       "id": "transparent_header",
       "label": "Transparent header",
-      "info": "Make the header transparent on the homepage only. Other pages always use a solid header.",
+      "info": "Make the header transparent on the homepage only.",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "sticky_header",
       "label": "Sticky header",
-      "info": "Keep the header fixed at the top of the page when scrolling.",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_enabled",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "info": "Leave blank to use the default locale translation."
+    },
+    {
+      "type": "url",
+      "id": "announcement_url",
+      "label": "Announcement link (optional)"
     },
     {
       "type": "header",
       "content": "t:general.navigation"
     },
     {
-      "type": "url",
-      "id": "shop_url",
-      "label": "Shop link"
-    },
-    {
-      "type": "url",
-      "id": "about_url",
-      "label": "About link"
-    },
-    {
-      "type": "url",
-      "id": "contact_url",
-      "label": "Contact link"
-    },
-    {
-      "type": "header",
-      "content": "t:general.primary_button"
+      "type": "text",
+      "id": "logo_text",
+      "label": "Wordmark text",
+      "default": "MOOV"
     },
     {
       "type": "text",
-      "id": "preorder_label",
-      "label": "Pre-order button label",
-      "default": "Pre-order"
+      "id": "nav_1_label",
+      "label": "Nav link 1 label",
+      "info": "Leave blank to use the default translation (Shop)."
     },
     {
       "type": "url",
-      "id": "preorder_url",
-      "label": "Pre-order button link"
+      "id": "nav_1_url",
+      "label": "Nav link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "nav_2_label",
+      "label": "Nav link 2 label",
+      "info": "Leave blank to use the default translation (Sale)."
+    },
+    {
+      "type": "url",
+      "id": "nav_2_url",
+      "label": "Nav link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "nav_3_label",
+      "label": "Nav link 3 label",
+      "info": "Leave blank to use the default translation (About)."
+    },
+    {
+      "type": "url",
+      "id": "nav_3_url",
+      "label": "Nav link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "nav_4_label",
+      "label": "Nav link 4 label",
+      "info": "Leave blank to use the default translation (Features)."
+    },
+    {
+      "type": "url",
+      "id": "nav_4_url",
+      "label": "Nav link 4 URL"
+    },
+    {
+      "type": "header",
+      "content": "Optional header CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav_cta",
+      "label": "Show header CTA button",
+      "info": "Turn off for a minimal utility-only header (e.g. shop + icons only).",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "get_moov_label",
+      "label": "CTA button label",
+      "default": "Get MOOV",
+      "visible_if": "{{ section.settings.show_nav_cta }}"
+    },
+    {
+      "type": "url",
+      "id": "get_moov_url",
+      "label": "CTA button link",
+      "visible_if": "{{ section.settings.show_nav_cta }}"
     }
   ]
 }
