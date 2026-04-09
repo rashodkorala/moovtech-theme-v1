@@ -10,9 +10,83 @@
         "cta_primary_label": "Get MOOV",
         "cta_ghost_label": "How it works"
       }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "What MOOVers are saying",
+        "overall_rating": "4.9",
+        "review_count": "200+ early testers",
+        "show_overall_rating": true
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "I've tried every morning hack out there. MOOV is the first thing that actually made me get out of bed without negotiating with myself. Standing to silence it changes everything.",
+            "reviewer_name": "Jordan M.",
+            "reviewer_title": "Early Bird backer"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "The app blocking feature alone is worth it. I used to check Instagram before my feet hit the floor. Now I make coffee first. Small thing, massive difference.",
+            "reviewer_name": "Priya S.",
+            "reviewer_title": "Product designer"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "The routines adapt to how much time I have. Some mornings it's 10 minutes, some it's 45. MOOV figures it out. I don't have to think about it.",
+            "reviewer_name": "Daniel K.",
+            "reviewer_title": "Founder"
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "I was skeptical. Now I'm the person telling everyone about it. Three weeks in and I haven't snoozed once. My partner pre-ordered one after watching me.",
+            "reviewer_name": "Taylor R.",
+            "reviewer_title": "Early adopter"
+          }
+        },
+        "review-5": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "quote": "Love how it doesn't feel like a productivity gimmick. It's calm and simple. Wake up, stand up, do your thing. No gamification, no streaks guilt.",
+            "reviewer_name": "Marcus L.",
+            "reviewer_title": "Remote engineer"
+          }
+        },
+        "review-6": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "My first hour used to disappear into my phone. Now it belongs to me. MOOV made that switch easier than any amount of willpower ever did.",
+            "reviewer_name": "Amara O.",
+            "reviewer_title": "MOOVment member"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4",
+        "review-5",
+        "review-6"
+      ]
     }
   },
   "order": [
-    "hero"
+    "hero",
+    "reviews"
   ]
 }

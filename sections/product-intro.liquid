@@ -79,7 +79,7 @@
       {%- else -%}
         <img
           src="{{ 'moov-product.jpg' | asset_url }}"
-          alt="MOOV Alarm"
+          alt="{{ section.settings.product_image_alt | escape }}"
           class="product-intro__render"
           loading="lazy"
           width="600"
@@ -155,7 +155,7 @@
   .product-intro__proof-item {
     font-family: var(--font-body);
     font-size: var(--text-sm);
-    font-weight: 300;
+    font-weight: 400;
     color: var(--moov-text-secondary-dark);
   }
 
@@ -362,6 +362,12 @@
       "type": "image_picker",
       "id": "product_image",
       "label": "t:labels.product_render"
+    },
+    {
+      "type": "text",
+      "id": "product_image_alt",
+      "label": "t:labels.product_render_alt",
+      "default": "MOOV Alarm"
     }
   ],
   "presets": [

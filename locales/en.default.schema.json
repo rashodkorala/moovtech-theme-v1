@@ -161,6 +161,14 @@
     },
     "moov_cart": {
       "name": "MOOV cart"
+    },
+    "reviews": {
+      "name": "Reviews",
+      "blocks": {
+        "review": {
+          "name": "Review"
+        }
+      }
     }
   },
   "labels": {
@@ -199,6 +207,7 @@
     "proof_point_1": "Proof point 1",
     "proof_point_2": "Proof point 2",
     "product_render": "Product render (PNG with transparent background)",
+    "product_render_alt": "Product image alt text",
     "app_image": "App screenshot / mockup",
     "app_screen": "App screen mockup",
     "app_store_url": "App Store URL",

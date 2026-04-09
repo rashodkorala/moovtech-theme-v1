@@ -286,9 +286,15 @@
       "get_google_play": "Get it on Google Play"
     },
     "footer": {
-      "newsletter_submit": "Send it to me",
+      "newsletter_submit": "Subscribe",
       "newsletter_email_label": "Email address",
-      "newsletter_placeholder": "Your email address"
+      "newsletter_placeholder": "Your email address",
+      "privacy_accept": "I accept the terms of",
+      "privacy_policy": "Privacy policy"
+    },
+    "reviews": {
+      "out_of_5": "{{ score }} out of 5",
+      "stars_label": "{{ count }} out of 5 stars"
     }
   },
   "labels": {

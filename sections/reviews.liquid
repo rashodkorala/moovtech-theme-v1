@@ -1,0 +1,607 @@
+{%- liquid
+  assign show_overall = section.settings.show_overall_rating
+  assign overall_rating = section.settings.overall_rating | default: '4.9'
+  assign review_count = section.settings.review_count | default: '200+ early testers'
+  assign heading = section.settings.heading | default: 'What MOOVers are saying'
+  assign eyebrow = section.settings.eyebrow
+  assign cta_label = section.settings.cta_label
+  assign cta_url = section.settings.cta_url
+-%}
+
+<section class="reviews full-width">
+  <div class="reviews__inner">
+
+    {%- comment -%} Header row {%- endcomment -%}
+    <div class="reviews__header" data-animate="reviews-header">
+      <div class="reviews__header-text">
+        {%- if eyebrow != blank -%}
+          <p class="reviews__eyebrow">{{ eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="reviews__heading">{{ heading | escape }}</h2>
+      </div>
+    </div>
+
+    {%- comment -%} Overall rating summary bar {%- endcomment -%}
+    {%- if show_overall -%}
+      <div class="reviews__summary" data-animate="reviews-summary">
+        <div class="reviews__summary-score">{{ overall_rating | escape }}</div>
+        <div class="reviews__summary-meta">
+          <div class="reviews__summary-stars" aria-label="{{ 'sections.reviews.out_of_5' | t: score: overall_rating }}">
+            {%- for i in (1..5) -%}
+              <svg class="reviews__star reviews__star--filled" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 1.5L12.39 6.26L17.73 7.01L13.87 10.77L14.78 16.09L10 13.5L5.22 16.09L6.13 10.77L2.27 7.01L7.61 6.26L10 1.5Z" fill="currentColor"/>
+              </svg>
+            {%- endfor -%}
+          </div>
+          <p class="reviews__summary-label">{{ 'sections.reviews.out_of_5' | t: score: overall_rating }}</p>
+          <p class="reviews__summary-count">{{ review_count | escape }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Review cards grid {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="reviews__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'review' -%}
+            {%- assign rating = block.settings.rating | default: 5 -%}
+            <div
+              class="reviews__card"
+              data-animate="reviews-card"
+              style="--card-delay: {{ forloop.index0 | times: 80 }}ms;"
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} Stars {%- endcomment -%}
+              <div class="reviews__card-stars" aria-label="{{ 'sections.reviews.stars_label' | t: count: rating }}">
+                {%- for i in (1..5) -%}
+                  {%- if i <= rating -%}
+                    <svg class="reviews__star reviews__star--filled" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M10 1.5L12.39 6.26L17.73 7.01L13.87 10.77L14.78 16.09L10 13.5L5.22 16.09L6.13 10.77L2.27 7.01L7.61 6.26L10 1.5Z" fill="currentColor"/>
+                    </svg>
+                  {%- else -%}
+                    <svg class="reviews__star reviews__star--empty" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M10 1.5L12.39 6.26L17.73 7.01L13.87 10.77L14.78 16.09L10 13.5L5.22 16.09L6.13 10.77L2.27 7.01L7.61 6.26L10 1.5Z" stroke="currentColor" stroke-width="1.2"/>
+                    </svg>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              {%- comment -%} Quote {%- endcomment -%}
+              {%- if block.settings.quote != blank -%}
+                <blockquote class="reviews__card-quote">
+                  <p>{{ block.settings.quote | escape }}</p>
+                </blockquote>
+              {%- endif -%}
+
+              {%- comment -%} Reviewer {%- endcomment -%}
+              <div class="reviews__card-reviewer">
+                {%- if block.settings.avatar != blank -%}
+                  <div class="reviews__card-avatar">
+                    {{ block.settings.avatar | image_url: width: 80, height: 80 | image_tag: loading: 'lazy', alt: block.settings.reviewer_name | escape }}
+                  </div>
+                {%- endif -%}
+                <div class="reviews__card-reviewer-info">
+                  {%- if block.settings.reviewer_name != blank -%}
+                    <p class="reviews__card-name">{{ block.settings.reviewer_name | escape }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.reviewer_title != blank -%}
+                    <p class="reviews__card-title">{{ block.settings.reviewer_title | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} CTA button {%- endcomment -%}
+    {%- if cta_label != blank -%}
+      <div class="reviews__cta-wrapper" data-animate="reviews-cta">
+        <a href="{{ cta_url | default: '#' }}" class="reviews__cta">
+          {{ cta_label | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+  .reviews {
+    background: #f5f5f3;
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad);
+  }
+
+  [data-theme="dark"] .reviews {
+    background: var(--moov-black);
+  }
+
+  .reviews__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  /* ─── Header ─── */
+  .reviews__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .reviews__header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .reviews__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-amber);
+    margin: 0;
+  }
+
+  [data-theme="dark"] .reviews__eyebrow {
+    color: var(--moov-amber);
+  }
+
+  .reviews__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--moov-black);
+    margin: 0;
+  }
+
+  [data-theme="dark"] .reviews__heading {
+    color: var(--moov-cream);
+  }
+
+  /* ─── Summary bar ─── */
+  .reviews__summary {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+  }
+
+  [data-theme="dark"] .reviews__summary {
+    background: var(--moov-surface-dark-raised);
+    border-color: var(--moov-border-dark);
+  }
+
+  .reviews__summary-score {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--moov-black);
+    letter-spacing: -0.03em;
+  }
+
+  [data-theme="dark"] .reviews__summary-score {
+    color: var(--moov-cream);
+  }
+
+  .reviews__summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .reviews__summary-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .reviews__summary-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--moov-black);
+    margin: 0;
+    opacity: 0.6;
+  }
+
+  [data-theme="dark"] .reviews__summary-label {
+    color: var(--moov-cream);
+  }
+
+  .reviews__summary-count {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--moov-black);
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  [data-theme="dark"] .reviews__summary-count {
+    color: var(--moov-cream);
+  }
+
+  /* ─── Stars shared ─── */
+  .reviews__star--filled {
+    color: var(--moov-amber);
+  }
+
+  .reviews__star--empty {
+    color: rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="dark"] .reviews__star--empty {
+    color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ─── Cards grid ─── */
+  .reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .reviews__card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.6s ease-out var(--card-delay, 0ms),
+      transform 0.6s ease-out var(--card-delay, 0ms),
+      box-shadow 0.25s ease;
+  }
+
+  .reviews__card.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reviews__card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="dark"] .reviews__card {
+    background: var(--moov-surface-dark-raised);
+    border-color: var(--moov-border-dark);
+  }
+
+  .reviews__card-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .reviews__card-quote {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-black);
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .reviews__card-quote p {
+    margin: 0;
+  }
+
+  [data-theme="dark"] .reviews__card-quote {
+    color: var(--moov-cream);
+    opacity: 0.85;
+  }
+
+  .reviews__card-reviewer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  [data-theme="dark"] .reviews__card-reviewer {
+    border-top-color: var(--moov-border-dark);
+  }
+
+  .reviews__card-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .reviews__card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .reviews__card-reviewer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .reviews__card-name {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--moov-black);
+    margin: 0;
+  }
+
+  [data-theme="dark"] .reviews__card-name {
+    color: var(--moov-cream);
+  }
+
+  .reviews__card-title {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--moov-black);
+    opacity: 0.55;
+    margin: 0;
+  }
+
+  [data-theme="dark"] .reviews__card-title {
+    color: var(--moov-cream);
+  }
+
+  /* ─── CTA ─── */
+  .reviews__cta-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+  }
+
+  .reviews__cta {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    border-radius: var(--style-border-radius-buttons);
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+
+  .reviews__cta:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .reviews__cta {
+    background: var(--moov-cream);
+    color: var(--moov-black);
+  }
+
+  [data-theme="dark"] .reviews__cta:hover {
+    background: var(--moov-amber);
+  }
+
+  /* ─── Scroll animations ─── */
+  [data-animate="reviews-header"],
+  [data-animate="reviews-summary"],
+  [data-animate="reviews-cta"] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+
+  [data-animate="reviews-header"].is-visible,
+  [data-animate="reviews-summary"].is-visible,
+  [data-animate="reviews-cta"].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .reviews__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .reviews__inner {
+      gap: 36px;
+    }
+
+    .reviews__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .reviews__summary {
+      padding: 20px 24px;
+    }
+
+    .reviews__card {
+      padding: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var animatedEls = document.querySelectorAll(
+      '.reviews [data-animate="reviews-header"],' +
+      '.reviews [data-animate="reviews-summary"],' +
+      '.reviews [data-animate="reviews-cta"],' +
+      '.reviews [data-animate="reviews-card"]'
+    );
+    if (!animatedEls.length) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    animatedEls.forEach(function (el) { observer.observe(el); });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.reviews.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "Early testers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "What MOOVers are saying"
+    },
+    {
+      "type": "header",
+      "content": "Overall rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overall_rating",
+      "label": "Show overall rating bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "overall_rating",
+      "label": "Overall rating score",
+      "default": "4.9",
+      "info": "Displayed as a large number, e.g. 4.9"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "Review count label",
+      "default": "200+ early testers"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.button_url"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "t:sections.reviews.blocks.review.name",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review quote",
+          "default": "MOOV changed how I start every day. I used to reach for my phone immediately. Now I'm actually up and moving before I even think about checking anything."
+        },
+        {
+          "type": "text",
+          "id": "reviewer_name",
+          "label": "Reviewer name",
+          "default": "Alex R."
+        },
+        {
+          "type": "text",
+          "id": "reviewer_title",
+          "label": "Reviewer title / role",
+          "default": "Early adopter"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.reviews.name",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "The movement-based alarm is the only thing that's actually broken my snooze habit. I've tried every app. None of them made me get out of bed the way MOOV does.",
+            "reviewer_name": "Jordan M.",
+            "reviewer_title": "Software engineer, early tester"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "I didn't expect the app blocker to matter as much as the alarm, but not seeing Instagram in the first hour genuinely changed my mood for the whole day.",
+            "reviewer_name": "Priya K.",
+            "reviewer_title": "Designer, early tester"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "Three weeks in and I've hit snooze zero times. That hasn't happened in years. The physical motion requirement makes it impossible to cheat.",
+            "reviewer_name": "Marcus T.",
+            "reviewer_title": "Founder, early tester"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
