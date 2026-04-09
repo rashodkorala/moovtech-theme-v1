@@ -14,49 +14,6 @@
 
 <footer class="footer full-width" data-surface="dark">
 
-  {%- comment -%} Part 1 — Community callout card {%- endcomment -%}
-  <div class="footer__outer">
-    <div class="footer__card" data-animate="footer-card">
-
-      <div class="footer__card-left">
-        {%- if section.settings.community_eyebrow != blank -%}
-          <p class="footer__card-eyebrow">{{ section.settings.community_eyebrow | escape }}</p>
-        {%- endif -%}
-
-        <h2 class="footer__card-heading">{{ section.settings.community_heading | escape }}</h2>
-
-        {%- if section.settings.community_body != blank -%}
-          <p class="footer__card-body">{{ section.settings.community_body | escape }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.community_cta_label != blank -%}
-          <a
-            href="{{ section.settings.community_cta_url | default: '#community' }}"
-            class="footer__card-cta"
-          >
-            {{- section.settings.community_cta_label | escape -}}
-          </a>
-        {%- endif -%}
-      </div>
-
-      <div class="footer__card-visual" aria-hidden="true">
-        <div class="footer__card-glow"></div>
-        <svg class="footer__card-orbits" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="200" cy="200" r="72"  stroke="rgba(240,180,41,0.18)" stroke-width="1"/>
-          <circle cx="200" cy="200" r="120" stroke="rgba(240,180,41,0.11)" stroke-width="1"/>
-          <circle cx="200" cy="200" r="170" stroke="rgba(240,180,41,0.06)" stroke-width="1"/>
-          <circle cx="200" cy="128" r="4.5" fill="rgba(240,180,41,0.55)"/>
-          <circle cx="285" cy="238" r="3"   fill="rgba(240,180,41,0.4)"/>
-          <circle cx="128" cy="272" r="2.5" fill="rgba(240,180,41,0.32)"/>
-          <circle cx="248" cy="76"  r="2"   fill="rgba(240,180,41,0.28)"/>
-          <circle cx="56"  cy="182" r="2"   fill="rgba(240,180,41,0.22)"/>
-          <circle cx="320" cy="148" r="1.5" fill="rgba(240,180,41,0.18)"/>
-        </svg>
-      </div>
-
-    </div>
-  </div>
-
   {%- comment -%} Part 2 — Footer columns {%- endcomment -%}
   <div class="footer__columns-wrapper">
     <div class="footer__columns">
