@@ -18,17 +18,17 @@
         "sticky_header": true,
         "announcement_enabled": true,
         "logo_text": "MOOV",
-        "nav_1_label": "Shop",
-        "nav_1_url": "shopify://collections/all",
-        "nav_2_label": "How it works",
-        "nav_2_url": "shopify://pages/how-it-works",
-        "nav_3_label": "Reviews",
-        "nav_3_url": "shopify://pages/reviews",
-        "nav_4_label": "Our story",
-        "nav_4_url": "shopify://pages/our-story",
-        "show_nav_cta": false,
+        "nav_1_label": "How it works",
+        "nav_1_url": "shopify://pages/how-it-works",
+        "nav_2_label": "Reviews",
+        "nav_2_url": "shopify://pages/reviews",
+        "nav_3_label": "Our story",
+        "nav_3_url": "shopify://pages/our-story",
+        "nav_4_label": "",
+        "nav_4_url": "",
+        "show_nav_cta": true,
         "get_moov_label": "Get MOOV",
-        "get_moov_url": "shopify://collections/all"
+        "get_moov_url": "shopify://products/moov"
       }
     }
   },

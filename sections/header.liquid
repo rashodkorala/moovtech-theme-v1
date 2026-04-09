@@ -57,7 +57,7 @@
             when 4
               assign nav_lbl = section.settings.nav_4_label
               assign nav_url = section.settings.nav_4_url
-              if nav_lbl == blank
+              if nav_lbl == blank and nav_url != blank
                 assign nav_lbl = 'general.nav.features' | t
               endif
           endcase
@@ -223,7 +223,7 @@
             when 4
               assign nav_lbl = section.settings.nav_4_label
               assign nav_url = section.settings.nav_4_url
-              if nav_lbl == blank
+              if nav_lbl == blank and nav_url != blank
                 assign nav_lbl = 'general.nav.features' | t
               endif
           endcase
