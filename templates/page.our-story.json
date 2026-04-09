@@ -1,8 +1,11 @@
 {
   "sections": {
     "main": {
-      "type": "about-page",
-      "settings": {}
+      "type": "our-story",
+      "settings": {
+        "hero_eyebrow": "Built to get you out of bed and into your life",
+        "hero_headline": "Passionate about mornings and dedicated to helping you own yours."
+      }
     }
   },
   "order": [
