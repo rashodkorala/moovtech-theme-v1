@@ -24,8 +24,8 @@
         "nav_2_url": "shopify://pages/reviews",
         "nav_3_label": "Our story",
         "nav_3_url": "shopify://pages/our-story",
-        "nav_4_label": "",
-        "nav_4_url": "",
+        "nav_4_label": "Get MOOV",
+        "nav_4_url": "shopify://products/moov",
         "show_nav_cta": true,
         "get_moov_label": "Get MOOV",
         "get_moov_url": "shopify://products/moov"
