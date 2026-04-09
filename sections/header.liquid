@@ -77,7 +77,11 @@
 
     {%- comment -%} Centre — Wordmark {%- endcomment -%}
     <a href="{{ routes.root_url }}" class="moov-nav__wordmark" aria-label="{{ shop.name }}">
-      {{- section.settings.logo_text | default: 'MOOV' | escape -}}
+      {%- if section.settings.logo_image != blank -%}
+        {{ section.settings.logo_image | image_url: width: 300 | image_tag: class: 'moov-nav__logo-img', alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        {{- section.settings.logo_text | default: 'MOOV' | escape -}}
+      {%- endif -%}
     </a>
 
     {%- comment -%} Right — Utilities + optional CTA {%- endcomment -%}
@@ -190,7 +194,11 @@
   {%- comment -%} Mobile drawer {%- endcomment -%}
   <div id="moov-mobile-drawer" class="moov-drawer" aria-hidden="true">
     <div class="moov-drawer__header">
-      <span class="moov-drawer__wordmark">{{ section.settings.logo_text | default: 'MOOV' | escape }}</span>
+      {%- if section.settings.logo_image != blank -%}
+        {{ section.settings.logo_image | image_url: width: 200 | image_tag: class: 'moov-nav__logo-img moov-nav__logo-img--drawer', alt: shop.name, loading: 'lazy' }}
+      {%- else -%}
+        <span class="moov-drawer__wordmark">{{ section.settings.logo_text | default: 'MOOV' | escape }}</span>
+      {%- endif -%}
       <button class="moov-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"/>
@@ -306,6 +314,19 @@
 
   .moov-nav__wordmark:hover {
     opacity: 0.7;
+  }
+
+  .moov-nav__logo-img {
+    display: block;
+    width: {{ section.settings.logo_max_width | default: 120 }}px;
+    height: auto;
+    max-height: 40px;
+    object-fit: contain;
+  }
+
+  .moov-nav__logo-img--drawer {
+    width: {{ section.settings.logo_max_width | default: 120 | times: 0.8 | round }}px;
+    max-height: 32px;
   }
 
   /* Left nav links */
@@ -1018,9 +1039,25 @@
       "content": "t:general.navigation"
     },
     {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image",
+      "info": "Recommended: SVG or PNG with transparent background, min 300px wide."
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "Logo image width",
+      "min": 60,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 120
+    },
+    {
       "type": "text",
       "id": "logo_text",
-      "label": "Wordmark text",
+      "label": "Wordmark text (fallback if no image)",
       "default": "MOOV"
     },
     {
