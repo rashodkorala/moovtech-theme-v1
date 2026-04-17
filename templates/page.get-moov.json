@@ -1,21 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
+        "hero_overlay_opacity": 60,
         "hero_eyebrow": "Limited Early Bird offer",
         "hero_headline": "Get your MOOV today",
         "hero_subheadline": "Join the morning system designed for people who know the first hour matters.",
-        "hero_overlay_opacity": 60,
         "cta_primary_label": "Pre-order now",
         "cta_ghost_label": "How it works"
       }
     },
     "product_intro": {
-      "type": "product-intro"
+      "type": "product-intro",
+      "settings": {}
     },
     "store_marketing_bands": {
-      "type": "store-marketing-bands"
+      "type": "store-marketing-bands",
+      "settings": {}
     }
   },
   "order": [
