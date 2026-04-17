@@ -3,6 +3,11 @@
   if product_eyebrow == blank
     assign product_eyebrow = 'store_marketing.badge_category' | t
   endif
+
+  assign steps_heading = section.settings.steps_heading
+  if steps_heading == blank
+    assign steps_heading = 'How MOOV works'
+  endif
 -%}
 
 {%- comment -%} ═══ STICKY MINI-BAR ═══ {%- endcomment -%}
@@ -15,15 +20,15 @@
       <span class="moov-mini-bar__name">{{ product.title }}</span>
     </div>
     <nav class="moov-mini-bar__links" aria-label="{{ 'product.mini_bar.nav_label' | t }}">
-      <a href="#moov-features" class="moov-mini-bar__link">{{ 'product.mini_bar.features' | t }}</a>
+      <a href="#moov-how" class="moov-mini-bar__link">{{ 'product.mini_bar.features' | t }}</a>
       <a href="#moov-specs" class="moov-mini-bar__link">{{ 'product.mini_bar.specs' | t }}</a>
     </nav>
     <a href="#moov-product-cta" class="moov-mini-bar__cta">{{ 'product.pre_order' | t }}</a>
   </div>
 </div>
 
-{%- comment -%} ═══ SECTION 1: PRODUCT INTRO (dark surface) ═══ {%- endcomment -%}
-<div class="moov-prod-intro full-width" data-surface="dark" id="moov-product-hero">
+{%- comment -%} ═══ SECTION 1: PRODUCT INTRO (cream surface) ═══ {%- endcomment -%}
+<div class="moov-prod-intro full-width" data-surface="cream" id="moov-product-hero">
   <div class="moov-prod-intro__inner">
     {%- comment -%} Left — Image carousel {%- endcomment -%}
     <div class="moov-prod-intro__gallery">
@@ -33,6 +38,14 @@
             {{ image | image_url: width: 900 | image_tag: loading: 'eager', alt: image.alt | default: product.title | escape }}
           </div>
         {%- endfor -%}
+        {%- if product.images.size > 1 -%}
+          <button type="button" class="moov-prod-intro__nav-btn moov-prod-intro__nav-btn--prev" aria-label="Previous image">
+            <span aria-hidden="true">&lsaquo;</span>
+          </button>
+          <button type="button" class="moov-prod-intro__nav-btn moov-prod-intro__nav-btn--next" aria-label="Next image">
+            <span aria-hidden="true">&rsaquo;</span>
+          </button>
+        {%- endif -%}
       </div>
       {%- if product.images.size > 1 -%}
         <div class="moov-prod-intro__thumbs">
@@ -48,7 +61,15 @@
     {%- comment -%} Right — Product details {%- endcomment -%}
     <div class="moov-prod-intro__details">
       <p class="moov-prod-intro__eyebrow">{{ product_eyebrow | escape }}</p>
-      <h1 class="moov-prod-intro__title">{{ product.title }}</h1>
+      <div class="moov-prod-intro__title-row">
+        <h1 class="moov-prod-intro__title">{{ product.title }}</h1>
+        {%- if section.settings.product_highlight_badge != blank -%}
+          <span class="moov-prod-intro__badge">{{ section.settings.product_highlight_badge | upcase | escape }}</span>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.product_subtitle != blank -%}
+        <p class="moov-prod-intro__subtitle">{{ section.settings.product_subtitle | escape }}</p>
+      {%- endif -%}
       {%- if product.description != blank -%}
         <p class="moov-prod-intro__desc">{{ product.description | strip_html | truncate: 120 }}</p>
       {%- endif -%}
@@ -102,9 +123,7 @@
       <div class="moov-prod-intro__features">
         {%- for i in (1..4) -%}
           {%- assign label_key = 'feature_' | append: i | append: '_label' -%}
-          {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
           {%- assign label = section.settings[label_key] -%}
-          {%- assign desc = section.settings[desc_key] -%}
           {%- if label == blank -%}
             {%- liquid
               case i
@@ -123,9 +142,6 @@
               {%- assign bullet_parts = bullet_full | split: ' - ' -%}
             {%- endif -%}
             {%- assign label = bullet_parts | first -%}
-            {%- if bullet_parts.size > 1 -%}
-              {%- assign desc = bullet_parts | last -%}
-            {%- endif -%}
           {%- endif -%}
           {%- if label != blank -%}
             <div class="moov-prod-intro__feat">
@@ -138,47 +154,49 @@
   </div>
 </div>
 
-{%- comment -%} ═══ SECTION 2: FEATURES STRIP (cream surface) ═══ {%- endcomment -%}
-<div class="moov-features-strip full-width" data-surface="cream" id="moov-features">
-  <div class="moov-features-strip__inner">
-    {%- for i in (1..4) -%}
-      {%- assign label_key = 'feature_' | append: i | append: '_label' -%}
-      {%- assign desc_key = 'feature_' | append: i | append: '_desc' -%}
-      {%- assign label = section.settings[label_key] -%}
-      {%- assign desc = section.settings[desc_key] -%}
-      {%- if label == blank -%}
-        {%- liquid
-          case i
-            when 1
-              assign bullet_full = 'store_marketing.product_bullet_1' | t
-            when 2
-              assign bullet_full = 'store_marketing.product_bullet_2' | t
-            when 3
-              assign bullet_full = 'store_marketing.product_bullet_3' | t
-            when 4
-              assign bullet_full = 'store_marketing.product_bullet_4' | t
-          endcase
-        -%}
-        {%- assign bullet_parts = bullet_full | split: ' — ' -%}
-        {%- if bullet_parts.size <= 1 -%}
-          {%- assign bullet_parts = bullet_full | split: ' - ' -%}
+{%- comment -%} ═══ SECTION 2: HOW IT WORKS BAND (dark surface) ═══ {%- endcomment -%}
+<div class="moov-steps-band full-width" data-surface="dark" id="moov-how">
+  <div class="moov-steps-band__inner">
+    <h2 class="moov-steps-band__heading">{{ steps_heading | upcase | escape }}</h2>
+    <div class="moov-steps-band__grid">
+      {%- for i in (1..3) -%}
+        {%- assign title_key = 'steps_' | append: i | append: '_title' -%}
+        {%- assign body_key = 'steps_' | append: i | append: '_body' -%}
+        {%- assign step_title = section.settings[title_key] -%}
+        {%- assign step_body = section.settings[body_key] -%}
+        {%- if step_title == blank -%}
+          {%- case i -%}
+            {%- when 1 -%}
+              {%- assign step_title = 'Mount your MOOV device' -%}
+            {%- when 2 -%}
+              {%- assign step_title = 'Set your wake-up in the app' -%}
+            {%- when 3 -%}
+              {%- assign step_title = 'Get up to silence the alarm' -%}
+          {%- endcase -%}
         {%- endif -%}
-        {%- assign label = bullet_parts | first -%}
-        {%- if bullet_parts.size > 1 -%}
-          {%- assign desc = bullet_parts | last -%}
+        {%- if step_body == blank -%}
+          {%- case i -%}
+            {%- when 1 -%}
+              {%- assign step_body = 'Place MOOV where you naturally move first after waking. Distance helps break the snooze loop.' -%}
+            {%- when 2 -%}
+              {%- assign step_body = 'Choose alarm sound, volume, and optional pre-alert so your wake-up feels more natural and less abrupt.' -%}
+            {%- when 3 -%}
+              {%- assign step_body = 'Your phone plays the alarm, and MOOV turns it off only after physical action, building a better morning habit.' -%}
+          {%- endcase -%}
         {%- endif -%}
-      {%- endif -%}
-      {%- if label != blank -%}
-        <div class="moov-features-strip__item">
-          <p class="moov-features-strip__label">{{ label | escape }}</p>
-          <p class="moov-features-strip__desc">{{ desc | escape }}</p>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
+        <article class="moov-steps-band__card">
+          <p class="moov-steps-band__kicker">
+            <span class="moov-steps-band__index">STEP {{ i }}</span>
+          </p>
+          <h3 class="moov-steps-band__title">{{ step_title | upcase | escape }}</h3>
+          <p class="moov-steps-band__body">{{ step_body | escape }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
   </div>
 </div>
 
-{%- comment -%} ═══ SECTION 3: DEEP-DIVE A (dark surface) ═══ {%- endcomment -%}
+{%- comment -%} ═══ SECTION 2: DEEP-DIVE A (dark surface) ═══ {%- endcomment -%}
 {%- if section.settings.deepdive_a_headline != blank -%}
   <div class="moov-deepdive moov-deepdive--a full-width" data-surface="dark">
     <div class="moov-deepdive__inner">
@@ -253,51 +271,60 @@
 {%- comment -%} ═══ SECTION 6: TECH SPECS (cream surface) ═══ {%- endcomment -%}
 <div class="moov-specs full-width" data-surface="cream" id="moov-specs">
   <div class="moov-specs__inner">
-    <h2 class="moov-specs__heading">{{ 'product.specs.title' | t }}</h2>
-    <div class="moov-specs__tabs" role="tablist">
-      <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="audio">{{ 'product.specs.audio' | t }}</button>
-      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
-      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
-      <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
-    </div>
+    <div class="moov-specs__layout">
+      <aside class="moov-specs__aside">
+        <p class="moov-specs__eyebrow">{{ section.settings.specs_eyebrow | default: 'Tech specs' | upcase | escape }}</p>
+        <h2 class="moov-specs__heading">{{ 'product.specs.title' | t }}</h2>
+        <p class="moov-specs__intro">{{ section.settings.specs_intro | default: 'Everything you need to know about MOOV hardware, connectivity, and in-box setup at a glance.' | escape }}</p>
+      </aside>
 
-    <div class="moov-specs__panel is-active" data-panel="audio">
-      <dl class="moov-specs__list">
-        <div class="moov-specs__row"><dt>{{ 'product.specs.amplifiers' | t }}</dt><dd>{{ 'product.specs.amplifiers_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.tweeters' | t }}</dt><dd>{{ 'product.specs.tweeters_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.woofer' | t }}</dt><dd>{{ 'product.specs.woofer_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.eq' | t }}</dt><dd>{{ 'product.specs.eq_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.trueplay' | t }}</dt><dd>{{ 'product.specs.trueplay_val' | t }}</dd></div>
-      </dl>
-    </div>
+      <div class="moov-specs__content">
+        <div class="moov-specs__tabs" role="tablist">
+          <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="audio">{{ 'product.specs.audio' | t }}</button>
+          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
+          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
+          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
+        </div>
 
-    <div class="moov-specs__panel" data-panel="dimensions">
-      <dl class="moov-specs__list">
-        <div class="moov-specs__row"><dt>{{ 'product.specs.height' | t }}</dt><dd>192.3mm</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.width' | t }}</dt><dd>112.5mm</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.depth' | t }}</dt><dd>76.7mm</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.weight' | t }}</dt><dd>1.3kg</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.finish' | t }}</dt><dd>{{ 'product.specs.finish_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.colours' | t }}</dt><dd>{{ 'product.specs.colours_val' | t }}</dd></div>
-      </dl>
-    </div>
+        <div class="moov-specs__panel is-active" data-panel="audio">
+          <dl class="moov-specs__list">
+            <div class="moov-specs__row"><dt>{{ 'product.specs.amplifiers' | t }}</dt><dd>{{ 'product.specs.amplifiers_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.tweeters' | t }}</dt><dd>{{ 'product.specs.tweeters_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.woofer' | t }}</dt><dd>{{ 'product.specs.woofer_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.eq' | t }}</dt><dd>{{ 'product.specs.eq_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.trueplay' | t }}</dt><dd>{{ 'product.specs.trueplay_val' | t }}</dd></div>
+          </dl>
+        </div>
 
-    <div class="moov-specs__panel" data-panel="connectivity">
-      <dl class="moov-specs__list">
-        <div class="moov-specs__row"><dt>{{ 'product.specs.battery' | t }}</dt><dd>{{ 'product.specs.battery_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>WiFi</dt><dd>802.11a/b/g/n/ac/ax 2.4GHz / 5GHz</dd></div>
-        <div class="moov-specs__row"><dt>Bluetooth</dt><dd>5.3</dd></div>
-        <div class="moov-specs__row"><dt>USB-C</dt><dd>{{ 'product.specs.usbc_val' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>{{ 'product.specs.water' | t }}</dt><dd>IP67</dd></div>
-      </dl>
-    </div>
+        <div class="moov-specs__panel" data-panel="dimensions">
+          <dl class="moov-specs__list">
+            <div class="moov-specs__row"><dt>{{ 'product.specs.height' | t }}</dt><dd>192.3mm</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.width' | t }}</dt><dd>112.5mm</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.depth' | t }}</dt><dd>76.7mm</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.weight' | t }}</dt><dd>1.3kg</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.finish' | t }}</dt><dd>{{ 'product.specs.finish_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.colours' | t }}</dt><dd>{{ 'product.specs.colours_val' | t }}</dd></div>
+          </dl>
+        </div>
 
-    <div class="moov-specs__panel" data-panel="inbox">
-      <dl class="moov-specs__list">
-        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_alarm' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_charger' | t }}</dd></div>
-        <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_guide' | t }}</dd></div>
-      </dl>
+        <div class="moov-specs__panel" data-panel="connectivity">
+          <dl class="moov-specs__list">
+            <div class="moov-specs__row"><dt>{{ 'product.specs.battery' | t }}</dt><dd>{{ 'product.specs.battery_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>WiFi</dt><dd>802.11a/b/g/n/ac/ax 2.4GHz / 5GHz</dd></div>
+            <div class="moov-specs__row"><dt>Bluetooth</dt><dd>5.3</dd></div>
+            <div class="moov-specs__row"><dt>USB-C</dt><dd>{{ 'product.specs.usbc_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.water' | t }}</dt><dd>IP67</dd></div>
+          </dl>
+        </div>
+
+        <div class="moov-specs__panel" data-panel="inbox">
+          <dl class="moov-specs__list">
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_alarm' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_charger' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_guide' | t }}</dd></div>
+          </dl>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -410,28 +437,36 @@
 
   /* ═══ PRODUCT INTRO ══════════════════════════ */
   .moov-prod-intro {
-    background: var(--moov-black);
-    padding: clamp(3.5rem, 10vw, 6rem) 0 clamp(3rem, 8vw, 5rem);
+    background: #fff;
+    padding: clamp(5rem, 11vw, 8rem) 0 clamp(4.5rem, 9vw, 7rem);
+    overflow: hidden;
   }
   .moov-prod-intro__inner {
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1240px;
+    box-sizing: border-box;
     margin: 0 auto;
-    padding: 0 var(--section-inline-pad);
+    padding: 0 clamp(1rem, 3vw, 2.5rem);
     display: grid;
-    grid-template-columns: 55% 45%;
-    gap: 48px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(24px, 3.2vw, 56px);
+    row-gap: clamp(24px, 3.2vw, 46px);
     align-items: start;
   }
   .moov-prod-intro__gallery {
+    min-width: 0;
+    width: 100%;
     position: sticky;
-    top: 140px;
+    top: calc(var(--header-height, 5rem) + 2rem);
   }
   .moov-prod-intro__main-image {
     position: relative;
-    aspect-ratio: 4/5;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 8px;
-    background: var(--moov-black);
+    border-radius: 16px;
+    border: 1px solid var(--moov-border-light);
+    background: var(--moov-cream-shadow);
   }
   .moov-prod-intro__slide {
     position: absolute;
@@ -445,19 +480,50 @@
   .moov-prod-intro__slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    padding: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+  .moov-prod-intro__nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--moov-border-light);
+    background: color-mix(in srgb, var(--moov-cream) 88%, transparent);
+    color: var(--moov-text-primary-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .moov-prod-intro__nav-btn--prev {
+    left: 12px;
+  }
+  .moov-prod-intro__nav-btn--next {
+    right: 12px;
+  }
+  .moov-prod-intro__nav-btn:hover {
+    background: var(--moov-amber);
+    border-color: var(--moov-amber);
+    color: var(--moov-black);
   }
   .moov-prod-intro__thumbs {
     display: flex;
     gap: 8px;
-    margin-top: 12px;
+    justify-content: center;
+    margin-top: 14px;
   }
   .moov-prod-intro__thumb {
     width: 56px;
     height: 56px;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
-    border: 1px solid transparent;
+    border: 1px solid var(--moov-border-light);
     background: none;
     padding: 0;
     cursor: pointer;
@@ -466,7 +532,7 @@
   }
   .moov-prod-intro__thumb.is-active {
     opacity: 1;
-    border-color: var(--moov-text-primary-dark);
+    border-color: var(--moov-amber);
   }
   .moov-prod-intro__thumb img {
     width: 100%;
@@ -475,6 +541,12 @@
   }
 
   /* Details */
+  .moov-prod-intro__details {
+    width: 100%;
+    min-width: 0;
+    max-width: 560px;
+    padding-top: clamp(0.4rem, 1vw, 0.9rem);
+  }
   .moov-prod-intro__eyebrow {
     font-family: var(--font-body);
     font-size: var(--text-2xs);
@@ -482,58 +554,86 @@
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--moov-eyebrow-accent);
-    margin: 0 0 16px;
+    margin: 0 0 14px;
+  }
+  .moov-prod-intro__title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
   }
   .moov-prod-intro__title {
     font-family: var(--font-display);
-    font-size: var(--text-4xl);
+    font-size: clamp(1.85rem, 3.3vw, 2.6rem);
     font-weight: 400;
     line-height: 1.1;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 12px;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+  }
+  .moov-prod-intro__badge {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--moov-black);
+    background: var(--moov-amber);
+    border-radius: 999px;
+    padding: 4px 10px;
+  }
+  .moov-prod-intro__subtitle {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 14px;
+    max-width: 46ch;
   }
   .moov-prod-intro__desc {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 400;
-    line-height: 1.6;
-    color: var(--moov-text-secondary-dark);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-light);
     margin: 0 0 24px;
+    max-width: 50ch;
   }
   .moov-prod-intro__price {
     display: flex;
     align-items: baseline;
     gap: 12px;
-    margin-bottom: 32px;
+    margin-bottom: 26px;
   }
   .moov-prod-intro__price-current {
     font-family: var(--font-display);
     font-size: var(--text-2xl);
     font-weight: 400;
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-amber);
   }
   .moov-prod-intro__price-compare {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 400;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-text-secondary-light);
     text-decoration: line-through;
   }
 
   /* Options */
   .moov-prod-intro__option {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    max-width: 430px;
   }
   .moov-prod-intro__option-label {
     font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 400;
-    color: var(--moov-text-tertiary-dark);
-    margin: 0 0 10px;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 12px;
   }
   .moov-prod-intro__option-label strong {
     font-weight: 400;
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
   }
   .moov-prod-intro__option-pills {
     display: flex;
@@ -546,28 +646,28 @@
     gap: 8px;
     padding: 8px 16px;
     border-radius: 999px;
-    border: 0.5px solid var(--moov-border-dark);
+    border: 0.5px solid var(--moov-border-light);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     background: none;
     cursor: pointer;
     transition: border-color 0.2s, color 0.2s;
   }
   .moov-colour-pill.is-selected {
-    border-color: var(--moov-text-primary-dark);
-    color: var(--moov-text-primary-dark);
+    border-color: var(--moov-text-primary-light);
+    color: var(--moov-text-primary-light);
   }
 
   /* CTA */
   .moov-prod-intro__add-btn {
     display: block;
     width: 100%;
-    height: 52px;
-    background: transparent;
-    border: 0.5px solid var(--moov-border-amber);
-    color: var(--moov-amber);
+    height: 54px;
+    background: var(--moov-black);
+    border: 0.5px solid var(--moov-black);
+    color: var(--moov-text-primary-dark);
     border-radius: 999px;
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -575,18 +675,20 @@
     letter-spacing: 0.03em;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    max-width: 430px;
   }
   .moov-prod-intro__add-btn:hover {
     background: var(--moov-amber);
-    color: var(--moov-black);
+    border-color: var(--moov-amber);
   }
   .moov-prod-intro__ship-notice {
     font-family: var(--font-body);
     font-size: var(--text-xs);
     color: var(--moov-eyebrow-accent);
     text-align: center;
-    margin: 0 0 8px;
+    margin: 0 0 12px;
+    max-width: 430px;
   }
 
   .moov-prod-intro__preorder-note {
@@ -594,28 +696,29 @@
     font-size: var(--text-xs);
     font-weight: 400;
     line-height: 1.5;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-text-secondary-light);
     text-align: center;
-    margin: 0 0 32px;
+    margin: 0 0 28px;
+    max-width: 430px;
   }
 
   .moov-prod-intro__price-anchor {
     font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 400;
-    line-height: 1.5;
-    color: var(--moov-text-tertiary-dark);
-    margin: 0 0 20px;
-    max-width: 28rem;
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 24px;
+    max-width: 46ch;
   }
 
   /* Feature icons */
   .moov-prod-intro__features {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     flex-wrap: wrap;
-    padding-top: 24px;
-    border-top: 0.5px solid var(--moov-border-dark);
+    padding-top: 28px;
+    border-top: 0.5px solid var(--moov-border-light);
   }
   .moov-prod-intro__feat {
     display: flex;
@@ -624,10 +727,72 @@
   }
   .moov-prod-intro__feat-label {
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
+    font-size: var(--text-xs);
     font-weight: 400;
     letter-spacing: 0.02em;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-text-secondary-light);
+  }
+
+  /* ═══ HOW IT WORKS BAND ═══════════════════════ */
+  .moov-steps-band {
+    background: var(--moov-black);
+    padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+    border-top: 0.5px solid var(--moov-border-dark);
+    border-bottom: 0.5px solid var(--moov-border-dark);
+  }
+  .moov-steps-band__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--section-inline-pad);
+  }
+  .moov-steps-band__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .moov-steps-band__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 20px);
+  }
+  .moov-steps-band__card {
+    border-radius: 14px;
+    border: 1px solid var(--moov-border-dark);
+    background: var(--moov-surface-dark-raised);
+    padding: clamp(1rem, 2vw, 1.3rem);
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+  }
+  .moov-steps-band__kicker {
+    margin: 0 0 0.55rem;
+  }
+  .moov-steps-band__index {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moov-amber);
+  }
+  .moov-steps-band__title {
+    margin: 0 0 0.65rem;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.7vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--moov-text-primary-dark);
+  }
+  .moov-steps-band__body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-dark);
   }
 
   /* ═══ FEATURES STRIP ═════════════════════════ */
@@ -870,14 +1035,40 @@
   }
 
   /* ═══ RESPONSIVE ═════════════════════════════ */
+  @media (max-width: 1100px) {
+    .moov-prod-intro__inner {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+      row-gap: 28px;
+      max-width: 640px;
+    }
+    .moov-prod-intro__gallery {
+      position: static;
+      top: auto;
+    }
+    .moov-prod-intro__main-image {
+      aspect-ratio: 4 / 5;
+    }
+    .moov-prod-intro__details {
+      max-width: none;
+      padding-top: 0;
+    }
+  }
+
   @media (max-width: 899px) {
     .moov-mini-bar__links { display: none; }
-    .moov-prod-intro__inner {
-      grid-template-columns: 1fr;
+    .moov-prod-intro {
+      padding: clamp(3.8rem, 9vw, 5.2rem) 0 clamp(3.2rem, 8vw, 4.6rem);
     }
-    .moov-prod-intro__gallery { position: static; }
     .moov-features-strip__inner {
       grid-template-columns: 1fr 1fr;
+    }
+    .moov-steps-band__grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .moov-steps-band__card {
+      min-height: 0;
     }
     .moov-deepdive__inner {
       grid-template-columns: 1fr;
@@ -895,6 +1086,188 @@
     .moov-prod-intro__thumbs { display: none; }
     .moov-features-strip__inner { grid-template-columns: 1fr 1fr; gap: 24px; }
     .moov-specs__tabs { gap: 16px; overflow-x: auto; }
+  }
+
+  /* ═══ REDESIGN OVERRIDES ═════════════════════ */
+  .moov-features-strip {
+    padding: clamp(2.5rem, 6vw, 4rem) 0;
+  }
+  .moov-features-strip__inner {
+    gap: clamp(12px, 2vw, 20px);
+  }
+  .moov-features-strip__item {
+    border: 1px solid var(--moov-border-light);
+    border-radius: 14px;
+    background: var(--moov-cream-shadow);
+    padding: clamp(0.95rem, 1.8vw, 1.2rem);
+    min-height: 132px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .moov-features-strip__label {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 1.7vw, 1.2rem);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 0 0 0.45rem;
+    color: var(--moov-text-primary-light);
+  }
+  .moov-features-strip__desc {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .moov-deepdive {
+    min-height: 0;
+    padding: clamp(2.4rem, 6vw, 4.5rem) 0;
+  }
+  .moov-deepdive__inner {
+    min-height: 0;
+    gap: clamp(1.3rem, 3vw, 2.6rem);
+    align-items: stretch;
+  }
+  .moov-deepdive__text {
+    max-width: none;
+    border: 1px solid var(--moov-border-dark);
+    border-radius: 18px;
+    padding: clamp(1.15rem, 2.4vw, 1.8rem);
+    background: var(--moov-surface-dark-raised);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .moov-deepdive--b .moov-deepdive__text {
+    border-color: var(--moov-border-light);
+    background: var(--moov-cream-shadow);
+  }
+  .moov-deepdive__heading {
+    font-size: clamp(1.55rem, 2.8vw, 2.45rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+  .moov-deepdive__body {
+    font-size: var(--text-sm);
+    line-height: 1.72;
+  }
+  .moov-deepdive__media {
+    border-radius: 18px;
+    border: 1px solid var(--moov-border-dark);
+    min-height: clamp(280px, 44vw, 480px);
+    background: var(--moov-surface-dark-raised);
+  }
+  .moov-deepdive--b .moov-deepdive__media {
+    border-color: var(--moov-border-light);
+    background: var(--moov-cream-shadow);
+  }
+
+  .moov-specs {
+    padding: clamp(2.6rem, 6vw, 4.8rem) 0;
+  }
+  .moov-specs__inner {
+    max-width: 1200px;
+  }
+  .moov-specs__layout {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    align-items: start;
+  }
+  .moov-specs__aside {
+    position: sticky;
+    top: calc(var(--header-height, 5rem) + 1rem);
+  }
+  .moov-specs__eyebrow {
+    margin: 0 0 0.55rem;
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-eyebrow-accent);
+  }
+  .moov-specs__heading {
+    font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 0.7rem;
+  }
+  .moov-specs__intro {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--moov-text-secondary-light);
+    max-width: 34ch;
+  }
+  .moov-specs__content {
+    border: 1px solid var(--moov-border-light);
+    border-radius: 18px;
+    background: var(--moov-cream-shadow);
+    padding: clamp(0.8rem, 1.6vw, 1.15rem);
+  }
+  .moov-specs__tabs {
+    gap: 12px;
+    margin-bottom: 0.65rem;
+    border-bottom: none;
+    flex-wrap: wrap;
+  }
+  .moov-specs__tab {
+    border: 1px solid var(--moov-border-light);
+    border-radius: 999px;
+    padding: 8px 14px;
+    margin-bottom: 0;
+    background: transparent;
+  }
+  .moov-specs__tab.is-active {
+    background: var(--moov-black);
+    color: var(--moov-text-primary-dark);
+    border-color: var(--moov-black);
+  }
+  .moov-specs__list {
+    border: 1px solid var(--moov-border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--moov-cream) 70%, transparent);
+  }
+  .moov-specs__row {
+    padding: 12px 14px;
+  }
+
+  .moov-accessories {
+    padding: clamp(2.8rem, 6vw, 4.8rem) 0;
+  }
+  .moov-accessories__heading {
+    font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.15rem;
+  }
+  .moov-accessories__card {
+    flex-basis: 280px;
+  }
+  .moov-accessories__card-img {
+    width: 280px;
+    height: 280px;
+    border-radius: 14px;
+    border: 1px solid var(--moov-border-dark);
+  }
+  .moov-accessories__card-title {
+    font-size: var(--text-base);
+    margin-bottom: 0.35rem;
+  }
+
+  @media (max-width: 899px) {
+    .moov-features-strip__item {
+      min-height: 0;
+    }
+    .moov-specs__layout {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .moov-specs__aside {
+      position: static;
+    }
   }
 {% endstylesheet %}
 
@@ -956,9 +1329,22 @@
   "name": "MOOV Product",
   "settings": [
     { "type": "text", "id": "product_eyebrow", "label": "Product eyebrow", "info": "Leave blank for store_marketing.badge_category" },
+    { "type": "text", "id": "product_subtitle", "label": "Product subtitle", "default": "Built for better mornings, less snooze." },
+    { "type": "text", "id": "product_highlight_badge", "label": "Product highlight badge", "default": "Best seller" },
     { "type": "text", "id": "preorder_date", "label": "Pre-order ship date", "default": "March 31, 2026" },
     { "type": "checkbox", "id": "show_price_anchor", "label": "Show price anchor line", "default": true },
     { "type": "checkbox", "id": "show_preorder_note", "label": "Show pre-order reassurance note", "default": true },
+    { "type": "header", "content": "How it works band" },
+    { "type": "text", "id": "steps_heading", "label": "Section heading", "default": "How MOOV works" },
+    { "type": "text", "id": "steps_1_title", "label": "Step 1 title", "default": "Mount your MOOV device" },
+    { "type": "textarea", "id": "steps_1_body", "label": "Step 1 body", "default": "Place MOOV where you naturally move first after waking. Distance helps break the snooze loop." },
+    { "type": "text", "id": "steps_2_title", "label": "Step 2 title", "default": "Set your wake-up in the app" },
+    { "type": "textarea", "id": "steps_2_body", "label": "Step 2 body", "default": "Choose alarm sound, volume, and optional pre-alert so your wake-up feels more natural and less abrupt." },
+    { "type": "text", "id": "steps_3_title", "label": "Step 3 title", "default": "Get up to silence the alarm" },
+    { "type": "textarea", "id": "steps_3_body", "label": "Step 3 body", "default": "Your phone plays the alarm, and MOOV turns it off only after physical action, building a better morning habit." },
+    { "type": "header", "content": "Tech specs intro" },
+    { "type": "text", "id": "specs_eyebrow", "label": "Specs eyebrow", "default": "Tech specs" },
+    { "type": "textarea", "id": "specs_intro", "label": "Specs intro text", "default": "Everything you need to know about MOOV hardware, connectivity, and in-box setup at a glance." },
     { "type": "header", "content": "Feature strip" },
     { "type": "paragraph", "content": "Leave labels empty to use store_marketing.product_bullet_1–4 (split on em dash)." },
     { "type": "text", "id": "feature_1_label", "label": "Feature 1 label" },
