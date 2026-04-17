@@ -346,6 +346,7 @@
   font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
   color: var(--color-foreground);
   background: var(--color-background);
+  overflow-x: clip;
 }
 
 /* ── 1. Hero ── */
@@ -924,6 +925,7 @@
 /* ── Responsive ── */
 @media (max-width: 960px) {
   .about-hero { padding: 48px 20px 32px; }
+  .about-hero__headline { line-height: 1.05; }
   .about-image-grid { padding: 0 20px 48px; }
   .about-image-grid__inner { grid-template-columns: 1fr; grid-template-rows: auto; gap: 10px; }
   .about-image-grid__left,
@@ -935,35 +937,86 @@
   .about-feature { padding: 48px 24px 64px; }
   .about-feature__inner { grid-template-columns: 1fr; gap: 24px; }
   .about-feature__body-cols { grid-template-columns: 1fr; gap: 16px; }
+  .about-feature__body { font-size: 14px; line-height: 1.6; }
   .about-page-founder { padding: 2rem 1.25rem 3rem; }
   .about-page-founder__grid { grid-template-columns: 1fr; gap: 24px; }
   .about-page-founder__sidebar { position: static; }
-  .about-page-founder__nav { flex-direction: row; gap: 8px; overflow-x: auto; padding-left: 0; border-left: none; border-top: 1.5px solid var(--moov-border-light); padding-top: 12px; }
+  .about-page-founder__nav {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1.5px solid var(--moov-border-light);
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
   [data-theme="dark"] .about-page-founder__nav { border-top-color: var(--moov-border-dark); }
   .about-page-founder__nav-btn {
+    scroll-snap-align: start;
     flex-shrink: 0;
     margin-bottom: 0;
     width: auto;
-    min-width: min(280px, calc(100vw - 2.5rem));
+    min-width: clamp(220px, 78vw, 320px);
     max-width: 100%;
+    padding: 14px 16px;
+  }
+  .about-page-founder__nav-label { margin-bottom: 6px; }
+  .about-page-founder__nav-body {
+    font-size: 13px;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .about-page-founder__article {
     opacity: 1;
   }
+  .about-page-founder__caption { padding-top: 18px; }
+  .about-page-founder__caption-title { font-size: clamp(1.25rem, 6vw, 1.75rem); line-height: 1.18; }
+  .about-page-founder__caption-text { font-size: 14px; line-height: 1.6; max-width: 100%; }
   .about-stats { padding: 32px 24px; }
   .about-stats__inner { grid-template-columns: 1fr; }
-  .about-stats__card { min-height: 220px; }
+  .about-stats__card { min-height: 0; padding: 28px 24px; gap: 18px; }
   .about-career { padding: 56px 24px; }
   .about-career__inner { grid-template-columns: 1fr; }
   .about-career__img,
   .about-career__img-placeholder { min-height: 320px; }
+  .about-career__content-col { padding: 44px 28px; }
+  .about-career__body { font-size: 14px; line-height: 1.6; }
   .about-blog { padding: 0 24px 56px; }
+  .about-blog__header { flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
+  .about-blog__read-all { padding: 10px 18px; }
   .about-blog__grid { grid-template-columns: 1fr; }
 }
 
 @media (min-width: 600px) and (max-width: 960px) {
   .about-blog__grid { grid-template-columns: repeat(2, 1fr); }
   .about-stats__inner { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .about-hero { padding: 40px 16px 28px; }
+  .about-hero__eyebrow { margin-bottom: 12px; letter-spacing: 0.15em; }
+  .about-image-grid { padding: 0 16px 40px; }
+  .about-feature { padding: 40px 16px 48px; }
+  .about-page-founder { padding: 1.75rem 1rem 2.5rem; }
+  .about-page-founder__title { margin-bottom: 1rem; font-size: clamp(1.6rem, 10vw, 2.2rem); }
+  .about-page-founder__nav-btn { min-width: clamp(200px, 82vw, 300px); }
+  .about-page-founder__nav-body { -webkit-line-clamp: 2; }
+  .about-page-founder__articles { gap: 2rem; }
+  .about-stats { padding: 24px 16px; }
+  .about-career { padding: 44px 16px; }
+  .about-career__img,
+  .about-career__img-placeholder { min-height: 250px; }
+  .about-career__content-col { padding: 34px 20px; }
+  .about-career__btn { width: 100%; justify-content: center; }
+  .about-blog { padding: 0 16px 44px; }
+  .about-blog__grid { gap: 20px; }
 }
 
 {% endstylesheet %}
