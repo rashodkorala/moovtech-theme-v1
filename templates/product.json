@@ -10,11 +10,42 @@
 {
   "sections": {
     "main": {
-      "type": "product",
-      "settings": {}
+      "type": "moov-product",
+      "settings": {
+        "show_price_anchor": true,
+        "show_preorder_note": true,
+        "deepdive_a_eyebrow": "Movement first",
+        "deepdive_a_headline": "Wake up by getting up.",
+        "deepdive_a_body": "MOOV breaks the snooze loop by requiring physical action before your alarm is silenced, helping you start your day with momentum instead of delay.",
+        "deepdive_b_eyebrow": "Designed for real mornings",
+        "deepdive_b_headline": "Simple setup. Lasting impact.",
+        "deepdive_b_body": "Install in minutes, set your schedule in the app, and let MOOV turn wake-up time into a repeatable routine you can stick with.",
+        "deepdive_c_eyebrow": "Built to support consistency",
+        "deepdive_c_headline": "A system that works with you.",
+        "deepdive_c_body": "From alarm behavior to first-hour habits, MOOV helps you reduce friction and make better mornings easier to repeat."
+      }
+    },
+    "cta": {
+      "type": "how-it-works-cta",
+      "settings": {
+        "surface": "dark",
+        "eyebrow": "Start tomorrow stronger",
+        "heading": "Ready to get up with MOOV?",
+        "highlight_word": "MOOV",
+        "subheading": "Bring intention to your first hour and make your wake-up routine something you can actually sustain.",
+        "button_label": "Shop now"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Product FAQs"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "cta",
+    "faq"
   ]
 }

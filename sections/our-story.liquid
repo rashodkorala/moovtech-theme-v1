@@ -35,6 +35,15 @@
       <div class="about-image-grid__left">
         {%- if section.settings.feature_image_left != blank -%}
           {{ section.settings.feature_image_left | image_url: width: 900 | image_tag: loading: 'lazy', class: 'about-image-grid__img' }}
+        {%- elsif section.settings.feature_image_left_url != blank -%}
+          <img
+            src="{{ section.settings.feature_image_left_url | escape }}"
+            alt=""
+            loading="lazy"
+            class="about-image-grid__img"
+            width="900"
+            height="1200"
+          >
         {%- else -%}
           <div class="about-image-grid__placeholder about-image-grid__placeholder--tall"></div>
         {%- endif -%}
@@ -42,6 +51,15 @@
       <div class="about-image-grid__right">
         {%- if section.settings.feature_image_right != blank -%}
           {{ section.settings.feature_image_right | image_url: width: 900 | image_tag: loading: 'lazy', class: 'about-image-grid__img' }}
+        {%- elsif section.settings.feature_image_right_url != blank -%}
+          <img
+            src="{{ section.settings.feature_image_right_url | escape }}"
+            alt=""
+            loading="lazy"
+            class="about-image-grid__img"
+            width="900"
+            height="675"
+          >
         {%- else -%}
           <div class="about-image-grid__placeholder about-image-grid__placeholder--wide"></div>
         {%- endif -%}
@@ -117,13 +135,9 @@
               >
                 {%- if block.settings.label != blank -%}
                   <p class="about-page-founder__nav-label">
-                    {%- assign nl = block.settings.label | upcase -%}
-                    {%- assign nl_parts = nl | split: 'FRUSTRATION' -%}
-                    {%- if nl_parts.size == 2 -%}
-                      {{- nl_parts[0] | escape -}}<span class="about-page-accent">FRUSTRATION</span>{{- nl_parts[1] | escape -}}
-                    {%- else -%}
-                      {{- nl | escape -}}
-                    {%- endif -%}
+                    {%- assign nl = block.settings.label | upcase | escape -%}
+                    {%- assign nl = nl | replace: 'FRUSTRATION', '<span class="about-page-accent">FRUSTRATION</span>' -%}
+                    {{- nl -}}
                   </p>
                 {%- endif -%}
                 {%- if block.settings.body != blank -%}
@@ -138,13 +152,22 @@
         <div class="about-page-founder__articles" id="about-page-founder-articles-{{ section.id }}">
           {%- for block in step_blocks -%}
             <article
-              class="about-page-founder__article"
+              class="about-page-founder__article{% if forloop.first %} about-page-founder__article--active{% endif %}"
               id="about-page-founder-article-{{ section.id }}-{{ forloop.index0 }}"
               data-story-block="{{ forloop.index0 }}"
               tabindex="-1"
             >
               {%- if block.settings.image != blank -%}
                 {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-page-founder__media' }}
+              {%- elsif block.settings.image_url != blank -%}
+                <img
+                  src="{{ block.settings.image_url | escape }}"
+                  alt="{{ block.settings.caption_headline | default: block.settings.label | escape }}"
+                  loading="lazy"
+                  class="about-page-founder__media"
+                  width="1400"
+                  height="788"
+                >
               {%- else -%}
                 <div class="about-page-founder__media-placeholder"></div>
               {%- endif -%}
@@ -152,44 +175,23 @@
                 <div class="about-page-founder__caption">
                   {%- if block.settings.caption_headline != blank -%}
                     <h3 class="about-page-founder__caption-title">
-                      {%- assign ch = block.settings.caption_headline -%}
-                      {%- assign ch_parts = ch | split: 'frustration' -%}
-                      {%- if ch_parts.size == 2 -%}
-                        {{- ch_parts[0] | escape -}}<span class="about-page-accent">frustration</span>{{- ch_parts[1] | escape -}}
-                      {%- else -%}
-                        {%- assign ch_parts_cap = ch | split: 'Frustration' -%}
-                        {%- if ch_parts_cap.size == 2 -%}
-                          {{- ch_parts_cap[0] | escape -}}<span class="about-page-accent">Frustration</span>{{- ch_parts_cap[1] | escape -}}
-                        {%- else -%}
-                          {%- assign ch_parts_upper = ch | split: 'FRUSTRATION' -%}
-                          {%- if ch_parts_upper.size == 2 -%}
-                            {{- ch_parts_upper[0] | escape -}}<span class="about-page-accent">FRUSTRATION</span>{{- ch_parts_upper[1] | escape -}}
-                          {%- else -%}
-                            {{- ch | escape -}}
-                          {%- endif -%}
-                        {%- endif -%}
-                      {%- endif -%}
+                      {%- assign ch = block.settings.caption_headline | escape -%}
+                      {%- assign ch = ch | replace: 'FRUSTRATION', '<span class="about-page-accent">FRUSTRATION</span>' -%}
+                      {%- assign ch = ch | replace: 'Frustration', '<span class="about-page-accent">Frustration</span>' -%}
+                      {%- assign ch = ch | replace: 'frustration', '<span class="about-page-accent">frustration</span>' -%}
+                      {%- assign ch = ch | replace: 'SYSTEM', '<span class="about-page-accent">SYSTEM</span>' -%}
+                      {%- assign ch = ch | replace: 'System', '<span class="about-page-accent">System</span>' -%}
+                      {%- assign ch = ch | replace: 'system', '<span class="about-page-accent">system</span>' -%}
+                      {{- ch -}}
                     </h3>
                   {%- endif -%}
                   {%- if block.settings.caption_body != blank -%}
                     <p class="about-page-founder__caption-text">
-                      {%- assign cb = block.settings.caption_body -%}
-                      {%- assign cb_parts = cb | split: 'one morning at a time' -%}
-                      {%- if cb_parts.size == 2 -%}
-                        {{- cb_parts[0] | escape -}}<span class="about-page-accent">one morning at a time</span>{{- cb_parts[1] | escape -}}
-                      {%- else -%}
-                        {%- assign cb_parts_cap = cb | split: 'One morning at a time' -%}
-                        {%- if cb_parts_cap.size == 2 -%}
-                          {{- cb_parts_cap[0] | escape -}}<span class="about-page-accent">One morning at a time</span>{{- cb_parts_cap[1] | escape -}}
-                        {%- else -%}
-                          {%- assign cb_parts_upper = cb | split: 'ONE MORNING AT A TIME' -%}
-                          {%- if cb_parts_upper.size == 2 -%}
-                            {{- cb_parts_upper[0] | escape -}}<span class="about-page-accent">ONE MORNING AT A TIME</span>{{- cb_parts_upper[1] | escape -}}
-                          {%- else -%}
-                            {{- cb | escape -}}
-                          {%- endif -%}
-                        {%- endif -%}
-                      {%- endif -%}
+                      {%- assign cb = block.settings.caption_body | escape -%}
+                      {%- assign cb = cb | replace: 'ONE MORNING AT A TIME', '<span class="about-page-accent">ONE MORNING AT A TIME</span>' -%}
+                      {%- assign cb = cb | replace: 'One morning at a time', '<span class="about-page-accent">One morning at a time</span>' -%}
+                      {%- assign cb = cb | replace: 'one morning at a time', '<span class="about-page-accent">one morning at a time</span>' -%}
+                      {{- cb -}}
                     </p>
                   {%- endif -%}
                 </div>
@@ -234,6 +236,15 @@
       <div class="about-career__image-col">
         {%- if section.settings.career_image != blank -%}
           {{ section.settings.career_image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'about-career__img' }}
+        {%- elsif section.settings.career_image_url != blank -%}
+          <img
+            src="{{ section.settings.career_image_url | escape }}"
+            alt=""
+            loading="lazy"
+            class="about-career__img"
+            width="1000"
+            height="1250"
+          >
         {%- else -%}
           <div class="about-career__img-placeholder"></div>
         {%- endif -%}
@@ -286,6 +297,15 @@
                 <div class="about-blog__card-image-wrap">
                   {%- if block.settings.image != blank -%}
                     {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'about-blog__card-img' }}
+                  {%- elsif block.settings.image_url != blank -%}
+                    <img
+                      src="{{ block.settings.image_url | escape }}"
+                      alt="{{ block.settings.title | escape }}"
+                      loading="lazy"
+                      class="about-blog__card-img"
+                      width="800"
+                      height="600"
+                    >
                   {%- else -%}
                     <div class="about-blog__card-img-placeholder"></div>
                   {%- endif -%}
@@ -457,7 +477,7 @@
 /* Left column: title + sidebar nav */
 .about-page-founder__sidebar {
   position: sticky;
-  top: 100px;
+  top: var(--about-founder-sticky-top, calc(var(--header-height, 5rem) + 1.25rem));
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -470,8 +490,8 @@
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: var(--color-foreground);
-  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
-  line-height: 1;
+  margin: 0.25rem 0 clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.05;
 }
 .about-page-founder__nav-rule {
   display: none;
@@ -479,10 +499,10 @@
 .about-page-founder__nav {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 12px;
   width: 100%;
   border-left: 1.5px solid var(--moov-border-light);
-  padding-left: 0;
+  padding-left: 5px;
 }
 [data-theme="dark"] .about-page-founder__nav {
   border-left-color: var(--moov-border-dark);
@@ -499,10 +519,6 @@
   cursor: pointer;
   opacity: 0.35;
   transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-  margin-bottom: 4px;
-}
-.about-page-founder__nav-btn:last-child {
-  margin-bottom: 0;
 }
 .about-page-founder__nav-btn--active {
   opacity: 1;
@@ -540,8 +556,13 @@
   min-width: 0;
 }
 .about-page-founder__article {
-  scroll-margin-top: calc(var(--header-height, 5rem) + 1rem);
+  scroll-margin-top: calc(var(--about-founder-sticky-top, var(--header-height, 5rem)) + 0.5rem);
   min-width: 0;
+  opacity: 0.55;
+  transition: opacity 0.28s ease;
+}
+.about-page-founder__article--active {
+  opacity: 1;
 }
 .about-page-founder__article:last-child {
   margin-bottom: 0;
@@ -926,6 +947,9 @@
     min-width: min(280px, calc(100vw - 2.5rem));
     max-width: 100%;
   }
+  .about-page-founder__article {
+    opacity: 1;
+  }
   .about-stats { padding: 32px 24px; }
   .about-stats__inner { grid-template-columns: 1fr; }
   .about-stats__card { min-height: 220px; }
@@ -946,175 +970,138 @@
 
 {% javascript %}
 (function () {
-  var sectionId = '{{ section.id }}';
-  var state = {
-    ignoreScrollSpy: false,
-    scrollSpyTimer: null,
-    scrollTicking: false,
-    listenersBound: false,
-  };
+  function getHeaderBottomOffset() {
+    var maxBottom = 0;
+    var headerGroup = document.querySelector('.shopify-section-group-header-group');
+    var header = document.querySelector('.moov-header');
 
-  function getContext() {
-    var sidebar = document.getElementById('about-page-founder-sidebar-' + sectionId);
-    var slidesContainer = document.getElementById('about-page-founder-articles-' + sectionId);
-    if (!sidebar || !slidesContainer) return null;
-    var navItems = sidebar.querySelectorAll('.about-page-founder__nav-btn');
-    var slides = slidesContainer.querySelectorAll('.about-page-founder__article');
-    if (!navItems.length || !slides.length) return null;
-    return { sidebar: sidebar, slidesContainer: slidesContainer, navItems: navItems, slides: slides };
+    if (headerGroup) {
+      maxBottom = Math.max(maxBottom, headerGroup.getBoundingClientRect().bottom);
+    }
+    if (header) {
+      maxBottom = Math.max(maxBottom, header.getBoundingClientRect().bottom);
+    }
+
+    if (maxBottom <= 0) return null;
+    return Math.max(0, Math.ceil(maxBottom + 16));
+  }
+
+  function updateStickyTop(root) {
+    var stickyTop = getHeaderBottomOffset();
+    if (!stickyTop) {
+      root.style.removeProperty('--about-founder-sticky-top');
+      return;
+    }
+    root.style.setProperty('--about-founder-sticky-top', stickyTop + 'px');
   }
 
   function prefersReducedMotion() {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function setActiveNav(ctx, index) {
+  function setActiveState(ctx, index) {
     if (!ctx || index < 0 || index >= ctx.navItems.length) return;
     ctx.navItems.forEach(function (item, i) {
       var active = i === index;
       item.classList.toggle('about-page-founder__nav-btn--active', active);
       item.setAttribute('aria-pressed', String(active));
     });
+    ctx.slides.forEach(function (item, i) {
+      item.classList.toggle('about-page-founder__article--active', i === index);
+    });
   }
 
-  /** Article that overlaps the reading band the most (works with very tall first cards). */
   function indexFromReadingBand(ctx) {
     var slides = ctx.slides;
-    var vh = window.innerHeight || 600;
+    var vh = window.innerHeight || 700;
     var header = document.querySelector('.moov-header');
     var hb = header ? header.getBoundingClientRect().bottom : 0;
-    var bandTop = Math.max(hb + 24, vh * 0.28);
-    var bandBottom = Math.min(vh * 0.62, vh - 16);
-    if (bandBottom - bandTop < 48) {
-      bandTop = vh * 0.3;
-      bandBottom = vh * 0.55;
-    }
+    var markerY = Math.max(hb + 24, vh * 0.35);
+    markerY = Math.min(markerY, vh * 0.5);
+    var active = 0;
 
-    var bestIdx = 0;
-    var bestOverlap = -1;
     for (var i = 0; i < slides.length; i++) {
       var r = slides[i].getBoundingClientRect();
-      var overlap = Math.min(r.bottom, bandBottom) - Math.max(r.top, bandTop);
-      if (overlap < 0) overlap = 0;
-      if (overlap > bestOverlap) {
-        bestOverlap = overlap;
-        bestIdx = i;
-      }
+      if (r.top <= markerY) active = i;
     }
 
-    if (bestOverlap > 2) return bestIdx;
-
-    var y = (bandTop + bandBottom) / 2;
-    var nearest = 0;
-    var nearestDist = Infinity;
-    for (var j = 0; j < slides.length; j++) {
-      var r2 = slides[j].getBoundingClientRect();
-      var d = 0;
-      if (y < r2.top) d = r2.top - y;
-      else if (y > r2.bottom) d = y - r2.bottom;
-      else d = 0;
-      if (d < nearestDist || (d === nearestDist && j > nearest)) {
-        nearestDist = d;
-        nearest = j;
-      }
-    }
-    return nearest;
+    return active;
   }
 
-  function onScrollSpy() {
-    if (state.ignoreScrollSpy) return;
-    var ctx = getContext();
-    if (!ctx) return;
-    setActiveNav(ctx, indexFromReadingBand(ctx));
-  }
-
-  function onScroll() {
-    if (state.ignoreScrollSpy) return;
-    if (!state.scrollTicking) {
-      state.scrollTicking = true;
-      requestAnimationFrame(function () {
-        state.scrollTicking = false;
-        onScrollSpy();
-      });
-    }
-  }
-
-  function bindNavClicks(ctx) {
+  function bindNavClicks(ctx, state, onScrollSpy) {
     ctx.navItems.forEach(function (item) {
-      if (item.getAttribute('data-founder-spy-bound') === sectionId) return;
-      item.setAttribute('data-founder-spy-bound', sectionId);
+      if (item.getAttribute('data-founder-spy-bound') === 'true') return;
+      item.setAttribute('data-founder-spy-bound', 'true');
       item.addEventListener('click', function () {
-        var fresh = getContext();
-        if (!fresh) return;
         var idx = parseInt(item.getAttribute('data-story-index'), 10);
         if (isNaN(idx)) return;
-        var target = fresh.slidesContainer.querySelector('.about-page-founder__article[data-story-block="' + idx + '"]');
+        var target = ctx.slidesContainer.querySelector('.about-page-founder__article[data-story-block="' + idx + '"]');
         if (!target) return;
-        state.ignoreScrollSpy = true;
-        setActiveNav(fresh, idx);
+        state.ignoreScroll = true;
+        setActiveState(ctx, idx);
         target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
-        if (state.scrollSpyTimer) clearTimeout(state.scrollSpyTimer);
-        state.scrollSpyTimer = setTimeout(function () {
-          state.ignoreScrollSpy = false;
+        if (state.timer) clearTimeout(state.timer);
+        state.timer = setTimeout(function () {
+          state.ignoreScroll = false;
           onScrollSpy();
         }, prefersReducedMotion() ? 80 : 900);
       });
     });
   }
 
-  function initFounderScrollSpy() {
-    var ctx = getContext();
-    if (!ctx) return;
+  function setupRoot(root) {
+    if (root.getAttribute('data-founder-spy-ready') === 'true') return;
 
-    bindNavClicks(ctx);
+    var sidebar = root.querySelector('.about-page-founder__sidebar');
+    var slidesContainer = root.querySelector('.about-page-founder__articles');
+    if (!sidebar || !slidesContainer) return;
 
-    if (!state.listenersBound) {
-      state.listenersBound = true;
-      window.addEventListener('scroll', onScroll, { passive: true });
-      document.addEventListener('scroll', onScroll, { passive: true, capture: true });
-      var se = document.scrollingElement || document.documentElement;
-      if (se) se.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScrollSpy, { passive: true });
-    }
+    var navItems = sidebar.querySelectorAll('.about-page-founder__nav-btn');
+    var slides = slidesContainer.querySelectorAll('.about-page-founder__article');
+    if (!navItems.length || !slides.length) return;
 
+    root.setAttribute('data-founder-spy-ready', 'true');
+
+    var state = {
+      ignoreScroll: false,
+      ticking: false,
+      timer: null,
+    };
+
+    var ctx = {
+      slidesContainer: slidesContainer,
+      navItems: navItems,
+      slides: slides,
+    };
+
+    var onScrollSpy = function () {
+      if (state.ignoreScroll) return;
+      setActiveState(ctx, indexFromReadingBand(ctx));
+    };
+
+    var onScroll = function () {
+      if (state.ignoreScroll || state.ticking) return;
+      state.ticking = true;
+      requestAnimationFrame(function () {
+        state.ticking = false;
+        updateStickyTop(root);
+        onScrollSpy();
+      });
+    };
+
+    bindNavClicks(ctx, state, onScrollSpy);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    updateStickyTop(root);
     onScrollSpy();
-
-    if (window.ResizeObserver) {
-      for (var k = 0; k < ctx.slides.length; k++) {
-        if (ctx.slides[k].getAttribute('data-founder-ro') === sectionId) continue;
-        ctx.slides[k].setAttribute('data-founder-ro', sectionId);
-        (function (el) {
-          var ro = new ResizeObserver(function () {
-            if (!state.ignoreScrollSpy) onScrollSpy();
-          });
-          ro.observe(el);
-        })(ctx.slides[k]);
-      }
-    }
-
-    if (window.IntersectionObserver) {
-      for (var m = 0; m < ctx.slides.length; m++) {
-        if (ctx.slides[m].getAttribute('data-founder-io') === sectionId) continue;
-        ctx.slides[m].setAttribute('data-founder-io', sectionId);
-        (function (el) {
-          var io = new IntersectionObserver(
-            function () {
-              if (!state.ignoreScrollSpy) onScrollSpy();
-            },
-            {
-              root: null,
-              rootMargin: '-30% 0px -45% 0px',
-              threshold: [0, 0.02, 0.06, 0.12, 0.2, 0.35, 0.5, 0.65, 0.8, 1],
-            }
-          );
-          io.observe(el);
-        })(ctx.slides[m]);
-      }
-    }
   }
 
   function run() {
-    initFounderScrollSpy();
+    var roots = document.querySelectorAll('[data-founder-spy-root]');
+    if (!roots.length) return;
+    roots.forEach(function (root) {
+      setupRoot(root);
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -1123,10 +1110,8 @@
     run();
   }
 
-  document.addEventListener('shopify:section:load', function (ev) {
-    var byId = ev.detail && String(ev.detail.sectionId) === String(sectionId);
-    var byDom = ev.target && ev.target.querySelector && ev.target.querySelector('#about-page-founder-sidebar-' + sectionId);
-    if (byId || byDom) setTimeout(run, 0);
+  document.addEventListener('shopify:section:load', function () {
+    setTimeout(run, 0);
   });
 })();
 {% endjavascript %}
@@ -1161,9 +1146,19 @@
       "label": "Left image (tall, 3:4)"
     },
     {
+      "type": "url",
+      "id": "feature_image_left_url",
+      "label": "Left image URL fallback"
+    },
+    {
       "type": "image_picker",
       "id": "feature_image_right",
       "label": "Right image (wide, 4:3)"
+    },
+    {
+      "type": "url",
+      "id": "feature_image_right_url",
+      "label": "Right image URL fallback"
     },
     {
       "type": "header",
@@ -1212,6 +1207,11 @@
       "type": "image_picker",
       "id": "career_image",
       "label": "CTA image"
+    },
+    {
+      "type": "url",
+      "id": "career_image_url",
+      "label": "CTA image URL fallback"
     },
     {
       "type": "text",
@@ -1281,6 +1281,11 @@
           "label": "Step image"
         },
         {
+          "type": "url",
+          "id": "image_url",
+          "label": "Step image URL fallback"
+        },
+        {
           "type": "text",
           "id": "caption_headline",
           "label": "Caption headline",
@@ -1326,6 +1331,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "Article image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Article image URL fallback"
         },
         {
           "type": "text",

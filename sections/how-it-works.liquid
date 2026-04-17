@@ -1,0 +1,720 @@
+<section class="how-it-works-page" id="how-it-works-page-{{ section.id }}">
+  <div class="how-it-works-page__hero">
+    <div class="how-it-works-page__hero-inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="how-it-works-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.headline != blank -%}
+        <h1 class="how-it-works-page__headline">{{ section.settings.headline }}</h1>
+      {%- endif -%}
+      {%- if section.settings.subheadline != blank -%}
+        <p class="how-it-works-page__subheadline">{{ section.settings.subheadline }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
+  {%- if step_blocks.size > 0 -%}
+    <div class="how-it-works-founder" data-hiw-spy-root="{{ section.id }}">
+      <div class="how-it-works-founder__inner">
+        <div class="how-it-works-founder__grid">
+          <aside class="how-it-works-founder__sidebar" id="how-it-works-founder-sidebar-{{ section.id }}">
+            <h2 class="how-it-works-founder__title">
+              {%- if section.settings.steps_sidebar_title != blank -%}
+                {{ section.settings.steps_sidebar_title | upcase }}
+              {%- else -%}
+                {{ 'How it works' | upcase }}
+              {%- endif -%}
+            </h2>
+            <div class="how-it-works-founder__nav-rule"></div>
+            <div class="how-it-works-founder__nav">
+              {%- for block in step_blocks -%}
+                <button
+                  type="button"
+                  class="how-it-works-founder__nav-btn{% if forloop.first %} how-it-works-founder__nav-btn--active{% endif %}"
+                  data-hiw-index="{{ forloop.index0 }}"
+                  aria-pressed="{{ forloop.first | json }}"
+                  aria-controls="how-it-works-founder-article-{{ section.id }}-{{ forloop.index0 }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <p class="how-it-works-founder__nav-label">
+                    {{ section.settings.step_prefix | default: 'Step' | upcase }} {{ forloop.index }}
+                    {%- if block.settings.kicker != blank -%}
+                      <span class="how-it-works-page-accent"> {{ block.settings.kicker | upcase }}</span>
+                    {%- endif -%}
+                  </p>
+                  {%- if block.settings.body != blank -%}
+                    <div class="how-it-works-founder__nav-body">{{ block.settings.body }}</div>
+                  {%- endif -%}
+                </button>
+              {%- endfor -%}
+            </div>
+          </aside>
+
+          <div class="how-it-works-founder__articles" id="how-it-works-founder-articles-{{ section.id }}">
+            {%- for block in step_blocks -%}
+              <article
+                class="how-it-works-founder__article{% if forloop.first %} how-it-works-founder__article--active{% endif %}"
+                id="how-it-works-founder-article-{{ section.id }}-{{ forloop.index0 }}"
+                data-hiw-block="{{ forloop.index0 }}"
+                tabindex="-1"
+              >
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'how-it-works-founder__media' }}
+                {%- elsif block.settings.image_url != blank -%}
+                  <img
+                    src="{{ block.settings.image_url | escape }}"
+                    alt="{{ block.settings.title | escape }}"
+                    loading="lazy"
+                    class="how-it-works-founder__media"
+                    width="1400"
+                    height="788"
+                  >
+                {%- else -%}
+                  <div class="how-it-works-founder__media-placeholder"></div>
+                {%- endif -%}
+                {%- if block.settings.title != blank or block.settings.body != blank or block.settings.explain_body != blank -%}
+                  <div class="how-it-works-founder__caption">
+                    {%- if block.settings.title != blank -%}
+                      <h3 class="how-it-works-founder__caption-title">
+                        <span>{{ block.settings.title | upcase }}</span>
+                      </h3>
+                    {%- endif -%}
+                    {%- if block.settings.body != blank -%}
+                      <div class="how-it-works-founder__caption-intro">{{ block.settings.body }}</div>
+                    {%- endif -%}
+                    {%- if block.settings.explain_title != blank or block.settings.explain_body != blank -%}
+                      <div class="how-it-works-founder__caption-explain">
+                        {%- if block.settings.explain_title != blank -%}
+                          <p class="how-it-works-founder__caption-explain-title">{{ block.settings.explain_title | upcase }}</p>
+                        {%- endif -%}
+                        {%- if block.settings.explain_body != blank -%}
+                          <div class="how-it-works-founder__caption-text">{{ block.settings.explain_body }}</div>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </article>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .how-it-works-page {
+    color: var(--color-foreground);
+    background: var(--color-background);
+  }
+
+  .how-it-works-page__hero {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
+    text-align: center;
+  }
+
+  .how-it-works-page__hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .how-it-works-page__eyebrow {
+    margin: 0 0 1rem;
+    font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--moov-text-secondary-light);
+  }
+
+  [data-theme='dark'] .how-it-works-page__eyebrow {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .how-it-works-page__headline {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 3.4rem);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .how-it-works-page__subheadline {
+    margin: 1rem auto 0;
+    max-width: 70ch;
+    font-size: clamp(0.95rem, 1.4vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+  }
+
+  [data-theme='dark'] .how-it-works-page__subheadline {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .how-it-works-page-accent {
+    color: var(--color-accent);
+  }
+
+  .how-it-works-founder {
+    padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
+    background: transparent;
+  }
+
+  .how-it-works-founder__inner {
+    width: 100%;
+    max-width: min(
+      calc(var(--page-width) - var(--page-margin) * 2),
+      calc(100% - var(--page-margin) * 2)
+    );
+    margin-inline: auto;
+  }
+
+  .how-it-works-founder__grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .how-it-works-founder__sidebar {
+    position: sticky;
+    top: var(--hiw-sticky-top, calc(var(--header-height, 5rem) + 1.25rem));
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .how-it-works-founder__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--color-foreground);
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1;
+  }
+
+  .how-it-works-founder__nav-rule {
+    display: none;
+  }
+
+  .how-it-works-founder__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    border-left: 1.5px solid var(--moov-border-light);
+    padding-left: 5px;
+  }
+
+  [data-theme='dark'] .how-it-works-founder__nav {
+    border-left-color: var(--moov-border-dark);
+  }
+
+  .how-it-works-founder__nav-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-align: left;
+    cursor: pointer;
+    opacity: 0.35;
+    transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .how-it-works-founder__nav-btn--active {
+    opacity: 1;
+    border-color: var(--moov-border-light);
+    background: var(--moov-wash-on-cream-4);
+  }
+
+  [data-theme='dark'] .how-it-works-founder__nav-btn--active {
+    border-color: var(--moov-border-dark);
+    background: var(--moov-surface-dark-raised);
+  }
+
+  .how-it-works-founder__nav-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    margin: 0 0 8px;
+  }
+
+  .how-it-works-founder__nav-body {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--moov-text-secondary-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .how-it-works-founder__nav-body p {
+    margin: 0;
+  }
+
+  .how-it-works-founder__nav-body p + p {
+    margin-top: 0.65rem;
+  }
+
+  [data-theme='dark'] .how-it-works-founder__nav-body {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .how-it-works-founder__articles {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    min-width: 0;
+  }
+
+  .how-it-works-founder__article {
+    scroll-margin-top: calc(var(--hiw-sticky-top, var(--header-height, 5rem)) + 0.5rem);
+    min-width: 0;
+    opacity: 0.55;
+    transition: opacity 0.28s ease;
+  }
+
+  .how-it-works-founder__article--active {
+    opacity: 1;
+  }
+
+  .how-it-works-founder__article:last-child {
+    margin-bottom: 0;
+  }
+
+  .how-it-works-founder__media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+  }
+
+  .how-it-works-founder__media-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--moov-wash-on-cream-6);
+    border-radius: 16px;
+  }
+
+  [data-theme='dark'] .how-it-works-founder__media-placeholder {
+    background: var(--moov-surface-dark-raised);
+  }
+
+  .how-it-works-founder__caption {
+    padding: 28px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .how-it-works-founder__caption-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--color-foreground);
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .how-it-works-founder__caption-intro {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-secondary-light);
+    line-height: 1.65;
+    margin: 0;
+    max-width: min(68ch, 100%);
+  }
+
+  .how-it-works-founder__caption-intro p {
+    margin: 0;
+  }
+
+  .how-it-works-founder__caption-intro p + p {
+    margin-top: 0.75rem;
+  }
+
+  [data-theme='dark'] .how-it-works-founder__caption-intro {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .how-it-works-founder__caption-explain {
+    margin-top: 0.25rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--moov-border-light);
+  }
+
+  [data-theme='dark'] .how-it-works-founder__caption-explain {
+    border-top-color: var(--moov-border-dark);
+  }
+
+  .how-it-works-founder__caption-explain-title {
+    margin: 0 0 0.5rem;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    line-height: 1.4;
+  }
+
+  .how-it-works-founder__caption-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--moov-text-secondary-light);
+    line-height: 1.65;
+    margin: 0;
+    max-width: min(68ch, 100%);
+  }
+
+  .how-it-works-founder__caption-text p {
+    margin: 0;
+  }
+
+  .how-it-works-founder__caption-text p + p {
+    margin-top: 0.75rem;
+  }
+
+  [data-theme='dark'] .how-it-works-founder__caption-text {
+    color: var(--moov-text-secondary-dark);
+  }
+
+  @media (max-width: 960px) {
+    .how-it-works-page__hero {
+      padding: 2.75rem 1.25rem 1.75rem;
+    }
+
+    .how-it-works-founder {
+      padding: 2rem 1.25rem 3.5rem;
+    }
+
+    .how-it-works-founder__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .how-it-works-founder__sidebar {
+      position: static;
+    }
+
+    .how-it-works-founder__nav {
+      flex-direction: row;
+      gap: 8px;
+      overflow-x: auto;
+      padding-left: 0;
+      border-left: none;
+      border-top: 1.5px solid var(--moov-border-light);
+      padding-top: 12px;
+    }
+
+    [data-theme='dark'] .how-it-works-founder__nav {
+      border-top-color: var(--moov-border-dark);
+    }
+
+    .how-it-works-founder__nav-btn {
+      flex-shrink: 0;
+      margin-bottom: 0;
+      width: auto;
+      min-width: min(280px, calc(100vw - 2.5rem));
+      max-width: 100%;
+    }
+
+    .how-it-works-founder__article {
+      opacity: 1;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    function getHeaderBottomOffset() {
+      var maxBottom = 0;
+      var headerGroup = document.querySelector('.shopify-section-group-header-group');
+      var header = document.querySelector('.moov-header');
+
+      if (headerGroup) {
+        maxBottom = Math.max(maxBottom, headerGroup.getBoundingClientRect().bottom);
+      }
+      if (header) {
+        maxBottom = Math.max(maxBottom, header.getBoundingClientRect().bottom);
+      }
+
+      if (maxBottom <= 0) return null;
+      return Math.max(0, Math.ceil(maxBottom + 16));
+    }
+
+    function updateStickyTop(root) {
+      var stickyTop = getHeaderBottomOffset();
+      if (!stickyTop) {
+        root.style.removeProperty('--hiw-sticky-top');
+        return;
+      }
+      root.style.setProperty('--hiw-sticky-top', stickyTop + 'px');
+    }
+
+    function prefersReducedMotion() {
+      return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function setActiveState(ctx, index) {
+      if (!ctx || index < 0 || index >= ctx.navItems.length) return;
+      ctx.navItems.forEach(function (item, i) {
+        var active = i === index;
+        item.classList.toggle('how-it-works-founder__nav-btn--active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      ctx.slides.forEach(function (item, i) {
+        item.classList.toggle('how-it-works-founder__article--active', i === index);
+      });
+    }
+
+    function indexFromReadingBand(ctx) {
+      var slides = ctx.slides;
+      var vh = window.innerHeight || 700;
+      var header = document.querySelector('.moov-header');
+      var hb = header ? header.getBoundingClientRect().bottom : 0;
+      var markerY = Math.max(hb + 24, vh * 0.35);
+      markerY = Math.min(markerY, vh * 0.5);
+      var active = 0;
+
+      for (var i = 0; i < slides.length; i++) {
+        var r = slides[i].getBoundingClientRect();
+        if (r.top <= markerY) active = i;
+      }
+
+      return active;
+    }
+
+    function bindNavClicks(ctx, state, onScrollSpy) {
+      ctx.navItems.forEach(function (item) {
+        if (item.getAttribute('data-hiw-spy-bound') === 'true') return;
+        item.setAttribute('data-hiw-spy-bound', 'true');
+        item.addEventListener('click', function () {
+          var idx = parseInt(item.getAttribute('data-hiw-index'), 10);
+          if (isNaN(idx)) return;
+          var target = ctx.slidesContainer.querySelector('.how-it-works-founder__article[data-hiw-block="' + idx + '"]');
+          if (!target) return;
+          state.ignoreScroll = true;
+          setActiveState(ctx, idx);
+          target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+          if (state.timer) clearTimeout(state.timer);
+          state.timer = setTimeout(function () {
+            state.ignoreScroll = false;
+            onScrollSpy();
+          }, prefersReducedMotion() ? 80 : 900);
+        });
+      });
+    }
+
+    function setupRoot(root) {
+      if (root.getAttribute('data-hiw-spy-ready') === 'true') return;
+
+      var sidebar = root.querySelector('.how-it-works-founder__sidebar');
+      var slidesContainer = root.querySelector('.how-it-works-founder__articles');
+      if (!sidebar || !slidesContainer) return;
+
+      var navItems = sidebar.querySelectorAll('.how-it-works-founder__nav-btn');
+      var slides = slidesContainer.querySelectorAll('.how-it-works-founder__article');
+      if (!navItems.length || !slides.length) return;
+
+      root.setAttribute('data-hiw-spy-ready', 'true');
+
+      var state = {
+        ignoreScroll: false,
+        ticking: false,
+        timer: null,
+      };
+
+      var ctx = {
+        slidesContainer: slidesContainer,
+        navItems: navItems,
+        slides: slides,
+      };
+
+      var onScrollSpy = function () {
+        if (state.ignoreScroll) return;
+        setActiveState(ctx, indexFromReadingBand(ctx));
+      };
+
+      var onScroll = function () {
+        if (state.ignoreScroll || state.ticking) return;
+        state.ticking = true;
+        requestAnimationFrame(function () {
+          state.ticking = false;
+          updateStickyTop(root);
+          onScrollSpy();
+        });
+      };
+
+      bindNavClicks(ctx, state, onScrollSpy);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      updateStickyTop(root);
+      onScrollSpy();
+    }
+
+    function init() {
+      var roots = document.querySelectorAll('[data-hiw-spy-root]');
+      if (!roots.length) return;
+      roots.forEach(function (root) {
+        setupRoot(root);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('shopify:section:load', function () {
+      setTimeout(init, 0);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "How it works page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "How it works"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Design over discipline"
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline",
+      "label": "Subheadline",
+      "default": "MOOV combines your device and mobile app into a simple morning system built to get you out of bed."
+    },
+    {
+      "type": "text",
+      "id": "step_prefix",
+      "label": "Step prefix",
+      "default": "Step"
+    },
+    {
+      "type": "text",
+      "id": "steps_sidebar_title",
+      "label": "Steps sidebar title",
+      "default": "How it works"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Kicker",
+          "default": "Device and mobile app"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "Place MOOV device on the wall in your desired location"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "<p>10-second, damage-free install with 3M tape. We recommend placing it where you usually go first.</p>"
+        },
+        {
+          "type": "text",
+          "id": "explain_title",
+          "label": "Explain title",
+          "default": "Why this step matters"
+        },
+        {
+          "type": "richtext",
+          "id": "explain_body",
+          "label": "Explain body",
+          "default": "<p>This creates a physical action between you and the snooze habit. You start your day with movement instead of hesitation.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Image URL fallback"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "How it works page",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Device and mobile app",
+            "title": "Place MOOV device on the wall in your desired location (max 30 ft)",
+            "body": "<p>10-second, damage-free install with 3M tape. We recommend placing it where you usually go first.</p>",
+            "explain_title": "Why this step matters",
+            "explain_body": "<p>Distance creates intention. When you have to move to silence the alarm, your body wakes up before your brain talks you back into bed.</p>",
+            "image_url": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Configure your alarm",
+            "title": "Set your desired get-up time in the MOOV app",
+            "body": "<p>Choose your alarm sound and volume. Set a pre-alert for 1-2 minutes before your main alarm to wake lightly before needing to get up.</p>",
+            "explain_title": "Why this step matters",
+            "explain_body": "<p>Custom timing and pre-alerts reduce sleep shock. You wake with less stress and more control over your first decision of the day.</p>",
+            "image_url": "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1400&q=80"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Get up to silence",
+            "title": "When the alarm rings, get up to turn it off",
+            "body": "<p>Your phone plays the alarm, and you must interact with the MOOV device to silence it.</p>",
+            "explain_title": "Why this step matters",
+            "explain_body": "<p>This closes the loop. The alarm only stops after action, which helps replace snoozing with a reliable get-up behavior over time.</p>",
+            "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

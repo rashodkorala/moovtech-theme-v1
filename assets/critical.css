@@ -14,6 +14,12 @@ body {
   line-height: 1.5;
 }
 
+/* Keep reading copy at or above 11pt. */
+.main-content p,
+.main-content li {
+  font-size: max(11pt, 1em);
+}
+
 .main-content {
   flex: 1;
   min-height: 0;
