@@ -11,23 +11,6 @@
   "sections": {
     "main": {
       "type": "our-story",
-      "settings": {
-        "hero_eyebrow": "Why MOOV",
-        "hero_headline": "Make getting up easier than staying in bed.",
-        "feature_image_left_url": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1200&q=80",
-        "feature_image_right_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&q=80",
-        "feature_headline": "What we believe about mornings",
-        "feature_body_1": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading.",
-        "feature_body_2": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day.",
-        "story_sidebar_title": "Founder story",
-        "show_career_cta": true,
-        "career_image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
-        "career_label": "Shop MOOV",
-        "career_headline": "Take back your mornings",
-        "career_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
-        "career_button_label": "Shop now",
-        "career_button_url": "/collections/all"
-      },
       "blocks": {
         "step-1": {
           "type": "step",
@@ -60,8 +43,33 @@
           }
         }
       },
-      "block_order": ["step-1", "step-2", "step-3"]
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ],
+      "settings": {
+        "hero_eyebrow": "Why MOOV",
+        "hero_headline": "Make getting up easier than staying in bed.",
+        "feature_image_left_url": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1200&q=80",
+        "feature_image_right_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&q=80",
+        "feature_headline": "What we believe about mornings",
+        "feature_body_1": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading.",
+        "feature_body_2": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day.",
+        "story_sidebar_title": "Founder story",
+        "show_career_cta": true,
+        "career_image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+        "career_label": "Shop MOOV",
+        "career_headline": "Take back your mornings",
+        "career_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
+        "career_button_label": "Shop now",
+        "career_button_url": "shopify://products/t",
+        "blog_read_all_label": "Read all",
+        "blog_read_all_url": ""
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
