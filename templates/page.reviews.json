@@ -1,24 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero": {
-      "type": "hero",
-      "settings": {
-        "hero_eyebrow": "Real people. Real mornings.",
-        "hero_headline": "What MOOVers are saying",
-        "hero_subheadline": "Early adopters share how MOOV changed the first hour of their day.",
-        "hero_overlay_opacity": 65,
-        "cta_primary_label": "Get MOOV",
-        "cta_ghost_label": "How it works"
-      }
-    },
     "reviews": {
       "type": "reviews",
-      "settings": {
-        "heading": "What MOOVers are saying",
-        "overall_rating": "4.9",
-        "review_count": "200+ early testers",
-        "show_overall_rating": true
-      },
       "blocks": {
         "review-1": {
           "type": "review",
@@ -82,11 +74,19 @@
         "review-4",
         "review-5",
         "review-6"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Early testers",
+        "heading": "What MOOVers are saying",
+        "show_overall_rating": true,
+        "overall_rating": "4.9",
+        "review_count": "200+ early testers",
+        "cta_label": "",
+        "cta_url": ""
+      }
     }
   },
   "order": [
-    "hero",
     "reviews"
   ]
 }
