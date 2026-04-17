@@ -159,19 +159,19 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
+        "default": "#faf8f3",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#0a0a09",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "accent_color",
-        "default": "#f0b429",
+        "default": "#ed9d09",
         "label": "Accent colour",
         "info": "Used for eyebrows, badges, hover highlights, and CTAs across the theme."
       },

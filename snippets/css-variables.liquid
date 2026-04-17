@@ -9,6 +9,12 @@
   {{ settings.type_heading_font | font_face: font_display: 'swap' }}
   {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
 
+  {%- liquid
+    assign moov_accent = settings.accent_color | default: '#ed9d09'
+    assign moov_cream = settings.background_color | default: '#faf8f3'
+    assign moov_black = settings.foreground_color | default: '#0a0a09'
+  -%}
+
   @font-face {
     font-family: 'Artford';
     src: url('{{ 'Artford-Regular.woff2' | asset_url }}') format('woff2'),
@@ -69,11 +75,11 @@
     --font-primary--weight: {{ settings.type_primary_font.weight }};
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
+    --color-background: {{ moov_black }};
+    --color-foreground: {{ moov_cream }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --style-border-radius-buttons: {{ settings.button_corner_radius }}px;
-    --color-accent: {{ settings.accent_color | default: '#f0b429' }};
+    --color-accent: {{ moov_accent }};
 
     /* Moov brand fonts */
     --font-wordmark: 'Artford', serif;
@@ -99,32 +105,41 @@
     --text-heading-sm:   clamp({{ 1.125 | times: s_sm }}rem, {{ 1 | times: s_sm }}vw,  {{ 1.5 | times: s_sm }}rem);
     --text-heading-xs:   clamp({{ 1.0 | times: s_xs }}rem,   {{ 0.5 | times: s_xs }}vw, {{ 1.25 | times: s_xs }}rem);
 
-    --moov-black: #0a0a09;
-    --moov-cream: #faf8f2;
-    --moov-cream-shadow: #f0ede3;
-    --moov-amber: #f0b429;
-    --moov-amber-hover: #e5a520;
-    --moov-amber-glow: rgba(240, 180, 41, 0.07);
+    /* Brand palette: cream “white”, near-black, accent (editable under Theme settings → Colors) */
+    --moov-black: {{ moov_black }};
+    --moov-cream: {{ moov_cream }};
+    --moov-cream-shadow: {{ moov_cream | color_darken: 6 }};
+    --moov-amber: {{ moov_accent }};
+    --moov-amber-hover: {{ moov_accent | color_darken: 12 }};
+    --moov-amber-glow: {{ moov_accent | color_modify: 'alpha', 0.07 }};
 
     /* Eyebrow accent — used for labels, badges, subtle highlights */
-    --moov-eyebrow-accent: rgba(240, 180, 41, 0.7);
+    --moov-eyebrow-accent: {{ moov_accent | color_modify: 'alpha', 0.7 }};
 
     /* Surface fills — subtle tinted backgrounds for cards & panels */
-    --moov-surface-dark-raised: rgba(250, 248, 242, 0.04);
-    --moov-surface-dark-divider: rgba(255, 255, 255, 0.07);
+    --moov-surface-dark-raised: {{ moov_cream | color_modify: 'alpha', 0.04 }};
+    --moov-surface-dark-divider: {{ moov_cream | color_modify: 'alpha', 0.07 }};
 
-    --moov-text-primary-dark: #faf8f2;
-    --moov-text-secondary-dark: rgba(250, 248, 242, 0.55);
-    --moov-text-tertiary-dark: rgba(250, 248, 242, 0.3);
-    --moov-text-quaternary-dark: rgba(250, 248, 242, 0.2);
+    --moov-text-primary-dark: {{ moov_cream }};
+    --moov-text-secondary-dark: {{ moov_cream | color_modify: 'alpha', 0.55 }};
+    --moov-text-tertiary-dark: {{ moov_cream | color_modify: 'alpha', 0.3 }};
+    --moov-text-quaternary-dark: {{ moov_cream | color_modify: 'alpha', 0.2 }};
 
-    --moov-text-primary-light: #0a0a09;
-    --moov-text-secondary-light: rgba(10, 10, 9, 0.5);
-    --moov-text-tertiary-light: rgba(10, 10, 9, 0.3);
+    --moov-text-primary-light: {{ moov_black }};
+    --moov-text-secondary-light: {{ moov_black | color_modify: 'alpha', 0.5 }};
+    --moov-text-tertiary-light: {{ moov_black | color_modify: 'alpha', 0.3 }};
 
-    --moov-border-dark: rgba(250, 248, 242, 0.1);
-    --moov-border-light: rgba(10, 10, 9, 0.1);
-    --moov-border-amber: rgba(240, 180, 41, 0.35);
+    --moov-border-dark: {{ moov_cream | color_modify: 'alpha', 0.1 }};
+    --moov-border-light: {{ moov_black | color_modify: 'alpha', 0.1 }};
+    --moov-border-amber: {{ moov_accent | color_modify: 'alpha', 0.35 }};
+
+    /* Extra surfaces (avoid hard-coded grays in sections) */
+    --moov-surface-dark-elevated: {{ moov_cream | color_modify: 'alpha', 0.06 }};
+    --moov-wash-on-cream-4: color-mix(in srgb, var(--moov-black) 4%, var(--moov-cream));
+    --moov-wash-on-cream-6: color-mix(in srgb, var(--moov-black) 6%, var(--moov-cream));
+    --moov-surface-section-rail: color-mix(in srgb, var(--moov-cream) 94%, var(--moov-black));
+    --moov-neutral-mid: color-mix(in srgb, var(--moov-cream) 72%, var(--moov-black));
+    --moov-neutral-deep: color-mix(in srgb, var(--moov-cream) 58%, var(--moov-black));
 
     /* Feedback colours — success / error states */
     --moov-success: #2e7d32;
@@ -160,19 +175,9 @@
     --section-block-pad-y-hero: clamp(5.5rem, 14vw, 10rem);
     --section-block-pad-y-hero-bottom: clamp(3.5rem, 8vw, 7.5rem);
   }
-  /* ── Smooth theme transitions ── */
+  /* ── Page shell ── */
   html {
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* ── Dark mode overrides ── */
-  [data-theme="dark"] {
-    --color-background: #0a0a09;
-    --color-foreground: #faf8f2;
-  }
-
-  [data-theme="dark"] body {
-    background-color: #0a0a09;
-    color: #faf8f2;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 {% endstyle %}

@@ -43,7 +43,7 @@
 <section
   class="moov-hero full-width{% unless section.settings.hero_desaturate_video == false %} moov-hero--desaturated{% endunless %}"
   data-surface="dark"
-  style="--hero-overlay: rgba(10, 10, 9, {{ overlay_decimal }});"
+  style="--hero-overlay: color-mix(in srgb, var(--moov-black) {{ overlay_opacity }}%, transparent);"
 >
   {%- comment -%} Video / slide layer {%- endcomment -%}
   {%- if has_slides -%}
@@ -84,7 +84,7 @@
           <div
             class="moov-hero__overlay"
             aria-hidden="true"
-            style="--hero-overlay: rgba(10, 10, 9, {{ slide_overlay_decimal }});"
+            style="--hero-overlay: color-mix(in srgb, var(--moov-black) {{ slide_overlay }}%, transparent);"
           ></div>
         </div>
       {%- endfor -%}
@@ -216,7 +216,7 @@
   .moov-hero__overlay {
     position: absolute;
     inset: 0;
-    background: var(--hero-overlay, rgba(10, 10, 9, 0.55));
+    background: var(--hero-overlay, color-mix(in srgb, var(--moov-black) 55%, transparent));
     z-index: 1;
   }
 
@@ -254,7 +254,7 @@
     font-size: var(--text-sm);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.9);
+    color: color-mix(in srgb, var(--moov-cream) 90%, transparent);
     margin: 0 0 clamp(10px, 1.2vw, 16px);
   }
 
@@ -266,7 +266,7 @@
     line-height: var(--heading-line-height, 1.05);
     letter-spacing: 0.1px;
     text-transform: var(--heading-text-transform, uppercase);
-    color: #ffffff;
+    color: var(--moov-cream);
     margin: 0 0 clamp(20px, 3vw, 36px);
     white-space: nowrap;
   }
@@ -276,7 +276,7 @@
     font-weight: 400;
     font-size: var(--text-base);
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.92);
+    color: color-mix(in srgb, var(--moov-cream) 92%, transparent);
     margin: 0 0 clamp(24px, 3vw, 40px);
     max-width: 520px;
   }
@@ -302,17 +302,17 @@
     letter-spacing: 0.02em;
     text-decoration: none;
     white-space: nowrap;
-    background: #ffffff;
-    color: #0a0a09;
+    background: #fff;
+    color: var(--moov-black);
     border: none;
     transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-    box-shadow: 0 1px 0 rgba(10, 10, 9, 0.06);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--moov-black) 6%, transparent);
   }
 
   .moov-hero__btn:hover {
-    background: #f5f5f4;
+    background: #f0f0ee;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--moov-black) 12%, transparent);
   }
 
   /* Carousel dots */
@@ -331,7 +331,7 @@
     height: 3px;
     width: 40px;
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.32);
+    background: color-mix(in srgb, var(--moov-cream) 32%, transparent);
     border: none;
     cursor: pointer;
     padding: 0;
@@ -339,7 +339,7 @@
   }
 
   .moov-hero__dot.is-active {
-    background: #ffffff;
+    background: var(--moov-cream);
   }
 
   /* Responsive */
@@ -349,7 +349,7 @@
     }
 
     .moov-hero__overlay {
-      background: rgba(10, 10, 9, 0.65);
+      background: color-mix(in srgb, var(--moov-black) 65%, transparent);
     }
   }
 {% endstylesheet %}

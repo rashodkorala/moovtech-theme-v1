@@ -109,7 +109,7 @@
 
 {% stylesheet %}
   .reviews {
-    background: #f5f5f3;
+    background: var(--color-background);
     padding: var(--section-block-pad-y-hero) var(--section-inline-pad);
   }
 
@@ -175,7 +175,7 @@
     gap: 24px;
     padding: 28px 32px;
     background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid var(--moov-border-light);
     border-radius: 16px;
   }
 
@@ -241,11 +241,11 @@
   }
 
   .reviews__star--empty {
-    color: rgba(0, 0, 0, 0.2);
+    color: color-mix(in srgb, var(--moov-black) 20%, transparent);
   }
 
   [data-theme="dark"] .reviews__star--empty {
-    color: rgba(255, 255, 255, 0.2);
+    color: color-mix(in srgb, var(--moov-cream) 20%, transparent);
   }
 
   /* ─── Cards grid ─── */
@@ -258,7 +258,7 @@
 
   .reviews__card {
     background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--moov-border-light);
     border-radius: 16px;
     padding: 28px;
     display: flex;
@@ -278,7 +278,7 @@
   }
 
   .reviews__card:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--moov-black) 8%, transparent);
   }
 
   [data-theme="dark"] .reviews__card {
@@ -317,7 +317,7 @@
     gap: 12px;
     margin-top: auto;
     padding-top: 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   [data-theme="dark"] .reviews__card-reviewer {

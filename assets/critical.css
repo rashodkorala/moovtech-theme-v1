@@ -26,8 +26,8 @@ body {
   top: 0.75rem;
   z-index: 9999;
   padding: 0.65rem 1rem;
-  background: var(--color-background, #fff);
-  color: var(--color-foreground, #111);
+  background: var(--color-background, #0a0a09);
+  color: var(--color-foreground, #faf8f3);
   border: 1px solid currentcolor;
   border-radius: var(--style-border-radius-inputs, 4px);
   font: inherit;
@@ -132,13 +132,17 @@ body {
   font-family: var(--font-primary--family);
   background-color: var(--color-background);
   color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth page-level scrolling */
+/* Smooth page-level scrolling; match body so theme toggle / overscroll paint correctly */
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Global link/button transition baseline */

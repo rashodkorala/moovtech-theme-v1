@@ -56,7 +56,7 @@
   .welcome {
     display: grid;
     grid-template-columns: var(--content-grid);
-    background-color: #f6f6f7;
+    background-color: var(--color-background);
     padding: var(--section-block-pad-y-md) 0;
   }
 
@@ -99,8 +99,8 @@
     height: 100%;
     padding: var(--section-inline-pad);
     border-radius: 8px;
-    background-color: #eef3ff;
-    color: rgb(92, 95, 98);
+    background-color: var(--moov-cream-shadow);
+    color: var(--moov-text-secondary-light);
     line-height: 1.4;
   }
 
@@ -110,7 +110,7 @@
 
   .highlight h3 {
     font-size: 1rem;
-    color: rgb(32, 34, 35);
+    color: var(--moov-text-primary-light);
   }
 
   .highlight-description {
@@ -120,11 +120,12 @@
   .highlight a {
     display: flex;
     width: fit-content;
-    background-color: rgb(250, 251, 251);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px -3px 0px 0px inset, rgba(255, 255, 255, 0.9) 0px 2px 0px 0px inset;
-    border: 1px solid rgb(140, 145, 150);
+    background-color: var(--color-background);
+    box-shadow: color-mix(in srgb, var(--moov-black) 20%, transparent) 0px -3px 0px 0px inset,
+      color-mix(in srgb, var(--moov-cream) 90%, transparent) 0px 2px 0px 0px inset;
+    border: 1px solid var(--moov-border-light);
     border-radius: 4px;
-    color: rgb(92, 95, 98);
+    color: var(--moov-text-secondary-light);
     padding: 3px 10px 5px;
     text-decoration: none;
   }

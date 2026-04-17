@@ -138,7 +138,7 @@
           {%- else -%}
             <img
               src="{{ 'moov-app-pairing.png' | asset_url }}"
-              alt="MOOV App — Pairing"
+              alt="MOOV App: Pairing"
               class="app-section__product-img"
               loading="lazy"
               width="390"
@@ -161,7 +161,7 @@
           {%- else -%}
             <img
               src="{{ 'moov-app-home.png' | asset_url }}"
-              alt="MOOV App — Home"
+              alt="MOOV App: Home"
               class="app-section__screen-img"
               loading="lazy"
               width="390"
@@ -385,7 +385,7 @@
     max-height: 500px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 40px 100px rgba(10, 10, 9, 0.15));
+    filter: drop-shadow(0 40px 100px color-mix(in srgb, var(--moov-black) 15%, transparent));
   }
 
   .app-section__product-img--placeholder {
@@ -407,7 +407,7 @@
     max-height: 560px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 40px 100px rgba(10, 10, 9, 0.15));
+    filter: drop-shadow(0 40px 100px color-mix(in srgb, var(--moov-black) 15%, transparent));
     transition: transform 0.6s ease;
   }
 

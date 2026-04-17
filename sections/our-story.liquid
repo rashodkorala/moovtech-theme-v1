@@ -1,3 +1,7 @@
+{% comment %}
+  Story page: In Shopify admin, create a page (e.g. handle "story") and set Theme template to "our-story".
+  Body copy defaults ship via templates/page.our-story.json; add grid, step, and CTA images in the theme editor.
+{% endcomment %}
 <div class="about-page" id="about-page-{{ section.id }}">
 
   {%- comment -%} ── 1. HERO ── {%- endcomment -%}
@@ -7,7 +11,20 @@
         <p class="about-hero__eyebrow">{{ section.settings.hero_eyebrow }}</p>
       {%- endif -%}
       {%- if section.settings.hero_headline != blank -%}
-        <h1 class="about-hero__headline">{{ section.settings.hero_headline }}</h1>
+        <h1 class="about-hero__headline">
+          {%- assign hl = section.settings.hero_headline -%}
+          {%- assign hl_parts = hl | split: 'easier' -%}
+          {%- if hl_parts.size == 2 -%}
+            {{- hl_parts[0] | escape -}}<span class="about-page-accent">easier</span>{{- hl_parts[1] | escape -}}
+          {%- else -%}
+            {%- assign hl_parts_cap = hl | split: 'Easier' -%}
+            {%- if hl_parts_cap.size == 2 -%}
+              {{- hl_parts_cap[0] | escape -}}<span class="about-page-accent">Easier</span>{{- hl_parts_cap[1] | escape -}}
+            {%- else -%}
+              {{- hl | escape -}}
+            {%- endif -%}
+          {%- endif -%}
+        </h1>
       {%- endif -%}
     </div>
   </div>
@@ -37,7 +54,25 @@
     <div class="about-feature__inner">
       <div class="about-feature__left">
         {%- if section.settings.feature_headline != blank -%}
-          <h2 class="about-feature__headline">{{ section.settings.feature_headline }}</h2>
+          <h2 class="about-feature__headline">
+            {%- assign fh = section.settings.feature_headline -%}
+            {%- assign fh_parts = fh | split: 'believe' -%}
+            {%- if fh_parts.size == 2 -%}
+              {{- fh_parts[0] | escape -}}<span class="about-page-accent">believe</span>{{- fh_parts[1] | escape -}}
+            {%- else -%}
+              {%- assign fh_parts2 = fh | split: 'Believe' -%}
+              {%- if fh_parts2.size == 2 -%}
+                {{- fh_parts2[0] | escape -}}<span class="about-page-accent">Believe</span>{{- fh_parts2[1] | escape -}}
+              {%- else -%}
+                {%- assign fh_parts3 = fh | split: 'BELIEVE' -%}
+                {%- if fh_parts3.size == 2 -%}
+                  {{- fh_parts3[0] | escape -}}<span class="about-page-accent">BELIEVE</span>{{- fh_parts3[1] | escape -}}
+                {%- else -%}
+                  {{- fh | escape -}}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endif -%}
+          </h2>
         {%- endif -%}
       </div>
       <div class="about-feature__right">
@@ -56,27 +91,43 @@
   {%- comment -%} ── 4. STORY SECTION ── {%- endcomment -%}
   {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
   {%- if step_blocks.size > 0 -%}
-  <div class="about-story">
-    <div class="about-story__inner">
-      <div class="about-story__layout">
+  <div class="about-page-founder" data-founder-spy-root="{{ section.id }}">
+    <div class="about-page-founder__inner">
+      <div class="about-page-founder__grid">
 
         {%- comment -%} Left column: title + sidebar nav {%- endcomment -%}
-        <aside class="about-story__sidebar" id="about-story-sidebar-{{ section.id }}">
-          <h2 class="about-story__section-title">{{ 'sections.about_page.our_story' | t | default: 'Our Story' | upcase }}</h2>
-          <div class="about-story__sidebar-rule"></div>
-          <div class="about-story__sidebar-items">
+        <aside class="about-page-founder__sidebar" id="about-page-founder-sidebar-{{ section.id }}">
+          <h2 class="about-page-founder__title">
+            {%- if section.settings.story_sidebar_title != blank -%}
+              {{ section.settings.story_sidebar_title | upcase }}
+            {%- else -%}
+              {{ 'sections.about_page.our_story' | t | default: 'Our Story' | upcase }}
+            {%- endif -%}
+          </h2>
+          <div class="about-page-founder__nav-rule"></div>
+          <div class="about-page-founder__nav">
             {%- for block in step_blocks -%}
               <button
-                class="about-story__sidebar-item{% if forloop.first %} about-story__sidebar-item--active{% endif %}"
+                type="button"
+                class="about-page-founder__nav-btn{% if forloop.first %} about-page-founder__nav-btn--active{% endif %}"
                 data-story-index="{{ forloop.index0 }}"
                 aria-pressed="{{ forloop.first | json }}"
+                aria-controls="about-page-founder-article-{{ section.id }}-{{ forloop.index0 }}"
                 {{ block.shopify_attributes }}
               >
                 {%- if block.settings.label != blank -%}
-                  <p class="about-story__sidebar-label">{{ block.settings.label | upcase }}</p>
+                  <p class="about-page-founder__nav-label">
+                    {%- assign nl = block.settings.label | upcase -%}
+                    {%- assign nl_parts = nl | split: 'FRUSTRATION' -%}
+                    {%- if nl_parts.size == 2 -%}
+                      {{- nl_parts[0] | escape -}}<span class="about-page-accent">FRUSTRATION</span>{{- nl_parts[1] | escape -}}
+                    {%- else -%}
+                      {{- nl | escape -}}
+                    {%- endif -%}
+                  </p>
                 {%- endif -%}
                 {%- if block.settings.body != blank -%}
-                  <p class="about-story__sidebar-body">{{ block.settings.body }}</p>
+                  <p class="about-page-founder__nav-body">{{ block.settings.body }}</p>
                 {%- endif -%}
               </button>
             {%- endfor -%}
@@ -84,28 +135,66 @@
         </aside>
 
         {%- comment -%} Right slides {%- endcomment -%}
-        <div class="about-story__slides" id="about-story-images-{{ section.id }}">
+        <div class="about-page-founder__articles" id="about-page-founder-articles-{{ section.id }}">
           {%- for block in step_blocks -%}
-            <div
-              class="about-story__slide{% if forloop.first %} about-story__slide--active{% endif %}"
+            <article
+              class="about-page-founder__article"
+              id="about-page-founder-article-{{ section.id }}-{{ forloop.index0 }}"
               data-story-block="{{ forloop.index0 }}"
+              tabindex="-1"
             >
               {%- if block.settings.image != blank -%}
-                {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-story__img' }}
+                {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-page-founder__media' }}
               {%- else -%}
-                <div class="about-story__img-placeholder"></div>
+                <div class="about-page-founder__media-placeholder"></div>
               {%- endif -%}
               {%- if block.settings.caption_headline != blank or block.settings.caption_body != blank -%}
-                <div class="about-story__caption">
+                <div class="about-page-founder__caption">
                   {%- if block.settings.caption_headline != blank -%}
-                    <h3 class="about-story__caption-headline">{{ block.settings.caption_headline }}</h3>
+                    <h3 class="about-page-founder__caption-title">
+                      {%- assign ch = block.settings.caption_headline -%}
+                      {%- assign ch_parts = ch | split: 'frustration' -%}
+                      {%- if ch_parts.size == 2 -%}
+                        {{- ch_parts[0] | escape -}}<span class="about-page-accent">frustration</span>{{- ch_parts[1] | escape -}}
+                      {%- else -%}
+                        {%- assign ch_parts_cap = ch | split: 'Frustration' -%}
+                        {%- if ch_parts_cap.size == 2 -%}
+                          {{- ch_parts_cap[0] | escape -}}<span class="about-page-accent">Frustration</span>{{- ch_parts_cap[1] | escape -}}
+                        {%- else -%}
+                          {%- assign ch_parts_upper = ch | split: 'FRUSTRATION' -%}
+                          {%- if ch_parts_upper.size == 2 -%}
+                            {{- ch_parts_upper[0] | escape -}}<span class="about-page-accent">FRUSTRATION</span>{{- ch_parts_upper[1] | escape -}}
+                          {%- else -%}
+                            {{- ch | escape -}}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </h3>
                   {%- endif -%}
                   {%- if block.settings.caption_body != blank -%}
-                    <p class="about-story__caption-body">{{ block.settings.caption_body }}</p>
+                    <p class="about-page-founder__caption-text">
+                      {%- assign cb = block.settings.caption_body -%}
+                      {%- assign cb_parts = cb | split: 'one morning at a time' -%}
+                      {%- if cb_parts.size == 2 -%}
+                        {{- cb_parts[0] | escape -}}<span class="about-page-accent">one morning at a time</span>{{- cb_parts[1] | escape -}}
+                      {%- else -%}
+                        {%- assign cb_parts_cap = cb | split: 'One morning at a time' -%}
+                        {%- if cb_parts_cap.size == 2 -%}
+                          {{- cb_parts_cap[0] | escape -}}<span class="about-page-accent">One morning at a time</span>{{- cb_parts_cap[1] | escape -}}
+                        {%- else -%}
+                          {%- assign cb_parts_upper = cb | split: 'ONE MORNING AT A TIME' -%}
+                          {%- if cb_parts_upper.size == 2 -%}
+                            {{- cb_parts_upper[0] | escape -}}<span class="about-page-accent">ONE MORNING AT A TIME</span>{{- cb_parts_upper[1] | escape -}}
+                          {%- else -%}
+                            {{- cb | escape -}}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </p>
                   {%- endif -%}
                 </div>
               {%- endif -%}
-            </div>
+            </article>
           {%- endfor -%}
         </div>
 
@@ -138,7 +227,8 @@
     </div>
   {%- endif -%}
 
-  {%- comment -%} ── 6. CAREER CTA ── {%- endcomment -%}
+  {%- comment -%} ── 6. BOTTOM CTA (shop / newsletter) ── {%- endcomment -%}
+  {%- if section.settings.show_career_cta -%}
   <div class="about-career">
     <div class="about-career__inner">
       <div class="about-career__image-col">
@@ -171,6 +261,7 @@
       </div>
     </div>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── 7. BLOG GRID ── {%- endcomment -%}
   {%- assign article_blocks = section.blocks | where: 'type', 'article' -%}
@@ -203,7 +294,7 @@
               <div class="about-blog__card-meta">
                 {%- if block.settings.category != blank -%}
                   <span class="about-blog__card-category">{{ block.settings.category }}</span>
-                  <span class="about-blog__card-sep">&ndash;</span>
+                  <span class="about-blog__card-sep">&middot;</span>
                 {%- endif -%}
                 {%- if block.settings.date != blank -%}
                   <span class="about-blog__card-date">{{ block.settings.date }}</span>
@@ -232,14 +323,14 @@
 {% stylesheet %}
 
 .about-page {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #111111;
-  background: #ffffff;
+  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
+  color: var(--color-foreground);
+  background: var(--color-background);
 }
 
 /* ── 1. Hero ── */
 .about-hero {
-  background: #fff;
+  background: transparent;
   padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
   text-align: center;
 }
@@ -252,9 +343,12 @@
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--moov-text-secondary-light);
   margin: 0 0 20px;
   line-height: 1.6;
+}
+[data-theme="dark"] .about-hero__eyebrow {
+  color: var(--moov-text-secondary-dark);
 }
 .about-hero__headline {
   font-family: var(--font-display);
@@ -264,12 +358,15 @@
   letter-spacing: -0.01em;
   line-height: 1.0;
   margin: 0;
-  color: #111;
+  color: var(--color-foreground);
+}
+.about-page-accent {
+  color: var(--color-accent);
 }
 
 /* ── 2. Image Grid ── */
 .about-image-grid {
-  background: #fff;
+  background: transparent;
   padding: 0 clamp(1.5rem, 5vw, 4rem) clamp(3rem, 5vw, 5rem);
 }
 .about-image-grid__inner {
@@ -294,7 +391,10 @@
   object-fit: cover;
 }
 .about-image-grid__placeholder {
-  background: #e8e8e6;
+  background: var(--moov-wash-on-cream-6);
+}
+[data-theme="dark"] .about-image-grid__placeholder {
+  background: var(--moov-surface-dark-raised);
 }
 
 /* ── 3. Feature Block ── */
@@ -314,7 +414,7 @@
   letter-spacing: -0.01em;
   line-height: 1.1;
   margin: 0;
-  color: #111111;
+  color: var(--color-foreground);
 }
 .about-feature__body-cols {
   display: grid;
@@ -324,148 +424,190 @@
 .about-feature__body {
   font-size: 15px;
   font-weight: 400;
-  color: #666;
+  color: var(--moov-text-secondary-light);
   line-height: 1.65;
   margin: 0;
 }
+[data-theme="dark"] .about-feature__body {
+  color: var(--moov-text-secondary-dark);
+}
 
-/* ── 4. Story Section ── */
-.about-story {
+/* ── 4. Founder story (namespaced; avoids clash with moov-about .about-story__inner grid) ── */
+.about-page-founder {
   padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 4rem);
-  background: #fff;
+  background: transparent;
 }
-.about-story__inner {
-  max-width: 1200px;
-  margin: 0 auto;
+.about-page-founder__inner {
+  width: 100%;
+  max-width: min(
+    calc(var(--page-width) - var(--page-margin) * 2),
+    calc(100% - var(--page-margin) * 2)
+  );
+  margin-inline: auto;
 }
-.about-story__layout {
+.about-page-founder__grid {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 56px;
+  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
   align-items: start;
+  width: 100%;
+  min-width: 0;
 }
 
-/* Left column — title + sidebar nav */
-.about-story__sidebar {
+/* Left column: title + sidebar nav */
+.about-page-founder__sidebar {
   position: sticky;
   top: 100px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
-.about-story__section-title {
+.about-page-founder__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: #111;
+  color: var(--color-foreground);
   margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
   line-height: 1;
 }
-.about-story__sidebar-rule {
+.about-page-founder__nav-rule {
   display: none;
 }
-.about-story__sidebar-items {
+.about-page-founder__nav {
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-left: 1.5px solid #e0e0e0;
+  width: 100%;
+  border-left: 1.5px solid var(--moov-border-light);
   padding-left: 0;
 }
-.about-story__sidebar-item {
+[data-theme="dark"] .about-page-founder__nav {
+  border-left-color: var(--moov-border-dark);
+}
+.about-page-founder__nav-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   background: none;
   border: 1px solid transparent;
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   text-align: left;
   cursor: pointer;
   opacity: 0.35;
   transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease;
   margin-bottom: 4px;
 }
-.about-story__sidebar-item:last-child {
+.about-page-founder__nav-btn:last-child {
   margin-bottom: 0;
 }
-.about-story__sidebar-item--active {
+.about-page-founder__nav-btn--active {
   opacity: 1;
-  border-color: #d0d5dd;
-  background: #f9f9f8;
+  border-color: var(--moov-border-light);
+  background: var(--moov-wash-on-cream-4);
 }
-.about-story__sidebar-label {
+[data-theme="dark"] .about-page-founder__nav-btn--active {
+  border-color: var(--moov-border-dark);
+  background: var(--moov-surface-dark-raised);
+}
+.about-page-founder__nav-label {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #111;
+  color: var(--color-foreground);
   margin: 0 0 8px;
 }
-.about-story__sidebar-body {
+.about-page-founder__nav-body {
   font-size: 14px;
   font-weight: 400;
-  color: #555;
+  color: var(--moov-text-secondary-light);
   line-height: 1.6;
   margin: 0;
 }
+[data-theme="dark"] .about-page-founder__nav-body {
+  color: var(--moov-text-secondary-dark);
+}
 
-/* Slides */
-.about-story__slides {
-  position: relative;
-  min-height: 400px;
+/* Slides: stacked for scroll; nav highlights via scroll-spy */
+.about-page-founder__articles {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  min-width: 0;
 }
-.about-story__slide {
-  display: none;
-  animation: storyFadeIn 0.35s ease;
+.about-page-founder__article {
+  scroll-margin-top: calc(var(--header-height, 5rem) + 1rem);
+  min-width: 0;
 }
-.about-story__slide--active {
-  display: block;
+.about-page-founder__article:last-child {
+  margin-bottom: 0;
 }
-@keyframes storyFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.about-story__img {
+.about-page-founder__media {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: 16px;
   display: block;
 }
-.about-story__img-placeholder {
+.about-page-founder__media-placeholder {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #e8e8e6;
+  background: var(--moov-wash-on-cream-6);
   border-radius: 16px;
 }
-.about-story__caption {
-  padding: 28px 0 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
+[data-theme="dark"] .about-page-founder__media-placeholder {
+  background: var(--moov-surface-dark-raised);
 }
-.about-story__caption-headline {
+.about-page-founder__caption {
+  padding: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  min-width: 0;
+}
+.about-page-founder__caption-title {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.5vw, 2.25rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
-  color: #111;
+  color: var(--color-foreground);
+  min-width: 0;
+  max-width: 100%;
+  hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
-.about-story__caption-body {
+.about-page-founder__caption-text {
   font-size: 15px;
   font-weight: 400;
-  color: #666;
+  color: var(--moov-text-secondary-light);
   line-height: 1.65;
   margin: 0;
-  padding-top: 4px;
+  min-width: 0;
+  max-width: min(65ch, 100%);
+  overflow-wrap: break-word;
+}
+[data-theme="dark"] .about-page-founder__caption-text {
+  color: var(--moov-text-secondary-dark);
 }
 
 /* ── 5. Stats Band ── */
 .about-stats {
-  background: #111111;
+  background: var(--moov-black);
   padding: 48px;
+}
+[data-theme="dark"] .about-stats {
+  background: var(--moov-surface-dark-raised);
+  border-top: 1px solid var(--moov-border-dark);
+  border-bottom: 1px solid var(--moov-border-dark);
 }
 .about-stats__inner {
   display: grid;
@@ -473,13 +615,17 @@
   gap: 16px;
 }
 .about-stats__card {
-  background: #e8e8e6;
+  background: var(--moov-cream-shadow);
   border-radius: 16px;
   padding: 36px 32px;
   min-height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+[data-theme="dark"] .about-stats__card {
+  background: var(--moov-surface-dark-elevated);
+  border: 1px solid var(--moov-border-dark);
 }
 .about-stats__card-top {
   display: flex;
@@ -492,7 +638,7 @@
   letter-spacing: -0.01em;
   line-height: 1.1;
   margin: 0;
-  color: #111111;
+  color: var(--moov-black);
 }
 .about-stats__label {
   font-size: clamp(1.5rem, 2vw, 2rem);
@@ -501,14 +647,21 @@
   letter-spacing: -0.01em;
   line-height: 1.1;
   margin: 0;
-  color: #111111;
+  color: var(--moov-black);
+}
+[data-theme="dark"] .about-stats__number,
+[data-theme="dark"] .about-stats__label {
+  color: var(--moov-text-primary-dark);
 }
 .about-stats__description {
   font-size: 13px;
   font-weight: 400;
-  color: #555;
+  color: var(--moov-text-secondary-light);
   line-height: 1.6;
   margin: 0;
+}
+[data-theme="dark"] .about-stats__description {
+  color: var(--moov-text-secondary-dark);
 }
 
 /* ── 6. Career CTA ── */
@@ -535,15 +688,22 @@
 .about-career__img-placeholder {
   width: 100%;
   min-height: 500px;
-  background: #e8e8e6;
+  background: var(--moov-wash-on-cream-6);
+}
+[data-theme="dark"] .about-career__img-placeholder {
+  background: var(--moov-surface-dark-raised);
 }
 .about-career__content-col {
-  background: #f0f0ee;
+  background: var(--moov-wash-on-cream-4);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 64px 48px;
+}
+[data-theme="dark"] .about-career__content-col {
+  background: var(--moov-surface-dark-raised);
+  border: 1px solid var(--moov-border-dark);
 }
 .about-career__content {
   text-align: center;
@@ -554,8 +714,11 @@
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #999;
+  color: var(--moov-text-tertiary-light);
   margin: 0 0 16px;
+}
+[data-theme="dark"] .about-career__label {
+  color: var(--moov-text-tertiary-dark);
 }
 .about-career__headline {
   font-size: clamp(2rem, 3.5vw, 3rem);
@@ -564,32 +727,39 @@
   letter-spacing: -0.01em;
   line-height: 1.05;
   margin: 0 0 20px;
-  color: #111111;
+  color: var(--color-foreground);
 }
 .about-career__body {
   font-size: 15px;
   font-weight: 400;
-  color: #666;
+  color: var(--moov-text-secondary-light);
   line-height: 1.65;
   margin: 0 0 32px;
+}
+[data-theme="dark"] .about-career__body {
+  color: var(--moov-text-secondary-dark);
 }
 .about-career__btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #111111;
-  color: #ffffff;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   padding: 14px 28px;
   border-radius: 999px;
   letter-spacing: 0.01em;
-  transition: background 0.2s ease;
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 .about-career__btn:hover {
-  background: #333333;
+  opacity: 0.88;
+}
+[data-theme="dark"] .about-career__btn:hover {
+  opacity: 1;
+  filter: brightness(1.1);
 }
 
 /* ── 7. Blog Grid ── */
@@ -609,25 +779,29 @@
   letter-spacing: -0.01em;
   line-height: 1;
   margin: 0;
-  color: #111111;
+  color: var(--color-foreground);
 }
 .about-blog__read-all {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #111111;
-  color: #ffffff;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   padding: 12px 22px;
   border-radius: 999px;
   letter-spacing: 0.01em;
-  transition: background 0.2s ease;
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 .about-blog__read-all:hover {
-  background: #333333;
+  opacity: 0.88;
+}
+[data-theme="dark"] .about-blog__read-all:hover {
+  opacity: 1;
+  filter: brightness(1.1);
 }
 .about-blog__grid {
   display: grid;
@@ -661,19 +835,28 @@
 .about-blog__card-img-placeholder {
   width: 100%;
   height: 100%;
-  background: #e8e8e6;
+  background: var(--moov-wash-on-cream-6);
+}
+[data-theme="dark"] .about-blog__card-img-placeholder {
+  background: var(--moov-surface-dark-raised);
 }
 .about-blog__card-meta {
   font-size: 12px;
   font-weight: 400;
-  color: #999;
+  color: var(--moov-text-tertiary-light);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
+[data-theme="dark"] .about-blog__card-meta {
+  color: var(--moov-text-tertiary-dark);
+}
 .about-blog__card-sep {
-  color: #ccc;
+  color: var(--moov-border-light);
+}
+[data-theme="dark"] .about-blog__card-sep {
+  color: var(--moov-border-dark);
 }
 .about-blog__card-title {
   font-size: 15px;
@@ -682,7 +865,7 @@
   letter-spacing: 0.01em;
   line-height: 1.3;
   margin: 0 0 14px;
-  color: #111111;
+  color: var(--color-foreground);
   flex: 1;
 }
 .about-blog__card-link {
@@ -691,12 +874,15 @@
   gap: 10px;
   font-size: 13px;
   font-weight: 400;
-  color: #111111;
+  color: var(--color-foreground);
   text-decoration: none;
   margin-top: auto;
 }
 .about-blog__card-link:hover {
-  color: #555;
+  color: var(--moov-text-secondary-light);
+}
+[data-theme="dark"] .about-blog__card-link:hover {
+  color: var(--moov-text-secondary-dark);
 }
 .about-blog__card-link-icon {
   display: inline-flex;
@@ -705,13 +891,13 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1.5px solid #111111;
+  border: 1.5px solid var(--color-foreground);
   flex-shrink: 0;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .about-blog__card-link:hover .about-blog__card-link-icon {
-  background: #111111;
-  color: #ffffff;
+  background: var(--color-foreground);
+  color: var(--color-background);
 }
 
 /* ── Responsive ── */
@@ -728,12 +914,18 @@
   .about-feature { padding: 48px 24px 64px; }
   .about-feature__inner { grid-template-columns: 1fr; gap: 24px; }
   .about-feature__body-cols { grid-template-columns: 1fr; gap: 16px; }
-  .about-story { padding: 2rem 1.25rem 3rem; }
-  .about-story__layout { grid-template-columns: 1fr; gap: 24px; }
-  .about-story__sidebar { position: static; }
-  .about-story__sidebar-items { flex-direction: row; gap: 8px; overflow-x: auto; padding-left: 0; border-left: none; border-top: 1.5px solid #e0e0e0; padding-top: 12px; }
-  .about-story__sidebar-item { flex-shrink: 0; margin-bottom: 0; }
-  .about-story__caption { grid-template-columns: 1fr; gap: 16px; }
+  .about-page-founder { padding: 2rem 1.25rem 3rem; }
+  .about-page-founder__grid { grid-template-columns: 1fr; gap: 24px; }
+  .about-page-founder__sidebar { position: static; }
+  .about-page-founder__nav { flex-direction: row; gap: 8px; overflow-x: auto; padding-left: 0; border-left: none; border-top: 1.5px solid var(--moov-border-light); padding-top: 12px; }
+  [data-theme="dark"] .about-page-founder__nav { border-top-color: var(--moov-border-dark); }
+  .about-page-founder__nav-btn {
+    flex-shrink: 0;
+    margin-bottom: 0;
+    width: auto;
+    min-width: min(280px, calc(100vw - 2.5rem));
+    max-width: 100%;
+  }
   .about-stats { padding: 32px 24px; }
   .about-stats__inner { grid-template-columns: 1fr; }
   .about-stats__card { min-height: 220px; }
@@ -755,32 +947,186 @@
 {% javascript %}
 (function () {
   var sectionId = '{{ section.id }}';
-  var sidebar = document.getElementById('about-story-sidebar-' + sectionId);
-  var slidesContainer = document.getElementById('about-story-images-' + sectionId);
+  var state = {
+    ignoreScrollSpy: false,
+    scrollSpyTimer: null,
+    scrollTicking: false,
+    listenersBound: false,
+  };
 
-  if (!sidebar || !slidesContainer) return;
+  function getContext() {
+    var sidebar = document.getElementById('about-page-founder-sidebar-' + sectionId);
+    var slidesContainer = document.getElementById('about-page-founder-articles-' + sectionId);
+    if (!sidebar || !slidesContainer) return null;
+    var navItems = sidebar.querySelectorAll('.about-page-founder__nav-btn');
+    var slides = slidesContainer.querySelectorAll('.about-page-founder__article');
+    if (!navItems.length || !slides.length) return null;
+    return { sidebar: sidebar, slidesContainer: slidesContainer, navItems: navItems, slides: slides };
+  }
 
-  var navItems = sidebar.querySelectorAll('.about-story__sidebar-item');
-  var slides = slidesContainer.querySelectorAll('.about-story__slide');
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
 
-  if (!navItems.length || !slides.length) return;
-
-  function showSlide(index) {
-    navItems.forEach(function (item, i) {
+  function setActiveNav(ctx, index) {
+    if (!ctx || index < 0 || index >= ctx.navItems.length) return;
+    ctx.navItems.forEach(function (item, i) {
       var active = i === index;
-      item.classList.toggle('about-story__sidebar-item--active', active);
+      item.classList.toggle('about-page-founder__nav-btn--active', active);
       item.setAttribute('aria-pressed', String(active));
-    });
-    slides.forEach(function (slide, i) {
-      slide.classList.toggle('about-story__slide--active', i === index);
     });
   }
 
-  navItems.forEach(function (item) {
-    item.addEventListener('click', function () {
-      var idx = parseInt(item.getAttribute('data-story-index'), 10);
-      if (!isNaN(idx)) showSlide(idx);
+  /** Article that overlaps the reading band the most (works with very tall first cards). */
+  function indexFromReadingBand(ctx) {
+    var slides = ctx.slides;
+    var vh = window.innerHeight || 600;
+    var header = document.querySelector('.moov-header');
+    var hb = header ? header.getBoundingClientRect().bottom : 0;
+    var bandTop = Math.max(hb + 24, vh * 0.28);
+    var bandBottom = Math.min(vh * 0.62, vh - 16);
+    if (bandBottom - bandTop < 48) {
+      bandTop = vh * 0.3;
+      bandBottom = vh * 0.55;
+    }
+
+    var bestIdx = 0;
+    var bestOverlap = -1;
+    for (var i = 0; i < slides.length; i++) {
+      var r = slides[i].getBoundingClientRect();
+      var overlap = Math.min(r.bottom, bandBottom) - Math.max(r.top, bandTop);
+      if (overlap < 0) overlap = 0;
+      if (overlap > bestOverlap) {
+        bestOverlap = overlap;
+        bestIdx = i;
+      }
+    }
+
+    if (bestOverlap > 2) return bestIdx;
+
+    var y = (bandTop + bandBottom) / 2;
+    var nearest = 0;
+    var nearestDist = Infinity;
+    for (var j = 0; j < slides.length; j++) {
+      var r2 = slides[j].getBoundingClientRect();
+      var d = 0;
+      if (y < r2.top) d = r2.top - y;
+      else if (y > r2.bottom) d = y - r2.bottom;
+      else d = 0;
+      if (d < nearestDist || (d === nearestDist && j > nearest)) {
+        nearestDist = d;
+        nearest = j;
+      }
+    }
+    return nearest;
+  }
+
+  function onScrollSpy() {
+    if (state.ignoreScrollSpy) return;
+    var ctx = getContext();
+    if (!ctx) return;
+    setActiveNav(ctx, indexFromReadingBand(ctx));
+  }
+
+  function onScroll() {
+    if (state.ignoreScrollSpy) return;
+    if (!state.scrollTicking) {
+      state.scrollTicking = true;
+      requestAnimationFrame(function () {
+        state.scrollTicking = false;
+        onScrollSpy();
+      });
+    }
+  }
+
+  function bindNavClicks(ctx) {
+    ctx.navItems.forEach(function (item) {
+      if (item.getAttribute('data-founder-spy-bound') === sectionId) return;
+      item.setAttribute('data-founder-spy-bound', sectionId);
+      item.addEventListener('click', function () {
+        var fresh = getContext();
+        if (!fresh) return;
+        var idx = parseInt(item.getAttribute('data-story-index'), 10);
+        if (isNaN(idx)) return;
+        var target = fresh.slidesContainer.querySelector('.about-page-founder__article[data-story-block="' + idx + '"]');
+        if (!target) return;
+        state.ignoreScrollSpy = true;
+        setActiveNav(fresh, idx);
+        target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+        if (state.scrollSpyTimer) clearTimeout(state.scrollSpyTimer);
+        state.scrollSpyTimer = setTimeout(function () {
+          state.ignoreScrollSpy = false;
+          onScrollSpy();
+        }, prefersReducedMotion() ? 80 : 900);
+      });
     });
+  }
+
+  function initFounderScrollSpy() {
+    var ctx = getContext();
+    if (!ctx) return;
+
+    bindNavClicks(ctx);
+
+    if (!state.listenersBound) {
+      state.listenersBound = true;
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+      var se = document.scrollingElement || document.documentElement;
+      if (se) se.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScrollSpy, { passive: true });
+    }
+
+    onScrollSpy();
+
+    if (window.ResizeObserver) {
+      for (var k = 0; k < ctx.slides.length; k++) {
+        if (ctx.slides[k].getAttribute('data-founder-ro') === sectionId) continue;
+        ctx.slides[k].setAttribute('data-founder-ro', sectionId);
+        (function (el) {
+          var ro = new ResizeObserver(function () {
+            if (!state.ignoreScrollSpy) onScrollSpy();
+          });
+          ro.observe(el);
+        })(ctx.slides[k]);
+      }
+    }
+
+    if (window.IntersectionObserver) {
+      for (var m = 0; m < ctx.slides.length; m++) {
+        if (ctx.slides[m].getAttribute('data-founder-io') === sectionId) continue;
+        ctx.slides[m].setAttribute('data-founder-io', sectionId);
+        (function (el) {
+          var io = new IntersectionObserver(
+            function () {
+              if (!state.ignoreScrollSpy) onScrollSpy();
+            },
+            {
+              root: null,
+              rootMargin: '-30% 0px -45% 0px',
+              threshold: [0, 0.02, 0.06, 0.12, 0.2, 0.35, 0.5, 0.65, 0.8, 1],
+            }
+          );
+          io.observe(el);
+        })(ctx.slides[m]);
+      }
+    }
+  }
+
+  function run() {
+    initFounderScrollSpy();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+
+  document.addEventListener('shopify:section:load', function (ev) {
+    var byId = ev.detail && String(ev.detail.sectionId) === String(sectionId);
+    var byDom = ev.target && ev.target.querySelector && ev.target.querySelector('#about-page-founder-sidebar-' + sectionId);
+    if (byId || byDom) setTimeout(run, 0);
   });
 })();
 {% endjavascript %}
@@ -797,13 +1143,13 @@
       "type": "text",
       "id": "hero_eyebrow",
       "label": "Eyebrow text",
-      "default": "Empowering your active life with quality sportswear for every journey"
+      "default": "Why MOOV"
     },
     {
       "type": "textarea",
       "id": "hero_headline",
       "label": "Headline",
-      "default": "Passionate about performance and dedicated to innovation, we create sportswear that supports your goals."
+      "default": "Make getting up easier than staying in bed."
     },
     {
       "type": "header",
@@ -827,52 +1173,69 @@
       "type": "textarea",
       "id": "feature_headline",
       "label": "Headline",
-      "default": "Crafted for performance, designed for you"
+      "default": "What we believe about mornings"
     },
     {
       "type": "textarea",
       "id": "feature_body_1",
-      "label": "Body copy — left column",
-      "default": "We believe that every detail matters. From breathable fabrics to ergonomic fits, our sportswear is built to keep up with you wherever you go. Crafted with high-quality materials and advanced design."
+      "label": "Body copy, left column",
+      "default": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading."
     },
     {
       "type": "textarea",
       "id": "feature_body_2",
-      "label": "Body copy — right column",
-      "default": "Each piece is designed to enhance your experience, whether you're hitting the trails or the gym. Our gear isn't just functional; it's a part of your journey, providing the support and freedom you need to perform at your best."
+      "label": "Body copy, right column",
+      "default": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day."
     },
     {
       "type": "header",
-      "content": "Career CTA"
+      "content": "Story section"
+    },
+    {
+      "type": "text",
+      "id": "story_sidebar_title",
+      "label": "Sidebar heading",
+      "default": "Founder story",
+      "info": "Shown above the story navigation. Leave blank to use the theme translation for \"Our story\"."
+    },
+    {
+      "type": "header",
+      "content": "Bottom CTA"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_career_cta",
+      "label": "Show bottom CTA",
+      "default": true
     },
     {
       "type": "image_picker",
       "id": "career_image",
-      "label": "Career image"
+      "label": "CTA image"
     },
     {
       "type": "text",
       "id": "career_label",
       "label": "Eyebrow label",
-      "default": "Career"
+      "default": "Shop MOOV"
     },
     {
       "type": "textarea",
       "id": "career_headline",
       "label": "Headline",
-      "default": "Join to shape the future of activewear"
+      "default": "Take back your mornings"
     },
     {
       "type": "textarea",
       "id": "career_body",
       "label": "Body",
-      "default": "Help us lead the way in sportswear innovation with exciting career opportunities. Join a team passionate about creating gear that supports every adventure and empowers every journey."
+      "default": "Ready to make getting up easier than staying in bed? Start with MOOV."
     },
     {
       "type": "text",
       "id": "career_button_label",
       "label": "Button label",
-      "default": "Learn more"
+      "default": "Shop now"
     },
     {
       "type": "url",
@@ -927,7 +1290,7 @@
           "type": "textarea",
           "id": "caption_body",
           "label": "Caption body",
-          "default": "We built MOOV to help people reclaim their first hour — turning the hardest moment of the day into the most powerful."
+          "default": "We built MOOV to help people reclaim their first hour, turning the hardest moment of the day into the most powerful."
         }
       ]
     },
@@ -997,76 +1360,28 @@
         {
           "type": "step",
           "settings": {
-            "label": "Vision",
-            "body": "We saw a world drowning in snooze buttons. MOOV was built to change the first moment of every day.",
-            "caption_headline": "Owning the morning",
-            "caption_body": "The alarm goes off. Most people lose the first battle of the day before they're even awake. We built MOOV to flip that."
+            "label": "The frustration",
+            "body": "MOOV started from frustration, knowing what a better morning looks like, but not living it.",
+            "caption_headline": "It started with frustration",
+            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like: getting up earlier, feeling less rushed, starting the day with more intention. But knowing what to do and actually doing it are two different things."
           }
         },
         {
           "type": "step",
           "settings": {
-            "label": "Journey",
-            "body": "From a late-night idea to a product that thousands of early risers now rely on every morning.",
-            "caption_headline": "Built from frustration",
-            "caption_body": "Our founders were chronic snoozers. They tried everything. Nothing worked — until they realised the solution was physical, not digital."
+            "label": "The insight",
+            "body": "The real problem was never the alarm. It was what came after.",
+            "caption_headline": "The system, not motivation",
+            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty. I realized the issue wasn't motivation. It was the system."
           }
         },
         {
           "type": "step",
           "settings": {
-            "label": "Promise",
-            "body": "Simple hardware, smart routines, and zero guilt. MOOV is designed to get you up and into your life.",
-            "caption_headline": "The MOOV promise",
-            "caption_body": "No gamification. No streaks. No pressure. Just a system that quietly makes getting up easier, every single day."
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "10,000+",
-            "label": "Happy customers",
-            "description": "Trusted by over 10,000 customers who rely on our sportswear for quality, performance, and style."
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "30+",
-            "label": "Countries",
-            "description": "Reaching athletes and enthusiasts in over 30 countries with gear made to support active lifestyles."
-          }
-        },
-        {
-          "type": "stat",
-          "settings": {
-            "number": "500+",
-            "label": "Positive reviews",
-            "description": "With over 500 positive reviews, our customers affirm our dedication to quality, comfort, and reliability."
-          }
-        },
-        {
-          "type": "article",
-          "settings": {
-            "category": "Route",
-            "date": "Nov 20 2024",
-            "title": "Top benefits of investing in quality sportswear"
-          }
-        },
-        {
-          "type": "article",
-          "settings": {
-            "category": "Interview",
-            "date": "Nov 20 2024",
-            "title": "How to care for and extend the life of your sports clothing"
-          }
-        },
-        {
-          "type": "article",
-          "settings": {
-            "category": "Community",
-            "date": "Nov 20 2024",
-            "title": "The evolution of sportswear: from function to fashion"
+            "label": "What we built",
+            "body": "A tool that changes the environment so mornings are easier, not more disciplined.",
+            "caption_headline": "For anyone tired of feeling behind",
+            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them. MOOV is for anyone who's tired of starting their day feeling behind. It's a simple tool built to help you take back control, one morning at a time."
           }
         }
       ]

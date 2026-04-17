@@ -3,35 +3,45 @@
     "main": {
       "type": "our-story",
       "settings": {
-        "hero_eyebrow": "Built to get you out of bed and into your life",
-        "hero_headline": "Passionate about mornings and dedicated to helping you own yours."
+        "hero_eyebrow": "Why MOOV",
+        "hero_headline": "Make getting up easier than staying in bed.",
+        "feature_headline": "What we believe about mornings",
+        "feature_body_1": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading.",
+        "feature_body_2": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day.",
+        "story_sidebar_title": "Founder story",
+        "show_career_cta": true,
+        "career_label": "Shop MOOV",
+        "career_headline": "Take back your mornings",
+        "career_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
+        "career_button_label": "Shop now",
+        "career_button_url": "/collections/all"
       },
       "blocks": {
         "step-1": {
           "type": "step",
           "settings": {
-            "label": "Vision",
-            "body": "We saw a world drowning in snooze buttons. MOOV was built to change the first moment of every day.",
-            "caption_headline": "Owning the morning",
-            "caption_body": "The alarm goes off. Most people lose the first battle of the day before they're even awake. We built MOOV to flip that."
+            "label": "The frustration",
+            "body": "MOOV started from frustration, knowing what a better morning looks like, but not living it.",
+            "caption_headline": "It started with frustration",
+            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like: getting up earlier, feeling less rushed, starting the day with more intention. But knowing what to do and actually doing it are two different things."
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
-            "label": "Journey",
-            "body": "From a late-night idea to a product that thousands of early risers now rely on every morning.",
-            "caption_headline": "Built from frustration",
-            "caption_body": "Our founders were chronic snoozers. They tried everything. Nothing worked until they realised the solution was physical, not digital."
+            "label": "The insight",
+            "body": "The real problem was never the alarm. It was what came after.",
+            "caption_headline": "The system, not motivation",
+            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty. I realized the issue wasn't motivation. It was the system."
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
-            "label": "Promise",
-            "body": "Simple hardware, smart routines, and zero guilt. MOOV is designed to get you up and into your life.",
-            "caption_headline": "The MOOV promise",
-            "caption_body": "No gamification. No streaks. No pressure. Just a system that quietly makes getting up easier, every single day."
+            "label": "What we built",
+            "body": "A tool that changes the environment so mornings are easier, not more disciplined.",
+            "caption_headline": "For anyone tired of feeling behind",
+            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them. MOOV is for anyone who's tired of starting their day feeling behind. It's a simple tool built to help you take back control, one morning at a time."
           }
         }
       },
