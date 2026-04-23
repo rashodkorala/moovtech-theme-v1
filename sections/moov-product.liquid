@@ -15,6 +15,7 @@
       <span class="moov-mini-bar__name">{{ product.title }}</span>
     </div>
     <nav class="moov-mini-bar__links" aria-label="{{ 'product.mini_bar.nav_label' | t }}">
+      <a href="#moov-product-story" class="moov-mini-bar__link">{{ 'product.mini_bar.story' | t }}</a>
       <a href="#moov-specs" class="moov-mini-bar__link">{{ 'product.mini_bar.specs' | t }}</a>
     </nav>
     <a href="#moov-product-cta" class="moov-mini-bar__cta">{{ 'product.pre_order' | t }}</a>
@@ -54,51 +55,290 @@
 
     {%- comment -%} Right — Product details {%- endcomment -%}
     <div class="moov-prod-intro__details">
-      <p class="moov-prod-intro__eyebrow">{{ product_eyebrow | escape }}</p>
+      {%- liquid
+        assign color_swatches = section.blocks | where: 'type', 'color_swatch'
+        assign trust_items = section.blocks | where: 'type', 'trust_item'
+        assign current_variant = product.selected_or_first_available_variant
+        assign is_new = false
+        if product.tags contains 'new'
+          assign is_new = true
+        endif
+        if product.tags contains 'New'
+          assign is_new = true
+        endif
+      -%}
+
+      {%- comment -%} Breadcrumb + "New" chip {%- endcomment -%}
+      <div class="moov-prod-intro__topline">
+        <nav class="moov-prod-intro__crumbs" aria-label="{{ 'general.accessibility.breadcrumb' | t }}">
+          <a href="{{ routes.collections_url }}">{{ 'product.hero.breadcrumb_shop' | t }}</a>
+          {%- if product.collections.first -%}
+            <span class="moov-prod-intro__crumb-sep" aria-hidden="true">›</span>
+            <a href="{{ product.collections.first.url }}">{{ product.collections.first.title | escape }}</a>
+          {%- endif -%}
+        </nav>
+        {%- if is_new -%}
+          <span class="moov-prod-intro__chip">{{ 'product.hero.new' | t }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if product_eyebrow != blank -%}
+        <p class="moov-prod-intro__eyebrow">{{ product_eyebrow | escape }}</p>
+      {%- endif -%}
       <h1 class="moov-prod-intro__title">{{ product.title }}</h1>
       {%- if section.settings.product_subtitle != blank -%}
         <p class="moov-prod-intro__subtitle">{{ section.settings.product_subtitle | escape }}</p>
       {%- endif -%}
-      {%- if product.description != blank -%}
-        <p class="moov-prod-intro__desc">{{ product.description | strip_html | truncate: 120 }}</p>
-      {%- endif -%}
 
-      <div class="moov-prod-intro__price">
-        <span class="moov-prod-intro__price-current">{{ product.selected_or_first_available_variant.price | money }}</span>
-        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
-          <span class="moov-prod-intro__price-compare">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span>
+      {%- comment -%} Price + rating row {%- endcomment -%}
+      <div class="moov-prod-intro__priceline">
+        <div class="moov-prod-intro__price">
+          <span class="moov-prod-intro__price-current" data-price>{{ current_variant.price | money }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="moov-prod-intro__price-compare" data-compare-price>{{ current_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+        </div>
+        {%- assign rating_metafield = product.metafields.reviews.rating.value -%}
+        {%- assign rating_count = product.metafields.reviews.rating_count -%}
+        {%- if rating_metafield -%}
+          {%- assign rating_score = rating_metafield.rating | default: rating_metafield -%}
+          {%- assign rating_number = rating_score | times: 1.0 -%}
+          {%- if rating_number > 0 -%}
+            {%- assign full_stars = rating_number | floor -%}
+            <a href="#moov-reviews" class="moov-prod-intro__rating" aria-label="{{ 'sections.reviews.out_of_5' | t: score: rating_number }}">
+              <span class="moov-prod-intro__rating-stars" aria-hidden="true">
+                {%- for i in (1..5) -%}
+                  {%- if i <= full_stars -%}
+                    <span class="moov-prod-intro__star moov-prod-intro__star--on">★</span>
+                  {%- else -%}
+                    <span class="moov-prod-intro__star">★</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </span>
+              <span class="moov-prod-intro__rating-text">
+                {{- rating_number -}}/5
+                {%- if rating_count -%}
+                  <span class="moov-prod-intro__rating-count">({{ rating_count }})</span>
+                {%- endif -%}
+              </span>
+            </a>
+          {%- endif -%}
         {%- endif -%}
       </div>
 
-      {%- comment -%} Variant selectors {%- endcomment -%}
-      {%- unless product.has_only_default_variant -%}
-        {%- for option in product.options_with_values -%}
-          <div class="moov-prod-intro__option">
-            <p class="moov-prod-intro__option-label">{{ option.name }}: <strong>{{ option.selected_value }}</strong></p>
-            <div class="moov-prod-intro__option-pills">
-              {%- for value in option.values -%}
-                <button
-                  class="moov-colour-pill {% if value == option.selected_value %}is-selected{% endif %}"
-                  data-option="{{ option.name }}"
-                  data-value="{{ value }}"
-                >
-                  {{ value }}
-                </button>
-              {%- endfor -%}
+      {%- comment -%} Short description + More info disclosure {%- endcomment -%}
+      {%- if product.description != blank -%}
+        {%- assign desc_full = product.description | strip_html -%}
+        {%- assign desc_short = desc_full | truncate: 140 -%}
+        {%- assign needs_disclosure = false -%}
+        {%- if desc_full.size > desc_short.size -%}
+          {%- assign needs_disclosure = true -%}
+        {%- endif -%}
+        <div class="moov-prod-intro__desc-wrap"{% if needs_disclosure %} data-disclosure{% endif %}>
+          <p class="moov-prod-intro__desc">{{ desc_short }}</p>
+          {%- if needs_disclosure -%}
+            <div class="moov-prod-intro__desc-full" hidden>
+              <div class="moov-prod-intro__desc-rich">{{ product.description }}</div>
             </div>
-          </div>
-        {%- endfor -%}
-      {%- endunless -%}
+            <button type="button" class="moov-prod-intro__more" aria-expanded="false" data-disclosure-toggle>
+              <span data-disclosure-open>{{ 'product.hero.more_info' | t }}</span>
+              <span data-disclosure-close hidden>{{ 'product.hero.less_info' | t }}</span>
+              <svg class="moov-prod-intro__more-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
 
-      {%- comment -%} Add to cart / Pre-order {%- endcomment -%}
-      <div id="moov-product-cta">
-        {%- form 'product', product -%}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          <button type="submit" class="moov-prod-intro__add-btn">
-            {{ 'product.pre_order' | t }}
-          </button>
-        {%- endform -%}
-      </div>
+      {%- comment -%} Product form (variants + qty + CTA + financing + delivery) {%- endcomment -%}
+      <form
+        id="moov-product-cta"
+        action="{{ routes.cart_add_url }}"
+        method="post"
+        enctype="multipart/form-data"
+        class="moov-prod-intro__form"
+        data-product-form
+        data-section-id="{{ section.id }}"
+      >
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign opt_name_down = option.name | downcase
+              assign is_color = false
+              if opt_name_down == 'color'
+                assign is_color = true
+              endif
+              if opt_name_down == 'colour'
+                assign is_color = true
+              endif
+            -%}
+
+            {%- if is_color -%}
+              <div class="moov-prod-intro__option moov-prod-intro__option--swatches" data-option-index="{{ forloop.index0 }}">
+                <p class="moov-prod-intro__option-label">
+                  {{ option.name | escape }}:
+                  <strong data-selected-value>{{ option.selected_value | escape }}</strong>
+                </p>
+                <div class="moov-prod-intro__swatches" role="radiogroup" aria-label="{{ option.name | escape }}">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign swatch_color = ''
+                      for swatch in color_swatches
+                        assign sw_val = swatch.settings.value | downcase | strip
+                        assign opt_val = value | downcase | strip
+                        if sw_val == opt_val
+                          assign swatch_color = swatch.settings.color
+                          break
+                        endif
+                      endfor
+                      if swatch_color == blank
+                        assign swatch_color = value | downcase
+                      endif
+                    -%}
+                    <button
+                      type="button"
+                      class="moov-prod-intro__swatch {% if value == option.selected_value %}is-selected{% endif %}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-value="{{ value | escape }}"
+                      style="--swatch-color: {{ swatch_color | escape }};"
+                      role="radio"
+                      aria-checked="{% if value == option.selected_value %}true{% else %}false{% endif %}"
+                      aria-label="{{ value | escape }}"
+                      title="{{ value | escape }}"
+                    >
+                      <span class="moov-prod-intro__swatch-dot" aria-hidden="true"></span>
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- else -%}
+              {%- if option.values.size > 1 -%}
+                <label class="moov-prod-intro__dropdown" data-option-index="{{ forloop.index0 }}">
+                  <span class="moov-prod-intro__dropdown-small">{{ 'product.hero.selected' | t }}</span>
+                  <span class="moov-prod-intro__dropdown-value" data-selected-value>{{ option.selected_value | escape }}</span>
+                  <svg class="moov-prod-intro__dropdown-chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <select class="moov-prod-intro__dropdown-select" data-option-select aria-label="{{ option.name | escape }}">
+                    {%- for value in option.values -%}
+                      <option value="{{ value | escape }}" {% if value == option.selected_value %}selected{% endif %}>{{ value | escape }}</option>
+                    {%- endfor -%}
+                  </select>
+                </label>
+              {%- else -%}
+                <input type="hidden" data-option-single data-option-index="{{ forloop.index0 }}" value="{{ option.selected_value | escape }}">
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
+
+        {%- comment -%} Quantity stepper {%- endcomment -%}
+        <div class="moov-prod-intro__qty">
+          <span class="moov-prod-intro__qty-label">{{ 'product.hero.quantity' | t }}</span>
+          <div class="moov-prod-intro__qty-stepper">
+            <button type="button" class="moov-prod-intro__qty-btn" data-qty="down" aria-label="{{ 'cart.decrease' | t }}">−</button>
+            <input
+              type="number"
+              name="quantity"
+              value="1"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              class="moov-prod-intro__qty-input"
+              aria-label="{{ 'cart.quantity' | t }}"
+            >
+            <button type="button" class="moov-prod-intro__qty-btn" data-qty="up" aria-label="{{ 'cart.increase' | t }}">+</button>
+          </div>
+        </div>
+
+        {%- assign available = current_variant.available -%}
+        <button
+          type="submit"
+          class="moov-prod-intro__add-btn"
+          data-add-btn
+          data-label-available="{{ 'product.pre_order' | t | escape }}"
+          data-label-unavailable="{{ 'product.sold_out_button' | t | escape }}"
+          {% unless available %}disabled{% endunless %}
+        >
+          <span data-add-label>
+            {%- if available -%}
+              {{ 'product.pre_order' | t }}
+            {%- else -%}
+              {{ 'product.sold_out_button' | t }}
+            {%- endif -%}
+          </span>
+        </button>
+
+        {%- comment -%} Financing note {%- endcomment -%}
+        {%- if section.settings.financing_enabled -%}
+          {%- assign installments = section.settings.financing_installments | default: 4 -%}
+          {%- assign brand = section.settings.financing_brand | default: 'Shop Pay' -%}
+          {%- assign installment_price = current_variant.price | divided_by: installments -%}
+          {%- assign installment_price_money = installment_price | money -%}
+          {%- assign financing_text = 'product.hero.financing' | t: installments: installments, installment: installment_price_money, brand: brand -%}
+          {%- capture financing_template -%}
+            {{- 'product.hero.financing' | t: installments: '__INSTALLMENTS__', installment: '__AMOUNT__', brand: brand -}}
+          {%- endcapture -%}
+          <p
+            class="moov-prod-intro__financing"
+            data-financing
+            data-installments="{{ installments }}"
+            data-template="{{ financing_template | escape }}"
+          >
+            <span data-financing-text>{{ financing_text }}</span>
+            {%- if section.settings.financing_link != blank -%}
+              <a href="{{ section.settings.financing_link }}" class="moov-prod-intro__financing-link">{{ 'product.hero.learn_more' | t }}</a>
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+
+        {%- comment -%} Delivery micro-note {%- endcomment -%}
+        <p class="moov-prod-intro__delivery">
+          <span class="moov-prod-intro__delivery-dot moov-prod-intro__delivery-dot--{% if available %}ok{% else %}out{% endif %}" aria-hidden="true"></span>
+          {%- if available -%}
+            <span>{{ 'product.hero.in_stock' | t }}</span>
+            {%- if section.settings.shipping_note != blank -%}
+              <span class="moov-prod-intro__delivery-sep" aria-hidden="true">·</span>
+              <span>{{ section.settings.shipping_note | escape }}</span>
+            {%- endif -%}
+          {%- else -%}
+            <span>{{ 'shop.sold_out' | t }}</span>
+          {%- endif -%}
+        </p>
+      </form>
+
+      {%- comment -%} Trust strip {%- endcomment -%}
+      {%- if trust_items.size > 0 -%}
+        <ul class="moov-prod-intro__trust">
+          {%- for item in trust_items -%}
+            <li class="moov-prod-intro__trust-item" {{ item.shopify_attributes }}>
+              <span class="moov-prod-intro__trust-icon" aria-hidden="true">
+                {%- case item.settings.icon -%}
+                  {%- when 'shipping' -%}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  {%- when 'trial' -%}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                  {%- when 'warranty' -%}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+                  {%- when 'secure' -%}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+                {%- endcase -%}
+              </span>
+              <span class="moov-prod-intro__trust-label">{{ item.settings.label | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- comment -%} Variant map for JS sync {%- endcomment -%}
+      <script type="application/json" data-variant-map>
+        {{ product.variants | json }}
+      </script>
     </div>
   </div>
 </div>
@@ -121,46 +361,47 @@
 
       <div class="moov-specs__content">
         <div class="moov-specs__tabs" role="tablist">
-          <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="audio">{{ 'product.specs.audio' | t }}</button>
+          <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="design">{{ 'product.specs.design' | t }}</button>
           <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
           <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
           <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
         </div>
 
-        <div class="moov-specs__panel is-active" data-panel="audio">
+        <div class="moov-specs__panel is-active" data-panel="design">
           <dl class="moov-specs__list">
-            <div class="moov-specs__row"><dt>{{ 'product.specs.amplifiers' | t }}</dt><dd>{{ 'product.specs.amplifiers_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.tweeters' | t }}</dt><dd>{{ 'product.specs.tweeters_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.woofer' | t }}</dt><dd>{{ 'product.specs.woofer_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.eq' | t }}</dt><dd>{{ 'product.specs.eq_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.trueplay' | t }}</dt><dd>{{ 'product.specs.trueplay_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.build' | t }}</dt><dd>{{ 'product.specs.build_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.led' | t }}</dt><dd>{{ 'product.specs.led_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.control' | t }}</dt><dd>{{ 'product.specs.control_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.mounting' | t }}</dt><dd>{{ 'product.specs.mounting_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.setup' | t }}</dt><dd>{{ 'product.specs.setup_val' | t }}</dd></div>
           </dl>
         </div>
 
         <div class="moov-specs__panel" data-panel="dimensions">
           <dl class="moov-specs__list">
-            <div class="moov-specs__row"><dt>{{ 'product.specs.height' | t }}</dt><dd>192.3mm</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.width' | t }}</dt><dd>112.5mm</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.depth' | t }}</dt><dd>76.7mm</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.weight' | t }}</dt><dd>1.3kg</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.finish' | t }}</dt><dd>{{ 'product.specs.finish_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.colours' | t }}</dt><dd>{{ 'product.specs.colours_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.length' | t }}</dt><dd>{{ 'product.specs.length_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.width' | t }}</dt><dd>{{ 'product.specs.width_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.depth' | t }}</dt><dd>{{ 'product.specs.depth_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.battery' | t }}</dt><dd>{{ 'product.specs.battery_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.charging' | t }}</dt><dd>{{ 'product.specs.charging_val' | t }}</dd></div>
           </dl>
         </div>
 
         <div class="moov-specs__panel" data-panel="connectivity">
           <dl class="moov-specs__list">
-            <div class="moov-specs__row"><dt>{{ 'product.specs.battery' | t }}</dt><dd>{{ 'product.specs.battery_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>WiFi</dt><dd>802.11a/b/g/n/ac/ax 2.4GHz / 5GHz</dd></div>
-            <div class="moov-specs__row"><dt>Bluetooth</dt><dd>5.3</dd></div>
-            <div class="moov-specs__row"><dt>USB-C</dt><dd>{{ 'product.specs.usbc_val' | t }}</dd></div>
-            <div class="moov-specs__row"><dt>{{ 'product.specs.water' | t }}</dt><dd>IP67</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.bluetooth' | t }}</dt><dd>{{ 'product.specs.bluetooth_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.android' | t }}</dt><dd>{{ 'product.specs.android_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.ios' | t }}</dt><dd>{{ 'product.specs.ios_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.alarm' | t }}</dt><dd>{{ 'product.specs.alarm_val' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>{{ 'product.specs.dismiss' | t }}</dt><dd>{{ 'product.specs.dismiss_val' | t }}</dd></div>
           </dl>
         </div>
 
         <div class="moov-specs__panel" data-panel="inbox">
           <dl class="moov-specs__list">
-            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_alarm' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_device' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_mount' | t }}</dd></div>
+            <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_strip' | t }}</dd></div>
             <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_charger' | t }}</dd></div>
             <div class="moov-specs__row"><dt>1×</dt><dd>{{ 'product.specs.inbox_guide' | t }}</dd></div>
           </dl>
@@ -501,9 +742,386 @@
     margin-bottom: 14px;
     max-width: 430px;
   }
-  .moov-prod-intro__add-btn:hover {
+  .moov-prod-intro__add-btn:hover:not(:disabled) {
     background: var(--moov-amber);
     border-color: var(--moov-amber);
+  }
+  .moov-prod-intro__add-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* ═══ BUY BOX — Sonos-style additions ═════════ */
+
+  /* Breadcrumb + New chip */
+  .moov-prod-intro__topline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .moov-prod-intro__crumbs {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-light);
+    letter-spacing: 0.02em;
+  }
+  .moov-prod-intro__crumbs a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .moov-prod-intro__crumbs a:hover {
+    color: var(--moov-text-primary-light);
+  }
+  .moov-prod-intro__crumb-sep {
+    color: var(--moov-text-tertiary-light);
+  }
+  .moov-prod-intro__chip {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--moov-black);
+    color: var(--moov-text-primary-dark);
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Price + rating line */
+  .moov-prod-intro__priceline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .moov-prod-intro__priceline .moov-prod-intro__price {
+    margin-bottom: 0;
+  }
+  .moov-prod-intro__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--moov-text-secondary-light);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    transition: color 0.15s ease;
+  }
+  .moov-prod-intro__rating:hover {
+    color: var(--moov-text-primary-light);
+  }
+  .moov-prod-intro__rating-stars {
+    display: inline-flex;
+    gap: 2px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+  .moov-prod-intro__star {
+    color: var(--moov-text-tertiary-light);
+    line-height: 1;
+  }
+  .moov-prod-intro__star--on {
+    color: var(--moov-amber);
+  }
+  .moov-prod-intro__rating-text {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 0.5px;
+  }
+  .moov-prod-intro__rating-count {
+    margin-left: 4px;
+    color: var(--moov-text-tertiary-light);
+  }
+
+  /* Description + "More info" disclosure */
+  .moov-prod-intro__desc-wrap {
+    margin: 0 0 22px;
+    max-width: 50ch;
+  }
+  .moov-prod-intro__desc-wrap .moov-prod-intro__desc {
+    margin-bottom: 6px;
+  }
+  .moov-prod-intro__desc-full {
+    overflow: hidden;
+  }
+  .moov-prod-intro__desc-rich {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--moov-text-secondary-light);
+    margin-top: 10px;
+  }
+  .moov-prod-intro__desc-rich p {
+    margin: 0 0 10px;
+  }
+  .moov-prod-intro__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--moov-text-primary-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 0.5px;
+  }
+  .moov-prod-intro__more-chev {
+    transition: transform 0.2s ease;
+  }
+  .moov-prod-intro__more[aria-expanded="true"] .moov-prod-intro__more-chev {
+    transform: rotate(180deg);
+  }
+
+  /* "Selected" variant dropdown */
+  .moov-prod-intro__dropdown {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    row-gap: 2px;
+    align-items: center;
+    padding: 12px 18px;
+    border: 1px solid var(--moov-border-light);
+    border-radius: 14px;
+    background: transparent;
+    margin-bottom: 18px;
+    max-width: 430px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .moov-prod-intro__dropdown:hover {
+    border-color: color-mix(in srgb, var(--moov-black) 35%, transparent);
+  }
+  .moov-prod-intro__dropdown:focus-within {
+    border-color: var(--moov-black);
+    outline: none;
+  }
+  .moov-prod-intro__dropdown-small {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    color: var(--moov-text-secondary-light);
+    letter-spacing: 0.02em;
+  }
+  .moov-prod-intro__dropdown-value {
+    grid-column: 1 / 2;
+    grid-row: 2;
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--moov-text-primary-light);
+  }
+  .moov-prod-intro__dropdown-chev {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--moov-text-secondary-light);
+  }
+  .moov-prod-intro__dropdown-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+  }
+
+  /* Colour swatches (replace old text pills) */
+  .moov-prod-intro__option--swatches .moov-prod-intro__option-label {
+    margin-bottom: 10px;
+  }
+  .moov-prod-intro__swatches {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .moov-prod-intro__swatch {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--moov-border-light);
+    border-radius: 999px;
+    background: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .moov-prod-intro__swatch:hover {
+    border-color: color-mix(in srgb, var(--moov-black) 40%, transparent);
+  }
+  .moov-prod-intro__swatch.is-selected {
+    border-color: var(--moov-text-primary-light);
+  }
+  .moov-prod-intro__swatch-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--swatch-color, var(--moov-text-primary-light));
+    border: 1px solid color-mix(in srgb, var(--moov-black) 10%, transparent);
+    display: block;
+  }
+
+  /* Quantity stepper */
+  .moov-prod-intro__qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    max-width: 430px;
+  }
+  .moov-prod-intro__qty-label {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-light);
+  }
+  .moov-prod-intro__qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--moov-border-light);
+    border-radius: 999px;
+    overflow: hidden;
+    background: transparent;
+  }
+  .moov-prod-intro__qty-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    font-family: var(--font-body);
+    color: var(--moov-text-primary-light);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .moov-prod-intro__qty-btn:hover {
+    background: color-mix(in srgb, var(--moov-black) 6%, transparent);
+  }
+  .moov-prod-intro__qty-input {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--moov-text-primary-light);
+    -moz-appearance: textfield;
+  }
+  .moov-prod-intro__qty-input::-webkit-outer-spin-button,
+  .moov-prod-intro__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .moov-prod-intro__qty-input:focus {
+    outline: none;
+  }
+
+  /* Financing line */
+  .moov-prod-intro__financing {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 10px;
+    padding: 10px 14px;
+    background: color-mix(in srgb, var(--moov-black) 3%, transparent);
+    border-radius: 8px;
+    max-width: 430px;
+  }
+  .moov-prod-intro__financing-link {
+    margin-left: 6px;
+    color: var(--moov-text-primary-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 0.5px;
+  }
+  .moov-prod-intro__financing-link:hover {
+    color: var(--moov-amber);
+  }
+
+  /* Delivery micro-note */
+  .moov-prod-intro__delivery {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-light);
+    margin: 14px 0 0;
+    max-width: 430px;
+  }
+  .moov-prod-intro__delivery-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--moov-text-tertiary-light);
+    flex-shrink: 0;
+  }
+  .moov-prod-intro__delivery-dot--ok {
+    background: var(--moov-success, #2e7d32);
+  }
+  .moov-prod-intro__delivery-dot--out {
+    background: var(--moov-error, #c62828);
+  }
+  .moov-prod-intro__delivery-sep {
+    color: var(--moov-text-tertiary-light);
+  }
+
+  /* Trust strip */
+  .moov-prod-intro__trust {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--moov-border-light);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px 16px;
+    max-width: 430px;
+  }
+  .moov-prod-intro__trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+  .moov-prod-intro__trust-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--moov-text-primary-light);
+  }
+  .moov-prod-intro__trust-label {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    color: var(--moov-text-secondary-light);
+    letter-spacing: 0.02em;
+    line-height: 1.3;
   }
   /* ═══ TECH SPECS ═════════════════════════════ */
   .moov-specs {
@@ -797,8 +1415,8 @@
   /* Image carousel */
   document.querySelectorAll('.moov-prod-intro__thumb').forEach(function(thumb) {
     thumb.addEventListener('click', function() {
-      var idx = this.getAttribute('data-index');
-      var gallery = this.closest('.moov-prod-intro__gallery');
+      var idx = thumb.getAttribute('data-index');
+      var gallery = thumb.closest('.moov-prod-intro__gallery');
       gallery.querySelectorAll('.moov-prod-intro__slide').forEach(function(s) {
         s.classList.toggle('is-active', s.getAttribute('data-index') === idx);
       });
@@ -808,10 +1426,27 @@
     });
   });
 
+  document.querySelectorAll('.moov-prod-intro__nav-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var gallery = btn.closest('.moov-prod-intro__gallery');
+      if (!gallery) return;
+      var slides = gallery.querySelectorAll('.moov-prod-intro__slide');
+      if (!slides.length) return;
+      var currentIdx = 0;
+      slides.forEach(function(s, i) { if (s.classList.contains('is-active')) currentIdx = i; });
+      var dir = btn.classList.contains('moov-prod-intro__nav-btn--next') ? 1 : -1;
+      var nextIdx = (currentIdx + dir + slides.length) % slides.length;
+      slides.forEach(function(s, i) { s.classList.toggle('is-active', i === nextIdx); });
+      gallery.querySelectorAll('.moov-prod-intro__thumb').forEach(function(t, i) {
+        t.classList.toggle('is-active', i === nextIdx);
+      });
+    });
+  });
+
   /* Spec tabs */
   document.querySelectorAll('.moov-specs__tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
-      var target = this.getAttribute('data-tab');
+      var target = tab.getAttribute('data-tab');
       document.querySelectorAll('.moov-specs__tab').forEach(function(t) {
         t.classList.toggle('is-active', t.getAttribute('data-tab') === target);
         t.setAttribute('aria-selected', t.getAttribute('data-tab') === target ? 'true' : 'false');
@@ -825,11 +1460,156 @@
   /* Smooth scroll for mini-bar links */
   document.querySelectorAll('.moov-mini-bar__link').forEach(function(link) {
     link.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
+      var target = document.querySelector(link.getAttribute('href'));
       if (!target) return;
       e.preventDefault();
       var top = target.getBoundingClientRect().top + window.pageYOffset - 140;
       window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
+  /* "More info" description disclosure */
+  document.querySelectorAll('[data-disclosure-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var wrap = btn.closest('[data-disclosure]');
+      if (!wrap) return;
+      var full = wrap.querySelector('.moov-prod-intro__desc-full');
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      if (full) full.hidden = isOpen;
+      var openLabel = btn.querySelector('[data-disclosure-open]');
+      var closeLabel = btn.querySelector('[data-disclosure-close]');
+      if (openLabel) openLabel.hidden = !isOpen;
+      if (closeLabel) closeLabel.hidden = isOpen;
+    });
+  });
+
+  /* Product form — variant sync, swatches, qty, financing */
+  document.querySelectorAll('[data-product-form]').forEach(function(form) {
+    var dataEl = form.parentElement.querySelector('[data-variant-map]');
+    if (!dataEl) return;
+    var variants;
+    try { variants = JSON.parse(dataEl.textContent); } catch (err) { return; }
+    if (!Array.isArray(variants)) return;
+
+    var variantInput = form.querySelector('[data-variant-id]');
+    var addBtn = form.querySelector('[data-add-btn]');
+    var addLabel = form.querySelector('[data-add-label]');
+    var priceEl = form.parentElement.querySelector('[data-price]');
+    var comparePriceEl = form.parentElement.querySelector('[data-compare-price]');
+    var financingTextEl = form.querySelector('[data-financing-text]');
+    var financingEl = form.querySelector('[data-financing]');
+
+    function formatMoney(cents) {
+      var format = (window.Shopify && window.Shopify.money_format) || '${{amount}}';
+      var amt = (cents / 100).toFixed(2);
+      return format.replace(/\{\{\s*amount\s*\}\}/, amt).replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100));
+    }
+
+    function currentSelection() {
+      var selection = [];
+      form.querySelectorAll('[data-option-index]').forEach(function(el) {
+        var idx = parseInt(el.getAttribute('data-option-index'), 10);
+        if (isNaN(idx)) return;
+        if (el.matches('[data-option-single]')) {
+          selection[idx] = el.value;
+        } else if (el.matches('.moov-prod-intro__dropdown')) {
+          var sel = el.querySelector('[data-option-select]');
+          if (sel) selection[idx] = sel.value;
+        } else if (el.matches('.moov-prod-intro__option--swatches')) {
+          var active = el.querySelector('.moov-prod-intro__swatch.is-selected');
+          if (active) selection[idx] = active.getAttribute('data-value');
+        }
+      });
+      return selection;
+    }
+
+    function findVariant(selection) {
+      return variants.find(function(v) {
+        return v.options.every(function(val, i) { return val === selection[i]; });
+      });
+    }
+
+    function updateVariant() {
+      var selection = currentSelection();
+      var variant = findVariant(selection);
+      var availLabel = addBtn ? (addBtn.getAttribute('data-label-available') || '') : '';
+      var unavailLabel = addBtn ? (addBtn.getAttribute('data-label-unavailable') || 'Sold out') : 'Sold out';
+
+      if (!variant) {
+        if (addBtn) {
+          addBtn.disabled = true;
+          if (addLabel) addLabel.textContent = unavailLabel;
+        }
+        return;
+      }
+      if (variantInput) variantInput.value = variant.id;
+      if (priceEl) priceEl.textContent = formatMoney(variant.price);
+      if (comparePriceEl) {
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          comparePriceEl.textContent = formatMoney(variant.compare_at_price);
+          comparePriceEl.hidden = false;
+        } else {
+          comparePriceEl.hidden = true;
+        }
+      }
+      if (addBtn) {
+        addBtn.disabled = !variant.available;
+        if (addLabel) {
+          addLabel.textContent = variant.available ? availLabel : unavailLabel;
+        }
+      }
+      if (financingEl && financingTextEl) {
+        var installments = parseInt(financingEl.getAttribute('data-installments') || '4', 10);
+        var tpl = financingEl.getAttribute('data-template');
+        if (tpl) {
+          financingTextEl.textContent = tpl
+            .replace('__INSTALLMENTS__', installments)
+            .replace('__AMOUNT__', formatMoney(Math.round(variant.price / installments)));
+        }
+      }
+
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', variant.id);
+      window.history.replaceState({}, '', url);
+    }
+
+    /* Dropdown change */
+    form.querySelectorAll('[data-option-select]').forEach(function(sel) {
+      sel.addEventListener('change', function() {
+        var wrap = sel.closest('.moov-prod-intro__dropdown');
+        if (wrap) {
+          var label = wrap.querySelector('[data-selected-value]');
+          if (label) label.textContent = sel.value;
+        }
+        updateVariant();
+      });
+    });
+
+    /* Swatch click */
+    form.querySelectorAll('.moov-prod-intro__swatch').forEach(function(sw) {
+      sw.addEventListener('click', function() {
+        var group = sw.closest('.moov-prod-intro__option--swatches');
+        if (!group) return;
+        group.querySelectorAll('.moov-prod-intro__swatch').forEach(function(s) {
+          s.classList.toggle('is-selected', s === sw);
+          s.setAttribute('aria-checked', s === sw ? 'true' : 'false');
+        });
+        var label = group.querySelector('[data-selected-value]');
+        if (label) label.textContent = sw.getAttribute('data-value');
+        updateVariant();
+      });
+    });
+
+    /* Quantity stepper */
+    var qtyInput = form.querySelector('.moov-prod-intro__qty-input');
+    form.querySelectorAll('[data-qty]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (!qtyInput) return;
+        var current = parseInt(qtyInput.value, 10) || 1;
+        var dir = btn.getAttribute('data-qty') === 'up' ? 1 : -1;
+        qtyInput.value = Math.max(1, current + dir);
+      });
     });
   });
 {% endjavascript %}
@@ -840,10 +1620,58 @@
   "settings": [
     { "type": "text", "id": "product_eyebrow", "label": "Product eyebrow", "info": "Leave blank for store_marketing.badge_category" },
     { "type": "text", "id": "product_subtitle", "label": "Product subtitle", "default": "Built for better mornings, less snooze." },
+
+    { "type": "header", "content": "Buy box" },
+    { "type": "text", "id": "shipping_note", "label": "Shipping/delivery note", "default": "Ships in 3–5 days" },
+    { "type": "checkbox", "id": "financing_enabled", "label": "Show financing line", "default": true },
+    { "type": "text", "id": "financing_brand", "label": "Financing brand", "default": "Shop Pay" },
+    { "type": "range", "id": "financing_installments", "label": "Number of installments", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "url", "id": "financing_link", "label": "Financing 'Learn more' link" },
+
     { "type": "header", "content": "Tech specs intro" },
     { "type": "text", "id": "specs_eyebrow", "label": "Specs eyebrow", "default": "Tech specs" },
     { "type": "textarea", "id": "specs_intro", "label": "Specs intro text", "default": "Everything you need to know about MOOV hardware, connectivity, and in-box setup at a glance." }
   ],
-  "presets": [{ "name": "MOOV Product" }]
+  "blocks": [
+    {
+      "type": "color_swatch",
+      "name": "Colour swatch",
+      "limit": 12,
+      "settings": [
+        { "type": "text", "id": "value", "label": "Option value", "info": "Must match the product option value (e.g. Black, Cream)" },
+        { "type": "color", "id": "color", "label": "Swatch colour", "default": "#0a0a09" }
+      ]
+    },
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping", "label": "Shipping" },
+            { "value": "trial", "label": "Trial" },
+            { "value": "warranty", "label": "Warranty" },
+            { "value": "secure", "label": "Secure" }
+          ],
+          "default": "shipping"
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Free shipping" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MOOV Product",
+      "blocks": [
+        { "type": "trust_item", "settings": { "icon": "shipping", "label": "Free shipping" } },
+        { "type": "trust_item", "settings": { "icon": "trial", "label": "30-day trial" } },
+        { "type": "trust_item", "settings": { "icon": "warranty", "label": "2-year warranty" } }
+      ]
+    }
+  ]
 }
 {% endschema %}

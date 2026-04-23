@@ -1,0 +1,268 @@
+{%- liquid
+  assign tiles = section.blocks | where: 'type', 'feature_tile'
+-%}
+
+<div
+  class="moov-prod-story full-width"
+  data-surface="cream"
+  id="moov-product-story"
+  aria-labelledby="moov-prod-story-heading-{{ section.id }}"
+>
+  <div class="moov-prod-story__inner">
+    <header class="moov-prod-story__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="moov-prod-story__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 id="moov-prod-story-heading-{{ section.id }}" class="moov-prod-story__heading">
+          {{ section.settings.heading | escape }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="moov-prod-story__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- if tiles.size > 0 -%}
+      <div class="moov-prod-story__grid" style="--tile-count: {{ tiles.size }};">
+        {%- for block in tiles -%}
+          <article
+            class="moov-prod-story__tile"
+            data-animate="feat-scroll"
+            style="--feat-delay: {{ forloop.index0 | times: 80 }}ms;"
+            {{ block.shopify_attributes }}
+          >
+            <div class="moov-prod-story__tile-media">
+              {%- if block.settings.image != blank -%}
+                {%- assign tile_alt = block.settings.image.alt | default: block.settings.title | escape -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'moov-prod-story__tile-img',
+                    alt: tile_alt,
+                    sizes: '(min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw',
+                    widths: '320, 480, 640, 900'
+                }}
+              {%- else -%}
+                <div class="moov-prod-story__tile-placeholder" aria-hidden="true"></div>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.title != blank -%}
+              <h3 class="moov-prod-story__tile-title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="moov-prod-story__tile-body">
+                {{- block.settings.body | escape -}}
+                {%- if block.settings.footnote != blank -%}
+                  <sup class="moov-prod-story__tile-foot">{{ block.settings.footnote | escape }}</sup>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .moov-prod-story {
+    background: var(--moov-cream);
+    padding: var(--section-block-pad-y-md) 0;
+    overflow: hidden;
+  }
+  .moov-prod-story__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 var(--section-inline-pad);
+  }
+  .moov-prod-story__header {
+    max-width: 760px;
+    margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+    text-align: center;
+  }
+  .moov-prod-story__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-eyebrow-accent);
+    margin: 0 0 14px;
+  }
+  .moov-prod-story__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.2vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.08;
+    color: var(--moov-text-primary-light);
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+  }
+  .moov-prod-story__subheading {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+    margin: 0 auto;
+    max-width: 62ch;
+  }
+
+  .moov-prod-story__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
+  }
+  .moov-prod-story__tile {
+    display: flex;
+    flex-direction: column;
+  }
+  .moov-prod-story__tile-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--moov-cream-shadow);
+    margin-bottom: 16px;
+    border: 1px solid var(--moov-border-light);
+  }
+  .moov-prod-story__tile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .moov-prod-story__tile-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg,
+        var(--moov-wash-on-cream-4) 0%,
+        var(--moov-wash-on-cream-6) 100%);
+  }
+  .moov-prod-story__tile-title {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 6px;
+    line-height: 1.3;
+  }
+  .moov-prod-story__tile-body {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+  }
+  .moov-prod-story__tile-foot {
+    font-size: 0.65em;
+    margin-left: 2px;
+    vertical-align: super;
+  }
+
+  /* Scroll animation reuses moov-product's feat-scroll observer */
+  .moov-prod-story [data-animate="feat-scroll"] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transition-delay: var(--feat-delay, 0ms);
+  }
+  .moov-prod-story [data-animate="feat-scroll"].is-visible {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  /* Tablet — 2 cols */
+  @media (min-width: 640px) and (max-width: 1099px) {
+    .moov-prod-story__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Mobile — 1 col */
+  @media (max-width: 639px) {
+    .moov-prod-story__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    .moov-prod-story__tile-media {
+      aspect-ratio: 4 / 5;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  var storyTiles = document.querySelectorAll('.moov-prod-story [data-animate="feat-scroll"]');
+  if (storyTiles.length && 'IntersectionObserver' in window) {
+    var storyObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          storyObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+    storyTiles.forEach(function(t) { storyObserver.observe(t); });
+  } else {
+    storyTiles.forEach(function(t) { t.classList.add('is-visible'); });
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "MOOV product story",
+  "tag": "section",
+  "class": "moov-prod-story-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Why you'll love it"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Powerful mornings. Perfectly sized."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "From bedside to backpack. MOOV brings calm, intentional starts everywhere you go."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_tile",
+      "name": "Feature tile",
+      "limit": 8,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Tile image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Feature title" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Short benefit copy — keep it to 2–3 lines so the grid stays tidy." },
+        { "type": "text", "id": "footnote", "label": "Footnote reference", "info": "Optional superscript reference (e.g. 1, 2, *)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MOOV product story",
+      "blocks": [
+        { "type": "feature_tile", "settings": { "title": "All-day battery", "body": "A full day of ambient light and alarms on a single charge." } },
+        { "type": "feature_tile", "settings": { "title": "Peel-and-stick setup", "body": "No tools. No drilling. Up in five minutes, sturdy for years." } },
+        { "type": "feature_tile", "settings": { "title": "Quiet the feed", "body": "Morning app boundaries keep your first hour calm and focused." } },
+        { "type": "feature_tile", "settings": { "title": "Routines that learn", "body": "Short flows that adapt to your energy, time, and priorities." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

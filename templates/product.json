@@ -13,6 +13,14 @@
       "type": "moov-product",
       "settings": {}
     },
+    "story": {
+      "type": "moov-product-story",
+      "settings": {
+        "eyebrow": "Why you'll love it",
+        "heading": "Powerful mornings. Perfectly sized.",
+        "subheading": "From bedside to backpack. MOOV brings calm, intentional starts everywhere you go."
+      }
+    },
     "cta": {
       "type": "how-it-works-cta",
       "settings": {
@@ -33,6 +41,7 @@
   },
   "order": [
     "main",
+    "story",
     "cta",
     "faq"
   ]
