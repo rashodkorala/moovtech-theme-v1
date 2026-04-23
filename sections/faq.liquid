@@ -1,30 +1,51 @@
+{%- liquid
+  # Prefer per-product metafields when we're on a product page; fall back to section settings/blocks.
+  assign faq_heading = section.settings.heading
+  if product and product.metafields.custom.faq_heading != blank
+    assign faq_heading = product.metafields.custom.faq_heading
+  endif
+
+  assign faq_items_mf = nil
+  if product
+    assign faq_items_mf = product.metafields.custom.faq_items.value
+  endif
+  assign use_metafield_faq = false
+  if faq_items_mf != blank and faq_items_mf.size > 0
+    assign use_metafield_faq = true
+  endif
+-%}
+
 <div class="faq full-width" data-surface="dark">
   <div class="faq__inner">
 
     {%- comment -%} Left — section label {%- endcomment -%}
     <div class="faq__label-col">
       <h2 class="faq__label" data-animate="faq-label">
-        {{- section.settings.heading | escape -}}
+        {{- faq_heading | escape -}}
       </h2>
     </div>
 
     {%- comment -%} Right — accordion {%- endcomment -%}
     <div class="faq__accordion" role="list">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'faq_item' -%}
+      {%- if use_metafield_faq -%}
+        {%- for entry in faq_items_mf -%}
+          {%- liquid
+            assign entry_id = entry.system.id | default: forloop.index
+            assign entry_question = entry.question | default: entry.fields.question
+            assign entry_answer = entry.answer | default: entry.fields.answer
+          -%}
           <div
             class="faq__item{%- if forloop.first %} faq__item--open{%- endif -%}"
             data-animate="faq-item"
             style="--item-delay: {{ forloop.index0 | times: 80 }}ms;"
             role="listitem"
-            {{ block.shopify_attributes }}
           >
             <button
               class="faq__question"
               aria-expanded="{%- if forloop.first -%}true{%- else -%}false{%- endif -%}"
-              aria-controls="faq-answer-{{ block.id }}"
+              aria-controls="faq-answer-{{ entry_id }}"
             >
-              <span class="faq__question-text">{{ block.settings.question | escape }}</span>
+              <span class="faq__question-text">{{ entry_question | escape }}</span>
               <span class="faq__indicator" aria-hidden="true">
                 <span class="faq__indicator-plus">+</span>
                 <span class="faq__indicator-times">&times;</span>
@@ -32,14 +53,45 @@
             </button>
             <div
               class="faq__answer"
-              id="faq-answer-{{ block.id }}"
+              id="faq-answer-{{ entry_id }}"
               role="region"
             >
-              <p class="faq__answer-text">{{ block.settings.answer | escape }}</p>
+              <p class="faq__answer-text">{{ entry_answer | escape }}</p>
             </div>
           </div>
-        {%- endif -%}
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq_item' -%}
+            <div
+              class="faq__item{%- if forloop.first %} faq__item--open{%- endif -%}"
+              data-animate="faq-item"
+              style="--item-delay: {{ forloop.index0 | times: 80 }}ms;"
+              role="listitem"
+              {{ block.shopify_attributes }}
+            >
+              <button
+                class="faq__question"
+                aria-expanded="{%- if forloop.first -%}true{%- else -%}false{%- endif -%}"
+                aria-controls="faq-answer-{{ block.id }}"
+              >
+                <span class="faq__question-text">{{ block.settings.question | escape }}</span>
+                <span class="faq__indicator" aria-hidden="true">
+                  <span class="faq__indicator-plus">+</span>
+                  <span class="faq__indicator-times">&times;</span>
+                </span>
+              </button>
+              <div
+                class="faq__answer"
+                id="faq-answer-{{ block.id }}"
+                role="region"
+              >
+                <p class="faq__answer-text">{{ block.settings.answer | escape }}</p>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
 
   </div>
@@ -65,7 +117,7 @@
     top: 160px;
     font-family: var(--font-display);
     font-size: clamp(4.5rem, 8vw, 8rem);
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1;
     color: var(--moov-text-primary-dark);
     margin: 0;

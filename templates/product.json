@@ -15,6 +15,42 @@
     },
     "story": {
       "type": "moov-product-story",
+      "blocks": {
+        "tile-battery": {
+          "type": "feature_tile",
+          "settings": {
+            "title": "All-day battery",
+            "body": "A full day of ambient light and alarms on a single charge."
+          }
+        },
+        "tile-setup": {
+          "type": "feature_tile",
+          "settings": {
+            "title": "Peel-and-stick setup",
+            "body": "No tools. No drilling. Up in five minutes, sturdy for years."
+          }
+        },
+        "tile-focus": {
+          "type": "feature_tile",
+          "settings": {
+            "title": "Quiet the feed",
+            "body": "Morning app boundaries keep your first hour calm and focused."
+          }
+        },
+        "tile-routines": {
+          "type": "feature_tile",
+          "settings": {
+            "title": "Routines that learn",
+            "body": "Short flows that adapt to your energy, time, and priorities."
+          }
+        }
+      },
+      "block_order": [
+        "tile-battery",
+        "tile-setup",
+        "tile-focus",
+        "tile-routines"
+      ],
       "settings": {
         "eyebrow": "Why you'll love it",
         "heading": "Powerful mornings. Perfectly sized.",

@@ -15,60 +15,6 @@
     assign moov_black = settings.foreground_color | default: '#0a0a09'
   -%}
 
-  @font-face {
-    font-family: 'Artford';
-    src: url('{{ 'Artford-Regular.woff2' | asset_url }}') format('woff2'),
-      url('{{ 'Artford-Regular.otf' | asset_url }}') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Grift';
-    src: url('{{ 'grift/Web-TT/Grift-Light.woff2' | asset_url }}') format('woff2'),
-         url('{{ 'grift/Web-TT/Grift-Light.woff' | asset_url }}') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Grift';
-    src: url('{{ 'grift/Web-TT/Grift-Regular.woff2' | asset_url }}') format('woff2'),
-         url('{{ 'grift/Web-TT/Grift-Regular.woff' | asset_url }}') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Grift';
-    src: url('{{ 'grift/Web-TT/Grift-Medium.woff2' | asset_url }}') format('woff2'),
-         url('{{ 'grift/Web-TT/Grift-Medium.woff' | asset_url }}') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Grift';
-    src: url('{{ 'grift/Web-TT/Grift-SemiBold.woff2' | asset_url }}') format('woff2'),
-         url('{{ 'grift/Web-TT/Grift-SemiBold.woff' | asset_url }}') format('woff');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Grift';
-    src: url('{{ 'grift/Web-TT/Grift-Bold.woff2' | asset_url }}') format('woff2'),
-         url('{{ 'grift/Web-TT/Grift-Bold.woff' | asset_url }}') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-  }
-
   :root {
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
@@ -82,9 +28,9 @@
     --color-accent: {{ moov_accent }};
 
     /* Moov brand fonts */
-    --font-wordmark: 'Artford', serif;
-    --font-display: {{ settings.type_heading_font.family }}, 'Syne', 'Helvetica Neue', sans-serif;
-    --font-body: 'Grift', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-hero: {{ settings.type_heading_font.family }}, 'Syne', 'Helvetica Neue', sans-serif;
+    --font-body: {{ settings.type_primary_font.family }}, 'Manrope', 'Helvetica Neue', sans-serif;
+    --font-display: var(--font-body);
 
     /* Heading settings */
     --heading-letter-spacing: {{ settings.heading_letter_spacing }}em;

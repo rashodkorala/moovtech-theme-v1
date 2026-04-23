@@ -15,8 +15,8 @@
 
       {%- comment -%} Brand top — wordmark + tagline + social icons {%- endcomment -%}
       <div class="footer__brand">
-        <a href="{{ routes.root_url }}" class="footer__wordmark">
-          {{- section.settings.footer_logo_text | default: 'MOOV' | escape -}}
+        <a href="{{ routes.root_url }}" class="footer__logo" aria-label="MOOV">
+          <img src="{{ 'moov-logo.png' | asset_url }}" alt="MOOV" width="160" height="40">
         </a>
 
         {%- if section.settings.brand_tagline != blank -%}
@@ -263,16 +263,17 @@
     padding-bottom: 2.5rem;
   }
 
-  .footer__wordmark {
+  .footer__logo {
     display: block;
-    font-family: var(--font-wordmark);
-    font-size: clamp(3.5rem, 8vw, 7rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--moov-text-primary-dark);
-    text-decoration: none;
-    line-height: 1;
     margin-bottom: 1rem;
+    text-decoration: none;
+    line-height: 0;
+  }
+
+  .footer__logo img {
+    display: block;
+    height: clamp(2.25rem, 4vw, 3.25rem);
+    width: auto;
   }
 
   .footer__tagline {
@@ -561,8 +562,8 @@
       padding: 2rem 1.25rem;
     }
 
-    .footer__wordmark {
-      font-size: clamp(3rem, 14vw, 4.5rem);
+    .footer__logo img {
+      height: clamp(2rem, 8vw, 2.75rem);
     }
 
     .footer__columns {

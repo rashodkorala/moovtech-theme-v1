@@ -1,5 +1,29 @@
 {%- liquid
-  assign tiles = section.blocks | where: 'type', 'feature_tile'
+  # Prefer per-product metafields; fall back to section settings/blocks.
+  assign story_eyebrow = product.metafields.custom.story_eyebrow
+  if story_eyebrow == blank
+    assign story_eyebrow = section.settings.eyebrow
+  endif
+
+  assign story_heading = product.metafields.custom.story_heading
+  if story_heading == blank
+    assign story_heading = section.settings.heading
+  endif
+
+  assign story_subheading = product.metafields.custom.story_subheading
+  if story_subheading == blank
+    assign story_subheading = section.settings.subheading
+  endif
+
+  assign story_tiles_mf = product.metafields.custom.story_tiles.value
+  assign use_metafield_tiles = false
+  if story_tiles_mf != blank and story_tiles_mf.size > 0
+    assign use_metafield_tiles = true
+    assign tiles_count = story_tiles_mf.size
+  else
+    assign tiles = section.blocks | where: 'type', 'feature_tile'
+    assign tiles_count = tiles.size
+  endif
 -%}
 
 <div
@@ -10,58 +34,115 @@
 >
   <div class="moov-prod-story__inner">
     <header class="moov-prod-story__header">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="moov-prod-story__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if story_eyebrow != blank -%}
+        <p class="moov-prod-story__eyebrow">{{ story_eyebrow | escape }}</p>
       {%- endif -%}
-      {%- if section.settings.heading != blank -%}
+      {%- if story_heading != blank -%}
         <h2 id="moov-prod-story-heading-{{ section.id }}" class="moov-prod-story__heading">
-          {{ section.settings.heading | escape }}
+          {{ story_heading | escape }}
         </h2>
       {%- endif -%}
-      {%- if section.settings.subheading != blank -%}
-        <p class="moov-prod-story__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- if story_subheading != blank -%}
+        <p class="moov-prod-story__subheading">{{ story_subheading | escape }}</p>
       {%- endif -%}
     </header>
 
-    {%- if tiles.size > 0 -%}
-      <div class="moov-prod-story__grid" style="--tile-count: {{ tiles.size }};">
-        {%- for block in tiles -%}
-          <article
-            class="moov-prod-story__tile"
-            data-animate="feat-scroll"
-            style="--feat-delay: {{ forloop.index0 | times: 80 }}ms;"
-            {{ block.shopify_attributes }}
-          >
-            <div class="moov-prod-story__tile-media">
-              {%- if block.settings.image != blank -%}
-                {%- assign tile_alt = block.settings.image.alt | default: block.settings.title | escape -%}
-                {{
-                  block.settings.image
-                  | image_url: width: 900
-                  | image_tag:
-                    loading: 'lazy',
-                    class: 'moov-prod-story__tile-img',
-                    alt: tile_alt,
-                    sizes: '(min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw',
-                    widths: '320, 480, 640, 900'
-                }}
-              {%- else -%}
-                <div class="moov-prod-story__tile-placeholder" aria-hidden="true"></div>
-              {%- endif -%}
-            </div>
-            {%- if block.settings.title != blank -%}
-              <h3 class="moov-prod-story__tile-title">{{ block.settings.title | escape }}</h3>
-            {%- endif -%}
-            {%- if block.settings.body != blank -%}
-              <p class="moov-prod-story__tile-body">
-                {{- block.settings.body | escape -}}
-                {%- if block.settings.footnote != blank -%}
-                  <sup class="moov-prod-story__tile-foot">{{ block.settings.footnote | escape }}</sup>
+    {%- if tiles_count > 0 -%}
+      <div class="moov-prod-story__grid" style="--tile-count: {{ tiles_count }};">
+        {%- if use_metafield_tiles -%}
+          {%- for tile in story_tiles_mf -%}
+            {%- liquid
+              assign tile_image = tile.image
+              if tile_image == blank
+                assign tile_image = tile.fields.image
+              endif
+              assign tile_title = tile.title
+              if tile_title == blank
+                assign tile_title = tile.fields.title
+              endif
+              assign tile_body = tile.body
+              if tile_body == blank
+                assign tile_body = tile.fields.body
+              endif
+              assign tile_footnote = tile.footnote
+              if tile_footnote == blank
+                assign tile_footnote = tile.fields.footnote
+              endif
+            -%}
+            <article
+              class="moov-prod-story__tile"
+              data-animate="feat-scroll"
+              style="--feat-delay: {{ forloop.index0 | times: 80 }}ms;"
+            >
+              <div class="moov-prod-story__tile-media">
+                {%- if tile_image != blank -%}
+                  {%- assign tile_alt = tile_image.alt | default: tile_title | escape -%}
+                  {{
+                    tile_image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'moov-prod-story__tile-img',
+                      alt: tile_alt,
+                      sizes: '(min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw',
+                      widths: '320, 480, 640, 900'
+                  }}
+                {%- else -%}
+                  <div class="moov-prod-story__tile-placeholder" aria-hidden="true"></div>
                 {%- endif -%}
-              </p>
-            {%- endif -%}
-          </article>
-        {%- endfor -%}
+              </div>
+              {%- if tile_title != blank -%}
+                <h3 class="moov-prod-story__tile-title">{{ tile_title | escape }}</h3>
+              {%- endif -%}
+              {%- if tile_body != blank -%}
+                <p class="moov-prod-story__tile-body">
+                  {{- tile_body | escape -}}
+                  {%- if tile_footnote != blank -%}
+                    <sup class="moov-prod-story__tile-foot">{{ tile_footnote | escape }}</sup>
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in tiles -%}
+            <article
+              class="moov-prod-story__tile"
+              data-animate="feat-scroll"
+              style="--feat-delay: {{ forloop.index0 | times: 80 }}ms;"
+              {{ block.shopify_attributes }}
+            >
+              <div class="moov-prod-story__tile-media">
+                {%- if block.settings.image != blank -%}
+                  {%- assign tile_alt = block.settings.image.alt | default: block.settings.title | escape -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'moov-prod-story__tile-img',
+                      alt: tile_alt,
+                      sizes: '(min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw',
+                      widths: '320, 480, 640, 900'
+                  }}
+                {%- else -%}
+                  <div class="moov-prod-story__tile-placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.title != blank -%}
+                <h3 class="moov-prod-story__tile-title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <p class="moov-prod-story__tile-body">
+                  {{- block.settings.body | escape -}}
+                  {%- if block.settings.footnote != blank -%}
+                    <sup class="moov-prod-story__tile-foot">{{ block.settings.footnote | escape }}</sup>
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     {%- endif -%}
   </div>
