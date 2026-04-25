@@ -48,6 +48,7 @@
         "company_link_3_url": "",
         "company_link_4_label": "",
         "company_link_4_url": "",
+        "show_newsletter": false,
         "newsletter_heading": "Subscribe for our newsletter",
         "newsletter_privacy_url": "",
         "copyright_name": "MOOV Technologies",

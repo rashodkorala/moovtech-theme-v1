@@ -54,8 +54,12 @@
 
       <div class="footer__card-divider"></div>
 
-      {%- comment -%} 4-column grid: Shop / Information / Company / Newsletter {%- endcomment -%}
-      <div class="footer__columns">
+      {%- comment -%}
+        Column grid — Shop / Information / Company (+ Newsletter when enabled).
+        The grid switches between 3- and 4-column layouts based on whether the
+        newsletter is shown.
+      {%- endcomment -%}
+      <div class="footer__columns{% unless section.settings.show_newsletter %} footer__columns--no-newsletter{% endunless %}">
 
         {%- comment -%}
           Legal column — auto-rendered from Shopify admin policies
@@ -206,6 +210,7 @@
         </div>
 
         {%- comment -%} Newsletter column {%- endcomment -%}
+        {%- if section.settings.show_newsletter -%}
         <div class="footer__col footer__col--newsletter">
           <p class="footer__col-heading">{{ newsletter_heading | escape }}</p>
           {% form 'customer' %}
@@ -243,6 +248,7 @@
             {%- endif -%}
           {% endform %}
         </div>
+        {%- endif -%}
 
       </div>
 
@@ -406,11 +412,16 @@
     margin-bottom: 2.5rem;
   }
 
-  /* ── 4-column grid ── */
+  /* ── Column grid ── */
   .footer__columns {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1.4fr;
     gap: 40px 48px;
+  }
+
+  .footer__columns--no-newsletter {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 720px;
   }
 
   .footer__col-heading {
@@ -891,6 +902,12 @@
     {
       "type": "header",
       "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
     },
     {
       "type": "text",
