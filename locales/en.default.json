@@ -122,6 +122,7 @@
       "features": "Features",
       "specs": "Specs",
       "story": "Story",
+      "returns": "Returns",
       "nav_label": "On-page product navigation"
     },
     "hero": {
@@ -131,8 +132,6 @@
       "quantity": "Quantity",
       "more_info": "More info",
       "less_info": "Less info",
-      "financing": "{{ installments }} payments of {{ installment }} with {{ brand }}.",
-      "learn_more": "Learn more",
       "in_stock": "In stock",
       "ships_in": "Ships in 3–5 days"
     },

@@ -25,6 +25,7 @@
     <nav class="moov-mini-bar__links" aria-label="{{ 'product.mini_bar.nav_label' | t }}">
       <a href="#moov-product-story" class="moov-mini-bar__link">{{ 'product.mini_bar.story' | t }}</a>
       <a href="#moov-specs" class="moov-mini-bar__link">{{ 'product.mini_bar.specs' | t }}</a>
+      <a href="#moov-product-returns" class="moov-mini-bar__link">{{ 'product.mini_bar.returns' | t }}</a>
     </nav>
     <a href="#moov-product-cta" class="moov-mini-bar__cta">{{ 'product.pre_order' | t }}</a>
   </div>
@@ -141,7 +142,7 @@
         </div>
       {%- endif -%}
 
-      {%- comment -%} Product form (variants + qty + CTA + financing + delivery) {%- endcomment -%}
+      {%- comment -%} Product form (variants + qty + CTA + delivery) {%- endcomment -%}
       <form
         id="moov-product-cta"
         action="{{ routes.cart_add_url }}"
@@ -264,29 +265,6 @@
           </span>
         </button>
 
-        {%- comment -%} Financing note {%- endcomment -%}
-        {%- if section.settings.financing_enabled -%}
-          {%- assign installments = section.settings.financing_installments | default: 4 -%}
-          {%- assign brand = section.settings.financing_brand | default: 'Shop Pay' -%}
-          {%- assign installment_price = current_variant.price | divided_by: installments -%}
-          {%- assign installment_price_money = installment_price | money -%}
-          {%- assign financing_text = 'product.hero.financing' | t: installments: installments, installment: installment_price_money, brand: brand -%}
-          {%- capture financing_template -%}
-            {{- 'product.hero.financing' | t: installments: '__INSTALLMENTS__', installment: '__AMOUNT__', brand: brand -}}
-          {%- endcapture -%}
-          <p
-            class="moov-prod-intro__financing"
-            data-financing
-            data-installments="{{ installments }}"
-            data-template="{{ financing_template | escape }}"
-          >
-            <span data-financing-text>{{ financing_text }}</span>
-            {%- if section.settings.financing_link != blank -%}
-              <a href="{{ section.settings.financing_link }}" class="moov-prod-intro__financing-link">{{ 'product.hero.learn_more' | t }}</a>
-            {%- endif -%}
-          </p>
-        {%- endif -%}
-
         {%- comment -%} Delivery micro-note {%- endcomment -%}
         <p class="moov-prod-intro__delivery">
           <span class="moov-prod-intro__delivery-dot moov-prod-intro__delivery-dot--{% if available %}ok{% else %}out{% endif %}" aria-hidden="true"></span>
@@ -323,6 +301,31 @@
             </li>
           {%- endfor -%}
         </ul>
+      {%- endif -%}
+
+      {%- comment -%} Returns & refunds policy link {%- endcomment -%}
+      {%- if section.settings.returns_link_label != blank -%}
+        {%- assign returns_href = section.settings.returns_link_url -%}
+        {%- if returns_href == blank -%}
+          {%- assign returns_href = '/pages/returns-refunds' -%}
+        {%- endif -%}
+        <a href="{{ returns_href }}" class="moov-prod-intro__returns">
+          <span class="moov-prod-intro__returns-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7"/>
+              <polyline points="3 4 3 9 8 9"/>
+            </svg>
+          </span>
+          <span class="moov-prod-intro__returns-text">
+            {{- section.settings.returns_link_label | escape -}}
+          </span>
+          <span class="moov-prod-intro__returns-arrow" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="13 6 19 12 13 18"/>
+            </svg>
+          </span>
+        </a>
       {%- endif -%}
 
       {%- comment -%} Variant map for JS sync {%- endcomment -%}
@@ -1032,28 +1035,6 @@
     outline: none;
   }
 
-  /* Financing line */
-  .moov-prod-intro__financing {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    color: var(--moov-text-secondary-light);
-    margin: 0 0 10px;
-    padding: 10px 14px;
-    background: color-mix(in srgb, var(--moov-black) 3%, transparent);
-    border-radius: 8px;
-    max-width: 430px;
-  }
-  .moov-prod-intro__financing-link {
-    margin-left: 6px;
-    color: var(--moov-text-primary-light);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 0.5px;
-  }
-  .moov-prod-intro__financing-link:hover {
-    color: var(--moov-amber);
-  }
-
   /* Delivery micro-note */
   .moov-prod-intro__delivery {
     display: flex;
@@ -1113,6 +1094,55 @@
     color: var(--moov-text-secondary-light);
     letter-spacing: 0.02em;
     line-height: 1.3;
+  }
+
+  /* Returns & refunds link (sits below the trust strip) */
+  .moov-prod-intro__returns {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0 0;
+    padding: 10px 14px;
+    background: var(--moov-cream-shadow);
+    border: 0.5px solid var(--moov-border-light);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--moov-text-primary-light);
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    max-width: 430px;
+  }
+  .moov-prod-intro__returns:hover {
+    background: var(--moov-cream);
+    border-color: var(--moov-border-amber);
+  }
+  .moov-prod-intro__returns:hover .moov-prod-intro__returns-arrow {
+    transform: translateX(2px);
+  }
+  .moov-prod-intro__returns-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    flex-shrink: 0;
+  }
+  .moov-prod-intro__returns-text {
+    flex: 1;
+    line-height: 1.3;
+  }
+  .moov-prod-intro__returns-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--moov-text-tertiary-light);
+    transition: transform 0.2s ease, color 0.2s ease;
   }
   /* ═══ TECH SPECS ═════════════════════════════ */
   .moov-specs {
@@ -1476,7 +1506,7 @@
     });
   });
 
-  /* Product form — variant sync, swatches, qty, financing */
+  /* Product form — variant sync, swatches, qty */
   document.querySelectorAll('[data-product-form]').forEach(function(form) {
     var dataEl = form.parentElement.querySelector('[data-variant-map]');
     if (!dataEl) return;
@@ -1489,9 +1519,6 @@
     var addLabel = form.querySelector('[data-add-label]');
     var priceEl = form.parentElement.querySelector('[data-price]');
     var comparePriceEl = form.parentElement.querySelector('[data-compare-price]');
-    var financingTextEl = form.querySelector('[data-financing-text]');
-    var financingEl = form.querySelector('[data-financing]');
-
     function formatMoney(cents) {
       var format = (window.Shopify && window.Shopify.money_format) || '${{amount}}';
       var amt = (cents / 100).toFixed(2);
@@ -1551,16 +1578,6 @@
           addLabel.textContent = variant.available ? availLabel : unavailLabel;
         }
       }
-      if (financingEl && financingTextEl) {
-        var installments = parseInt(financingEl.getAttribute('data-installments') || '4', 10);
-        var tpl = financingEl.getAttribute('data-template');
-        if (tpl) {
-          financingTextEl.textContent = tpl
-            .replace('__INSTALLMENTS__', installments)
-            .replace('__AMOUNT__', formatMoney(Math.round(variant.price / installments)));
-        }
-      }
-
       var url = new URL(window.location.href);
       url.searchParams.set('variant', variant.id);
       window.history.replaceState({}, '', url);
@@ -1615,10 +1632,8 @@
 
     { "type": "header", "content": "Buy box" },
     { "type": "text", "id": "shipping_note", "label": "Shipping/delivery note", "default": "Ships in 3–5 days" },
-    { "type": "checkbox", "id": "financing_enabled", "label": "Show financing line", "default": true },
-    { "type": "text", "id": "financing_brand", "label": "Financing brand", "default": "Shop Pay" },
-    { "type": "range", "id": "financing_installments", "label": "Number of installments", "min": 2, "max": 12, "step": 1, "default": 4 },
-    { "type": "url", "id": "financing_link", "label": "Financing 'Learn more' link" },
+    { "type": "text", "id": "returns_link_label", "label": "Returns link label", "info": "Shown as a small pill below the trust strip. Leave blank to hide.", "default": "View return & refund policy" },
+    { "type": "url", "id": "returns_link_url", "label": "Returns link URL", "info": "Defaults to /pages/returns-refunds when left blank." },
 
     { "type": "header", "content": "Tech specs intro" },
     { "type": "text", "id": "specs_eyebrow", "label": "Specs eyebrow", "default": "Tech specs" },

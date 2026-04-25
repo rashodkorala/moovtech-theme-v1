@@ -60,10 +60,29 @@
         "heading": "Powerful mornings. Perfectly sized.",
         "subheading": "From bedside to backpack. MOOV brings calm, intentional starts everywhere you go."
       }
+    },
+    "returns-overview": {
+      "type": "returns-overview",
+      "settings": {
+        "image_url": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1400&q=80",
+        "badge_text": "30-day guarantee",
+        "eyebrow": "Try MOOV risk-free",
+        "heading": "30-day returns. Easy refunds.",
+        "body": "Not the right fit? Send it back within 30 days of delivery and we'll refund you to the original payment method. No stress.",
+        "highlight_1_title": "30 days to decide",
+        "highlight_1_body": "Live with it for a month. If it's not for you, send it back.",
+        "highlight_2_title": "Original packaging only",
+        "highlight_2_body": "Return in good condition with all components included.",
+        "highlight_3_title": "Refunded the way you paid",
+        "highlight_3_body": "Issued back to your original payment method once we receive it.",
+        "cta_label": "View full policy",
+        "fineprint": "Return shipping is the customer's responsibility."
+      }
     }
   },
   "order": [
     "main",
-    "story"
+    "story",
+    "returns-overview"
   ]
 }
