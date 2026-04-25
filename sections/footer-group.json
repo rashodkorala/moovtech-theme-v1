@@ -53,7 +53,7 @@
         "newsletter_privacy_url": "",
         "copyright_name": "MOOV Technologies",
         "powered_by_shopify": false,
-        "show_currency_selector": false,
+        "show_currency_selector": true,
         "show_payment_icons": true
       }
     }
