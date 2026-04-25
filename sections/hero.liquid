@@ -24,11 +24,6 @@
     assign cta_primary_label = 'store_marketing.hero_cta_primary' | t
   endif
 
-  assign cta_ghost_label = section.settings.cta_ghost_label
-  if cta_ghost_label == blank
-    assign cta_ghost_label = 'store_marketing.hero_cta_secondary' | t
-  endif
-
   assign hero_tagline_left = section.settings.hero_tagline_left
   if hero_tagline_left == blank
     assign hero_tagline_left = 'store_marketing.hero_tagline_left' | t
@@ -137,19 +132,6 @@
           </svg>
         </a>
       {%- endif -%}
-
-      {%- if cta_ghost_label != blank -%}
-        <a
-          href="{{ section.settings.cta_ghost_url | default: '#' }}"
-          class="moov-hero__btn"
-        >
-          {{- cta_ghost_label | escape -}}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="2" y1="12" x2="12" y2="2"/>
-            <polyline points="5,2 12,2 12,9"/>
-          </svg>
-        </a>
-      {%- endif -%}
     </div>
   </div>
 
@@ -249,13 +231,44 @@
   }
 
   .moov-hero__overline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 500;
     font-size: var(--text-sm);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--moov-cream) 90%, transparent);
+    color: var(--color-accent, #ed9d09);
     margin: 0 0 clamp(10px, 1.2vw, 16px);
+  }
+
+  .moov-hero__overline::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-accent, #ed9d09);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent, #ed9d09) 70%, transparent);
+    animation: moov-hero-pulse 2.4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes moov-hero-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.25);
+      opacity: 0.75;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .moov-hero__overline::before {
+      animation: none;
+    }
   }
 
   /* Headline — white on media (reference storefront) */
@@ -339,7 +352,8 @@
   }
 
   .moov-hero__dot.is-active {
-    background: var(--moov-cream);
+    background: var(--color-accent, #ed9d09);
+    width: 56px;
   }
 
   /* Responsive */
@@ -486,7 +500,7 @@
       "id": "hero_desaturate_video",
       "label": "Black and white video",
       "info": "Applies a grayscale look to the hero video (like the reference storefront).",
-      "default": true
+      "default": false
     },
     {
       "type": "header",
@@ -495,7 +509,8 @@
     {
       "type": "text",
       "id": "hero_eyebrow",
-      "label": "Overline text"
+      "label": "Overline text",
+      "default": "New — Morning system"
     },
     {
       "type": "text",
@@ -530,21 +545,6 @@
       "type": "url",
       "id": "cta_primary_url",
       "label": "Primary CTA link"
-    },
-    {
-      "type": "header",
-      "content": "Secondary CTA"
-    },
-    {
-      "type": "text",
-      "id": "cta_ghost_label",
-      "label": "Secondary CTA label",
-      "default": "Explore sale"
-    },
-    {
-      "type": "url",
-      "id": "cta_ghost_url",
-      "label": "Secondary CTA link"
     }
   ],
   "presets": [

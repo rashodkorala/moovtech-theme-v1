@@ -17,7 +17,7 @@
           "settings": {
             "label": "The frustration",
             "body": "MOOV started from frustration, knowing what a better morning looks like, but not living it.",
-            "image_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1400&q=80",
+            "image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=1400&q=80",
             "caption_headline": "It started with frustration",
             "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like: getting up earlier, feeling less rushed, starting the day with more intention. But knowing what to do and actually doing it are two different things."
           }
@@ -27,7 +27,7 @@
           "settings": {
             "label": "The insight",
             "body": "The real problem was never the alarm. It was what came after.",
-            "image_url": "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1400&q=80",
+            "image_url": "https://images.unsplash.com/photo-1422190441165-ec2956dc9ecc?auto=format&fit=crop&w=1400&q=80",
             "caption_headline": "The system, not motivation",
             "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty. I realized the issue wasn't motivation. It was the system."
           }
@@ -37,7 +37,7 @@
           "settings": {
             "label": "What we built",
             "body": "A tool that changes the environment so mornings are easier, not more disciplined.",
-            "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
+            "image_url": "https://images.unsplash.com/photo-1762845872088-12c352bbb119?auto=format&fit=crop&w=1400&q=80",
             "caption_headline": "For anyone tired of feeling behind",
             "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them. MOOV is for anyone who's tired of starting their day feeling behind. It's a simple tool built to help you take back control, one morning at a time."
           }
@@ -49,16 +49,12 @@
         "step-3"
       ],
       "settings": {
-        "hero_eyebrow": "Why MOOV",
-        "hero_headline": "Make getting up easier than staying in bed.",
-        "feature_image_left_url": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1200&q=80",
-        "feature_image_right_url": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1200&q=80",
         "feature_headline": "What we believe about mornings",
         "feature_body_1": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading.",
         "feature_body_2": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day.",
         "story_sidebar_title": "Founder story",
         "show_career_cta": true,
-        "career_image_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+        "career_image_url": "https://images.unsplash.com/photo-1747372277831-bfefabee8e11?auto=format&fit=crop&w=1400&q=80",
         "career_label": "Shop MOOV",
         "career_headline": "Take back your mornings",
         "career_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",

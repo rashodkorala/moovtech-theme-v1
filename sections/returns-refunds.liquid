@@ -1,0 +1,596 @@
+{% comment %}
+  Returns & refunds page: In Shopify admin, create a Page (suggested handle "returns-refunds")
+  and assign Theme template "returns-refunds". Default copy ships via the schema below; merchants
+  can override every string in the theme editor.
+{% endcomment %}
+
+{%- liquid
+  assign contact_email = section.settings.contact_email
+-%}
+
+<div class="returns-page">
+
+  {%- comment -%} ─── 1. HERO ─── {%- endcomment -%}
+  <div class="returns-hero full-width" data-surface="dark">
+    <div class="returns-hero__inner">
+      {%- if section.settings.hero_eyebrow != blank -%}
+        <p class="returns-hero__eyebrow">{{ section.settings.hero_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.hero_heading != blank -%}
+        <h1 class="returns-hero__heading">{{ section.settings.hero_heading | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.hero_intro != blank -%}
+        <p class="returns-hero__body">{{ section.settings.hero_intro | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ─── 2. ELIGIBILITY ─── {%- endcomment -%}
+  <div class="returns-eligibility full-width" data-surface="cream">
+    <div class="returns-eligibility__inner">
+      {%- if section.settings.eligibility_heading != blank -%}
+        <h2 class="returns-eligibility__heading">{{ section.settings.eligibility_heading | escape }}</h2>
+      {%- endif -%}
+
+      <ul class="returns-eligibility__list" role="list">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            case i
+              when 1
+                assign item = section.settings.eligibility_item_1
+              when 2
+                assign item = section.settings.eligibility_item_2
+              when 3
+                assign item = section.settings.eligibility_item_3
+              when 4
+                assign item = section.settings.eligibility_item_4
+            endcase
+          -%}
+          {%- if item != blank -%}
+            <li class="returns-eligibility__item">
+              <span class="returns-eligibility__check" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 7.2L5.6 10.8L12 4.4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="returns-eligibility__item-text">{{ item | escape }}</span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+
+  {%- comment -%} ─── 3. HOW IT WORKS ─── {%- endcomment -%}
+  <div class="returns-steps full-width" data-surface="cream">
+    <div class="returns-steps__inner">
+      {%- if section.settings.steps_heading != blank -%}
+        <h2 class="returns-steps__heading">{{ section.settings.steps_heading | escape }}</h2>
+      {%- endif -%}
+
+      <ol class="returns-steps__grid" role="list">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            case i
+              when 1
+                assign step_title = section.settings.step_1_title
+                assign step_body = section.settings.step_1_body
+              when 2
+                assign step_title = section.settings.step_2_title
+                assign step_body = section.settings.step_2_body
+              when 3
+                assign step_title = section.settings.step_3_title
+                assign step_body = section.settings.step_3_body
+              when 4
+                assign step_title = section.settings.step_4_title
+                assign step_body = section.settings.step_4_body
+            endcase
+          -%}
+          {%- if step_title != blank or step_body != blank -%}
+            <li class="returns-steps__tile">
+              <span class="returns-steps__num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              {%- if step_title != blank -%}
+                <h3 class="returns-steps__tile-title">{{ step_title | escape }}</h3>
+              {%- endif -%}
+              {%- if step_body != blank -%}
+                <p class="returns-steps__tile-body">
+                  {%- if i == 1 and contact_email != blank -%}
+                    {%- assign body_parts = step_body | split: contact_email -%}
+                    {%- if body_parts.size == 2 -%}
+                      {{- body_parts[0] | escape -}}<a class="returns-steps__email" href="mailto:{{ contact_email }}">{{ contact_email }}</a>{{- body_parts[1] | escape -}}
+                    {%- else -%}
+                      {{- step_body | escape -}}
+                    {%- endif -%}
+                  {%- else -%}
+                    {{- step_body | escape -}}
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  </div>
+
+  {%- comment -%} ─── 4. NOTES ─── {%- endcomment -%}
+  <div class="returns-notes full-width" data-surface="dark">
+    <div class="returns-notes__inner">
+      {%- if section.settings.notes_heading != blank -%}
+        <h2 class="returns-notes__heading">{{ section.settings.notes_heading | escape }}</h2>
+      {%- endif -%}
+
+      <div class="returns-notes__body">
+        {%- if section.settings.notes_body_1 != blank -%}
+          <p class="returns-notes__para">{{ section.settings.notes_body_1 | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.notes_body_2 != blank -%}
+          <p class="returns-notes__para">{{ section.settings.notes_body_2 | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.cta_label != blank -%}
+        {%- assign cta_href = section.settings.cta_url -%}
+        {%- if cta_href == blank -%}
+          {%- assign cta_href = '/pages/contact' -%}
+        {%- endif -%}
+        <a class="returns-notes__cta" href="{{ cta_href }}">
+          {{- section.settings.cta_label | escape -}}
+          <span class="returns-notes__cta-arrow" aria-hidden="true">&nearr;</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+</div>
+
+{% stylesheet %}
+  /* ─── HERO ─── */
+  .returns-hero {
+    background: var(--moov-black);
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
+    text-align: center;
+  }
+
+  .returns-hero__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .returns-hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-eyebrow-accent);
+    margin: 0 0 20px;
+  }
+
+  .returns-hero__heading {
+    font-family: var(--font-hero);
+    font-size: var(--text-5xl);
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 28px;
+  }
+
+  .returns-hero__body {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 auto;
+    max-width: 560px;
+  }
+
+  /* ─── ELIGIBILITY ─── */
+  .returns-eligibility {
+    background: var(--moov-cream);
+    padding: var(--section-block-pad-y-xl) var(--section-inline-pad) var(--section-block-pad-y);
+  }
+
+  .returns-eligibility__inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .returns-eligibility__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 32px;
+  }
+
+  .returns-eligibility__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .returns-eligibility__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 22px;
+    background: var(--moov-cream-shadow);
+    border-radius: 12px;
+  }
+
+  .returns-eligibility__check {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    margin-top: 1px;
+  }
+
+  .returns-eligibility__item-text {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--moov-text-primary-light);
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .returns-steps {
+    background: var(--moov-cream);
+    padding: var(--section-block-pad-y) var(--section-inline-pad) var(--section-block-pad-y-xl);
+  }
+
+  .returns-steps__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .returns-steps__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 36px;
+  }
+
+  .returns-steps__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    counter-reset: returns-step;
+  }
+
+  .returns-steps__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 24px;
+    background: var(--moov-cream-shadow);
+    border-radius: 14px;
+    border: 0.5px solid var(--moov-border-light);
+  }
+
+  .returns-steps__num {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--moov-text-tertiary-light);
+  }
+
+  .returns-steps__tile-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+  }
+
+  .returns-steps__tile-body {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+  }
+
+  .returns-steps__email {
+    color: var(--moov-text-primary-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .returns-steps__email:hover {
+    color: var(--moov-amber-hover);
+  }
+
+  /* ─── NOTES ─── */
+  .returns-notes {
+    background: var(--moov-black);
+    padding: var(--section-block-pad-y-xl) var(--section-inline-pad);
+    text-align: center;
+  }
+
+  .returns-notes__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .returns-notes__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 24px;
+  }
+
+  .returns-notes__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0 0 32px;
+  }
+
+  .returns-notes__para {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+
+  .returns-notes__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--moov-cream);
+    color: var(--moov-black);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .returns-notes__cta:hover {
+    background: var(--moov-amber);
+  }
+
+  .returns-notes__cta-arrow {
+    font-size: 1em;
+    line-height: 1;
+  }
+
+  /* ─── Tablet ─── */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .returns-steps__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 767px) {
+    .returns-hero {
+      padding: 4.5rem 1.25rem 3rem;
+    }
+
+    .returns-hero__heading {
+      font-size: var(--text-4xl);
+    }
+
+    .returns-eligibility,
+    .returns-steps,
+    .returns-notes {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .returns-eligibility__heading,
+    .returns-steps__heading,
+    .returns-notes__heading {
+      font-size: var(--text-xl);
+    }
+
+    .returns-steps__grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .returns-steps__tile {
+      padding: 22px 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Returns & refunds",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Eyebrow",
+      "default": "Policy"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Heading",
+      "default": "Returns & refunds"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_intro",
+      "label": "Intro",
+      "default": "We want you to feel confident trying MOOV. If it's not the right fit, you can return it within 30 days of delivery."
+    },
+    {
+      "type": "header",
+      "content": "Eligibility"
+    },
+    {
+      "type": "text",
+      "id": "eligibility_heading",
+      "label": "Heading",
+      "default": "To be eligible for a return"
+    },
+    {
+      "type": "text",
+      "id": "eligibility_item_1",
+      "label": "Item 1",
+      "default": "Item must be in good condition"
+    },
+    {
+      "type": "text",
+      "id": "eligibility_item_2",
+      "label": "Item 2",
+      "default": "All components to be included"
+    },
+    {
+      "type": "text",
+      "id": "eligibility_item_3",
+      "label": "Item 3",
+      "default": "Returned with original packaging"
+    },
+    {
+      "type": "text",
+      "id": "eligibility_item_4",
+      "label": "Item 4",
+      "default": "Proof of purchase required"
+    },
+    {
+      "type": "header",
+      "content": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "steps_heading",
+      "label": "Heading",
+      "default": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Returns email",
+      "info": "Used as a mailto link inside step 1.",
+      "default": "refunds@moovalarm.com"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1 title",
+      "default": "Email us"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_body",
+      "label": "Step 1 body",
+      "default": "Send a request to refunds@moovalarm.com with your order details."
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2 title",
+      "default": "Get instructions"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_body",
+      "label": "Step 2 body",
+      "default": "We'll send return instructions and a confirmation within 1–2 business days."
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3 title",
+      "default": "Ship it back"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_body",
+      "label": "Step 3 body",
+      "default": "Pack the product in its original packaging and ship it back to us."
+    },
+    {
+      "type": "text",
+      "id": "step_4_title",
+      "label": "Step 4 title",
+      "default": "Get refunded"
+    },
+    {
+      "type": "textarea",
+      "id": "step_4_body",
+      "label": "Step 4 body",
+      "default": "Refund issued to your original payment method once received and inspected."
+    },
+    {
+      "type": "header",
+      "content": "Notes"
+    },
+    {
+      "type": "text",
+      "id": "notes_heading",
+      "label": "Heading",
+      "default": "A few notes"
+    },
+    {
+      "type": "textarea",
+      "id": "notes_body_1",
+      "label": "Note 1",
+      "default": "Return shipping fee is the customer's responsibility."
+    },
+    {
+      "type": "textarea",
+      "id": "notes_body_2",
+      "label": "Note 2",
+      "default": "Refunds are issued to your original payment method."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL",
+      "info": "Defaults to /pages/contact when left blank."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Returns & refunds"
+    }
+  ]
+}
+{% endschema %}

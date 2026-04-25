@@ -19,6 +19,7 @@
         "tile-battery": {
           "type": "feature_tile",
           "settings": {
+            "image_url": "https://images.unsplash.com/photo-1494491483073-ff8ee3f7af0d?auto=format&fit=crop&w=900&q=80",
             "title": "All-day battery",
             "body": "A full day of ambient light and alarms on a single charge."
           }
@@ -26,6 +27,7 @@
         "tile-setup": {
           "type": "feature_tile",
           "settings": {
+            "image_url": "https://images.unsplash.com/photo-1762845872088-12c352bbb119?auto=format&fit=crop&w=900&q=80",
             "title": "Peel-and-stick setup",
             "body": "No tools. No drilling. Up in five minutes, sturdy for years."
           }
@@ -33,6 +35,7 @@
         "tile-focus": {
           "type": "feature_tile",
           "settings": {
+            "image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=900&q=80",
             "title": "Quiet the feed",
             "body": "Morning app boundaries keep your first hour calm and focused."
           }
@@ -40,6 +43,7 @@
         "tile-routines": {
           "type": "feature_tile",
           "settings": {
+            "image_url": "https://images.unsplash.com/photo-1771499931747-5a383e3bd54d?auto=format&fit=crop&w=900&q=80",
             "title": "Routines that learn",
             "body": "Short flows that adapt to your energy, time, and priorities."
           }
@@ -56,29 +60,10 @@
         "heading": "Powerful mornings. Perfectly sized.",
         "subheading": "From bedside to backpack. MOOV brings calm, intentional starts everywhere you go."
       }
-    },
-    "cta": {
-      "type": "how-it-works-cta",
-      "settings": {
-        "surface": "dark",
-        "eyebrow": "Start tomorrow stronger",
-        "heading": "Ready to get up with MOOV?",
-        "highlight_word": "MOOV",
-        "subheading": "Bring intention to your first hour and make your wake-up routine something you can actually sustain.",
-        "button_label": "Shop now"
-      }
-    },
-    "faq": {
-      "type": "faq",
-      "settings": {
-        "heading": "Product FAQs"
-      }
     }
   },
   "order": [
     "main",
-    "story",
-    "cta",
-    "faq"
+    "story"
   ]
 }

@@ -20,7 +20,7 @@
             "body": "<p>10-second, damage-free install with 3M tape. We recommend placing it where you usually go first.</p>",
             "explain_title": "Why this step matters",
             "explain_body": "<p>Distance creates intention. When you have to move to silence the alarm, your body wakes before your mind can negotiate a snooze.</p>",
-            "image_url": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80"
+            "image_url": "https://images.unsplash.com/photo-1757693223749-d5ce2dff34f4?auto=format&fit=crop&w=1400&q=80"
           }
         },
         "step-2": {
@@ -31,7 +31,7 @@
             "body": "<p>Choose your alarm sound and volume. Set a pre-alert for 1-2 minutes before your main alarm so you wake lightly before needing to get up.</p>",
             "explain_title": "Why this step matters",
             "explain_body": "<p>Pre-alert and sound controls help reduce sleep shock, so your wake-up feels smoother and easier to follow through on.</p>",
-            "image_url": "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=1400&q=80"
+            "image_url": "https://images.unsplash.com/photo-1771499931747-5a383e3bd54d?auto=format&fit=crop&w=1400&q=80"
           }
         },
         "step-3": {
@@ -42,7 +42,7 @@
             "body": "<p>The phone plays the alarm. You must interact with the MOOV device to silence it.</p>",
             "explain_title": "Why this step matters",
             "explain_body": "<p>The alarm ends only after action, reinforcing a repeatable morning habit that favors getting up over staying in bed.</p>",
-            "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
+            "image_url": "https://images.unsplash.com/photo-1632466477918-66ed5a901be2?auto=format&fit=crop&w=1400&q=80"
           }
         }
       },
@@ -62,7 +62,7 @@
     "cta": {
       "type": "how-it-works-cta",
       "settings": {
-        "background_image_url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=2200&q=80",
+        "background_image_url": "https://images.unsplash.com/photo-1747372277831-bfefabee8e11?auto=format&fit=crop&w=2400&q=80",
         "surface": "dark",
         "eyebrow": "Take back your mornings",
         "heading": "Ready to try it out?",

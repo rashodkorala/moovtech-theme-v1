@@ -15,7 +15,13 @@
               <span class="prod-ship__row-label">{{ block.settings.label | escape }}</span>
             {%- endif -%}
             {%- if block.settings.value != blank -%}
-              <span class="prod-ship__row-value">{{ block.settings.value | escape }}</span>
+              {%- if block.settings.value_url != blank -%}
+                <a class="prod-ship__row-value prod-ship__row-value--link" href="{{ block.settings.value_url }}">
+                  {{- block.settings.value | escape -}}
+                </a>
+              {%- else -%}
+                <span class="prod-ship__row-value">{{ block.settings.value | escape }}</span>
+              {%- endif -%}
             {%- endif -%}
           </div>
         {%- endif -%}
@@ -88,6 +94,19 @@
     color: var(--moov-text-primary-dark);
   }
 
+  a.prod-ship__row-value--link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 0.5px;
+    text-decoration-color: var(--moov-text-tertiary-dark);
+    transition: text-decoration-color 0.2s ease, color 0.2s ease;
+  }
+
+  a.prod-ship__row-value--link:hover {
+    color: var(--moov-amber);
+    text-decoration-color: var(--moov-amber);
+  }
+
   /* Tablet */
   @media (min-width: 768px) and (max-width: 1279px) {
     .prod-ship__inner {
@@ -145,6 +164,12 @@
           "id": "value",
           "label": "t:labels.row_value",
           "default": "Value"
+        },
+        {
+          "type": "url",
+          "id": "value_url",
+          "label": "Value link (optional)",
+          "info": "When set, the value text becomes a link."
         }
       ]
     }
@@ -155,7 +180,7 @@
       "blocks": [
         { "type": "shipping_row", "settings": { "label": "Estimated ship date", "value": "May 2026" } },
         { "type": "shipping_row", "settings": { "label": "Shipping", "value": "Free in the US and Canada" } },
-        { "type": "shipping_row", "settings": { "label": "Returns", "value": "30-day money-back guarantee" } },
+        { "type": "shipping_row", "settings": { "label": "Returns", "value": "30-day money-back guarantee", "value_url": "/pages/returns-refunds" } },
         { "type": "shipping_row", "settings": { "label": "Questions", "value": "hello@moovtech.ca" } }
       ]
     }

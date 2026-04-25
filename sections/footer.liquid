@@ -104,6 +104,9 @@
                   when 4
                     assign lbl = section.settings.info_link_4_label
                     assign lurl = section.settings.info_link_4_url
+                    if lurl == blank
+                      assign lurl = '/pages/returns-refunds'
+                    endif
                 endcase
               -%}
               {%- if lbl != blank -%}
@@ -738,12 +741,14 @@
     {
       "type": "text",
       "id": "info_link_4_label",
-      "label": "Link 4 label"
+      "label": "Link 4 label",
+      "default": "Returns & refunds"
     },
     {
       "type": "url",
       "id": "info_link_4_url",
-      "label": "Link 4 URL"
+      "label": "Link 4 URL",
+      "info": "Defaults to /pages/returns-refunds when left blank."
     },
     {
       "type": "header",

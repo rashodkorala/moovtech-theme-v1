@@ -28,7 +28,7 @@
 
 <div
   class="moov-prod-story full-width"
-  data-surface="cream"
+  data-surface="{{ section.settings.surface }}"
   id="moov-product-story"
   aria-labelledby="moov-prod-story-heading-{{ section.id }}"
 >
@@ -125,6 +125,15 @@
                       sizes: '(min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw',
                       widths: '320, 480, 640, 900'
                   }}
+                {%- elsif block.settings.image_url != blank -%}
+                  <img
+                    src="{{ block.settings.image_url | escape }}"
+                    alt="{{ block.settings.title | escape }}"
+                    loading="lazy"
+                    class="moov-prod-story__tile-img"
+                    width="900"
+                    height="1125"
+                  >
                 {%- else -%}
                   <div class="moov-prod-story__tile-placeholder" aria-hidden="true"></div>
                 {%- endif -%}
@@ -150,9 +159,14 @@
 
 {% stylesheet %}
   .moov-prod-story {
-    background: var(--moov-cream);
     padding: var(--section-block-pad-y-md) 0;
     overflow: hidden;
+  }
+  .moov-prod-story[data-surface='cream'] {
+    background: var(--moov-cream);
+  }
+  .moov-prod-story[data-surface='dark'] {
+    background: var(--moov-black);
   }
   .moov-prod-story__inner {
     max-width: 1240px;
@@ -176,11 +190,14 @@
   .moov-prod-story__heading {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4.2vw, 3.4rem);
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1.08;
     color: var(--moov-text-primary-light);
     letter-spacing: -0.01em;
     margin: 0 0 14px;
+  }
+  .moov-prod-story[data-surface='dark'] .moov-prod-story__heading {
+    color: var(--moov-text-primary-dark);
   }
   .moov-prod-story__subheading {
     font-family: var(--font-body);
@@ -189,6 +206,9 @@
     color: var(--moov-text-secondary-light);
     margin: 0 auto;
     max-width: 62ch;
+  }
+  .moov-prod-story[data-surface='dark'] .moov-prod-story__subheading {
+    color: var(--moov-text-secondary-dark);
   }
 
   .moov-prod-story__grid {
@@ -204,11 +224,15 @@
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 5;
-    border-radius: 18px;
+    border-radius: 22px;
     overflow: hidden;
     background: var(--moov-cream-shadow);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     border: 1px solid var(--moov-border-light);
+  }
+  .moov-prod-story[data-surface='dark'] .moov-prod-story__tile-media {
+    background: var(--moov-surface-dark-elev-1, color-mix(in srgb, var(--moov-cream) 6%, transparent));
+    border-color: var(--moov-surface-dark-divider);
   }
   .moov-prod-story__tile-img {
     width: 100%;
@@ -227,19 +251,25 @@
   }
   .moov-prod-story__tile-title {
     font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 600;
+    font-size: var(--text-lg);
+    font-weight: 700;
     color: var(--moov-text-primary-light);
-    margin: 0 0 6px;
+    margin: 0 0 8px;
     line-height: 1.3;
+  }
+  .moov-prod-story[data-surface='dark'] .moov-prod-story__tile-title {
+    color: var(--moov-text-primary-dark);
   }
   .moov-prod-story__tile-body {
     font-family: var(--font-body);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     font-weight: 400;
     line-height: 1.55;
     color: var(--moov-text-secondary-light);
     margin: 0;
+  }
+  .moov-prod-story[data-surface='dark'] .moov-prod-story__tile-body {
+    color: var(--moov-text-secondary-dark);
   }
   .moov-prod-story__tile-foot {
     font-size: 0.65em;
@@ -303,6 +333,16 @@
   "class": "moov-prod-story-section",
   "settings": [
     {
+      "type": "select",
+      "id": "surface",
+      "label": "Surface",
+      "options": [
+        { "value": "cream", "label": "Cream" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "cream"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
@@ -328,6 +368,7 @@
       "limit": 8,
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Tile image" },
+        { "type": "url", "id": "image_url", "label": "Tile image URL", "info": "Used as a fallback when no tile image is uploaded." },
         { "type": "text", "id": "title", "label": "Title", "default": "Feature title" },
         { "type": "textarea", "id": "body", "label": "Body", "default": "Short benefit copy — keep it to 2–3 lines so the grid stays tidy." },
         { "type": "text", "id": "footnote", "label": "Footnote reference", "info": "Optional superscript reference (e.g. 1, 2, *)" }

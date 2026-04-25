@@ -509,7 +509,7 @@
 
   /* ═══ PRODUCT INTRO ══════════════════════════ */
   .moov-prod-intro {
-    background: #fff;
+    background: var(--moov-cream);
     padding: clamp(5rem, 11vw, 8rem) 0 clamp(4.5rem, 9vw, 7rem);
     overflow: hidden;
   }
@@ -535,6 +535,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
+    min-height: clamp(500px, 60vw, 740px);
     overflow: hidden;
     border-radius: 16px;
     background: transparent;
@@ -1255,6 +1256,7 @@
       top: auto;
     }
     .moov-prod-intro__main-image {
+      min-height: 0;
       aspect-ratio: 4 / 5;
     }
     .moov-prod-intro__details {

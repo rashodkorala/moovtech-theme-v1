@@ -15,8 +15,8 @@
         "hero_video_mp4": "",
         "hero_video_webm": "",
         "hero_overlay_opacity": 55,
-        "hero_desaturate_video": true,
-        "hero_eyebrow": "",
+        "hero_desaturate_video": false,
+        "hero_eyebrow": "New — Morning system",
         "hero_headline": "Reclaim your morning",
         "hero_subheadline": "",
         "hero_tagline_left": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action.",
@@ -29,14 +29,14 @@
     "featured_split_showcase": {
       "type": "featured-split-showcase",
       "settings": {
+        "promo_image_url": "https://images.unsplash.com/photo-1494491483073-ff8ee3f7af0d?auto=format&fit=crop&w=2400&q=80",
+        "content_position": "middle-left",
+        "overlay_opacity": 35,
         "promo_eyebrow": "Hardware and digital tools for a steadier first hour",
         "promo_heading": "Reclaim your morning",
-        "promo_cta_label": "Reserve your MOOV",
-        "promo_cta_url": "shopify://products/t",
-        "products_eyebrow": "Shop MOOV",
-        "products": [
-          "t"
-        ]
+        "promo_body": "Add a short description that supports your headline and gives shoppers a reason to click.",
+        "promo_cta_label": "Buy now",
+        "promo_cta_url": "shopify://products/t"
       }
     }
   },
