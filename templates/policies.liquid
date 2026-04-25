@@ -1,0 +1,16 @@
+{% comment %}
+  Renders Shopify admin policy pages (privacy, terms, refund, shipping, etc.)
+  using the themed prose layout. Available at /policies/<handle>.
+
+  Policy templates must be `.liquid` (JSON templates are not supported).
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/policies
+
+  The `policy` object exposes `title` and `body` from Settings → Policies in
+  the Shopify admin, so any update there automatically reflects on the page.
+{% endcomment %}
+
+{% render 'page-prose',
+  title: policy.title,
+  body: policy.body,
+  eyebrow: 'Policy'
+%}

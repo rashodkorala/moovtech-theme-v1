@@ -1,13 +1,15 @@
 {% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
+  Default page template — renders any non-policy CMS page (About, Contact, etc.)
+  in the themed prose layout. Custom-templated pages (page.our-story.json,
+  page.contact.json, etc.) override this with their own bespoke sections.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
-
-{{ page.content }}
+{% render 'page-prose',
+  title: page.title,
+  body: page.content
+%}
 
 {% schema %}
 {

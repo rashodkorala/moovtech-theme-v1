@@ -1,0 +1,245 @@
+{% doc %}
+  Renders a themed, document-style page wrapper with a heading, optional
+  eyebrow, and rich-text body. Used for generic CMS pages (`page.content`)
+  and Shopify policy pages (`policy.body`) so both inherit the same
+  reading-optimised layout: cream surface, narrow column, clean type.
+
+  @param {string} title - Page heading, rendered as an h1
+  @param {string} body  - HTML body content (output as-is)
+  @param {string} [eyebrow] - Optional small label above the title
+  @param {string} [updated_at] - Optional ISO date string; rendered as
+    "Last updated <date>" beneath the title
+
+  @example
+  {% render 'page-prose', title: page.title, body: page.content %}
+  {% render 'page-prose',
+    title: policy.title,
+    body: policy.body,
+    eyebrow: 'Policy'
+  %}
+{% enddoc %}
+
+<article class="page-prose" data-surface="cream">
+  <div class="page-prose__inner">
+    <header class="page-prose__header">
+      {%- if eyebrow != blank -%}
+        <p class="page-prose__eyebrow">{{ eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if title != blank -%}
+        <h1 class="page-prose__title">{{ title | escape }}</h1>
+      {%- endif -%}
+      {%- if updated_at != blank -%}
+        <p class="page-prose__meta">
+          {{- 'general.page.last_updated' | t | default: 'Last updated' }}
+          <time datetime="{{ updated_at }}">{{ updated_at | date: '%B %-d, %Y' }}</time>
+        </p>
+      {%- endif -%}
+    </header>
+
+    <div class="page-prose__body rte">
+      {{ body }}
+    </div>
+  </div>
+</article>
+
+{% stylesheet %}
+  /* ─── Page surface ─── */
+  .page-prose {
+    background: var(--moov-cream);
+    padding: clamp(3rem, 7vw, 5rem) var(--section-inline-pad) clamp(4rem, 9vw, 7rem);
+  }
+
+  .page-prose__inner {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--moov-text-primary-light);
+  }
+
+  /* ─── Header ─── */
+  .page-prose__header {
+    margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2rem);
+    border-bottom: 0.5px solid var(--moov-border-light);
+  }
+
+  .page-prose__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-text-tertiary-light);
+    margin: 0 0 12px;
+  }
+
+  .page-prose__title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+  }
+
+  .page-prose__meta {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--moov-text-tertiary-light);
+    margin: 14px 0 0;
+  }
+
+  /* ─── Rich text body ─── */
+  .page-prose__body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--moov-text-primary-light);
+  }
+
+  /* Headings inside body content */
+  .page-prose__body h1,
+  .page-prose__body h2,
+  .page-prose__body h3,
+  .page-prose__body h4,
+  .page-prose__body h5,
+  .page-prose__body h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--moov-text-primary-light);
+    margin: 2em 0 0.6em;
+  }
+
+  .page-prose__body > :first-child {
+    margin-top: 0;
+  }
+
+  .page-prose__body h1 { font-size: var(--text-2xl); }
+  .page-prose__body h2 { font-size: var(--text-xl); }
+  .page-prose__body h3 { font-size: var(--text-lg); }
+  .page-prose__body h4 { font-size: var(--text-md); }
+  .page-prose__body h5,
+  .page-prose__body h6 {
+    font-size: var(--text-base);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--moov-text-secondary-light);
+  }
+
+  .page-prose__body p {
+    margin: 0 0 1em;
+  }
+
+  .page-prose__body a {
+    color: var(--moov-text-primary-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s ease;
+  }
+
+  .page-prose__body a:hover {
+    color: var(--moov-amber-hover);
+  }
+
+  .page-prose__body strong,
+  .page-prose__body b {
+    font-weight: 600;
+    color: var(--moov-text-primary-light);
+  }
+
+  .page-prose__body em,
+  .page-prose__body i {
+    font-style: italic;
+  }
+
+  .page-prose__body ul,
+  .page-prose__body ol {
+    margin: 0 0 1.25em;
+    padding-left: 1.5rem;
+  }
+
+  .page-prose__body ul ul,
+  .page-prose__body ul ol,
+  .page-prose__body ol ul,
+  .page-prose__body ol ol {
+    margin: 0.4em 0 0.4em;
+  }
+
+  .page-prose__body li {
+    margin-bottom: 0.4em;
+  }
+
+  .page-prose__body li::marker {
+    color: var(--moov-text-tertiary-light);
+  }
+
+  .page-prose__body blockquote {
+    margin: 1.5em 0;
+    padding: 0.25em 0 0.25em 1.25rem;
+    border-left: 2px solid var(--moov-border-light);
+    color: var(--moov-text-secondary-light);
+    font-style: italic;
+  }
+
+  .page-prose__body hr {
+    border: none;
+    border-top: 0.5px solid var(--moov-border-light);
+    margin: 2em 0;
+  }
+
+  .page-prose__body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--moov-cream-shadow);
+    border-radius: 4px;
+  }
+
+  .page-prose__body pre {
+    margin: 1.5em 0;
+    padding: 1rem 1.25rem;
+    background: var(--moov-cream-shadow);
+    border: 0.5px solid var(--moov-border-light);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  .page-prose__body pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .page-prose__body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5em auto;
+    border-radius: 8px;
+  }
+
+  .page-prose__body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: var(--text-sm);
+  }
+
+  .page-prose__body th,
+  .page-prose__body td {
+    text-align: left;
+    padding: 0.6em 0.85em;
+    border-bottom: 0.5px solid var(--moov-border-light);
+  }
+
+  .page-prose__body th {
+    font-weight: 600;
+    color: var(--moov-text-primary-light);
+    background: var(--moov-cream-shadow);
+  }
+{% endstylesheet %}

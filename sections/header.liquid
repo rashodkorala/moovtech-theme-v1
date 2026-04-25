@@ -93,14 +93,6 @@
 
     {%- comment -%} Right — Utilities + optional CTA {%- endcomment -%}
     <div class="moov-nav__right">
-      {%- comment -%} Search {%- endcomment -%}
-      <a href="{{ routes.search_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.search' | t }}">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </a>
-
       {%- comment -%} Account {%- endcomment -%}
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ routes.account_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.account' | t }}">

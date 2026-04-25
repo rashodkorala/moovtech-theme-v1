@@ -57,10 +57,20 @@
       {%- comment -%} 4-column grid: Shop / Information / Company / Newsletter {%- endcomment -%}
       <div class="footer__columns">
 
-        {%- comment -%} Shop column {%- endcomment -%}
+        {%- comment -%}
+          Legal column — auto-rendered from Shopify admin policies
+          (Settings → Policies). Each policy with content appears here.
+          Extra manual links (slots 1–4) render after the policies.
+        {%- endcomment -%}
         <div class="footer__col">
-          <p class="footer__col-heading">{{ section.settings.col_heading_shop | default: 'Shop' | escape }}</p>
+          <p class="footer__col-heading">{{ section.settings.col_heading_shop | default: 'Legal' | escape }}</p>
           <ul class="footer__links">
+            {%- for policy in shop.policies -%}
+              {%- if policy.body != blank -%}
+                <li><a href="{{ policy.url }}" class="footer__link">{{ policy.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+
             {%- for i in (1..4) -%}
               {%- liquid
                 case i
@@ -77,9 +87,56 @@
                     assign lbl = section.settings.shop_link_4_label
                     assign lurl = section.settings.shop_link_4_url
                 endcase
+
+                comment
+                  Skip a manual link if its label refers to the same policy
+                  already rendered above (e.g. a manual "Terms of Use" entry
+                  alongside the admin's "Terms of service"). Match is by
+                  keyword so naming variations are deduped.
+                endcomment
+                assign skip_link = false
+                if lbl != blank
+                  assign lbl_lc = lbl | downcase
+                  assign lbl_keyword = ''
+                  if lbl_lc contains 'privacy'
+                    assign lbl_keyword = 'privacy'
+                  elsif lbl_lc contains 'terms'
+                    assign lbl_keyword = 'terms'
+                  elsif lbl_lc contains 'refund'
+                    assign lbl_keyword = 'refund'
+                  elsif lbl_lc contains 'return'
+                    assign lbl_keyword = 'refund'
+                  elsif lbl_lc contains 'shipping'
+                    assign lbl_keyword = 'shipping'
+                  elsif lbl_lc contains 'legal notice'
+                    assign lbl_keyword = 'legal'
+                  elsif lbl_lc contains 'contact'
+                    assign lbl_keyword = 'contact'
+                  endif
+
+                  if lbl_keyword != ''
+                    for policy in shop.policies
+                      if policy.body != blank
+                        assign policy_title_lc = policy.title | downcase
+                        if policy_title_lc contains lbl_keyword
+                          assign skip_link = true
+                          break
+                        endif
+                        if lbl_keyword == 'refund' and policy_title_lc contains 'return'
+                          assign skip_link = true
+                          break
+                        endif
+                        if lbl_keyword == 'legal' and policy_title_lc contains 'legal'
+                          assign skip_link = true
+                          break
+                        endif
+                      endif
+                    endfor
+                  endif
+                endif
               -%}
-              {%- if lbl != blank -%}
-                <li><a href="{{ lurl | default: '#' }}" class="footer__link">{{ lbl | escape }}</a></li>
+              {%- if lbl != blank and skip_link == false -%}
+                <li><a href="{% render 'policy-url', label: lbl, url: lurl %}" class="footer__link">{{ lbl | escape }}</a></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -105,12 +162,16 @@
                     assign lbl = section.settings.info_link_4_label
                     assign lurl = section.settings.info_link_4_url
                     if lurl == blank
-                      assign lurl = '/pages/returns-refunds'
+                      if shop.refund_policy != blank
+                        assign lurl = shop.refund_policy.url
+                      else
+                        assign lurl = '/pages/returns-refunds'
+                      endif
                     endif
                 endcase
               -%}
               {%- if lbl != blank -%}
-                <li><a href="{{ lurl | default: '#' }}" class="footer__link">{{ lbl | escape }}</a></li>
+                <li><a href="{% render 'policy-url', label: lbl, url: lurl %}" class="footer__link">{{ lbl | escape }}</a></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -138,7 +199,7 @@
                 endcase
               -%}
               {%- if lbl != blank -%}
-                <li><a href="{{ lurl | default: '#' }}" class="footer__link">{{ lbl | escape }}</a></li>
+                <li><a href="{% render 'policy-url', label: lbl, url: lurl %}" class="footer__link">{{ lbl | escape }}</a></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -164,12 +225,18 @@
                 {{ 'sections.footer.newsletter_submit' | t }} &nearr;
               </button>
             </div>
-            {%- if section.settings.newsletter_privacy_url != blank -%}
+            {%- liquid
+              assign newsletter_privacy_href = section.settings.newsletter_privacy_url
+              if newsletter_privacy_href == blank and shop.privacy_policy != blank
+                assign newsletter_privacy_href = shop.privacy_policy.url
+              endif
+            -%}
+            {%- if newsletter_privacy_href != blank -%}
               <p class="footer__newsletter-privacy">
                 <label class="footer__privacy-check">
                   <input type="checkbox" required class="footer__privacy-checkbox">
                   <span>{{ 'sections.footer.privacy_accept' | t }}
-                    <a href="{{ section.settings.newsletter_privacy_url }}" class="footer__privacy-link">{{ 'sections.footer.privacy_policy' | t }}</a>
+                    <a href="{{ newsletter_privacy_href }}" class="footer__privacy-link">{{ 'sections.footer.privacy_policy' | t }}</a>
                   </span>
                 </label>
               </p>
@@ -190,10 +257,28 @@
         {%- if section.settings.powered_by_shopify -%}
           {{ powered_by_link }}
         {%- endif -%}
+        {%- if shop.terms_of_service != blank -%}
+          <span class="footer__legal-sep" aria-hidden="true">&middot;</span>
+          <a href="{{ shop.terms_of_service.url }}" class="footer__legal-link">
+            {{- shop.terms_of_service.title -}}
+          </a>
+        {%- endif -%}
         {%- if shop.privacy_policy != blank -%}
           <span class="footer__legal-sep" aria-hidden="true">&middot;</span>
           <a href="{{ shop.privacy_policy.url }}" class="footer__legal-link">
-            {{- 'sections.footer.privacy_policy' | t -}}
+            {{- shop.privacy_policy.title -}}
+          </a>
+        {%- endif -%}
+        {%- if shop.refund_policy != blank -%}
+          <span class="footer__legal-sep" aria-hidden="true">&middot;</span>
+          <a href="{{ shop.refund_policy.url }}" class="footer__legal-link">
+            {{- shop.refund_policy.title -}}
+          </a>
+        {%- endif -%}
+        {%- if shop.shipping_policy != blank -%}
+          <span class="footer__legal-sep" aria-hidden="true">&middot;</span>
+          <a href="{{ shop.shipping_policy.url }}" class="footer__legal-link">
+            {{- shop.shipping_policy.title -}}
           </a>
         {%- endif -%}
       </p>

@@ -1,0 +1,46 @@
+{% doc %}
+  Resolves a footer/legal link URL. If `url` is blank and `label` matches a
+  known policy keyword, falls back to the matching Shopify admin policy
+  (Settings → Policies). Outputs the resolved URL or `#` if nothing matches.
+
+  Recognised label keywords (case-insensitive):
+    - "privacy"           → shop.privacy_policy
+    - "terms"             → shop.terms_of_service
+    - "refund" / "return" → shop.refund_policy
+    - "shipping"          → shop.shipping_policy
+    - "legal notice"      → shop.legal_notice_policy
+    - "contact"           → shop.contact_information_policy
+
+  @param {string} label - The link label, used for keyword matching
+  @param {string} [url] - Merchant-set URL; takes precedence when present
+
+  @example
+  <a href="{% render 'policy-url', label: lbl, url: lurl %}">{{ lbl }}</a>
+{% enddoc %}
+
+{%- liquid
+  assign resolved = url
+
+  if resolved == blank and label != blank
+    assign label_lc = label | downcase
+    if label_lc contains 'privacy'
+      assign resolved = shop.privacy_policy.url
+    elsif label_lc contains 'terms'
+      assign resolved = shop.terms_of_service.url
+    elsif label_lc contains 'refund'
+      assign resolved = shop.refund_policy.url
+    elsif label_lc contains 'return'
+      assign resolved = shop.refund_policy.url
+    elsif label_lc contains 'shipping'
+      assign resolved = shop.shipping_policy.url
+    elsif label_lc contains 'legal notice'
+      assign resolved = shop.legal_notice_policy.url
+    elsif label_lc contains 'contact'
+      assign resolved = shop.contact_information_policy.url
+    endif
+  endif
+
+  if resolved == blank
+    assign resolved = '#'
+  endif
+-%}{{- resolved -}}
