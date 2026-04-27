@@ -1,0 +1,308 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.home_founder_story.default_eyebrow' | t
+  endif
+
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'sections.home_founder_story.default_heading' | t
+  endif
+
+  assign body = section.settings.body
+  if body == blank
+    assign body = 'sections.home_founder_story.default_body' | t
+  endif
+
+  assign cta_label = section.settings.cta_label
+  if cta_label == blank
+    assign cta_label = 'sections.home_founder_story.default_cta' | t
+  endif
+
+  assign cta_url = section.settings.cta_url | default: '/pages/our-story'
+  assign overlay_opacity = section.settings.overlay_opacity | default: 40
+-%}
+
+<section
+  class="founder-story full-width"
+  aria-labelledby="founder-story-heading-{{ section.id }}"
+  style="--fs-overlay: color-mix(in srgb, var(--moov-black) {{ overlay_opacity }}%, transparent);"
+>
+  <div class="founder-story__media">
+    {%- if section.settings.image != blank -%}
+      {%- assign media_alt = section.settings.image.alt | default: heading -%}
+      {{
+        section.settings.image
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'lazy',
+          class: 'founder-story__img',
+          alt: media_alt,
+          sizes: '(min-width: 1200px) 1200px, 100vw',
+          widths: '400, 600, 800, 1200, 1600, 2000, 2400'
+      }}
+    {%- elsif section.settings.image_url != blank -%}
+      <img
+        src="{{ section.settings.image_url | escape }}"
+        alt="{{ heading | escape }}"
+        loading="lazy"
+        class="founder-story__img"
+        width="2400"
+        height="1350"
+      >
+    {%- else -%}
+      <div
+        class="founder-story__placeholder"
+        role="img"
+        aria-label="{{ 'sections.home_founder_story.image_placeholder_label' | t }}"
+      ></div>
+    {%- endif -%}
+    <div class="founder-story__overlay" aria-hidden="true"></div>
+    <div class="founder-story__overlay founder-story__overlay--bottom" aria-hidden="true"></div>
+  </div>
+
+  <div class="founder-story__content">
+    {%- if eyebrow != blank -%}
+      <p class="founder-story__eyebrow">{{ eyebrow | escape }}</p>
+    {%- endif -%}
+
+    <h2 id="founder-story-heading-{{ section.id }}" class="founder-story__heading">
+      {{ heading | escape }}
+    </h2>
+
+    {%- if body != blank -%}
+      <p class="founder-story__body">{{ body | escape }}</p>
+    {%- endif -%}
+
+    {%- if cta_label != blank -%}
+      <a href="{{ cta_url }}" class="founder-story__cta">
+        {{- cta_label | escape -}}
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="2" y1="12" x2="12" y2="2" />
+          <polyline points="5,2 12,2 12,9" />
+        </svg>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .founder-story {
+    --fs-radius: clamp(18px, 2.4vw, 28px);
+    --fs-pad: clamp(1.5rem, 5vw, 4rem);
+    position: relative;
+    margin: var(--section-block-pad-y-md) var(--section-inline-pad);
+    border-radius: var(--fs-radius);
+    overflow: hidden;
+    isolation: isolate;
+    min-height: clamp(360px, 60vw, 620px);
+    display: grid;
+    color: var(--moov-cream);
+  }
+
+  .founder-story__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .founder-story__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .founder-story__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--moov-cream) 62%, var(--moov-black)) 0%,
+      var(--moov-neutral-deep) 100%
+    );
+  }
+
+  .founder-story__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: var(--fs-overlay, color-mix(in srgb, var(--moov-black) 40%, transparent));
+  }
+
+  .founder-story__overlay--bottom {
+    z-index: 2;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--moov-black) 75%, transparent) 0%,
+      color-mix(in srgb, var(--moov-black) 25%, transparent) 45%,
+      transparent 72%
+    );
+  }
+
+  .founder-story__content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-self: start;
+    align-self: end;
+    gap: clamp(14px, 2vw, 22px);
+    max-width: 560px;
+    padding: var(--fs-pad);
+  }
+
+  .founder-story__eyebrow {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--moov-cream) 88%, transparent);
+  }
+
+  .founder-story__heading {
+    margin: 0;
+    font-family: var(--font-hero, var(--font-body));
+    font-weight: 600;
+    font-size: clamp(2rem, 4.4vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: var(--heading-text-transform, uppercase);
+    color: var(--moov-cream);
+    text-shadow: 0 1px 24px color-mix(in srgb, var(--moov-black) 20%, transparent);
+  }
+
+  .founder-story__body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--moov-cream) 92%, transparent);
+    max-width: 480px;
+  }
+
+  .founder-story__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: clamp(13px, 1.2vw, 16px) clamp(26px, 2.8vw, 36px);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--moov-black);
+    background: #fff;
+    border: none;
+    margin-top: clamp(4px, 1vw, 10px);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--moov-black) 6%, transparent);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .founder-story__cta:hover {
+    background: #f0f0ee;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--moov-black) 24%, transparent);
+  }
+
+  @media (max-width: 749px) {
+    .founder-story {
+      min-height: clamp(420px, 90vw, 560px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.home_founder_story.name",
+  "tag": "section",
+  "class": "section-home-founder-story",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.home_founder_story.content_header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "t:labels.body"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.home_founder_story.image_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.background_image"
+    },
+    {
+      "type": "url",
+      "id": "image_url",
+      "label": "t:sections.home_founder_story.image_url_label",
+      "info": "t:sections.home_founder_story.image_url_info"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:sections.home_founder_story.overlay_label",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "%",
+      "info": "t:sections.home_founder_story.overlay_info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.home_founder_story.name",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "We're building for the first hour",
+        "body": "MOOV started from frustration with mornings that felt reactive, not intentional. Read how we're designing a system that meets people where they are.",
+        "cta_label": "Read our story",
+        "cta_url": "/pages/our-story",
+        "image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=2400&q=80",
+        "overlay_opacity": 40
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,437 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.home_how_glimpse.default_eyebrow' | t
+  endif
+
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'sections.home_how_glimpse.default_heading' | t
+  endif
+
+  assign body = section.settings.body
+  if body == blank
+    assign body = 'sections.home_how_glimpse.default_body' | t
+  endif
+
+  assign cta_label = section.settings.cta_label
+  if cta_label == blank
+    assign cta_label = 'sections.home_how_glimpse.default_cta' | t
+  endif
+
+  assign cta_url = section.settings.cta_url | default: '/pages/how-it-works'
+-%}
+
+<section
+  class="hiw-glimpse full-width"
+  aria-labelledby="hiw-glimpse-heading-{{ section.id }}"
+>
+  <div class="hiw-glimpse__inner">
+    <div class="hiw-glimpse__header">
+      {%- if eyebrow != blank -%}
+        <p class="hiw-glimpse__eyebrow">{{ eyebrow | escape }}</p>
+      {%- endif -%}
+
+      <h2 id="hiw-glimpse-heading-{{ section.id }}" class="hiw-glimpse__heading">
+        {{ heading | escape }}
+      </h2>
+
+      {%- if body != blank -%}
+        <p class="hiw-glimpse__intro">{{ body | escape }}</p>
+      {%- endif -%}
+
+      {%- if cta_label != blank -%}
+        <a href="{{ cta_url }}" class="hiw-glimpse__cta">
+          {{- cta_label | escape -}}
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="2" y1="7" x2="11" y2="7" />
+            <polyline points="7,3.5 11,7 7,10.5" />
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="hiw-glimpse__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            {%- liquid
+              assign step_index = forloop.index
+              if step_index < 10
+                assign step_badge = step_index | prepend: '0'
+              else
+                assign step_badge = step_index | append: ''
+              endif
+            -%}
+
+            <li class="hiw-glimpse__cell" {{ block.shopify_attributes }}>
+              <div class="hiw-glimpse__card">
+                <div class="hiw-glimpse__media">
+                  {%- if block.settings.image != blank -%}
+                    {%- assign step_alt = block.settings.image.alt | default: block.settings.title -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1000
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'hiw-glimpse__img',
+                        alt: step_alt,
+                        sizes: '(min-width: 990px) 32vw, (min-width: 750px) 45vw, 100vw',
+                        widths: '400, 600, 800, 1000'
+                    }}
+                  {%- elsif block.settings.image_url != blank -%}
+                    <img
+                      src="{{ block.settings.image_url | escape }}"
+                      alt="{{ block.settings.title | default: heading | escape }}"
+                      loading="lazy"
+                      class="hiw-glimpse__img"
+                      width="1000"
+                      height="800"
+                    >
+                  {%- else -%}
+                    <div
+                      class="hiw-glimpse__placeholder"
+                      role="img"
+                      aria-label="{{ 'sections.home_how_glimpse.image_placeholder_label' | t }}"
+                    ></div>
+                  {%- endif -%}
+                  <span class="hiw-glimpse__badge" aria-hidden="true">{{ step_badge | escape }}</span>
+                </div>
+
+                <div class="hiw-glimpse__card-body">
+                  {%- if block.settings.kicker != blank -%}
+                    <p class="hiw-glimpse__kicker">{{ block.settings.kicker | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="hiw-glimpse__step-title">{{ block.settings.title | escape }}</h3>
+                  {%- endif -%}
+
+                  {%- if block.settings.text != blank -%}
+                    <p class="hiw-glimpse__step-text">{{ block.settings.text | strip_html | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .hiw-glimpse {
+    --hiw-radius: clamp(16px, 1.8vw, 24px);
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
+  }
+
+  .hiw-glimpse__inner {
+    max-width: min(var(--page-width), calc(100% - var(--page-margin) * 2));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 4.5vw, 3.5rem);
+  }
+
+  .hiw-glimpse__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 1.2vw, 0.9rem);
+    max-width: 64ch;
+  }
+
+  .hiw-glimpse__eyebrow {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  .hiw-glimpse__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: var(--heading-text-transform, uppercase);
+    color: var(--moov-text-primary-dark);
+  }
+
+  .hiw-glimpse__intro {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .hiw-glimpse__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: clamp(0.2rem, 0.5vw, 0.4rem);
+    padding: 0.9rem 1.5rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--moov-black);
+    background: var(--moov-cream);
+    border: 1px solid var(--moov-border-dark);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hiw-glimpse__cta:hover {
+    background: var(--moov-cream-shadow);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 30%, transparent);
+  }
+
+  .hiw-glimpse__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.5vw, 1.4rem);
+  }
+
+  .hiw-glimpse__cell {
+    min-width: 0;
+  }
+
+  .hiw-glimpse__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--hiw-radius);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--moov-cream) 5%, var(--moov-black));
+    border: 1px solid var(--moov-border-dark);
+  }
+
+  .hiw-glimpse__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--moov-cream) 6%, var(--moov-black));
+  }
+
+  .hiw-glimpse__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .hiw-glimpse__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 120px;
+    background: linear-gradient(
+      140deg,
+      color-mix(in srgb, var(--moov-cream) 10%, var(--moov-black)) 0%,
+      var(--moov-neutral-deep) 100%
+    );
+  }
+
+  .hiw-glimpse__badge {
+    position: absolute;
+    left: clamp(10px, 1.1vw, 14px);
+    bottom: clamp(10px, 1.1vw, 14px);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--moov-cream) 40%, transparent);
+    background: color-mix(in srgb, var(--moov-black) 40%, transparent);
+    backdrop-filter: blur(4px);
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .hiw-glimpse__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: clamp(1rem, 1.5vw, 1.25rem);
+    flex: 1;
+  }
+
+  .hiw-glimpse__kicker {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  .hiw-glimpse__step-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--moov-text-primary-dark);
+  }
+
+  .hiw-glimpse__step-text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  @media (max-width: 989px) {
+    .hiw-glimpse__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hiw-glimpse__media {
+      aspect-ratio: 16 / 10;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.home_how_glimpse.name",
+  "tag": "section",
+  "class": "section-hiw-glimpse",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.home_how_glimpse.content_header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "t:labels.body",
+      "info": "t:sections.home_how_glimpse.body_info"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.button_url"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "t:sections.home_how_glimpse.blocks.step.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "t:sections.home_how_glimpse.blocks.step.kicker"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.heading"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:labels.body"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.background_image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "t:sections.home_how_glimpse.image_url_label",
+          "info": "t:sections.home_how_glimpse.image_url_info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.home_how_glimpse.name",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Device and mobile app",
+            "title": "Place MOOV on the wall",
+            "text": "10-second, damage-free install. Put it where you go first in the morning.",
+            "image_url": "https://images.unsplash.com/photo-1757693223749-d5ce2dff34f4?auto=format&fit=crop&w=1200&q=80"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Configure your alarm",
+            "title": "Set your get-up time in the app",
+            "text": "Choose your alarm, volume, and optional pre-alert for a gentler start.",
+            "image_url": "https://images.unsplash.com/photo-1771499931747-5a383e3bd54d?auto=format&fit=crop&w=1200&q=80"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "kicker": "Get up to silence",
+            "title": "Walk to the device to turn it off",
+            "text": "Movement first — the alarm stops only when you act. No more half-asleep snoozes.",
+            "image_url": "https://images.unsplash.com/photo-1632466477918-66ed5a901be2?auto=format&fit=crop&w=1200&q=80"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

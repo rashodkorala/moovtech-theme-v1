@@ -169,6 +169,37 @@
           "name": "Review"
         }
       }
+    },
+    "home_how_glimpse": {
+      "name": "How it works (glimpse)",
+      "content_header": "Content",
+      "body_info": "Shown above the step cards. Add up to three step blocks for the row below.",
+      "image_url_label": "Image URL fallback",
+      "image_url_info": "Used when no image is selected above.",
+      "blocks": {
+        "step": {
+          "name": "Step",
+          "kicker": "Label"
+        }
+      }
+    },
+    "home_product_glimpse": {
+      "name": "Product (glimpse)",
+      "content_header": "Content",
+      "image_header": "Image",
+      "image_url_label": "Image URL fallback",
+      "image_url_info": "Fills the rounded card behind the text. Used when no image is selected above.",
+      "overlay_label": "Text overlay strength",
+      "overlay_info": "Darkens the image so overlaid text stays readable."
+    },
+    "home_founder_story": {
+      "name": "Founder story (glimpse)",
+      "content_header": "Content",
+      "image_header": "Image",
+      "image_url_label": "Image URL fallback",
+      "image_url_info": "Fills the rounded card behind the text. Used when no image is selected above.",
+      "overlay_label": "Overlay strength",
+      "overlay_info": "Darkens the image so overlaid text stays readable."
     }
   },
   "labels": {

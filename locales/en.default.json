@@ -319,6 +319,28 @@
     "reviews": {
       "out_of_5": "{{ score }} out of 5",
       "stars_label": "{{ count }} out of 5 stars"
+    },
+    "home_how_glimpse": {
+      "default_eyebrow": "The morning system",
+      "default_heading": "How it works",
+      "default_body": "Three steps — place, configure, act. Full details on the how it works page.",
+      "default_cta": "See the full system",
+      "body_info": "Shown above the step cards. Three steps are added as blocks below.",
+      "image_placeholder_label": "Step image placeholder"
+    },
+    "home_product_glimpse": {
+      "default_eyebrow": "Hardware and digital tools for a steadier first hour",
+      "default_heading": "Get up. Then get going.",
+      "default_body": "A wall-mounted alarm that won't quit until you do. Movement before screens, intention before scroll — every single morning.",
+      "default_cta": "Get your MOOV",
+      "image_placeholder_label": "Product image placeholder"
+    },
+    "home_founder_story": {
+      "default_eyebrow": "Our story",
+      "default_heading": "We're building for the first hour",
+      "default_body": "MOOV started from frustration with mornings that felt reactive, not intentional. Read how we're designing a system that meets people where they are.",
+      "default_cta": "Read our story",
+      "image_placeholder_label": "Founder story image placeholder"
     }
   },
   "labels": {
