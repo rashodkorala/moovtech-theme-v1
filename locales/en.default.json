@@ -341,6 +341,22 @@
       "default_body": "MOOV started from frustration with mornings that felt reactive, not intentional. Read how we're designing a system that meets people where they are.",
       "default_cta": "Read our story",
       "image_placeholder_label": "Founder story image placeholder"
+    },
+    "how_it_works_app": {
+      "carousel_aria": "App preview slides",
+      "slide_aria": "Slide {{ number }} of {{ count }}",
+      "dots_aria": "Choose a slide to show",
+      "default_eyebrow": "The MOOV app",
+      "default_heading": "Your alarm lives on the phone. The habit lives in the room.",
+      "default_body": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll.",
+      "default_footnote": "iOS and Android. Bluetooth keeps your device and phone in sync.",
+      "image_placeholder_label": "App image placeholder",
+      "store_badge_app_alt": "Download on the App Store",
+      "store_badge_play_alt": "Get it on Google Play",
+      "store_fallback_app_kicker": "Download on the",
+      "store_fallback_play_kicker": "Get it on",
+      "store_fallback_app_name": "App Store",
+      "store_fallback_play_name": "Google Play"
     }
   },
   "labels": {

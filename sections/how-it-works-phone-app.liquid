@@ -1,0 +1,1039 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.how_it_works_app.default_eyebrow' | t
+  endif
+
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'sections.how_it_works_app.default_heading' | t
+  endif
+
+  assign body = section.settings.body
+  if body == blank
+    assign body = 'sections.how_it_works_app.default_body' | t
+  endif
+
+  assign footnote = section.settings.footnote
+  if footnote == blank
+    assign footnote = 'sections.how_it_works_app.default_footnote' | t
+  endif
+
+  assign cta_label = section.settings.cta_label
+  assign cta_url = section.settings.cta_url
+  assign image_position = section.settings.image_position
+  if image_position != 'left'
+    assign image_position = 'right'
+  endif
+  assign mobile_image_first = section.settings.mobile_image_first
+  assign app_store_url = section.settings.app_store_url | default: '#'
+  assign google_play_url = section.settings.google_play_url | default: '#'
+  assign app_store_badge_alt = 'sections.how_it_works_app.store_badge_app_alt' | t
+  assign play_store_badge_alt = 'sections.how_it_works_app.store_badge_play_alt' | t
+-%}
+
+<section
+  class="hiw-app full-width{% if image_position == 'left' %} hiw-app--image-left{% endif %}"
+  data-surface="dark"
+  aria-labelledby="hiw-app-heading-{{ section.id }}"
+>
+  <div class="hiw-app__inner">
+    <div class="hiw-app__grid">
+      <div class="hiw-app__copy">
+        {%- if eyebrow != blank -%}
+          <p class="hiw-app__eyebrow">{{ eyebrow | escape }}</p>
+        {%- endif -%}
+
+        <h2 id="hiw-app-heading-{{ section.id }}" class="hiw-app__heading">
+          {{ heading | escape }}
+        </h2>
+
+        {%- if body != blank -%}
+          <p class="hiw-app__body">{{ body | escape }}</p>
+        {%- endif -%}
+
+        {%- assign feature_blocks = section.blocks | where: 'type', 'feature' -%}
+        {%- if feature_blocks.size > 0 -%}
+          <ul class="hiw-app__features" role="list">
+            {%- for block in feature_blocks -%}
+              <li class="hiw-app__feature" {{ block.shopify_attributes }}>
+                {%- if block.settings.title != blank -%}
+                  <p class="hiw-app__feature-title">{{ block.settings.title | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="hiw-app__feature-text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- unless section.settings.show_store_badges == false -%}
+          <div class="hiw-app__stores">
+            {%- if section.settings.app_store_badge != blank -%}
+              <a
+                href="{{ app_store_url }}"
+                class="hiw-app__store-badge hiw-app__store-badge--image"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {{
+                  section.settings.app_store_badge
+                  | image_url: width: 400
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'hiw-app__store-badge-img',
+                    alt: app_store_badge_alt,
+                    widths: '200, 300, 400'
+                }}
+              </a>
+            {%- else -%}
+              <a
+                href="{{ app_store_url }}"
+                class="hiw-app__store-fallback"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="{{ 'sections.app_section.download_app_store' | t }}"
+              >
+                <span class="hiw-app__store-fallback-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                </span>
+                <span class="hiw-app__store-fallback-text">
+                  <span class="hiw-app__store-fallback-kicker">{{ 'sections.how_it_works_app.store_fallback_app_kicker' | t }}</span>
+                  <span class="hiw-app__store-fallback-name">{{ 'sections.how_it_works_app.store_fallback_app_name' | t }}</span>
+                </span>
+              </a>
+            {%- endif -%}
+
+            {%- if section.settings.play_store_badge != blank -%}
+              <a
+                href="{{ google_play_url }}"
+                class="hiw-app__store-badge hiw-app__store-badge--image"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {{
+                  section.settings.play_store_badge
+                  | image_url: width: 400
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'hiw-app__store-badge-img',
+                    alt: play_store_badge_alt,
+                    widths: '200, 300, 400'
+                }}
+              </a>
+            {%- else -%}
+              <a
+                href="{{ google_play_url }}"
+                class="hiw-app__store-fallback"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="{{ 'sections.app_section.get_google_play' | t }}"
+              >
+                <span class="hiw-app__store-fallback-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.18 23.76c.3.17.64.24.99.2L15.39 12 11.9 8.5 3.18 23.76z" fill="#EA4335"/>
+                    <path d="M20.54 10.61l-2.84-1.63-3.18 3.02 3.18 3.02 2.87-1.65c.82-.47.82-1.29-.03-1.76z" fill="#FBBC04"/>
+                    <path d="M2.1.49C1.8.83 1.62 1.34 1.62 2v20c0 .66.18 1.17.49 1.51L13.56 12 2.1.49z" fill="#4285F4"/>
+                    <path d="M15.39 12 4.17.22c.35-.04.72.03 1.02.2L20.54 10.61 15.39 12z" fill="#34A853"/>
+                  </svg>
+                </span>
+                <span class="hiw-app__store-fallback-text">
+                  <span class="hiw-app__store-fallback-kicker">{{ 'sections.how_it_works_app.store_fallback_play_kicker' | t }}</span>
+                  <span class="hiw-app__store-fallback-name">{{ 'sections.how_it_works_app.store_fallback_play_name' | t }}</span>
+                </span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endunless -%}
+
+        {%- if footnote != blank -%}
+          <p class="hiw-app__footnote">{{ footnote | escape }}</p>
+        {%- endif -%}
+
+        {%- if cta_label != blank and cta_url != blank -%}
+          <a href="{{ cta_url }}" class="hiw-app__cta">
+            {{- cta_label | escape -}}
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="2" y1="12" x2="12" y2="2" />
+              <polyline points="5,2 12,2 12,9" />
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="hiw-app__visual{% if mobile_image_first %} hiw-app__visual--first-mobile{% endif %}">
+        {%- assign app_slide_blocks = section.blocks | where: 'type', 'app_image' -%}
+        {%- if app_slide_blocks.size >= 2 -%}
+          {%- assign carousel_label = 'sections.how_it_works_app.carousel_aria' | t -%}
+          <div
+            class="hiw-app__phone hiw-app__phone--carousel"
+            id="hiw-app-carousel-{{ section.id }}"
+            data-hiw-app-carousel
+            data-hiw-app-interval="2400"
+          >
+            <div
+              class="hiw-app__carousel-viewport"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="{{ carousel_label | escape }}"
+            >
+              {%- for block in app_slide_blocks -%}
+                {%- liquid
+                  assign slide_image = block.settings.image
+                  assign slide_url = block.settings.image_url
+                  if block.settings.image_alt != blank
+                    assign slide_alt = block.settings.image_alt
+                  else
+                    assign slide_alt = heading
+                  endif
+                -%}
+                <div
+                  class="hiw-app__carousel-slide hiw-app__img-wrap{% if forloop.first %} is-active{% endif %}"
+                  data-hiw-app-slide
+                  data-hiw-index="{{ forloop.index0 }}"
+                  aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+                  id="hiw-app-slide-{{ section.id }}-{{ forloop.index0 }}"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label="{{ 'sections.how_it_works_app.slide_aria' | t: number: forloop.index, count: app_slide_blocks.size }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if slide_image != blank -%}
+                    {{
+                      slide_image
+                      | image_url: width: 2000
+                      | image_tag:
+                        loading: 'lazy',
+                        class: 'hiw-app__img',
+                        alt: slide_alt,
+                        sizes: '(min-width: 1200px) 50vw, (min-width: 990px) 46vw, 100vw',
+                        widths: '400, 600, 800, 1000, 1200, 1600, 2000'
+                    }}
+                  {%- elsif slide_url != blank -%}
+                    <img
+                      src="{{ slide_url | escape }}"
+                      alt="{{ slide_alt | escape }}"
+                      loading="lazy"
+                      class="hiw-app__img"
+                      width="800"
+                      height="1200"
+                    >
+                  {%- else -%}
+                    <div
+                      class="hiw-app__placeholder"
+                      role="img"
+                      aria-label="{{ 'sections.how_it_works_app.image_placeholder_label' | t }}"
+                    ></div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+            <div class="hiw-app__carousel-dots" role="tablist" aria-label="{{ 'sections.how_it_works_app.dots_aria' | t }}">
+              {%- for block in app_slide_blocks -%}
+                <button
+                  type="button"
+                  class="hiw-app__carousel-dot{% if forloop.first %} is-active{% endif %}"
+                  data-hiw-app-dot
+                  data-hiw-index="{{ forloop.index0 }}"
+                  id="hiw-app-dot-{{ section.id }}-{{ forloop.index0 }}"
+                  role="tab"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-controls="hiw-app-slide-{{ section.id }}-{{ forloop.index0 }}"
+                  tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                >
+                  <span class="hiw-app__sr-only">
+                    {{- 'sections.how_it_works_app.slide_aria' | t: number: forloop.index, count: app_slide_blocks.size -}}
+                  </span>
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- elsif app_slide_blocks.size == 1 -%}
+          {%- assign solo_block = app_slide_blocks | first -%}
+          {%- liquid
+            assign slide_image = solo_block.settings.image
+            assign slide_url = solo_block.settings.image_url
+            if solo_block.settings.image_alt != blank
+              assign slide_alt = solo_block.settings.image_alt
+            else
+              assign slide_alt = heading
+            endif
+          -%}
+          <div class="hiw-app__phone" {{ solo_block.shopify_attributes }}>
+            {%- if slide_image != blank -%}
+              {{
+                slide_image
+                | image_url: width: 2000
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'hiw-app__img',
+                  alt: slide_alt,
+                  sizes: '(min-width: 1200px) 50vw, (min-width: 990px) 46vw, 100vw',
+                  widths: '400, 600, 800, 1000, 1200, 1600, 2000'
+              }}
+            {%- elsif slide_url != blank -%}
+              <img
+                src="{{ slide_url | escape }}"
+                alt="{{ slide_alt | escape }}"
+                loading="lazy"
+                class="hiw-app__img"
+                width="800"
+                height="1200"
+              >
+            {%- else -%}
+              <div
+                class="hiw-app__placeholder"
+                role="img"
+                aria-label="{{ 'sections.how_it_works_app.image_placeholder_label' | t }}"
+              ></div>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div class="hiw-app__phone">
+            {%- if section.settings.image != blank -%}
+              {%- assign img_alt = section.settings.image.alt | default: heading -%}
+              {{
+                section.settings.image
+                | image_url: width: 2000
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'hiw-app__img',
+                  alt: img_alt,
+                  sizes: '(min-width: 1200px) 50vw, (min-width: 990px) 46vw, 100vw',
+                  widths: '400, 600, 800, 1000, 1200, 1600, 2000'
+              }}
+            {%- elsif section.settings.image_url != blank -%}
+              <img
+                src="{{ section.settings.image_url | escape }}"
+                alt="{{ heading | escape }}"
+                loading="lazy"
+                class="hiw-app__img"
+                width="800"
+                height="1200"
+              >
+            {%- else -%}
+              <div
+                class="hiw-app__placeholder"
+                role="img"
+                aria-label="{{ 'sections.how_it_works_app.image_placeholder_label' | t }}"
+              ></div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .hiw-app {
+    --hiw-app-radius: clamp(20px, 2.5vw, 32px);
+    --hiw-app-glow: color-mix(in srgb, var(--color-accent, #ed9d09) 18%, transparent);
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
+  }
+
+  .hiw-app__inner {
+    max-width: min(var(--page-width), calc(100% - var(--page-margin) * 2));
+    margin: 0 auto;
+  }
+
+  .hiw-app__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.32fr);
+    gap: clamp(2.5rem, 6vw, 4rem);
+    align-items: center;
+  }
+
+  .hiw-app--image-left .hiw-app__grid {
+    direction: rtl;
+  }
+
+  .hiw-app--image-left .hiw-app__grid > * {
+    direction: ltr;
+  }
+
+  .hiw-app__copy {
+    max-width: 38rem;
+  }
+
+  .hiw-app__eyebrow {
+    margin: 0 0 clamp(0.5rem, 1vw, 0.75rem);
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  .hiw-app__heading {
+    margin: 0 0 clamp(0.9rem, 1.5vw, 1.25rem);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.65rem, 3.2vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: var(--heading-text-transform, uppercase);
+    color: var(--moov-text-primary-dark);
+  }
+
+  .hiw-app__body {
+    margin: 0 0 clamp(1.5rem, 2.5vw, 2rem);
+    max-width: 50ch;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--moov-cream) 90%, transparent);
+  }
+
+  .hiw-app__features {
+    margin: 0 0 clamp(1.25rem, 2vw, 1.75rem);
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .hiw-app__feature {
+    position: relative;
+    padding-left: 1.15rem;
+    border-left: 2px solid color-mix(in srgb, var(--color-accent, #ed9d09) 75%, transparent);
+  }
+
+  .hiw-app__feature-title {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--moov-cream);
+  }
+
+  .hiw-app__feature-text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--moov-cream) 78%, transparent);
+  }
+
+  .hiw-app__stores {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 14px;
+    margin: clamp(1.25rem, 2.5vw, 2rem) 0 clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .hiw-app__store-badge--image {
+    display: inline-block;
+    line-height: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px color-mix(in srgb, var(--moov-black) 40%, transparent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hiw-app__store-badge--image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--moov-black) 45%, transparent);
+  }
+
+  .hiw-app__store-badge-img {
+    display: block;
+    height: 44px;
+    width: auto;
+    max-width: 150px;
+  }
+
+  .hiw-app__store-fallback {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px 16px 8px 12px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--moov-cream) 22%, transparent);
+    background: color-mix(in srgb, var(--moov-cream) 6%, transparent);
+    text-decoration: none;
+    color: var(--moov-cream);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .hiw-app__store-fallback:hover {
+    border-color: color-mix(in srgb, var(--moov-cream) 40%, transparent);
+    background: color-mix(in srgb, var(--moov-cream) 10%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .hiw-app__store-fallback-icon {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--moov-cream);
+  }
+
+  .hiw-app__store-fallback-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .hiw-app__store-fallback-kicker {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: color-mix(in srgb, var(--moov-cream) 70%, transparent);
+  }
+
+  .hiw-app__store-fallback-name {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .hiw-app__footnote {
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    max-width: 48ch;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  .hiw-app__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: clamp(12px, 1.1vw, 15px) clamp(24px, 2.5vw, 32px);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--moov-black);
+    background: #fff;
+    border: none;
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--moov-black) 6%, transparent);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .hiw-app__cta:hover {
+    background: #f0f0ee;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--moov-black) 24%, transparent);
+  }
+
+  .hiw-app__visual {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .hiw-app__phone {
+    position: relative;
+    width: 100%;
+    max-width: min(100%, 640px);
+    min-height: min(32rem, 72vh);
+    border-radius: var(--hiw-app-radius);
+    overflow: hidden;
+    box-shadow:
+      0 24px 56px color-mix(in srgb, var(--moov-black) 55%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--moov-cream) 8%, transparent),
+      0 0 0 1px var(--hiw-app-glow);
+  }
+
+  .hiw-app__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: min(32rem, 72vh);
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hiw-app__phone--carousel {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 2.5rem;
+  }
+
+  .hiw-app__img-wrap,
+  .hiw-app__carousel-viewport {
+    min-height: min(32rem, 72vh);
+  }
+
+  .hiw-app__carousel-viewport {
+    position: relative;
+    width: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .hiw-app__carousel-slide {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .hiw-app__carousel-slide.is-active {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: auto;
+  }
+
+  .hiw-app__phone--carousel .hiw-app__img {
+    min-height: 100%;
+  }
+
+  .hiw-app__carousel-dots {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    max-width: calc(100% - 1.5rem);
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transform: translateX(-50%);
+  }
+
+  .hiw-app__carousel-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--moov-cream) 38%, transparent);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .hiw-app__carousel-dot:hover,
+  .hiw-app__carousel-dot:focus-visible {
+    background: color-mix(in srgb, var(--moov-cream) 72%, transparent);
+    transform: scale(1.15);
+  }
+
+  .hiw-app__carousel-dot.is-active {
+    background: var(--moov-cream);
+    width: 1.1rem;
+  }
+
+  .hiw-app__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .hiw-app__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: min(32rem, 72vh);
+    aspect-ratio: 3 / 5;
+    min-width: 200px;
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--moov-cream) 8%, var(--moov-black)) 0%,
+      var(--moov-neutral-deep) 55%,
+      var(--moov-black) 100%
+    );
+  }
+
+  @media (max-width: 989px) {
+    .hiw-app__grid {
+      grid-template-columns: 1fr;
+      gap: clamp(1.75rem, 4vw, 2.5rem);
+    }
+
+    .hiw-app--image-left .hiw-app__grid {
+      direction: ltr;
+    }
+
+    .hiw-app__visual--first-mobile {
+      order: -1;
+    }
+
+    .hiw-app__phone {
+      min-height: min(22rem, 52vh);
+      max-width: min(100%, 420px);
+      margin-inline: auto;
+    }
+
+    .hiw-app__img {
+      min-height: min(22rem, 52vh);
+    }
+
+    .hiw-app__img-wrap,
+    .hiw-app__carousel-viewport {
+      min-height: min(22rem, 52vh);
+    }
+
+    .hiw-app__store-badge-img {
+      height: 40px;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var INTERVAL_MS = 2400;
+
+    function prefersReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function goToIndex(root, slides, dots, nextIndex) {
+      var n = slides.length;
+      if (n === 0) return;
+      var i = ((nextIndex % n) + n) % n;
+      for (var s = 0; s < n; s++) {
+        var active = s === i;
+        slides[s].classList.toggle('is-active', active);
+        slides[s].setAttribute('aria-hidden', active ? 'false' : 'true');
+        if (dots[s]) {
+          dots[s].classList.toggle('is-active', active);
+          dots[s].setAttribute('aria-selected', active ? 'true' : 'false');
+          dots[s].setAttribute('tabindex', active ? '0' : '-1');
+        }
+      }
+      root.setAttribute('data-hiw-app-active', String(i));
+    }
+
+    function getActiveIndex(root) {
+      var v = root.getAttribute('data-hiw-app-active');
+      if (v == null) return 0;
+      return parseInt(v, 10) || 0;
+    }
+
+    function setupCarousel(root) {
+      if (root.getAttribute('data-hiw-app-ready') === 'true') return;
+      var slides = root.querySelectorAll('[data-hiw-app-slide]');
+      var dots = root.querySelectorAll('[data-hiw-app-dot]');
+      if (slides.length < 2) return;
+
+      var attrInterval = root.getAttribute('data-hiw-app-interval');
+      var intervalMs = parseInt(attrInterval, 10);
+      if (isNaN(intervalMs) || intervalMs < 200) intervalMs = INTERVAL_MS;
+
+      var startIndex = 0;
+      for (var j = 0; j < slides.length; j++) {
+        if (slides[j].classList.contains('is-active')) {
+          startIndex = j;
+          break;
+        }
+      }
+      goToIndex(root, slides, dots, startIndex);
+
+      var timer = null;
+      var reduced = prefersReducedMotion();
+
+      function go(i) {
+        goToIndex(root, slides, dots, i);
+      }
+
+      function next() {
+        var cur = getActiveIndex(root);
+        goToIndex(root, slides, dots, (cur + 1) % slides.length);
+      }
+
+      function start() {
+        if (reduced) return;
+        stop();
+        timer = window.setInterval(next, intervalMs);
+      }
+
+      function stop() {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+
+      for (var d = 0; d < dots.length; d++) {
+        (function (idx) {
+          dots[idx].addEventListener('click', function () {
+            go(idx);
+            stop();
+            start();
+          });
+        })(d);
+      }
+
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', function (e) {
+        if (!root.contains(e.relatedTarget)) start();
+      });
+
+      start();
+      root.setAttribute('data-hiw-app-ready', 'true');
+    }
+
+    function init() {
+      var roots = document.querySelectorAll('[data-hiw-app-carousel]');
+      for (var r = 0; r < roots.length; r++) {
+        setupCarousel(roots[r]);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('shopify:section:load', function () {
+      setTimeout(init, 0);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.how_it_works_app.name",
+  "tag": "section",
+  "class": "section-how-it-works-phone-app",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "The MOOV app"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Your alarm lives on the phone. The habit lives in the room."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "t:labels.body",
+      "default": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll."
+    },
+    {
+      "type": "textarea",
+      "id": "footnote",
+      "label": "t:sections.how_it_works_app.footnote_label",
+      "default": "iOS and Android. Bluetooth keeps your device and phone in sync."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:labels.button_label",
+      "default": "Shop MOOV"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_store_badges",
+      "label": "t:sections.how_it_works_app.show_store_badges",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "app_store_url",
+      "label": "t:sections.how_it_works_app.app_store_url"
+    },
+    {
+      "type": "url",
+      "id": "google_play_url",
+      "label": "t:sections.how_it_works_app.google_play_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.how_it_works_app.store_badges_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "app_store_badge",
+      "label": "t:sections.how_it_works_app.app_store_badge_label",
+      "info": "t:sections.how_it_works_app.app_store_badge_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "play_store_badge",
+      "label": "t:sections.how_it_works_app.play_store_badge_label",
+      "info": "t:sections.how_it_works_app.play_store_badge_info"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.how_it_works_app.image_position_label",
+      "default": "right",
+      "options": [
+        { "value": "right", "label": "t:sections.how_it_works_app.image_right" },
+        { "value": "left", "label": "t:sections.how_it_works_app.image_left" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_image_first",
+      "label": "t:sections.how_it_works_app.mobile_image_first_label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:labels.background_image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.background_image"
+    },
+    {
+      "type": "url",
+      "id": "image_url",
+      "label": "t:sections.how_it_works_app.image_url_label",
+      "info": "t:sections.how_it_works_app.image_url_info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "t:sections.how_it_works_app.feature_name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.heading",
+          "default": "Alarms and sounds"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:labels.body",
+          "default": "Set your get-up time, pre-alert, and volume so waking up matches how you want to feel."
+        }
+      ]
+    },
+    {
+      "type": "app_image",
+      "name": "t:sections.how_it_works_app.app_image_name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.background_image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "t:sections.how_it_works_app.image_url_label",
+          "info": "t:sections.how_it_works_app.app_image_url_info"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "t:sections.how_it_works_app.app_image_alt_label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.how_it_works_app.name",
+      "settings": {
+        "eyebrow": "The MOOV app",
+        "heading": "Your alarm lives on the phone. The habit lives in the room.",
+        "body": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll.",
+        "footnote": "iOS and Android. Bluetooth keeps your device and phone in sync.",
+        "cta_label": "Shop MOOV",
+        "cta_url": "shopify://products/t",
+        "show_store_badges": true,
+        "app_store_url": "https://apps.apple.com/app/",
+        "google_play_url": "https://play.google.com/store/apps/",
+        "image_position": "right",
+        "mobile_image_first": true
+      },
+      "blocks": [
+        {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Alarms and sounds",
+            "text": "Set your get-up time, pre-alert, and volume so waking up matches how you want to feel."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Device pairing",
+            "text": "Connect MOOV over Bluetooth so silencing the alarm always means you have reached the device."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Streaks and rhythm",
+            "text": "See the mornings you followed through — small feedback that reinforces the routine, not another dashboard."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

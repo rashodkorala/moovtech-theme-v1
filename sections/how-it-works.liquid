@@ -1,15 +1,44 @@
+{%- liquid
+  assign hiw_hero_opacity = section.settings.hero_overlay_opacity | default: 55
+  assign hiw_hero_image = section.settings.hero_image
+  assign hiw_hero_image_url = section.settings.hero_image_url
+  if hiw_hero_image == blank
+    if hiw_hero_image_url == blank
+      assign hiw_hero_image_url = 'https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=2400&q=80'
+    endif
+  endif
+-%}
 <section class="how-it-works-page" id="how-it-works-page-{{ section.id }}">
-  <div class="how-it-works-page__hero">
-    <div class="how-it-works-page__hero-inner">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="how-it-works-page__eyebrow">{{ section.settings.eyebrow }}</p>
-      {%- endif -%}
-      {%- if section.settings.headline != blank -%}
-        <h1 class="how-it-works-page__headline">{{ section.settings.headline }}</h1>
-      {%- endif -%}
-      {%- if section.settings.subheadline != blank -%}
-        <p class="how-it-works-page__subheadline">{{ section.settings.subheadline }}</p>
-      {%- endif -%}
+  <div class="how-it-works-page__hero-wrap">
+    <div
+      class="how-it-works-page__hero-frame"
+      data-surface="dark"
+      style="--hiw-hero-overlay: color-mix(in srgb, var(--moov-black) {{ hiw_hero_opacity }}%, transparent);"
+    >
+      <div class="how-it-works-page__hero-bg" aria-hidden="true">
+        {%- if hiw_hero_image != blank -%}
+          {{ hiw_hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'how-it-works-page__hero-bg-img', sizes: '100vw', widths: '375, 750, 1100, 1500, 2200, 2400' }}
+        {%- else -%}
+          <img
+            src="{{ hiw_hero_image_url | escape }}"
+            alt=""
+            width="2400"
+            height="1600"
+            loading="eager"
+            fetchpriority="high"
+            class="how-it-works-page__hero-bg-img"
+          >
+        {%- endif -%}
+      </div>
+      <div class="how-it-works-page__hero-overlay" aria-hidden="true"></div>
+      <div class="how-it-works-page__hero-inner">
+        {%- if section.settings.headline != blank -%}
+          <h1 class="how-it-works-page__headline">{{ section.settings.headline }}</h1>
+        {%- endif -%}
+        {%- if section.settings.subheadline != blank -%}
+          <p class="how-it-works-page__subheadline">{{ section.settings.subheadline }}</p>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 
@@ -110,27 +139,60 @@
     background: var(--color-background);
   }
 
-  .how-it-works-page__hero {
-    padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
-    text-align: center;
+  .how-it-works-page__hero-wrap {
+    margin: calc(var(--section-block-pad-y-md) * 0.58) max(0.35rem, calc(var(--section-inline-pad) * 0.48)) calc(var(--section-block-pad-y-sm) * 0.58);
+  }
+
+  .how-it-works-page__hero-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: clamp(18px, 2.4vw, 28px);
+    min-height: min(70vh, 640px);
+    isolation: isolate;
+  }
+
+  @media (max-width: 749px) {
+    .how-it-works-page__hero-frame {
+      min-height: min(58vh, 520px);
+    }
+  }
+
+  .how-it-works-page__hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .how-it-works-page__hero-bg-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .how-it-works-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(
+      --hiw-hero-overlay,
+      color-mix(in srgb, var(--moov-black) 55%, transparent)
+    );
+    pointer-events: none;
   }
 
   .how-it-works-page__hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
-  }
-
-  .how-it-works-page__eyebrow {
-    margin: 0 0 1rem;
-    font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-    line-height: 1.4;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--moov-text-secondary-light);
-  }
-
-  [data-theme='dark'] .how-it-works-page__eyebrow {
-    color: var(--moov-text-secondary-dark);
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2rem);
+    text-align: center;
   }
 
   .how-it-works-page__headline {
@@ -141,6 +203,7 @@
     font-weight: 700;
     letter-spacing: -0.01em;
     text-transform: uppercase;
+    color: var(--color-foreground);
   }
 
   .how-it-works-page__subheadline {
@@ -153,6 +216,14 @@
 
   [data-theme='dark'] .how-it-works-page__subheadline {
     color: var(--moov-text-secondary-dark);
+  }
+
+  .how-it-works-page__hero-frame .how-it-works-page__headline {
+    color: var(--moov-cream);
+  }
+
+  .how-it-works-page__hero-frame .how-it-works-page__subheadline {
+    color: color-mix(in srgb, var(--moov-cream) 86%, transparent);
   }
 
   .how-it-works-page-accent {
@@ -598,12 +669,6 @@
   "name": "How it works page",
   "settings": [
     {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "How it works"
-    },
-    {
       "type": "textarea",
       "id": "headline",
       "label": "Headline",
@@ -614,6 +679,27 @@
       "id": "subheadline",
       "label": "Subheadline",
       "default": "MOOV combines your device and mobile app into a simple morning system built to get you out of bed."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero background image"
+    },
+    {
+      "type": "url",
+      "id": "hero_image_url",
+      "label": "Hero background image URL",
+      "info": "Used when no image is selected. Can be an Unsplash or CDN link (wide landscape works best)."
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "min": 25,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Hero image overlay strength",
+      "default": 55
     },
     {
       "type": "text",

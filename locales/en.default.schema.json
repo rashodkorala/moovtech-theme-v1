@@ -200,6 +200,28 @@
       "image_url_info": "Fills the rounded card behind the text. Used when no image is selected above.",
       "overlay_label": "Overlay strength",
       "overlay_info": "Darkens the image so overlaid text stays readable."
+    },
+    "how_it_works_app": {
+      "name": "How it works — app",
+      "footnote_label": "Small print / platform line",
+      "image_position_label": "Image position (desktop)",
+      "image_right": "Text left, image right",
+      "image_left": "Image left, text right",
+      "mobile_image_first_label": "Show image first on mobile",
+      "image_url_label": "Image URL fallback",
+      "image_url_info": "Phone or app UI shot. Fills the rounded frame when no image is selected above.",
+      "feature_name": "App feature",
+      "show_store_badges": "Show app store download links",
+      "app_store_url": "App Store URL",
+      "google_play_url": "Google Play URL",
+      "store_badges_header": "Store badges (optional images)",
+      "app_store_badge_label": "App Store badge image",
+      "app_store_badge_info": "Official badge PNG. If empty, a text link is used.",
+      "play_store_badge_label": "Google Play badge image",
+      "play_store_badge_info": "Official badge PNG. If empty, a text link is used.",
+      "app_image_name": "App image slide",
+      "app_image_url_info": "Used when no image is selected. Add two or more slides to run the auto carousel (2.4s per slide).",
+      "app_image_alt_label": "Image alt text (accessibility)"
     }
   },
   "labels": {

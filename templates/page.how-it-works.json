@@ -52,11 +52,77 @@
         "step-3"
       ],
       "settings": {
-        "eyebrow": "How it works",
         "headline": "Design over discipline",
         "subheadline": "MOOV works with a wall-mounted device and mobile app to make getting out of bed easier than staying in it.",
+        "hero_image_url": "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=2400&q=80",
+        "hero_overlay_opacity": 55,
         "step_prefix": "Step",
         "steps_sidebar_title": "How it works"
+      }
+    },
+    "phone_app": {
+      "type": "how-it-works-phone-app",
+      "blocks": {
+        "app-img-1": {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        "app-img-2": {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        "app-img-3": {
+          "type": "app_image",
+          "settings": {
+            "image_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=2000&q=80"
+          }
+        },
+        "app-f1": {
+          "type": "feature",
+          "settings": {
+            "title": "Alarms and sounds",
+            "text": "Set your get-up time, pre-alert, and volume so waking up matches how you want to feel."
+          }
+        },
+        "app-f2": {
+          "type": "feature",
+          "settings": {
+            "title": "Device pairing",
+            "text": "Connect MOOV over Bluetooth so silencing the alarm always means you have reached the device."
+          }
+        },
+        "app-f3": {
+          "type": "feature",
+          "settings": {
+            "title": "Streaks and rhythm",
+            "text": "See the mornings you followed through — small feedback that reinforces the routine, not another dashboard."
+          }
+        }
+      },
+      "block_order": [
+        "app-img-1",
+        "app-img-2",
+        "app-img-3",
+        "app-f1",
+        "app-f2",
+        "app-f3"
+      ],
+      "settings": {
+        "eyebrow": "The MOOV app",
+        "heading": "Your alarm lives on the phone. The habit lives in the room.",
+        "body": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll.",
+        "footnote": "iOS and Android. Bluetooth keeps your device and phone in sync.",
+        "cta_label": "Shop MOOV",
+        "cta_url": "shopify://products/t",
+        "show_store_badges": true,
+        "app_store_url": "https://apps.apple.com/app/",
+        "google_play_url": "https://play.google.com/store/apps/",
+        "image_position": "right",
+        "mobile_image_first": true
       }
     },
     "cta": {
@@ -165,6 +231,7 @@
   },
   "order": [
     "main",
+    "phone_app",
     "cta",
     "faq"
   ]
