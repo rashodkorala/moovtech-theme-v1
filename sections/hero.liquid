@@ -1,6 +1,5 @@
 {%- liquid
   assign overlay_opacity = section.settings.hero_overlay_opacity | default: 55
-  assign overlay_decimal = overlay_opacity | times: 1.0 | divided_by: 100.0
 
   assign video_src = 'hero-bg.mp4' | asset_url
   if section.settings.hero_video_mp4 != blank
@@ -42,67 +41,70 @@
 >
   {%- comment -%} Video / slide layer {%- endcomment -%}
   {%- if has_slides -%}
-    <div class="moov-hero__slides">
-      {%- for block in section.blocks -%}
-        {%- liquid
-          assign slide_video = block.settings.video_mp4
-          if slide_video == blank
-            assign slide_video = video_src
-          endif
-          assign slide_overlay = block.settings.overlay_opacity | default: overlay_opacity
-          assign slide_overlay_decimal = slide_overlay | times: 1.0 | divided_by: 100.0
-        -%}
-        <div
-          class="moov-hero__slide{% if forloop.first %} is-active{% endif %}"
-          data-slide-index="{{ forloop.index0 }}"
-          {{ block.shopify_attributes }}
-        >
-          <video
-            class="moov-hero__video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-            {%- if block.settings.poster != blank -%}
-              poster="{{ block.settings.poster | image_url: width: 1920 }}"
-            {%- elsif section.settings.hero_poster != blank -%}
-              poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
-            {%- endif -%}
-            aria-hidden="true"
-          >
-            <source src="{{ slide_video }}" type="video/mp4">
-            {%- if block.settings.video_webm != blank -%}
-              <source src="{{ block.settings.video_webm }}" type="video/webm">
-            {%- endif -%}
-          </video>
+    <div class="moov-hero__frame">
+      <div class="moov-hero__slides">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign slide_video = block.settings.video_mp4
+            if slide_video == blank
+              assign slide_video = video_src
+            endif
+            assign slide_overlay = block.settings.overlay_opacity | default: overlay_opacity
+          -%}
           <div
-            class="moov-hero__overlay"
-            aria-hidden="true"
-            style="--hero-overlay: color-mix(in srgb, var(--moov-black) {{ slide_overlay }}%, transparent);"
-          ></div>
-        </div>
-      {%- endfor -%}
+            class="moov-hero__slide{% if forloop.first %} is-active{% endif %}"
+            data-slide-index="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            <video
+              class="moov-hero__video"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              {%- if block.settings.poster != blank -%}
+                poster="{{ block.settings.poster | image_url: width: 1920 }}"
+              {%- elsif section.settings.hero_poster != blank -%}
+                poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
+              {%- endif -%}
+              aria-hidden="true"
+            >
+              <source src="{{ slide_video }}" type="video/mp4">
+              {%- if block.settings.video_webm != blank -%}
+                <source src="{{ block.settings.video_webm }}" type="video/webm">
+              {%- endif -%}
+            </video>
+            <div
+              class="moov-hero__overlay"
+              aria-hidden="true"
+              style="--hero-overlay: color-mix(in srgb, var(--moov-black) {{ slide_overlay }}%, transparent);"
+            ></div>
+          </div>
+        {%- endfor -%}
+      </div>
     </div>
   {%- else -%}
-    <video
-      class="moov-hero__video"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      {%- if section.settings.hero_poster -%}
-        poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
-      {%- endif -%}
-      aria-hidden="true"
-    >
-      <source src="{{ video_src }}" type="video/mp4">
-      {%- if section.settings.hero_video_webm != blank -%}
-        <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
-      {%- endif -%}
-    </video>
-    <div class="moov-hero__overlay" aria-hidden="true"></div>
+    <div class="moov-hero__frame">
+      <video
+        class="moov-hero__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        {%- if section.settings.hero_poster -%}
+          poster="{{ section.settings.hero_poster | image_url: width: 1920 }}"
+        {%- endif -%}
+        aria-hidden="true"
+      >
+        <source src="{{ video_src }}" type="video/mp4">
+        {%- if section.settings.hero_video_webm != blank -%}
+          <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
+        {%- endif -%}
+      </video>
+      <div class="moov-hero__overlay" aria-hidden="true"></div>
+    </div>
   {%- endif -%}
 
   {%- comment -%} Centre content {%- endcomment -%}
@@ -153,13 +155,28 @@
 
 {% stylesheet %}
   .moov-hero {
+    --hero-frame-radius: clamp(18px, 2.4vw, 28px);
+    --hero-inset-top: var(--section-block-pad-y-md);
+    --hero-inset-bottom: max(0.5rem, calc(var(--section-block-pad-y-sm) * 0.42));
+    --hero-inset-x: max(0.5rem, calc(var(--section-inline-pad) * 0.72));
     position: relative;
     min-height: 100vh;
-    overflow: hidden;
+    box-sizing: border-box;
+    padding: var(--hero-inset-top) var(--hero-inset-x) var(--hero-inset-bottom) var(--hero-inset-x);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: var(--moov-black);
+  }
+
+  /* Inset media */
+  .moov-hero__frame {
+    position: absolute;
+    inset: var(--hero-inset-top) var(--hero-inset-x) var(--hero-inset-bottom) var(--hero-inset-x);
+    z-index: 0;
+    border-radius: var(--hero-frame-radius);
+    overflow: hidden;
   }
 
   /* Slides container */
@@ -206,7 +223,7 @@
   .moov-hero__tagline-left {
     position: absolute;
     bottom: clamp(3.5rem, 8vw, 5.5rem);
-    left: var(--section-inline-pad);
+    left: var(--hero-inset-x);
     max-width: 260px;
     font-family: var(--font-body);
     font-weight: 400;
@@ -331,7 +348,7 @@
   /* Carousel dots */
   .moov-hero__dots {
     position: absolute;
-    bottom: clamp(1.5rem, 3vw, 2.5rem);
+    bottom: calc(var(--hero-inset-bottom) + clamp(1.5rem, 3vw, 2.5rem));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
