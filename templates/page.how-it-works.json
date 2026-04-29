@@ -54,8 +54,9 @@
       "settings": {
         "headline": "Design over discipline",
         "subheadline": "MOOV works with a wall-mounted device and mobile app to make getting out of bed easier than staying in it.",
+        "hero_image": "shopify://shop_images/CFC86724-4271-4448-BD4D-1BFC891817C5.png",
         "hero_image_url": "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=2400&q=80",
-        "hero_overlay_opacity": 55,
+        "hero_overlay_opacity": 30,
         "step_prefix": "Step",
         "steps_sidebar_title": "How it works"
       }
@@ -66,19 +67,22 @@
         "app-img-1": {
           "type": "app_image",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=2000&q=80"
+            "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=2000&q=80",
+            "image_alt": ""
           }
         },
         "app-img-2": {
           "type": "app_image",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80"
+            "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80",
+            "image_alt": ""
           }
         },
         "app-img-3": {
           "type": "app_image",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=2000&q=80"
+            "image_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=2000&q=80",
+            "image_alt": ""
           }
         },
         "app-f1": {
@@ -122,7 +126,8 @@
         "app_store_url": "https://apps.apple.com/app/",
         "google_play_url": "https://play.google.com/store/apps/",
         "image_position": "right",
-        "mobile_image_first": true
+        "mobile_image_first": true,
+        "image_url": ""
       }
     },
     "cta": {

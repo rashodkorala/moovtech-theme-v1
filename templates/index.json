@@ -24,6 +24,20 @@
         "cta_primary_url": "/collections/all"
       }
     },
+    "product_glimpse": {
+      "type": "home-product-glimpse",
+      "settings": {
+        "eyebrow": "Introducing",
+        "heading": "MOOV",
+        "subheading": "A better way to start your morning.",
+        "body": "Built to get you out of bed — and into your day.",
+        "cta_label": "Get your MOOV",
+        "cta_url": "/pages/get-moov",
+        "image_asset": "product-preiview-mainpage.PNG",
+        "image_url": "",
+        "overlay_opacity": 25
+      }
+    },
     "how_it_works_glimpse": {
       "type": "home-how-it-works-glimpse",
       "blocks": {
@@ -33,6 +47,7 @@
             "kicker": "Device and mobile app",
             "title": "Place MOOV on the wall",
             "text": "10-second, damage-free install. Put it where you go first in the morning.",
+            "image": "shopify://shop_images/C32907BD-4DEC-493F-9BC6-9604A393935E.jpg",
             "image_url": "https://images.unsplash.com/photo-1757693223749-d5ce2dff34f4?auto=format&fit=crop&w=1200&q=80"
           }
         },
@@ -42,6 +57,7 @@
             "kicker": "Configure your alarm",
             "title": "Set your get-up time in the app",
             "text": "Choose your alarm, volume, and optional pre-alert for a gentler start.",
+            "image": "shopify://shop_images/191F9EE5-E9B1-44A9-9568-13D01A145BF1.png",
             "image_url": "https://images.unsplash.com/photo-1771499931747-5a383e3bd54d?auto=format&fit=crop&w=1200&q=80"
           }
         },
@@ -51,6 +67,7 @@
             "kicker": "Get up to silence",
             "title": "Walk to the device to turn it off",
             "text": "Movement first — the alarm stops only when you act. No more half-asleep snoozes.",
+            "image": "shopify://shop_images/CDB146EA-3404-44E1-B8F6-96E0E056E90C.png",
             "image_url": "https://images.unsplash.com/photo-1632466477918-66ed5a901be2?auto=format&fit=crop&w=1200&q=80"
           }
         }
@@ -66,20 +83,6 @@
         "body": "Three steps — place, configure, act. See the full story on the next page.",
         "cta_label": "See the full system",
         "cta_url": "/pages/how-it-works"
-      }
-    },
-    "product_glimpse": {
-      "type": "home-product-glimpse",
-      "settings": {
-        "eyebrow": "Introducing",
-        "heading": "MOOV",
-        "subheading": "A better way to start your morning.",
-        "body": "Built to get you out of bed — and into your day.",
-        "cta_label": "Get your MOOV",
-        "cta_url": "/pages/get-moov",
-        "image_asset": "product-preiview-mainpage.PNG",
-        "image_url": "",
-        "overlay_opacity": 25
       }
     },
     "founder_story": {
@@ -167,6 +170,7 @@
         "review-6"
       ],
       "settings": {
+        "eyebrow": "",
         "heading": "Real mornings, reclaimed.",
         "body": "From people who stopped reaching for their phone first.",
         "visible_count": 3,
