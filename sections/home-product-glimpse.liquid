@@ -27,6 +27,13 @@
   assign cta_url = section.settings.cta_url | default: '/pages/get-moov'
   assign overlay_opacity = section.settings.overlay_opacity | default: 40
   assign image_asset = section.settings.image_asset | strip
+  if section.settings.image == blank
+    if section.settings.image_url == blank
+      if image_asset == blank
+        assign image_asset = 'product-preiview-mainpage.PNG'
+      endif
+    endif
+  endif
 -%}
 
 <section
@@ -48,14 +55,16 @@
           widths: '400, 600, 800, 1200, 1600, 2000, 2400'
       }}
     {%- elsif image_asset != blank -%}
-      {{
-        image_asset
-        | asset_url
-        | image_tag:
-          loading: 'lazy',
-          class: 'product-glimpse__img',
-          alt: heading
-      }}
+      <img
+        class="product-glimpse__img"
+        src="{{ image_asset | asset_url }}"
+        alt="{{ heading | escape }}"
+        width="2400"
+        height="1600"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
     {%- elsif section.settings.image_url != blank -%}
       <img
         src="{{ section.settings.image_url | escape }}"
@@ -143,7 +152,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 28% center;
+    object-position: 40% center;
     display: block;
   }
 
@@ -162,13 +171,13 @@
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    opacity: calc(0.42 + var(--pg-scrim-strength, 40) * 0.0045);
+    opacity: calc(0.2 + var(--pg-scrim-strength, 40) * 0.0028);
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--moov-cream) 88%, transparent) 0%,
-      color-mix(in srgb, var(--moov-cream) 52%, transparent) 32%,
-      color-mix(in srgb, var(--moov-cream) 18%, transparent) 52%,
-      transparent 72%
+      color-mix(in srgb, var(--moov-cream) 52%, transparent) 0%,
+      color-mix(in srgb, var(--moov-cream) 18%, transparent) 26%,
+      color-mix(in srgb, var(--moov-cream) 6%, transparent) 44%,
+      transparent 58%
     );
   }
 
@@ -179,8 +188,8 @@
     z-index: 2;
     background: linear-gradient(
       to top,
-      color-mix(in srgb, var(--moov-cream) 35%, transparent) 0%,
-      transparent 42%
+      color-mix(in srgb, var(--moov-cream) 16%, transparent) 0%,
+      transparent 34%
     );
   }
 
@@ -278,7 +287,9 @@
     }
 
     .product-glimpse__img {
-      object-position: center 30%;
+      object-position: 20%;
+      scale: 1.1;
+      transform-origin: center;
     }
 
     .product-glimpse__content {
@@ -341,7 +352,8 @@
       "type": "text",
       "id": "image_asset",
       "label": "t:sections.home_product_glimpse.image_asset_label",
-      "info": "t:sections.home_product_glimpse.image_asset_info"
+      "info": "t:sections.home_product_glimpse.image_asset_info",
+      "default": "product-preiview-mainpage.PNG"
     },
     {
       "type": "url",
@@ -373,7 +385,7 @@
         "cta_url": "/pages/get-moov",
         "image_asset": "product-preiview-mainpage.PNG",
         "image_url": "",
-        "overlay_opacity": 35
+        "overlay_opacity": 25
       }
     }
   ]
