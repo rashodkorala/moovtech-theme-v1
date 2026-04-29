@@ -9,6 +9,11 @@
     assign heading = 'sections.home_product_glimpse.default_heading' | t
   endif
 
+  assign subheading = section.settings.subheading
+  if subheading == blank
+    assign subheading = 'sections.home_product_glimpse.default_subheading' | t
+  endif
+
   assign body = section.settings.body
   if body == blank
     assign body = 'sections.home_product_glimpse.default_body' | t
@@ -21,12 +26,13 @@
 
   assign cta_url = section.settings.cta_url | default: '/pages/get-moov'
   assign overlay_opacity = section.settings.overlay_opacity | default: 40
+  assign image_asset = section.settings.image_asset | strip
 -%}
 
 <section
   class="product-glimpse full-width"
   aria-labelledby="product-glimpse-heading-{{ section.id }}"
-  style="--pg-overlay: color-mix(in srgb, var(--moov-black) {{ overlay_opacity }}%, transparent);"
+  style="--pg-scrim-strength: {{ overlay_opacity }};"
 >
   <div class="product-glimpse__media">
     {%- if section.settings.image != blank -%}
@@ -40,6 +46,15 @@
           alt: media_alt,
           sizes: '(min-width: 1200px) 1200px, 100vw',
           widths: '400, 600, 800, 1200, 1600, 2000, 2400'
+      }}
+    {%- elsif image_asset != blank -%}
+      {{
+        image_asset
+        | asset_url
+        | image_tag:
+          loading: 'lazy',
+          class: 'product-glimpse__img',
+          alt: heading
       }}
     {%- elsif section.settings.image_url != blank -%}
       <img
@@ -57,7 +72,7 @@
         aria-label="{{ 'sections.home_product_glimpse.image_placeholder_label' | t }}"
       ></div>
     {%- endif -%}
-    <div class="product-glimpse__overlay" aria-hidden="true"></div>
+    <div class="product-glimpse__overlay product-glimpse__overlay--scrim" aria-hidden="true"></div>
     <div class="product-glimpse__overlay product-glimpse__overlay--bottom" aria-hidden="true"></div>
   </div>
 
@@ -69,6 +84,14 @@
     <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__heading">
       {{ heading | escape }}
     </h2>
+
+    {%- if subheading != blank -%}
+      <p class="product-glimpse__subheading">{{ subheading | escape }}</p>
+    {%- endif -%}
+
+    {%- if subheading != blank and body != blank -%}
+      <hr class="product-glimpse__rule" aria-hidden="true">
+    {%- endif -%}
 
     {%- if body != blank -%}
       <p class="product-glimpse__body">{{ body | escape }}</p>
@@ -107,7 +130,7 @@
     isolation: isolate;
     min-height: clamp(360px, 60vw, 620px);
     display: grid;
-    color: var(--moov-cream);
+    color: var(--moov-black);
   }
 
   .product-glimpse__media {
@@ -120,7 +143,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: 28% center;
     display: block;
   }
 
@@ -134,21 +157,30 @@
     );
   }
 
-  .product-glimpse__overlay {
+  .product-glimpse__overlay--scrim {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    background: var(--pg-overlay, color-mix(in srgb, var(--moov-black) 40%, transparent));
+    opacity: calc(0.42 + var(--pg-scrim-strength, 40) * 0.0045);
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--moov-cream) 88%, transparent) 0%,
+      color-mix(in srgb, var(--moov-cream) 52%, transparent) 32%,
+      color-mix(in srgb, var(--moov-cream) 18%, transparent) 52%,
+      transparent 72%
+    );
   }
 
   .product-glimpse__overlay--bottom {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
     z-index: 2;
     background: linear-gradient(
       to top,
-      color-mix(in srgb, var(--moov-black) 75%, transparent) 0%,
-      color-mix(in srgb, var(--moov-black) 25%, transparent) 45%,
-      transparent 72%
+      color-mix(in srgb, var(--moov-cream) 35%, transparent) 0%,
+      transparent 42%
     );
   }
 
@@ -159,41 +191,60 @@
     flex-direction: column;
     align-items: flex-start;
     justify-self: start;
-    align-self: end;
-    gap: clamp(14px, 2vw, 22px);
-    max-width: 560px;
+    align-self: center;
+    gap: clamp(12px, 1.8vw, 18px);
+    max-width: min(520px, 100%);
     padding: var(--pg-pad);
   }
 
   .product-glimpse__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
+    font-size: var(--text-sm);
     font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--moov-cream) 88%, transparent);
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: color-mix(in srgb, var(--moov-black) 78%, transparent);
   }
 
   .product-glimpse__heading {
     margin: 0;
     font-family: var(--font-hero, var(--font-body));
-    font-weight: 600;
-    font-size: clamp(2rem, 4.4vw, 3.75rem);
-    line-height: 1.05;
-    letter-spacing: 0.02em;
-    text-transform: var(--heading-text-transform, uppercase);
-    color: var(--moov-cream);
-    text-shadow: 0 1px 24px color-mix(in srgb, var(--moov-black) 20%, transparent);
+    font-weight: 700;
+    font-size: clamp(2.75rem, 7vw, 4.25rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--moov-black);
+  }
+
+  .product-glimpse__subheading {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 400;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--moov-black) 88%, transparent);
+    max-width: 420px;
+  }
+
+  .product-glimpse__rule {
+    margin: clamp(2px, 0.6vw, 6px) 0;
+    border: none;
+    width: 2.5rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--moov-black) 35%, transparent);
+    align-self: flex-start;
   }
 
   .product-glimpse__body {
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-base);
-    line-height: 1.6;
-    color: color-mix(in srgb, var(--moov-cream) 92%, transparent);
-    max-width: 480px;
+    line-height: 1.65;
+    font-style: italic;
+    color: color-mix(in srgb, var(--moov-black) 80%, transparent);
+    max-width: 400px;
   }
 
   .product-glimpse__cta {
@@ -207,23 +258,32 @@
     font-weight: 500;
     letter-spacing: 0.02em;
     text-decoration: none;
-    color: var(--moov-black);
-    background: #fff;
+    color: var(--moov-cream);
+    background: var(--moov-black);
     border: none;
-    margin-top: clamp(4px, 1vw, 10px);
-    box-shadow: 0 1px 0 color-mix(in srgb, var(--moov-black) 6%, transparent);
+    margin-top: clamp(6px, 1vw, 12px);
+    box-shadow: none;
     transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   }
 
   .product-glimpse__cta:hover {
-    background: #f0f0ee;
+    background: color-mix(in srgb, var(--moov-black) 88%, var(--moov-cream));
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px color-mix(in srgb, var(--moov-black) 24%, transparent);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--moov-black) 18%, transparent);
   }
 
   @media (max-width: 749px) {
     .product-glimpse {
       min-height: clamp(420px, 90vw, 560px);
+    }
+
+    .product-glimpse__img {
+      object-position: center 30%;
+    }
+
+    .product-glimpse__content {
+      align-self: end;
+      padding-top: 2rem;
     }
   }
 {% endstylesheet %}
@@ -250,6 +310,11 @@
     },
     {
       "type": "textarea",
+      "id": "subheading",
+      "label": "t:labels.subheading"
+    },
+    {
+      "type": "textarea",
       "id": "body",
       "label": "t:labels.body"
     },
@@ -273,6 +338,12 @@
       "label": "t:labels.background_image"
     },
     {
+      "type": "text",
+      "id": "image_asset",
+      "label": "t:sections.home_product_glimpse.image_asset_label",
+      "info": "t:sections.home_product_glimpse.image_asset_info"
+    },
+    {
       "type": "url",
       "id": "image_url",
       "label": "t:sections.home_product_glimpse.image_url_label",
@@ -294,13 +365,15 @@
     {
       "name": "t:sections.home_product_glimpse.name",
       "settings": {
-        "eyebrow": "The real cost of your first hour",
-        "heading": "You wake up — and the phone is already in charge",
-        "body": "Snooze from bed, then messages, then the feed. The first hour disappears before you choose what matters, and the day starts in react mode — not the one you promised yourself.",
+        "eyebrow": "Introducing",
+        "heading": "MOOV",
+        "subheading": "A better way to start your morning.",
+        "body": "Built to get you out of bed — and into your day.",
         "cta_label": "Get your MOOV",
         "cta_url": "/pages/get-moov",
-        "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80",
-        "overlay_opacity": 40
+        "image_asset": "product-preiview-mainpage.PNG",
+        "image_url": "",
+        "overlay_opacity": 35
       }
     }
   ]

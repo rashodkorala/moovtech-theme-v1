@@ -77,14 +77,15 @@
             alt: section.settings.product_image.alt | escape
         }}
       {%- else -%}
-        <img
-          src="{{ 'moov-product.jpg' | asset_url }}"
-          alt="{{ section.settings.product_image_alt | escape }}"
-          class="product-intro__render"
-          loading="lazy"
-          width="600"
-          height="800"
-        >
+        {{
+          'product-preiview-mainpage.PNG'
+          | asset_url
+          | image_tag:
+            class: 'product-intro__render',
+            loading: 'lazy',
+            alt: section.settings.product_image_alt | default: intro_heading,
+            widths: '400, 600, 800, 1000, 1200'
+        }}
       {%- endif -%}
     </div>
 

@@ -187,10 +187,12 @@
       "name": "Product (glimpse)",
       "content_header": "Content",
       "image_header": "Image",
+      "image_asset_label": "Theme asset filename",
+      "image_asset_info": "File in the assets folder (for example product-preiview-mainpage.PNG). Used when no background image is selected above.",
       "image_url_label": "Image URL fallback",
-      "image_url_info": "Fills the rounded card behind the text. Used when no image is selected above.",
-      "overlay_label": "Text overlay strength",
-      "overlay_info": "Darkens the image so overlaid text stays readable."
+      "image_url_info": "Fills the rounded card behind the text. Used when no image or theme asset is set.",
+      "overlay_label": "Text side scrim strength",
+      "overlay_info": "Increases the soft light wash on the left so dark text stays readable."
     },
     "home_founder_story": {
       "name": "Founder story (glimpse)",
@@ -246,6 +248,7 @@
     "background_image_info": "Used as poster frame while video loads, and as fallback if no video is set.",
     "min_height": "Minimum height",
     "eyebrow_text": "Eyebrow text",
+    "subheading": "Subheading",
     "heading": "Heading",
     "heading_accent": "Heading accent (italic)",
     "button_label": "Button label",
