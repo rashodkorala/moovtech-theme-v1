@@ -33,7 +33,7 @@ body {
   z-index: 9999;
   padding: 0.65rem 1rem;
   background: var(--color-background, #0a0a09);
-  color: var(--color-foreground, #faf8f3);
+  color: var(--color-foreground, #deddd8);
   border: 1px solid currentcolor;
   border-radius: var(--style-border-radius-inputs, 4px);
   font: inherit;

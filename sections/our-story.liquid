@@ -1,1287 +1,1021 @@
-{% comment %}
-  Story page: In Shopify admin, create a page (e.g. handle "story") and set Theme template to "our-story".
-  Body copy defaults ship via templates/page.our-story.json; add grid, step, and CTA images in the theme editor.
-{% endcomment %}
-<div class="about-page" id="about-page-{{ section.id }}">
+{%- liquid
+  assign hero_overlay = section.settings.hero_overlay_opacity | default: 55
+  assign panel_overlay = section.settings.panel_overlay_opacity | default: 20
+  assign hero_eyebrow = section.settings.hero_eyebrow
+  if hero_eyebrow == blank
+    assign hero_eyebrow = 'sections.our_story.default_hero_eyebrow' | t
+  endif
+  assign hero_heading = section.settings.hero_heading
+  if hero_heading == blank
+    assign hero_heading = 'sections.our_story.default_hero_heading' | t
+  endif
+  assign hero_body = section.settings.hero_body
+  if hero_body == blank
+    assign hero_body = 'sections.our_story.default_hero_body' | t
+  endif
+  assign hero_cta_label = section.settings.hero_cta_label
+  assign hero_cta_url = section.settings.hero_cta_url | default: routes.root_url
 
-  {%- comment -%} ── 1. FEATURE BLOCK ── {%- endcomment -%}
-  <div class="about-feature">
-    <div class="about-feature__inner">
-      <div class="about-feature__left">
-        {%- if section.settings.feature_headline != blank -%}
-          <h2 class="about-feature__headline">
-            {%- assign fh = section.settings.feature_headline -%}
-            {%- assign fh_parts = fh | split: 'believe' -%}
-            {%- if fh_parts.size == 2 -%}
-              {{- fh_parts[0] | escape -}}<span class="about-page-accent">believe</span>{{- fh_parts[1] | escape -}}
-            {%- else -%}
-              {%- assign fh_parts2 = fh | split: 'Believe' -%}
-              {%- if fh_parts2.size == 2 -%}
-                {{- fh_parts2[0] | escape -}}<span class="about-page-accent">Believe</span>{{- fh_parts2[1] | escape -}}
-              {%- else -%}
-                {%- assign fh_parts3 = fh | split: 'BELIEVE' -%}
-                {%- if fh_parts3.size == 2 -%}
-                  {{- fh_parts3[0] | escape -}}<span class="about-page-accent">BELIEVE</span>{{- fh_parts3[1] | escape -}}
-                {%- else -%}
-                  {{- fh | escape -}}
-                {%- endif -%}
-              {%- endif -%}
-            {%- endif -%}
-          </h2>
-        {%- endif -%}
-      </div>
-      <div class="about-feature__right">
-        <div class="about-feature__body-cols">
-          {%- if section.settings.feature_body_1 != blank -%}
-            <p class="about-feature__body">{{ section.settings.feature_body_1 }}</p>
-          {%- endif -%}
-          {%- if section.settings.feature_body_2 != blank -%}
-            <p class="about-feature__body">{{ section.settings.feature_body_2 }}</p>
-          {%- endif -%}
-        </div>
-      </div>
-    </div>
-  </div>
+  assign step_blocks = section.blocks | where: 'type', 'step'
 
-  {%- comment -%} ── 2. STORY SECTION ── {%- endcomment -%}
-  {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
-  {%- if step_blocks.size > 0 -%}
-  <div class="about-page-founder" data-founder-spy-root="{{ section.id }}">
-    <div class="about-page-founder__inner">
-      <div class="about-page-founder__grid">
+  assign founder_eyebrow = section.settings.founder_eyebrow
+  if founder_eyebrow == blank
+    assign founder_eyebrow = 'sections.our_story.default_founder_eyebrow' | t
+  endif
+  assign founder_heading = section.settings.founder_heading
+  if founder_heading == blank
+    assign founder_heading = 'sections.our_story.default_founder_heading' | t
+  endif
+  assign founder_body = section.settings.founder_body
+  if founder_body == blank
+    assign founder_body = 'sections.our_story.default_founder_body' | t
+  endif
+  assign founder_cta_label = section.settings.founder_cta_label
+  assign founder_cta_url = section.settings.founder_cta_url | default: '/collections/all'
 
-        {%- comment -%} Left column: title + sidebar nav {%- endcomment -%}
-        <aside class="about-page-founder__sidebar" id="about-page-founder-sidebar-{{ section.id }}">
-          <h2 class="about-page-founder__title">
-            {%- if section.settings.story_sidebar_title != blank -%}
-              {{ section.settings.story_sidebar_title | upcase }}
-            {%- else -%}
-              {{ 'sections.about_page.our_story' | t | default: 'Our Story' | upcase }}
-            {%- endif -%}
-          </h2>
-          <div class="about-page-founder__nav-rule"></div>
-          <div class="about-page-founder__nav">
-            {%- for block in step_blocks -%}
-              <button
-                type="button"
-                class="about-page-founder__nav-btn{% if forloop.first %} about-page-founder__nav-btn--active{% endif %}"
-                data-story-index="{{ forloop.index0 }}"
-                aria-pressed="{{ forloop.first | json }}"
-                aria-controls="about-page-founder-article-{{ section.id }}-{{ forloop.index0 }}"
-                {{ block.shopify_attributes }}
-              >
-                {%- if block.settings.label != blank -%}
-                  <p class="about-page-founder__nav-label">
-                    {%- assign nl = block.settings.label | upcase | escape -%}
-                    {%- assign nl = nl | replace: 'FRUSTRATION', '<span class="about-page-accent">FRUSTRATION</span>' -%}
-                    {{- nl -}}
-                  </p>
-                {%- endif -%}
-                {%- if block.settings.body != blank -%}
-                  <p class="about-page-founder__nav-body">{{ block.settings.body }}</p>
-                {%- endif -%}
-              </button>
-            {%- endfor -%}
-          </div>
-        </aside>
+  assign cta_heading = section.settings.cta_heading
+  if cta_heading == blank
+    assign cta_heading = 'sections.our_story.default_cta_heading' | t
+  endif
+  assign cta_body = section.settings.cta_body
+  if cta_body == blank
+    assign cta_body = 'sections.our_story.default_cta_body' | t
+  endif
+  assign cta_button_label = section.settings.cta_button_label
+  if cta_button_label == blank
+    assign cta_button_label = 'sections.our_story.default_cta_button' | t
+  endif
+  assign cta_button_url = section.settings.cta_button_url | default: '/collections/all'
+-%}
 
-        {%- comment -%} Right slides {%- endcomment -%}
-        <div class="about-page-founder__articles" id="about-page-founder-articles-{{ section.id }}">
-          {%- for block in step_blocks -%}
-            <article
-              class="about-page-founder__article{% if forloop.first %} about-page-founder__article--active{% endif %}"
-              id="about-page-founder-article-{{ section.id }}-{{ forloop.index0 }}"
-              data-story-block="{{ forloop.index0 }}"
-              tabindex="-1"
-            >
-              <div class="about-page-founder__mobile-step">
-                {%- if block.settings.label != blank -%}
-                  <p class="about-page-founder__mobile-step-label">
-                    {%- assign msl = block.settings.label | upcase | escape -%}
-                    {%- assign msl = msl | replace: 'FRUSTRATION', '<span class="about-page-accent">FRUSTRATION</span>' -%}
-                    {{- msl -}}
-                  </p>
-                {%- endif -%}
-                {%- if block.settings.body != blank -%}
-                  <p class="about-page-founder__mobile-step-body">{{ block.settings.body }}</p>
-                {%- endif -%}
-              </div>
-              {%- if block.settings.caption_headline != blank or block.settings.caption_body != blank -%}
-                <div class="about-page-founder__caption">
-                  {%- if block.settings.caption_headline != blank -%}
-                    <h3 class="about-page-founder__caption-title">
-                      {%- assign ch = block.settings.caption_headline | escape -%}
-                      {%- assign ch = ch | replace: 'FRUSTRATION', '<span class="about-page-accent">FRUSTRATION</span>' -%}
-                      {%- assign ch = ch | replace: 'Frustration', '<span class="about-page-accent">Frustration</span>' -%}
-                      {%- assign ch = ch | replace: 'frustration', '<span class="about-page-accent">frustration</span>' -%}
-                      {%- assign ch = ch | replace: 'SYSTEM', '<span class="about-page-accent">SYSTEM</span>' -%}
-                      {%- assign ch = ch | replace: 'System', '<span class="about-page-accent">System</span>' -%}
-                      {%- assign ch = ch | replace: 'system', '<span class="about-page-accent">system</span>' -%}
-                      {{- ch -}}
-                    </h3>
-                  {%- endif -%}
-                  {%- if block.settings.caption_body != blank -%}
-                    <p class="about-page-founder__caption-text">
-                      {%- assign cb = block.settings.caption_body | escape -%}
-                      {%- assign cb = cb | replace: 'ONE MORNING AT A TIME', '<span class="about-page-accent">ONE MORNING AT A TIME</span>' -%}
-                      {%- assign cb = cb | replace: 'One morning at a time', '<span class="about-page-accent">One morning at a time</span>' -%}
-                      {%- assign cb = cb | replace: 'one morning at a time', '<span class="about-page-accent">one morning at a time</span>' -%}
-                      {{- cb -}}
-                    </p>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-              {%- if block.settings.image != blank -%}
-                {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'about-page-founder__media' }}
-              {%- elsif block.settings.image_url != blank -%}
-                <img
-                  src="{{ block.settings.image_url | escape }}"
-                  alt="{{ block.settings.caption_headline | default: block.settings.label | escape }}"
-                  loading="lazy"
-                  class="about-page-founder__media"
-                  width="1400"
-                  height="788"
-                >
-              {%- else -%}
-                <div class="about-page-founder__media-placeholder"></div>
-              {%- endif -%}
-            </article>
-          {%- endfor -%}
-        </div>
-
-      </div>
-    </div>
-  </div>
-  {%- endif -%}
-
-  {%- comment -%} ── 5. STATS BAND ── {%- endcomment -%}
-  {%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
-  {%- if stat_blocks.size > 0 -%}
-    <div class="about-stats">
-      <div class="about-stats__inner">
-        {%- for block in stat_blocks -%}
-          <div class="about-stats__card" {{ block.shopify_attributes }}>
-            <div class="about-stats__card-top">
-              {%- if block.settings.number != blank -%}
-                <p class="about-stats__number">{{ block.settings.number }}</p>
-              {%- endif -%}
-              {%- if block.settings.label != blank -%}
-                <p class="about-stats__label">{{ block.settings.label | upcase }}</p>
-              {%- endif -%}
-            </div>
-            {%- if block.settings.description != blank -%}
-              <p class="about-stats__description">{{ block.settings.description }}</p>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
-
-  {%- comment -%} ── 6. BOTTOM CTA (shop / newsletter) ── {%- endcomment -%}
-  {%- if section.settings.show_career_cta -%}
-  <div class="about-career">
-    <div class="about-career__inner">
-      <div class="about-career__image-col">
-        {%- if section.settings.career_image != blank -%}
-          {{ section.settings.career_image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'about-career__img' }}
-        {%- elsif section.settings.career_image_url != blank -%}
-          <img
-            src="{{ section.settings.career_image_url | escape }}"
-            alt=""
-            loading="lazy"
-            class="about-career__img"
-            width="1000"
-            height="1250"
-          >
+{%- comment -%} ══ ZONE 1: HERO ══ {%- endcomment -%}
+<section class="story-hero full-width" data-surface="dark" style="--story-hero-overlay: color-mix(in srgb, var(--moov-black) {{ hero_overlay }}%, transparent);">
+  <div class="story-hero__wrap">
+    <div class="story-hero__frame">
+      <div class="story-hero__media">
+        {%- if section.settings.hero_image != blank -%}
+          {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', class: 'story-hero__img', sizes: '100vw', widths: '600, 900, 1200, 1800, 2400' }}
+        {%- elsif section.settings.hero_image_url != blank -%}
+          <img src="{{ section.settings.hero_image_url | escape }}" alt="" loading="eager" class="story-hero__img" width="2400" height="1350">
         {%- else -%}
-          <div class="about-career__img-placeholder"></div>
+          <div class="story-hero__placeholder" aria-hidden="true"></div>
+        {%- endif -%}
+        <div class="story-hero__overlay" aria-hidden="true"></div>
+      </div>
+
+      <div class="story-hero__content" data-animate="story-fade-up">
+        {%- if hero_eyebrow != blank -%}
+          <p class="story-hero__overline">{{ hero_eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="story-hero__heading">{{ hero_heading | escape }}</h1>
+        {%- if hero_body != blank -%}
+          <p class="story-hero__body">{{ hero_body | escape }}</p>
+        {%- endif -%}
+        {%- if hero_cta_label != blank -%}
+          <a href="{{ hero_cta_url }}" class="story-hero__cta">
+            {{- hero_cta_label | escape -}}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2" y1="12" x2="12" y2="2"/><polyline points="5,2 12,2 12,9"/></svg>
+          </a>
         {%- endif -%}
       </div>
-      <div class="about-career__content-col">
-        <div class="about-career__content">
-          {%- if section.settings.career_label != blank -%}
-            <p class="about-career__label">{{ section.settings.career_label | upcase }}</p>
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ══ ZONE 2: ORIGIN STORY — CINEMATIC SCROLL PANELS ══ {%- endcomment -%}
+{%- if step_blocks.size > 0 -%}
+<section class="story-panels full-width" data-surface="dark">
+  <div class="story-panels__stack">
+    {%- for block in step_blocks -%}
+      {%- assign is_reversed = forloop.index | modulo: 2 -%}
+      <div class="story-panels__item">
+        <div class="story-panel__wrap">
+          <div class="story-panel__frame" data-surface="cream">
+            <div class="story-panel{% if is_reversed == 0 %} story-panel--reversed{% endif %}" data-animate="story-fade-up" style="--story-panel-overlay: color-mix(in srgb, var(--moov-black) {{ panel_overlay }}%, transparent);" {{ block.shopify_attributes }}>
+              <div class="story-panel__media">
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'story-panel__img', sizes: '(min-width: 768px) 50vw, 100vw', widths: '400, 600, 800, 1000, 1400' }}
+                {%- elsif block.settings.image_url != blank -%}
+                  <img src="{{ block.settings.image_url | escape }}" alt="" loading="lazy" class="story-panel__img" width="1400" height="900">
+                {%- else -%}
+                  <div class="story-panel__placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+                <div class="story-panel__overlay" aria-hidden="true"></div>
+              </div>
+              <div class="story-panel__text">
+                {%- if block.settings.caption_headline != blank -%}
+                  <h2 class="story-panel__heading">{{ block.settings.caption_headline | escape }}</h2>
+                {%- endif -%}
+                {%- if block.settings.caption_body != blank -%}
+                  <p class="story-panel__body">{{ block.settings.caption_body | escape }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{%- comment -%} ══ ZONE 3: VALUES — TYPOGRAPHIC TILES ══ {%- endcomment -%}
+{%- assign value_blocks = section.blocks | where: 'type', 'value' -%}
+{%- if value_blocks.size > 0 -%}
+<section class="story-values full-width" data-surface="dark">
+  <div class="story-values__grid">
+    {%- for block in value_blocks -%}
+      <div class="story-values__tile" style="--stagger: {{ forloop.index0 | times: 1 }}" data-animate="story-fade-up" {{ block.shopify_attributes }}>
+        <span class="story-values__watermark" aria-hidden="true">{{ block.settings.value_word | escape }}</span>
+        <h3 class="story-values__title">{{ block.settings.value_title | escape }}</h3>
+        <p class="story-values__desc">{{ block.settings.value_description | escape }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{%- comment -%} ══ ZONE 4: FOUNDER NOTE ══ {%- endcomment -%}
+<section class="story-founder full-width" data-surface="dark">
+  <div class="story-founder__wrap">
+    <div class="story-founder__frame" data-surface="cream">
+      <div class="story-founder__inner">
+        <div class="story-founder__media" data-animate="story-fade">
+          {%- if section.settings.founder_image != blank -%}
+            {{ section.settings.founder_image | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'story-founder__img', sizes: '(min-width: 768px) 45vw, 100vw', widths: '400, 600, 800, 1000, 1200' }}
+          {%- elsif section.settings.founder_image_url != blank -%}
+            <img src="{{ section.settings.founder_image_url | escape }}" alt="" loading="lazy" class="story-founder__img" width="1200" height="800">
+          {%- else -%}
+            <div class="story-founder__placeholder" aria-hidden="true"></div>
           {%- endif -%}
-          {%- if section.settings.career_headline != blank -%}
-            <h2 class="about-career__headline">{{ section.settings.career_headline | upcase }}</h2>
+        </div>
+        <div class="story-founder__content" data-animate="story-slide-right">
+          {%- if founder_eyebrow != blank -%}
+            <p class="story-founder__eyebrow">{{ founder_eyebrow | escape }}</p>
           {%- endif -%}
-          {%- if section.settings.career_body != blank -%}
-            <p class="about-career__body">{{ section.settings.career_body }}</p>
+          <h2 class="story-founder__heading">{{ founder_heading | escape }}</h2>
+          {%- if founder_body != blank -%}
+            <p class="story-founder__body">{{ founder_body | escape }}</p>
           {%- endif -%}
-          {%- if section.settings.career_button_label != blank -%}
-            <a href="{{ section.settings.career_button_url | default: '#' }}" class="about-career__btn">
-              {{ section.settings.career_button_label }}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+          {%- if founder_cta_label != blank -%}
+            <a href="{{ founder_cta_url }}" class="story-founder__cta">
+              {{- founder_cta_label | escape -}}
             </a>
           {%- endif -%}
         </div>
       </div>
     </div>
   </div>
-  {%- endif -%}
+</section>
 
-  {%- comment -%} ── 7. BLOG GRID ── {%- endcomment -%}
-  {%- assign article_blocks = section.blocks | where: 'type', 'article' -%}
-  {%- if article_blocks.size > 0 -%}
-    <div class="about-blog">
-      <div class="about-blog__inner">
-        <div class="about-blog__header">
-          <h2 class="about-blog__heading">{{ 'sections.about_page.blog_heading' | t | default: 'Blog' | upcase }}</h2>
-          {%- if section.settings.blog_read_all_url != blank -%}
-            <a href="{{ section.settings.blog_read_all_url }}" class="about-blog__read-all">
-              {{ section.settings.blog_read_all_label | default: 'Read all' }}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          {%- endif -%}
-        </div>
-        <div class="about-blog__grid">
-          {%- for block in article_blocks -%}
-            <article class="about-blog__card" {{ block.shopify_attributes }}>
-              <a href="{{ block.settings.url | default: '#' }}" class="about-blog__card-image-link">
-                <div class="about-blog__card-image-wrap">
-                  {%- if block.settings.image != blank -%}
-                    {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'about-blog__card-img' }}
-                  {%- elsif block.settings.image_url != blank -%}
-                    <img
-                      src="{{ block.settings.image_url | escape }}"
-                      alt="{{ block.settings.title | escape }}"
-                      loading="lazy"
-                      class="about-blog__card-img"
-                      width="800"
-                      height="600"
-                    >
-                  {%- else -%}
-                    <div class="about-blog__card-img-placeholder"></div>
-                  {%- endif -%}
-                </div>
-              </a>
-              <div class="about-blog__card-meta">
-                {%- if block.settings.category != blank -%}
-                  <span class="about-blog__card-category">{{ block.settings.category }}</span>
-                  <span class="about-blog__card-sep">&middot;</span>
-                {%- endif -%}
-                {%- if block.settings.date != blank -%}
-                  <span class="about-blog__card-date">{{ block.settings.date }}</span>
-                {%- endif -%}
-              </div>
-              {%- if block.settings.title != blank -%}
-                <h3 class="about-blog__card-title">{{ block.settings.title | upcase }}</h3>
-              {%- endif -%}
-              <a href="{{ block.settings.url | default: '#' }}" class="about-blog__card-link">
-                <span class="about-blog__card-link-icon">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5M11.5 2.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-                {{ 'sections.about_page.read_article' | t | default: 'Read article' }}
-              </a>
-            </article>
-          {%- endfor -%}
-        </div>
-      </div>
-    </div>
-  {%- endif -%}
-
-</div>
+{%- comment -%} ══ ZONE 5: BOTTOM CTA ══ {%- endcomment -%}
+<section class="story-cta full-width" data-surface="dark" data-animate="story-fade-up">
+  <div class="story-cta__inner">
+    <h2 class="story-cta__heading">{{ cta_heading | escape }}</h2>
+    {%- if cta_body != blank -%}
+      <p class="story-cta__body">{{ cta_body | escape }}</p>
+    {%- endif -%}
+    <a href="{{ cta_button_url }}" class="story-cta__btn">
+      {{- cta_button_label | escape -}}
+    </a>
+  </div>
+</section>
 
 {% stylesheet %}
-
-.about-page {
-  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
-  color: var(--color-foreground);
-  background: var(--color-background);
-  overflow-x: clip;
-}
-
-.about-page-accent {
-  color: var(--color-accent);
-}
-
-/* ── 1. Feature Block ── */
-.about-feature {
-  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem);
-}
-.about-feature__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
-  max-width: var(--page-width, 1400px);
-  margin: 0 auto;
-}
-.about-feature__headline {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-  margin: 0;
-  color: var(--color-foreground);
-}
-.about-feature__body-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-.about-feature__body {
-  font-size: 15px;
-  font-weight: 400;
-  color: color-mix(in srgb, var(--moov-black) 42%, var(--moov-cream));
-  line-height: 1.65;
-  margin: 0;
-}
-[data-theme="dark"] .about-feature__body {
-  color: color-mix(in srgb, var(--moov-cream) 78%, var(--moov-black));
-}
-
-/* ── 2. Founder story (namespaced; avoids clash with moov-about .about-story__inner grid) ── */
-.about-page-founder {
-  padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 4rem);
-  background: transparent;
-}
-.about-page-founder__inner {
-  width: 100%;
-  max-width: min(
-    calc(var(--page-width) - var(--page-margin) * 2),
-    calc(100% - var(--page-margin) * 2)
-  );
-  margin-inline: auto;
-}
-.about-page-founder__grid {
-  display: grid;
-  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 3.5rem);
-  align-items: start;
-  width: 100%;
-  min-width: 0;
-}
-
-/* Left column: title + sidebar nav */
-.about-page-founder__sidebar {
-  position: sticky;
-  top: var(--about-founder-sticky-top, calc(var(--header-height, 5rem) + 1.25rem));
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-width: 0;
-}
-.about-page-founder__title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-foreground);
-  margin: 0.25rem 0 clamp(1.5rem, 3vw, 2.5rem);
-  line-height: 1.05;
-}
-.about-page-founder__nav-rule {
-  display: none;
-}
-.about-page-founder__nav {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  border-left: 1.5px solid var(--moov-border-light);
-  padding-left: 5px;
-}
-[data-theme="dark"] .about-page-founder__nav {
-  border-left-color: var(--moov-border-dark);
-}
-.about-page-founder__nav-btn {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  background: none;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  padding: 16px 18px;
-  text-align: left;
-  cursor: pointer;
-  opacity: 0.35;
-  transition: opacity 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-}
-.about-page-founder__nav-btn--active {
-  opacity: 1;
-  border-color: var(--moov-border-light);
-  background: var(--moov-wash-on-cream-4);
-}
-[data-theme="dark"] .about-page-founder__nav-btn--active {
-  border-color: var(--moov-border-dark);
-  background: var(--moov-surface-dark-raised);
-}
-.about-page-founder__nav-label {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-foreground);
-  margin: 0 0 8px;
-}
-.about-page-founder__nav-body {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--moov-text-secondary-light);
-  line-height: 1.6;
-  margin: 0;
-}
-[data-theme="dark"] .about-page-founder__nav-body {
-  color: var(--moov-text-secondary-dark);
-}
-
-/* Slides: stacked for scroll; nav highlights via scroll-spy */
-.about-page-founder__articles {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2.5rem, 5vw, 4rem);
-  min-width: 0;
-}
-.about-page-founder__article {
-  scroll-margin-top: calc(var(--about-founder-sticky-top, var(--header-height, 5rem)) + 0.5rem);
-  min-width: 0;
-  opacity: 0.55;
-  transition: opacity 0.28s ease;
-}
-.about-page-founder__article--active {
-  opacity: 1;
-}
-.about-page-founder__article:last-child {
-  margin-bottom: 0;
-}
-.about-page-founder__mobile-step {
-  display: none;
-}
-.about-page-founder__media {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-}
-.about-page-founder__media-placeholder {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: var(--moov-wash-on-cream-6);
-  border-radius: 16px;
-}
-[data-theme="dark"] .about-page-founder__media-placeholder {
-  background: var(--moov-surface-dark-raised);
-}
-.about-page-founder__caption {
-  padding: 0 0 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-  min-width: 0;
-}
-.about-page-founder__caption-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  margin: 0;
-  color: var(--color-foreground);
-  min-width: 0;
-  max-width: 100%;
-  hyphens: none;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-.about-page-founder__caption-text {
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--moov-text-secondary-light);
-  line-height: 1.65;
-  margin: 0;
-  min-width: 0;
-  max-width: min(65ch, 100%);
-  overflow-wrap: break-word;
-}
-[data-theme="dark"] .about-page-founder__caption-text {
-  color: var(--moov-text-secondary-dark);
-}
-
-/* ── 5. Stats Band ── */
-.about-stats {
-  background: var(--moov-black);
-  padding: 48px;
-}
-[data-theme="dark"] .about-stats {
-  background: var(--moov-surface-dark-raised);
-  border-top: 1px solid var(--moov-border-dark);
-  border-bottom: 1px solid var(--moov-border-dark);
-}
-.about-stats__inner {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.about-stats__card {
-  background: var(--moov-cream-shadow);
-  border-radius: 16px;
-  padding: 36px 32px;
-  min-height: 320px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-[data-theme="dark"] .about-stats__card {
-  background: var(--moov-surface-dark-elevated);
-  border: 1px solid var(--moov-border-dark);
-}
-.about-stats__card-top {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.about-stats__number {
-  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-  margin: 0;
-  color: var(--moov-black);
-}
-.about-stats__label {
-  font-size: clamp(1.5rem, 2vw, 2rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-  margin: 0;
-  color: var(--moov-black);
-}
-[data-theme="dark"] .about-stats__number,
-[data-theme="dark"] .about-stats__label {
-  color: var(--moov-text-primary-dark);
-}
-.about-stats__description {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--moov-text-secondary-light);
-  line-height: 1.6;
-  margin: 0;
-}
-[data-theme="dark"] .about-stats__description {
-  color: var(--moov-text-secondary-dark);
-}
-
-/* ── 6. Career CTA ── */
-.about-career {
-  padding: 80px 48px;
-}
-.about-career__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: stretch;
-}
-.about-career__image-col {
-  border-radius: 16px;
-  overflow: hidden;
-}
-.about-career__img {
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
-  object-fit: cover;
-  display: block;
-}
-.about-career__img-placeholder {
-  width: 100%;
-  min-height: 500px;
-  background: var(--moov-wash-on-cream-6);
-}
-[data-theme="dark"] .about-career__img-placeholder {
-  background: var(--moov-surface-dark-raised);
-}
-.about-career__content-col {
-  background: var(--moov-wash-on-cream-4);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 64px 48px;
-}
-[data-theme="dark"] .about-career__content-col {
-  background: var(--moov-surface-dark-raised);
-  border: 1px solid var(--moov-border-dark);
-}
-.about-career__content {
-  text-align: center;
-  max-width: 420px;
-}
-.about-career__label {
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--moov-text-tertiary-light);
-  margin: 0 0 16px;
-}
-[data-theme="dark"] .about-career__label {
-  color: var(--moov-text-tertiary-dark);
-}
-.about-career__headline {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1.05;
-  margin: 0 0 20px;
-  color: var(--color-foreground);
-}
-.about-career__body {
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--moov-text-secondary-light);
-  line-height: 1.65;
-  margin: 0 0 32px;
-}
-[data-theme="dark"] .about-career__body {
-  color: var(--moov-text-secondary-dark);
-}
-.about-career__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-foreground);
-  color: var(--color-background);
-  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  padding: 14px 28px;
-  border-radius: 999px;
-  letter-spacing: 0.01em;
-  transition: opacity 0.2s ease, filter 0.2s ease;
-}
-.about-career__btn:hover {
-  opacity: 0.88;
-}
-[data-theme="dark"] .about-career__btn:hover {
-  opacity: 1;
-  filter: brightness(1.1);
-}
-
-/* ── 7. Blog Grid ── */
-.about-blog {
-  padding: 0 48px 80px;
-}
-.about-blog__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 32px;
-}
-.about-blog__heading {
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin: 0;
-  color: var(--color-foreground);
-}
-.about-blog__read-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-foreground);
-  color: var(--color-background);
-  font-family: var(--font-body, 'Helvetica Neue', Helvetica, Arial, sans-serif);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  padding: 12px 22px;
-  border-radius: 999px;
-  letter-spacing: 0.01em;
-  transition: opacity 0.2s ease, filter 0.2s ease;
-}
-.about-blog__read-all:hover {
-  opacity: 0.88;
-}
-[data-theme="dark"] .about-blog__read-all:hover {
-  opacity: 1;
-  filter: brightness(1.1);
-}
-.about-blog__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.about-blog__card {
-  display: flex;
-  flex-direction: column;
-}
-.about-blog__card-image-link {
-  display: block;
-  text-decoration: none;
-  margin-bottom: 16px;
-}
-.about-blog__card-image-wrap {
-  border-radius: 16px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-}
-.about-blog__card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s ease;
-}
-.about-blog__card-image-link:hover .about-blog__card-img {
-  transform: scale(1.03);
-}
-.about-blog__card-img-placeholder {
-  width: 100%;
-  height: 100%;
-  background: var(--moov-wash-on-cream-6);
-}
-[data-theme="dark"] .about-blog__card-img-placeholder {
-  background: var(--moov-surface-dark-raised);
-}
-.about-blog__card-meta {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--moov-text-tertiary-light);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-[data-theme="dark"] .about-blog__card-meta {
-  color: var(--moov-text-tertiary-dark);
-}
-.about-blog__card-sep {
-  color: var(--moov-border-light);
-}
-[data-theme="dark"] .about-blog__card-sep {
-  color: var(--moov-border-dark);
-}
-.about-blog__card-title {
-  font-size: 15px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
-  margin: 0 0 14px;
-  color: var(--color-foreground);
-  flex: 1;
-}
-.about-blog__card-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--color-foreground);
-  text-decoration: none;
-  margin-top: auto;
-}
-.about-blog__card-link:hover {
-  color: var(--moov-text-secondary-light);
-}
-[data-theme="dark"] .about-blog__card-link:hover {
-  color: var(--moov-text-secondary-dark);
-}
-.about-blog__card-link-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-foreground);
-  flex-shrink: 0;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-.about-blog__card-link:hover .about-blog__card-link-icon {
-  background: var(--color-foreground);
-  color: var(--color-background);
-}
-
-/* ── Responsive ── */
-@media (max-width: 960px) {
-  .about-feature { padding: 48px 24px 64px; }
-  .about-feature__inner { grid-template-columns: 1fr; gap: 24px; }
-  .about-feature__body-cols { grid-template-columns: 1fr; gap: 16px; }
-  .about-feature__body { font-size: 14px; line-height: 1.6; }
-  .about-page-founder { padding: 2rem 1.25rem 3rem; }
-  .about-page-founder__grid { grid-template-columns: 1fr; gap: 24px; }
-  .about-page-founder__sidebar { display: block; position: static; }
-  .about-page-founder__nav { display: none; }
-  .about-page-founder__title { margin: 0 0 6px; }
-  .about-page-founder__article {
-    display: block;
-    opacity: 1;
+  /* ══ ZONE 1: HERO ══ */
+  .story-hero {
+    position: relative;
+    background: var(--moov-black);
+    padding: calc(var(--section-block-pad-y-md) * 0.58) max(0.35rem, calc(var(--section-inline-pad) * 0.48))
+      calc(var(--section-block-pad-y-sm) * 0.58);
   }
-  .about-page-founder__mobile-step {
-    display: block;
-    margin: 0 0 14px;
-    padding-left: 14px;
-    border-left: 1.5px solid var(--moov-border-light);
+
+  .story-hero__wrap {
+    margin: 0;
+    max-width: none;
   }
-  [data-theme="dark"] .about-page-founder__mobile-step { border-left-color: var(--moov-border-dark); }
-  .about-page-founder__mobile-step-label {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+
+  .story-hero__frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: clamp(18px, 2.4vw, 28px);
+    min-height: min(70vh, 640px);
+    isolation: isolate;
+  }
+
+  @media (max-width: 749px) {
+    .story-hero__frame {
+      min-height: min(58vh, 520px);
+    }
+  }
+
+  .story-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .story-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .story-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--moov-cream) 20%, var(--moov-black)) 0%, var(--moov-black) 100%);
+  }
+
+  .story-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--story-hero-overlay);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .story-hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .story-hero__overline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-2xs);
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-foreground);
-    margin: 0 0 6px;
+    color: var(--moov-eyebrow-accent);
+    margin: 0 0 20px;
   }
-  .about-page-founder__mobile-step-body {
-    font-size: 13px;
-    line-height: 1.55;
+
+  .story-hero__overline::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-accent, #ed9d09);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent, #ed9d09) 70%, transparent);
+    animation: story-pulse 2.4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes story-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.75; }
+  }
+
+  .story-hero__heading {
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: var(--text-5xl);
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 28px;
+  }
+
+  .story-hero__body {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 0 36px;
+    max-width: 560px;
+  }
+
+  .story-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 14px 28px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    background: #fff;
+    color: var(--moov-black);
+    border: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .story-hero__cta:hover {
+    opacity: 0.85;
+  }
+
+  /* ══ ZONE 2: CINEMATIC PANELS (inset rounded frames on dark, mirrors story-hero) ══ */
+  .story-panels {
+    background: var(--moov-black);
+    padding: calc(var(--section-block-pad-y-md) * 0.58) 0 calc(var(--section-block-pad-y-sm) * 0.58);
+  }
+
+  .story-panels__stack {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--section-block-pad-y-sm) * 0.5);
+  }
+
+  .story-panel__wrap {
+    padding: 0 max(0.35rem, calc(var(--section-inline-pad) * 0.48));
+  }
+
+  .story-panel__frame {
+    border-radius: clamp(18px, 2.4vw, 28px);
+    overflow: hidden;
+    background: var(--moov-cream);
+    isolation: isolate;
+  }
+
+  .story-panel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: min(88vh, 880px);
+  }
+
+  .story-panel--reversed {
+    direction: rtl;
+  }
+
+  .story-panel--reversed > * {
+    direction: ltr;
+  }
+
+  .story-panel__media {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .story-panel__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: var(--story-panel-overlay, color-mix(in srgb, var(--moov-black) 20%, transparent));
+  }
+
+  .story-panel__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .story-panel__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--moov-wash-on-cream-6) 0%, var(--moov-wash-on-cream-4) 100%);
+    position: relative;
+    z-index: 0;
+  }
+
+  .story-panel__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1rem, 2.5vw, 2rem) clamp(1.25rem, 3.25vw, 2.25rem);
+    max-width: none;
+    margin: 0;
+    height: 100%;
+  }
+
+  .story-panel__heading {
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: clamp(2rem, 4.25vw, 3.75rem);
+    line-height: 1.08;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 clamp(0.75rem, 2vw, 1.25rem);
+    max-width: min(100%, 28rem);
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
+  }
+
+  .story-panel__body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 400;
+    line-height: 1.75;
     color: var(--moov-text-secondary-light);
     margin: 0;
+    max-width: 75%;
   }
-  [data-theme="dark"] .about-page-founder__mobile-step-body { color: var(--moov-text-secondary-dark); }
-  .about-page-founder__media { border-radius: 14px; }
-  .about-page-founder__caption { padding: 0 0 18px; }
-  .about-page-founder__caption-title { font-size: clamp(1.25rem, 6vw, 1.75rem); line-height: 1.18; }
-  .about-page-founder__caption-text { font-size: 14px; line-height: 1.6; max-width: 100%; }
-  .about-stats { padding: 32px 24px; }
-  .about-stats__inner { grid-template-columns: 1fr; }
-  .about-stats__card { min-height: 0; padding: 28px 24px; gap: 18px; }
-  .about-career { padding: 56px 24px; }
-  .about-career__inner { grid-template-columns: 1fr; }
-  .about-career__img,
-  .about-career__img-placeholder { min-height: 320px; }
-  .about-career__content-col { padding: 44px 28px; }
-  .about-career__body { font-size: 14px; line-height: 1.6; }
-  .about-blog { padding: 0 24px 56px; }
-  .about-blog__header { flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
-  .about-blog__read-all { padding: 10px 18px; }
-  .about-blog__grid { grid-template-columns: 1fr; }
-}
 
-@media (min-width: 600px) and (max-width: 960px) {
-  .about-blog__grid { grid-template-columns: repeat(2, 1fr); }
-  .about-stats__inner { grid-template-columns: repeat(2, 1fr); }
-}
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .story-panel {
+      grid-template-columns: 45fr 55fr;
+    }
+  }
 
-@media (max-width: 640px) {
-  .about-feature { padding: 40px 16px 48px; }
-  .about-page-founder { padding: 1.75rem 1rem 2.5rem; }
-  .about-page-founder__title { margin-bottom: 1rem; font-size: clamp(1.6rem, 10vw, 2.2rem); }
-  .about-page-founder__articles { gap: 2rem; }
-  .about-stats { padding: 24px 16px; }
-  .about-career { padding: 44px 16px; }
-  .about-career__img,
-  .about-career__img-placeholder { min-height: 250px; }
-  .about-career__content-col { padding: 34px 20px; }
-  .about-career__btn { width: 100%; justify-content: center; }
-  .about-blog { padding: 0 16px 44px; }
-  .about-blog__grid { gap: 20px; }
-}
+  @media (max-width: 767px) {
+    .story-panel {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
 
+    .story-panel--reversed {
+      direction: ltr;
+    }
+
+    .story-panel__wrap {
+      padding: 0 max(0.35rem, calc(var(--section-inline-pad) * 0.4));
+    }
+
+    .story-panel__media {
+      position: relative;
+      height: min(52vh, 420px);
+      min-height: 240px;
+    }
+
+    .story-panel__img {
+      position: absolute;
+    }
+
+    .story-panel__text {
+      padding: clamp(1.25rem, 3vw, 2.125rem) clamp(1.5rem, 5vw, 2.25rem);
+      max-width: none;
+      margin: 0;
+    }
+  }
+
+  /* ══ ZONE 3: VALUES ══ */
+  .story-values {
+    background: var(--moov-black);
+    padding: var(--section-block-pad-y-xl) var(--section-inline-pad);
+  }
+
+  .story-values__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .story-values__tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 0.5px solid var(--moov-border-dark);
+    padding: 36px 28px;
+    transition: background 0.2s ease;
+  }
+
+  .story-values__tile:hover {
+    background: var(--moov-surface-dark-raised);
+  }
+
+  .story-values__watermark {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 5vw, 6rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    opacity: 0.06;
+    color: var(--moov-cream);
+    line-height: 1;
+    margin-bottom: 20px;
+    white-space: nowrap;
+  }
+
+  .story-values__title {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 12px;
+  }
+
+  .story-values__desc {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0;
+  }
+
+  @media (max-width: 1279px) {
+    .story-values__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .story-values__grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  /* ══ ZONE 4: FOUNDER NOTE (matches story-hero inset frame) ══ */
+  .story-founder {
+    position: relative;
+    background: var(--moov-black);
+    padding: calc(var(--section-block-pad-y-md) * 0.58) max(0.35rem, calc(var(--section-inline-pad) * 0.48))
+      calc(var(--section-block-pad-y-sm) * 0.58);
+  }
+
+  .story-founder__wrap {
+    margin: 0;
+    max-width: none;
+  }
+
+  .story-founder__frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: clamp(18px, 2.4vw, 28px);
+    background: var(--moov-cream);
+    isolation: isolate;
+  }
+
+  .story-founder__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 80px);
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.75rem) clamp(1.25rem, 4vw, 2.5rem);
+  }
+
+  .story-founder__media {
+    overflow: hidden;
+  }
+
+  .story-founder__img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  .story-founder__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--moov-wash-on-cream-6);
+    border-radius: 0;
+  }
+
+  .story-founder__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .story-founder__eyebrow {
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-eyebrow-accent);
+    margin: 0 0 16px;
+  }
+
+  .story-founder__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--moov-text-primary-light);
+    margin: 0 0 24px;
+  }
+
+  .story-founder__body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    max-width: 440px;
+  }
+
+  .story-founder__cta {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 14px 28px;
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .story-founder__cta:hover {
+    opacity: 0.85;
+  }
+
+  @media (min-width: 768px) and (max-width: 1279px) {
+    .story-founder__inner {
+      gap: 48px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .story-founder__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  /* ══ ZONE 5: BOTTOM CTA ══ */
+  .story-cta {
+    background: var(--moov-black);
+    padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
+    text-align: center;
+  }
+
+  .story-cta__inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .story-cta__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 20px;
+  }
+
+  .story-cta__body {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: 0 0 36px;
+  }
+
+  .story-cta__btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border: 0.5px solid var(--moov-border-amber);
+    border-radius: 999px;
+    color: var(--moov-amber);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .story-cta__btn:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+  }
+
+  /* ══ ANIMATIONS ══ */
+  [data-animate="story-fade-up"] {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="story-fade"] {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+    transition-delay: 0.15s;
+  }
+
+  [data-animate="story-slide-right"] {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  [data-animate="story-fade-up"].is-visible,
+  [data-animate="story-fade"].is-visible,
+  [data-animate="story-slide-right"].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .story-values__tile[data-animate="story-fade-up"] {
+    transition-delay: calc(var(--stagger, 0) * 100ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-animate="story-fade-up"],
+    [data-animate="story-fade"],
+    [data-animate="story-slide-right"] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .story-hero__overline::before {
+      animation: none;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
-(function () {
-  function getHeaderBottomOffset() {
-    var maxBottom = 0;
-    var headerGroup = document.querySelector('.shopify-section-group-header-group');
-    var header = document.querySelector('.moov-header');
+  (function () {
+    var els = document.querySelectorAll('[data-animate^="story-"]');
+    if (!els.length) return;
 
-    if (headerGroup) {
-      maxBottom = Math.max(maxBottom, headerGroup.getBoundingClientRect().bottom);
-    }
-    if (header) {
-      maxBottom = Math.max(maxBottom, header.getBoundingClientRect().bottom);
-    }
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
 
-    if (maxBottom <= 0) return null;
-    return Math.max(0, Math.ceil(maxBottom + 16));
-  }
-
-  function updateStickyTop(root) {
-    var stickyTop = getHeaderBottomOffset();
-    if (!stickyTop) {
-      root.style.removeProperty('--about-founder-sticky-top');
-      return;
-    }
-    root.style.setProperty('--about-founder-sticky-top', stickyTop + 'px');
-  }
-
-  function prefersReducedMotion() {
-    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  function isMobileViewport() {
-    return window.matchMedia && window.matchMedia('(max-width: 960px)').matches;
-  }
-
-  function setActiveState(ctx, index) {
-    if (!ctx || index < 0 || index >= ctx.navItems.length) return;
-    ctx.navItems.forEach(function (item, i) {
-      var active = i === index;
-      item.classList.toggle('about-page-founder__nav-btn--active', active);
-      item.setAttribute('aria-pressed', String(active));
-    });
-    ctx.slides.forEach(function (item, i) {
-      item.classList.toggle('about-page-founder__article--active', i === index);
-    });
-  }
-
-  function indexFromReadingBand(ctx) {
-    var slides = ctx.slides;
-    var vh = window.innerHeight || 700;
-    var header = document.querySelector('.moov-header');
-    var hb = header ? header.getBoundingClientRect().bottom : 0;
-    var markerY = Math.max(hb + 24, vh * 0.35);
-    markerY = Math.min(markerY, vh * 0.5);
-    var active = 0;
-
-    for (var i = 0; i < slides.length; i++) {
-      var r = slides[i].getBoundingClientRect();
-      if (r.top <= markerY) active = i;
-    }
-
-    return active;
-  }
-
-  function bindNavClicks(ctx, state, onScrollSpy) {
-    ctx.navItems.forEach(function (item) {
-      if (item.getAttribute('data-founder-spy-bound') === 'true') return;
-      item.setAttribute('data-founder-spy-bound', 'true');
-      item.addEventListener('click', function () {
-        var idx = parseInt(item.getAttribute('data-story-index'), 10);
-        if (isNaN(idx)) return;
-        if (isMobileViewport()) {
-          setActiveState(ctx, idx);
-          return;
-        }
-        var target = ctx.slidesContainer.querySelector('.about-page-founder__article[data-story-block="' + idx + '"]');
-        if (!target) return;
-        state.ignoreScroll = true;
-        setActiveState(ctx, idx);
-        target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
-        if (state.timer) clearTimeout(state.timer);
-        state.timer = setTimeout(function () {
-          state.ignoreScroll = false;
-          onScrollSpy();
-        }, prefersReducedMotion() ? 80 : 900);
-      });
-    });
-  }
-
-  function setupRoot(root) {
-    if (root.getAttribute('data-founder-spy-ready') === 'true') return;
-
-    var sidebar = root.querySelector('.about-page-founder__sidebar');
-    var slidesContainer = root.querySelector('.about-page-founder__articles');
-    if (!sidebar || !slidesContainer) return;
-
-    var navItems = sidebar.querySelectorAll('.about-page-founder__nav-btn');
-    var slides = slidesContainer.querySelectorAll('.about-page-founder__article');
-    if (!navItems.length || !slides.length) return;
-
-    root.setAttribute('data-founder-spy-ready', 'true');
-
-    var state = {
-      ignoreScroll: false,
-      ticking: false,
-      timer: null,
-    };
-
-    var ctx = {
-      slidesContainer: slidesContainer,
-      navItems: navItems,
-      slides: slides,
-    };
-
-    var onScrollSpy = function () {
-      if (isMobileViewport()) return;
-      if (state.ignoreScroll) return;
-      setActiveState(ctx, indexFromReadingBand(ctx));
-    };
-
-    var onScroll = function () {
-      if (state.ignoreScroll || state.ticking) return;
-      state.ticking = true;
-      requestAnimationFrame(function () {
-        state.ticking = false;
-        updateStickyTop(root);
-        onScrollSpy();
-      });
-    };
-
-    bindNavClicks(ctx, state, onScrollSpy);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    updateStickyTop(root);
-    onScrollSpy();
-  }
-
-  function run() {
-    var roots = document.querySelectorAll('[data-founder-spy-root]');
-    if (!roots.length) return;
-    roots.forEach(function (root) {
-      setupRoot(root);
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-  } else {
-    run();
-  }
-
-  document.addEventListener('shopify:section:load', function () {
-    setTimeout(run, 0);
-  });
-})();
+    els.forEach(function (el) { observer.observe(el); });
+  })();
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "About page",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Feature block"
-    },
-    {
-      "type": "textarea",
-      "id": "feature_headline",
-      "label": "Headline",
-      "default": "What we believe about mornings"
-    },
-    {
-      "type": "textarea",
-      "id": "feature_body_1",
-      "label": "Body copy, left column",
-      "default": "We believe mornings matter more than most people realize, not because every morning needs to be perfect, but because how you start your day shapes how the rest of it feels. Too many people wake up already behind. They hit snooze. They scroll. They rush. And before the day even starts, they feel like they're reacting instead of leading."
-    },
-    {
-      "type": "textarea",
-      "id": "feature_body_2",
-      "label": "Body copy, right column",
-      "default": "We don't believe better mornings should depend on willpower. We believe good systems beat good intentions. MOOV was built around one simple idea: make getting up easier than staying in bed. Because sometimes one small action, like getting up, walking across the room, pressing a button, can change the direction of your entire day."
-    },
-    {
-      "type": "header",
-      "content": "Story section"
-    },
-    {
-      "type": "text",
-      "id": "story_sidebar_title",
-      "label": "Sidebar heading",
-      "default": "Founder story",
-      "info": "Shown above the story navigation. Leave blank to use the theme translation for \"Our story\"."
-    },
-    {
-      "type": "header",
-      "content": "Bottom CTA"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_career_cta",
-      "label": "Show bottom CTA",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "career_image",
-      "label": "CTA image"
-    },
-    {
-      "type": "url",
-      "id": "career_image_url",
-      "label": "CTA image URL fallback"
-    },
-    {
-      "type": "text",
-      "id": "career_label",
-      "label": "Eyebrow label",
-      "default": "Shop MOOV"
-    },
-    {
-      "type": "textarea",
-      "id": "career_headline",
-      "label": "Headline",
-      "default": "Take back your mornings"
-    },
-    {
-      "type": "textarea",
-      "id": "career_body",
-      "label": "Body",
-      "default": "Ready to make getting up easier than staying in bed? Start with MOOV."
-    },
-    {
-      "type": "text",
-      "id": "career_button_label",
-      "label": "Button label",
-      "default": "Shop now"
-    },
-    {
-      "type": "url",
-      "id": "career_button_url",
-      "label": "Button URL"
-    },
-    {
-      "type": "header",
-      "content": "Blog grid"
-    },
-    {
-      "type": "text",
-      "id": "blog_read_all_label",
-      "label": "Read all button label",
-      "default": "Read all"
-    },
-    {
-      "type": "url",
-      "id": "blog_read_all_url",
-      "label": "Read all button URL"
-    }
-  ],
+  "name": "t:sections.our_story.name",
+  "tag": "div",
+  "class": "section-our-story",
   "blocks": [
     {
       "type": "step",
-      "name": "Story step",
+      "name": "t:sections.our_story.block_step",
       "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Step label",
-          "default": "Vision"
-        },
-        {
-          "type": "textarea",
-          "id": "body",
-          "label": "Step description",
-          "default": "A short description of this chapter of the MOOV story."
-        },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Step image"
+          "label": "t:labels.background_image"
         },
         {
           "type": "url",
           "id": "image_url",
-          "label": "Step image URL fallback"
+          "label": "t:sections.our_story.image_url_label",
+          "info": "t:sections.our_story.image_url_info"
         },
         {
           "type": "text",
           "id": "caption_headline",
-          "label": "Caption headline",
-          "default": "Owning the morning"
+          "label": "t:labels.heading"
         },
         {
           "type": "textarea",
           "id": "caption_body",
-          "label": "Caption body",
-          "default": "We built MOOV to help people reclaim their first hour, turning the hardest moment of the day into the most powerful."
+          "label": "t:sections.our_story.panel_body_label"
         }
       ]
     },
     {
-      "type": "stat",
-      "name": "Stat card",
+      "type": "value",
+      "name": "t:sections.our_story.block_value",
       "settings": [
         {
           "type": "text",
-          "id": "number",
-          "label": "Number",
-          "default": "10,000+"
+          "id": "value_word",
+          "label": "t:sections.our_story.value_word_label"
         },
         {
           "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Happy customers"
+          "id": "value_title",
+          "label": "t:sections.our_story.value_title_label"
         },
         {
           "type": "textarea",
-          "id": "description",
-          "label": "Description",
-          "default": "Trusted by over 10,000 customers who rely on our sportswear for quality, performance, and style."
-        }
-      ]
-    },
-    {
-      "type": "article",
-      "name": "Blog article",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Article image"
-        },
-        {
-          "type": "url",
-          "id": "image_url",
-          "label": "Article image URL fallback"
-        },
-        {
-          "type": "text",
-          "id": "category",
-          "label": "Category",
-          "default": "Route"
-        },
-        {
-          "type": "text",
-          "id": "date",
-          "label": "Date",
-          "default": "Nov 20 2024"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Top benefits of investing in quality sportswear"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Article URL"
+          "id": "value_description",
+          "label": "t:sections.our_story.value_desc_label"
         }
       ]
     }
   ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.our_story.header_hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "t:labels.background_image"
+    },
+    {
+      "type": "url",
+      "id": "hero_image_url",
+      "label": "t:sections.our_story.image_url_label",
+      "info": "t:sections.our_story.image_url_info"
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "label": "t:sections.our_story.overlay_label",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 55,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "panel_overlay_opacity",
+      "label": "t:sections.our_story.panel_overlay_label",
+      "info": "t:sections.our_story.panel_overlay_info",
+      "min": 0,
+      "max": 45,
+      "step": 1,
+      "default": 20,
+      "unit": "%"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "t:labels.eyebrow_text"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_body",
+      "label": "t:sections.our_story.hero_body_label"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "hero_cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.our_story.header_founder"
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "t:labels.background_image"
+    },
+    {
+      "type": "url",
+      "id": "founder_image_url",
+      "label": "t:sections.our_story.image_url_label",
+      "info": "t:sections.our_story.image_url_info"
+    },
+    {
+      "type": "text",
+      "id": "founder_eyebrow",
+      "label": "t:labels.eyebrow_text"
+    },
+    {
+      "type": "text",
+      "id": "founder_heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "founder_body",
+      "label": "t:sections.our_story.founder_body_label"
+    },
+    {
+      "type": "text",
+      "id": "founder_cta_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "founder_cta_url",
+      "label": "t:labels.button_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.our_story.header_cta"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_body",
+      "label": "t:sections.our_story.cta_body_label"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "t:labels.button_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "t:labels.button_url"
+    }
+  ],
   "presets": [
     {
-      "name": "About page",
+      "name": "t:sections.our_story.name",
+      "settings": {
+        "hero_eyebrow": "Our story",
+        "hero_heading": "Built for the first hour",
+        "hero_body": "MOOV started from a simple frustration: knowing what a better morning looks like, but not living it.",
+        "hero_overlay_opacity": 55,
+        "founder_eyebrow": "From the founder",
+        "founder_heading": "A note on why we built this",
+        "founder_body": "I started MOOV because I was tired of mornings that felt reactive. I knew what I wanted my day to look like, but the gap between intention and action felt impossible to close without changing the environment.",
+        "founder_cta_label": "Shop MOOV",
+        "cta_heading": "Take back your mornings",
+        "cta_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
+        "cta_button_label": "Shop now"
+      },
       "blocks": [
         {
           "type": "step",
           "settings": {
-            "label": "The frustration",
-            "body": "MOOV started from frustration, knowing what a better morning looks like, but not living it.",
             "caption_headline": "It started with frustration",
-            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like: getting up earlier, feeling less rushed, starting the day with more intention. But knowing what to do and actually doing it are two different things."
+            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like but knowing what to do and actually doing it are two different things."
           }
         },
         {
           "type": "step",
           "settings": {
-            "label": "The insight",
-            "body": "The real problem was never the alarm. It was what came after.",
             "caption_headline": "The system, not motivation",
-            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty. I realized the issue wasn't motivation. It was the system."
+            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty."
           }
         },
         {
           "type": "step",
           "settings": {
-            "label": "What we built",
-            "body": "A tool that changes the environment so mornings are easier, not more disciplined.",
             "caption_headline": "For anyone tired of feeling behind",
-            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them. MOOV is for anyone who's tired of starting their day feeling behind. It's a simple tool built to help you take back control, one morning at a time."
+            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "value_word": "Systems",
+            "value_title": "Systems over willpower",
+            "value_description": "We believe good systems beat good intentions. Make the right action the easy action."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "value_word": "Mornings",
+            "value_title": "Mornings matter",
+            "value_description": "How you start your day shapes how the rest of it feels. One small action can change everything."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "value_word": "Simple",
+            "value_title": "Simplicity wins",
+            "value_description": "No complexity, no guilt. Just a tool that makes getting up easier than staying in bed."
+          }
+        },
+        {
+          "type": "value",
+          "settings": {
+            "value_word": "Human",
+            "value_title": "Built for humans",
+            "value_description": "We design for real behaviour, not idealized routines. Meet people where they are."
           }
         }
       ]
