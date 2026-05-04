@@ -140,14 +140,14 @@
   }
 
   .how-it-works-page__hero-wrap {
-    margin: calc(var(--section-block-pad-y-md) * 0.58) max(0.35rem, calc(var(--section-inline-pad) * 0.48)) calc(var(--section-block-pad-y-sm) * 0.58);
+    margin: calc(var(--section-block-pad-y-md) * 0.58) var(--section-inline-pad) calc(var(--section-block-pad-y-sm) * 0.58);
   }
 
   .how-it-works-page__hero-frame {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: hidden;
     border-radius: clamp(18px, 2.4vw, 28px);
     min-height: min(70vh, 640px);
@@ -188,11 +188,12 @@
   .how-it-works-page__hero-inner {
     position: relative;
     z-index: 2;
-    width: 100%;
+    flex: 0 1 auto;
+    width: min(100%, 900px);
     max-width: 900px;
-    margin: 0 auto;
+    margin: 0;
     padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2rem);
-    text-align: center;
+    text-align: left;
   }
 
   .how-it-works-page__headline {
@@ -204,11 +205,13 @@
     letter-spacing: -0.01em;
     text-transform: uppercase;
     color: var(--color-foreground);
+    text-align: left;
   }
 
   .how-it-works-page__subheadline {
-    margin: 1rem auto 0;
-    max-width: 70ch;
+    margin: 1rem 0 0;
+    max-width: min(54ch, 100%);
+    text-align: left;
     font-size: clamp(0.95rem, 1.4vw, 1.125rem);
     line-height: 1.6;
     color: var(--moov-text-secondary-light);
@@ -220,6 +223,12 @@
 
   .how-it-works-page__hero-frame .how-it-works-page__headline {
     color: var(--moov-cream);
+    /* ~1 word per line relative to headline size (narrower than hero copy block) */
+    max-width: min(7em, 100%);
+    line-height: 1.03;
+    hyphens: none;
+    word-break: normal;
+    overflow-wrap: normal;
   }
 
   .how-it-works-page__hero-frame .how-it-works-page__subheadline {
@@ -231,16 +240,13 @@
   }
 
   .how-it-works-founder {
-    padding: clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
+    padding: clamp(3rem, 5vw, 5rem) var(--section-inline-pad) clamp(4rem, 8vw, 6rem);
     background: transparent;
   }
 
   .how-it-works-founder__inner {
     width: 100%;
-    max-width: min(
-      calc(var(--page-width) - var(--page-margin) * 2),
-      calc(100% - var(--page-margin) * 2)
-    );
+    max-width: var(--layout-max-width);
     margin-inline: auto;
   }
 
@@ -414,7 +420,7 @@
     color: var(--moov-text-secondary-light);
     line-height: 1.65;
     margin: 0;
-    max-width: min(68ch, 100%);
+    max-width: min(54ch, 100%);
   }
 
   .how-it-works-founder__caption-intro p {
@@ -455,7 +461,7 @@
     color: var(--moov-text-secondary-light);
     line-height: 1.65;
     margin: 0;
-    max-width: min(68ch, 100%);
+    max-width: min(54ch, 100%);
   }
 
   .how-it-works-founder__caption-text p {
@@ -471,8 +477,8 @@
   }
 
   @media (max-width: 960px) {
-    .how-it-works-page__hero {
-      padding: 2.75rem 1.25rem 1.75rem;
+    .how-it-works-page__hero-wrap {
+      padding-block: 2.75rem 1.75rem;
     }
 
     .how-it-works-founder {

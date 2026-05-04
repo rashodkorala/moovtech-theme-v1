@@ -101,7 +101,9 @@
     --fs-radius: clamp(18px, 2.4vw, 28px);
     --fs-pad: clamp(1.5rem, 5vw, 4rem);
     position: relative;
-    margin: var(--section-block-pad-y-md) var(--section-inline-pad);
+    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-block: var(--section-block-pad-y-md);
+    margin-inline: auto;
     border-radius: var(--fs-radius);
     overflow: hidden;
     isolation: isolate;

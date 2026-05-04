@@ -95,7 +95,7 @@
 {% stylesheet %}
   .product-intro {
     background: var(--moov-black);
-    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
+    padding: var(--section-block-pad-y-hero) 0 var(--section-block-pad-y-hero-bottom);
   }
 
   .product-intro__inner {
@@ -103,8 +103,8 @@
     grid-template-columns: 1fr 1fr;
     gap: 80px;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-inline: auto;
   }
 
   /* Left column */

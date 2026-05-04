@@ -186,13 +186,22 @@
     "home_product_glimpse": {
       "name": "Product (glimpse)",
       "content_header": "Content",
+      "brand_header": "Brand",
+      "logo_image_label": "Logo",
+      "logo_image_info": "Replaces the plain-text title next to copy. Uses the fallback file in Assets when empty.",
+      "logo_max_width_label": "Logo max width",
+      "logo_alt_label": "Logo alt text",
+      "logo_alt_info": "For screen readers. Leave blank for your store name. Use plain text; dynamic sources aren't supported for this field.",
+      "logo_fallback_asset_label": "Fallback logo asset",
+      "logo_fallback_asset_info": "Filename in Assets (PNG or SVG), for example moov-logo-black.png. Used when no logo image is chosen.",
+      "tagline_label": "Tagline",
       "image_header": "Image",
       "image_asset_label": "Theme asset filename",
-      "image_asset_info": "File in the assets folder (for example product-preiview-mainpage.PNG). Used when no background image is selected above.",
+      "image_asset_info": "File in the assets folder (for example product-preiview-mainpage.png). Used when no background image is selected above.",
       "image_url_label": "Image URL fallback",
       "image_url_info": "Fills the rounded card behind the text. Used when no image or theme asset is set.",
       "overlay_label": "Text side scrim strength",
-      "overlay_info": "Increases the soft light wash on the left so dark text stays readable."
+      "overlay_info": "Strengthens the dark wash behind the block so cream/white titles stay readable."
     },
     "home_founder_story": {
       "name": "Founder story (glimpse)",

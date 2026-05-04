@@ -1,7 +1,7 @@
 {%- liquid
   assign overlay_opacity = section.settings.hero_overlay_opacity | default: 55
 
-  assign video_src = 'hero-bg.mp4' | asset_url
+  assign video_src = 'hero-bg-1.mp4' | asset_url
   if section.settings.hero_video_mp4 != blank
     assign video_src = section.settings.hero_video_mp4
   endif
@@ -21,11 +21,6 @@
   assign cta_primary_label = section.settings.cta_primary_label
   if cta_primary_label == blank
     assign cta_primary_label = 'store_marketing.hero_cta_primary' | t
-  endif
-
-  assign hero_tagline_left = section.settings.hero_tagline_left
-  if hero_tagline_left == blank
-    assign hero_tagline_left = 'store_marketing.hero_tagline_left' | t
   endif
 
   assign has_slides = false
@@ -158,11 +153,15 @@
     --hero-frame-radius: clamp(18px, 2.4vw, 28px);
     --hero-inset-top: var(--section-block-pad-y-md);
     --hero-inset-bottom: max(0.5rem, calc(var(--section-block-pad-y-sm) * 0.42));
-    --hero-inset-x: max(0.5rem, calc(var(--section-inline-pad) * 0.72));
+    --hero-content-pad-x: var(--section-inline-pad);
     position: relative;
-    min-height: 100vh;
+    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-inline: auto;
+    /* Fluid block height: avoids a rigid 100vh "skyscraper" on ultrawides and reduces mobile vw quirks */
+    min-height: clamp(520px, 72svh, 880px);
+    min-height: clamp(520px, 72dvh, 880px);
     box-sizing: border-box;
-    padding: var(--hero-inset-top) var(--hero-inset-x) var(--hero-inset-bottom) var(--hero-inset-x);
+    padding: var(--hero-inset-top) 0 var(--hero-inset-bottom);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -173,7 +172,7 @@
   /* Inset media */
   .moov-hero__frame {
     position: absolute;
-    inset: var(--hero-inset-top) var(--hero-inset-x) var(--hero-inset-bottom) var(--hero-inset-x);
+    inset: var(--hero-inset-top) 0 var(--hero-inset-bottom);
     z-index: 0;
     border-radius: var(--hero-frame-radius);
     overflow: hidden;
@@ -219,29 +218,13 @@
     z-index: 1;
   }
 
-  /* Left tagline */
-  .moov-hero__tagline-left {
-    position: absolute;
-    bottom: clamp(3.5rem, 8vw, 5.5rem);
-    left: var(--hero-inset-x);
-    max-width: 260px;
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: var(--text-2xs);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--moov-text-tertiary-dark);
-    line-height: 1.7;
-    z-index: 2;
-  }
-
   /* Centre content */
   .moov-hero__content {
     position: relative;
     z-index: 2;
     text-align: center;
-    padding: 0 var(--section-inline-pad);
-    max-width: 720px;
+    padding: 0 var(--hero-content-pad-x);
+    max-width: min(720px, 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -375,8 +358,9 @@
 
   /* Responsive */
   @media (max-width: 767px) {
-    .moov-hero__tagline-left {
-      display: none;
+    .moov-hero__heading {
+      white-space: normal;
+      max-width: 100%;
     }
 
     .moov-hero__overlay {
@@ -539,13 +523,6 @@
       "type": "textarea",
       "id": "hero_subheadline",
       "label": "Subheadline",
-      "default": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action."
-    },
-    {
-      "type": "textarea",
-      "id": "hero_tagline_left",
-      "label": "Left side tagline",
-      "info": "Small uppercase text positioned at the bottom-left of the hero.",
       "default": "Quit losing your morning to bad phone habits. MOOV is designed to get you up and into action."
     },
     {

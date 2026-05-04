@@ -4,10 +4,15 @@
     assign eyebrow = 'sections.home_product_glimpse.default_eyebrow' | t
   endif
 
-  assign heading = section.settings.heading
-  if heading == blank
-    assign heading = 'sections.home_product_glimpse.default_heading' | t
+  assign logo_alt = section.settings.logo_alt | strip
+  if logo_alt == blank
+    assign logo_alt = shop.name
   endif
+  assign logo_fallback = section.settings.logo_fallback_asset | strip
+  if logo_fallback == blank
+    assign logo_fallback = 'moov-logo-black.png'
+  endif
+  assign logo_max_width = section.settings.logo_max_width | default: 296
 
   assign subheading = section.settings.subheading
   if subheading == blank
@@ -30,7 +35,7 @@
   if section.settings.image == blank
     if section.settings.image_url == blank
       if image_asset == blank
-        assign image_asset = 'product-preiview-mainpage.PNG'
+        assign image_asset = 'product-preiview-mainpage.png'
       endif
     endif
   endif
@@ -39,11 +44,11 @@
 <section
   class="product-glimpse full-width"
   aria-labelledby="product-glimpse-heading-{{ section.id }}"
-  style="--pg-scrim-strength: {{ overlay_opacity }};"
+  style="--pg-scrim-strength: {{ overlay_opacity }}; --pg-logo-max: {{ logo_max_width }}px;"
 >
   <div class="product-glimpse__media">
     {%- if section.settings.image != blank -%}
-      {%- assign media_alt = section.settings.image.alt | default: heading -%}
+      {%- assign media_alt = section.settings.image.alt | default: logo_alt -%}
       {{
         section.settings.image
         | image_url: width: 2400
@@ -58,7 +63,7 @@
       <img
         class="product-glimpse__img"
         src="{{ image_asset | asset_url }}"
-        alt="{{ heading | escape }}"
+        alt="{{ logo_alt | escape }}"
         width="2400"
         height="1600"
         loading="eager"
@@ -68,7 +73,7 @@
     {%- elsif section.settings.image_url != blank -%}
       <img
         src="{{ section.settings.image_url | escape }}"
-        alt="{{ heading | escape }}"
+        alt="{{ logo_alt | escape }}"
         loading="lazy"
         class="product-glimpse__img"
         width="2400"
@@ -90,20 +95,42 @@
       <p class="product-glimpse__eyebrow">{{ eyebrow | escape }}</p>
     {%- endif -%}
 
-    <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__heading">
-      {{ heading | escape }}
+    <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__title">
+      {%- if section.settings.logo_image != blank -%}
+        {{
+          section.settings.logo_image
+          | image_url: width: 600
+          | image_tag:
+            class: 'product-glimpse__logo',
+            widths: '200, 300, 400, 600',
+            sizes: '(min-width: 750px) 280px, 62vw',
+            alt: logo_alt,
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {%- else -%}
+        <img
+          class="product-glimpse__logo"
+          src="{{ logo_fallback | asset_url }}"
+          alt="{{ logo_alt | escape }}"
+          width="400"
+          height="120"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        >
+      {%- endif -%}
     </h2>
 
     {%- if subheading != blank -%}
-      <p class="product-glimpse__subheading">{{ subheading | escape }}</p>
-    {%- endif -%}
-
-    {%- if subheading != blank and body != blank -%}
-      <hr class="product-glimpse__rule" aria-hidden="true">
+      <p class="product-glimpse__tagline">{{ subheading | escape }}</p>
     {%- endif -%}
 
     {%- if body != blank -%}
-      <p class="product-glimpse__body">{{ body | escape }}</p>
+      {%- if subheading != blank -%}
+        <hr class="product-glimpse__rule" aria-hidden="true">
+      {%- endif -%}
+      <div class="product-glimpse__body">{{ body | escape | newline_to_br }}</div>
     {%- endif -%}
 
     {%- if cta_label != blank -%}
@@ -133,13 +160,15 @@
     --pg-radius: clamp(18px, 2.4vw, 28px);
     --pg-pad: clamp(1.5rem, 5vw, 4rem);
     position: relative;
-    margin: var(--section-block-pad-y-md) var(--section-inline-pad);
+    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-block: var(--section-block-pad-y-md);
+    margin-inline: auto;
     border-radius: var(--pg-radius);
     overflow: hidden;
     isolation: isolate;
     min-height: clamp(360px, 60vw, 620px);
     display: grid;
-    color: var(--moov-black);
+    color: var(--moov-cream);
   }
 
   .product-glimpse__media {
@@ -152,7 +181,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 40% center;
+    object-position: 32% center;
     display: block;
   }
 
@@ -171,13 +200,14 @@
     inset: 0;
     pointer-events: none;
     z-index: 1;
-    opacity: calc(0.2 + var(--pg-scrim-strength, 40) * 0.0028);
+    opacity: clamp(0.45, calc(0.28 + var(--pg-scrim-strength, 40) / 175), 0.92);
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--moov-cream) 52%, transparent) 0%,
-      color-mix(in srgb, var(--moov-cream) 18%, transparent) 26%,
-      color-mix(in srgb, var(--moov-cream) 6%, transparent) 44%,
-      transparent 58%
+      transparent 0%,
+      transparent 38%,
+      color-mix(in srgb, var(--moov-black) 20%, transparent) 54%,
+      color-mix(in srgb, var(--moov-black) 44%, transparent) 70%,
+      color-mix(in srgb, var(--moov-black) 78%, transparent) 100%
     );
   }
 
@@ -188,8 +218,8 @@
     z-index: 2;
     background: linear-gradient(
       to top,
-      color-mix(in srgb, var(--moov-cream) 16%, transparent) 0%,
-      transparent 34%
+      color-mix(in srgb, var(--moov-black) 36%, transparent) 0%,
+      transparent 38%
     );
   }
 
@@ -198,62 +228,78 @@
     z-index: 3;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-self: start;
+    align-items: flex-end;
+    justify-self: end;
     align-self: center;
-    gap: clamp(12px, 1.8vw, 18px);
-    max-width: min(520px, 100%);
+    text-align: right;
+    gap: clamp(7px, 1.05vw, 11px);
+    max-width: min(380px, 94vw);
     padding: var(--pg-pad);
+  }
+  .product-glimpse__title {
+    margin: 0;
+    line-height: 0;
+    font-weight: inherit;
+    font-size: inherit;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .product-glimpse__logo {
+    display: block;
+    width: min(100%, var(--pg-logo-max));
+    height: auto;
+    object-fit: contain;
+    object-position: right center;
+    /* Monotone black marks read as cream/white over the darker scrim */
+    filter: brightness(0) invert(1);
+  }
+
+  .product-glimpse__tagline {
+    margin: 0;
+    font-family: var(--font-display, var(--font-body));
+    font-size: clamp(2.0625rem, 5vw, 2.875rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-transform: none;
+    color: var(--moov-cream);
+    max-width: 100%;
+    text-wrap: balance;
   }
 
   .product-glimpse__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-sm);
+    font-size: var(--text-lg);
     font-weight: 500;
     letter-spacing: 0.02em;
     text-transform: none;
-    color: color-mix(in srgb, var(--moov-black) 78%, transparent);
-  }
-
-  .product-glimpse__heading {
-    margin: 0;
-    font-family: var(--font-hero, var(--font-body));
-    font-weight: 700;
-    font-size: clamp(2.75rem, 7vw, 4.25rem);
-    line-height: 0.95;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--moov-black);
-  }
-
-  .product-glimpse__subheading {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: clamp(1.05rem, 2vw, 1.2rem);
-    font-weight: 400;
-    line-height: 1.45;
-    color: color-mix(in srgb, var(--moov-black) 88%, transparent);
-    max-width: 420px;
+    color: color-mix(in srgb, var(--moov-cream) 84%, transparent);
+    line-height: 1.2;
+    text-wrap: balance;
+    max-width: 100%;
   }
 
   .product-glimpse__rule {
-    margin: clamp(2px, 0.6vw, 6px) 0;
+    margin: 4px 0 2px;
     border: none;
-    width: 2.5rem;
+    width: 2rem;
     height: 1px;
-    background: color-mix(in srgb, var(--moov-black) 35%, transparent);
-    align-self: flex-start;
+    background: color-mix(in srgb, var(--moov-cream) 42%, transparent);
+    align-self: flex-end;
   }
 
   .product-glimpse__body {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-base);
-    line-height: 1.65;
-    font-style: italic;
-    color: color-mix(in srgb, var(--moov-black) 80%, transparent);
-    max-width: 400px;
+    font-size: 14px;
+    line-height: 1.42;
+    font-style: normal;
+    color: color-mix(in srgb, var(--moov-cream) 90%, transparent);
+    max-width: 100%;
+    text-wrap: pretty;
   }
 
   .product-glimpse__cta {
@@ -261,24 +307,24 @@
     align-items: center;
     gap: 8px;
     border-radius: 999px;
-    padding: clamp(13px, 1.2vw, 16px) clamp(26px, 2.8vw, 36px);
+    padding: clamp(12px, 1.15vw, 15px) clamp(24px, 2.6vw, 34px);
     font-family: var(--font-body);
     font-size: var(--text-base);
     font-weight: 500;
     letter-spacing: 0.02em;
     text-decoration: none;
-    color: var(--moov-cream);
-    background: var(--moov-black);
+    color: var(--moov-black);
+    background: var(--moov-cream);
     border: none;
-    margin-top: clamp(6px, 1vw, 12px);
+    margin-top: clamp(4px, 0.75vw, 8px);
     box-shadow: none;
     transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   }
 
   .product-glimpse__cta:hover {
-    background: color-mix(in srgb, var(--moov-black) 88%, var(--moov-cream));
+    background: color-mix(in srgb, var(--moov-cream) 94%, transparent);
     transform: translateY(-1px);
-    box-shadow: 0 8px 22px color-mix(in srgb, var(--moov-black) 18%, transparent);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--moov-black) 28%, transparent);
   }
 
   @media (max-width: 749px) {
@@ -287,13 +333,15 @@
     }
 
     .product-glimpse__img {
-      object-position: 20%;
+      object-position: 36%;
       scale: 1.1;
       transform-origin: center;
     }
 
     .product-glimpse__content {
+      justify-self: end;
       align-self: end;
+      align-items: flex-end;
       padding-top: 2rem;
     }
   }
@@ -315,14 +363,42 @@
       "label": "t:labels.eyebrow_text"
     },
     {
+      "type": "header",
+      "content": "t:sections.home_product_glimpse.brand_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "t:sections.home_product_glimpse.logo_image_label",
+      "info": "t:sections.home_product_glimpse.logo_image_info"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "t:sections.home_product_glimpse.logo_max_width_label",
+      "min": 96,
+      "max": 340,
+      "step": 4,
+      "default": 296,
+      "unit": "px"
+    },
+    {
       "type": "text",
-      "id": "heading",
-      "label": "t:labels.heading"
+      "id": "logo_alt",
+      "label": "t:sections.home_product_glimpse.logo_alt_label",
+      "info": "t:sections.home_product_glimpse.logo_alt_info"
+    },
+    {
+      "type": "text",
+      "id": "logo_fallback_asset",
+      "label": "t:sections.home_product_glimpse.logo_fallback_asset_label",
+      "info": "t:sections.home_product_glimpse.logo_fallback_asset_info",
+      "default": "moov-logo-black.png"
     },
     {
       "type": "textarea",
       "id": "subheading",
-      "label": "t:labels.subheading"
+      "label": "t:sections.home_product_glimpse.tagline_label"
     },
     {
       "type": "textarea",
@@ -353,7 +429,7 @@
       "id": "image_asset",
       "label": "t:sections.home_product_glimpse.image_asset_label",
       "info": "t:sections.home_product_glimpse.image_asset_info",
-      "default": "product-preiview-mainpage.PNG"
+      "default": "product-preiview-mainpage.png"
     },
     {
       "type": "url",
@@ -378,12 +454,12 @@
       "name": "t:sections.home_product_glimpse.name",
       "settings": {
         "eyebrow": "Introducing",
-        "heading": "MOOV",
+        "logo_max_width": 296,
         "subheading": "A better way to start your morning.",
         "body": "Built to get you out of bed — and into your day.",
         "cta_label": "Get your MOOV",
         "cta_url": "/pages/get-moov",
-        "image_asset": "product-preiview-mainpage.PNG",
+        "image_asset": "product-preiview-mainpage.png",
         "image_url": "",
         "overlay_opacity": 25
       }

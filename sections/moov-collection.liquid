@@ -94,13 +94,13 @@
   /* ─── Header ─── */
   .shop-header {
     background: var(--moov-black);
-    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-xl);
+    padding: var(--section-block-pad-y-hero) 0 var(--section-block-pad-y-xl);
     text-align: center;
   }
 
   .shop-header__inner {
-    max-width: 720px;
-    margin: 0 auto;
+    width: min(720px, var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-inline: auto;
   }
 
   .shop-header__eyebrow {
@@ -141,7 +141,7 @@
   }
 
   .shop-grid__inner {
-    max-width: 1200px;
+    max-width: var(--layout-max-width);
     margin: 0 auto;
   }
 

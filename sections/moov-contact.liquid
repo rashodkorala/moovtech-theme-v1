@@ -112,13 +112,13 @@
   /* ─── Hero ─── */
   .contact-hero {
     background: var(--moov-black);
-    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
+    padding: var(--section-block-pad-y-hero) 0 var(--section-block-pad-y-hero-bottom);
     text-align: center;
   }
 
   .contact-hero__inner {
-    max-width: 720px;
-    margin: 0 auto;
+    width: min(720px, var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    margin-inline: auto;
   }
 
   .contact-hero__eyebrow {
@@ -163,7 +163,7 @@
     display: grid;
     grid-template-columns: 60% 40%;
     gap: 80px;
-    max-width: 1100px;
+    max-width: var(--layout-max-width);
     margin: 0 auto;
   }
 
