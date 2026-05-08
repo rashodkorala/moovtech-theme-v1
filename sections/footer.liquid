@@ -148,7 +148,7 @@
 
         {%- comment -%} Information column {%- endcomment -%}
         <div class="footer__col">
-          <p class="footer__col-heading">{{ section.settings.col_heading_information | default: 'Information' | escape }}</p>
+          <p class="footer__col-heading">{{ section.settings.col_heading_information | default: 'Site map' | escape }}</p>
           <ul class="footer__links">
             {%- for i in (1..4) -%}
               {%- liquid
@@ -793,13 +793,13 @@
     },
     {
       "type": "header",
-      "content": "Information column"
+      "content": "Site map column"
     },
     {
       "type": "text",
       "id": "col_heading_information",
       "label": "Column heading",
-      "default": "Information"
+      "default": "Site map"
     },
     {
       "type": "text",

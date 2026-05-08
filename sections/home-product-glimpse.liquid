@@ -1,9 +1,4 @@
 {%- liquid
-  assign eyebrow = section.settings.eyebrow
-  if eyebrow == blank
-    assign eyebrow = 'sections.home_product_glimpse.default_eyebrow' | t
-  endif
-
   assign logo_alt = section.settings.logo_alt | strip
   if logo_alt == blank
     assign logo_alt = shop.name
@@ -12,11 +7,25 @@
   if logo_fallback == blank
     assign logo_fallback = 'moov-logo-black.png'
   endif
-  assign logo_max_width = section.settings.logo_max_width | default: 296
+  assign logo_max_width = section.settings.logo_max_width | default: 200
 
-  assign subheading = section.settings.subheading
-  if subheading == blank
-    assign subheading = 'sections.home_product_glimpse.default_subheading' | t
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.home_product_glimpse.default_eyebrow' | t
+  endif
+
+  assign heading_raw = section.settings.heading | strip
+  assign subheading_raw = section.settings.subheading | strip
+
+  if heading_raw != blank
+    assign heading_display = heading_raw
+    assign subheading_display = subheading_raw
+  else
+    assign heading_display = subheading_raw
+    if heading_display == blank
+      assign heading_display = 'sections.home_product_glimpse.default_heading' | t
+    endif
+    assign subheading_display = ''
   endif
 
   assign body = section.settings.body
@@ -30,7 +39,7 @@
   endif
 
   assign cta_url = section.settings.cta_url | default: '/pages/get-moov'
-  assign overlay_opacity = section.settings.overlay_opacity | default: 40
+
   assign image_asset = section.settings.image_asset | strip
   if section.settings.image == blank
     if section.settings.image_url == blank
@@ -39,266 +48,272 @@
       endif
     endif
   endif
+
+  assign image_position = section.settings.image_position | default: 'left'
+  assign show_logo = true
+  if section.settings.show_logo == false
+    assign show_logo = false
+  endif
 -%}
 
 <section
-  class="product-glimpse full-width"
+  class="product-glimpse full-width product-glimpse--image-{{ image_position }}"
+  data-surface="cream"
   aria-labelledby="product-glimpse-heading-{{ section.id }}"
-  style="--pg-scrim-strength: {{ overlay_opacity }}; --pg-logo-max: {{ logo_max_width }}px;"
+  style="--pg-logo-max: {{ logo_max_width }}px;"
 >
-  <div class="product-glimpse__media">
-    {%- if section.settings.image != blank -%}
-      {%- assign media_alt = section.settings.image.alt | default: logo_alt -%}
-      {{
-        section.settings.image
-        | image_url: width: 2400
-        | image_tag:
-          loading: 'lazy',
-          class: 'product-glimpse__img',
-          alt: media_alt,
-          sizes: '(min-width: 1200px) 1200px, 100vw',
-          widths: '400, 600, 800, 1200, 1600, 2000, 2400'
-      }}
-    {%- elsif image_asset != blank -%}
-      <img
-        class="product-glimpse__img"
-        src="{{ image_asset | asset_url }}"
-        alt="{{ logo_alt | escape }}"
-        width="2400"
-        height="1600"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      >
-    {%- elsif section.settings.image_url != blank -%}
-      <img
-        src="{{ section.settings.image_url | escape }}"
-        alt="{{ logo_alt | escape }}"
-        loading="lazy"
-        class="product-glimpse__img"
-        width="2400"
-        height="1350"
-      >
-    {%- else -%}
-      <div
-        class="product-glimpse__placeholder"
-        role="img"
-        aria-label="{{ 'sections.home_product_glimpse.image_placeholder_label' | t }}"
-      ></div>
-    {%- endif -%}
-    <div class="product-glimpse__overlay product-glimpse__overlay--scrim" aria-hidden="true"></div>
-    <div class="product-glimpse__overlay product-glimpse__overlay--bottom" aria-hidden="true"></div>
-  </div>
+  <div class="product-glimpse__inner">
+    <div class="product-glimpse__media-cell">
+      <div class="product-glimpse__frame">
+        {%- if section.settings.image != blank -%}
+          {%- assign media_alt = section.settings.image.alt | default: heading_display -%}
+          {{
+            section.settings.image
+            | image_url: width: 2400
+            | image_tag:
+              loading: 'lazy',
+              class: 'product-glimpse__img',
+              alt: media_alt,
+              sizes: '(min-width: 750px) 72vw, 100vw',
+              widths: '400, 600, 800, 1200, 1600, 2000, 2400'
+          }}
+        {%- elsif image_asset != blank -%}
+          <img
+            class="product-glimpse__img"
+            src="{{ image_asset | asset_url }}"
+            alt="{{ heading_display | escape }}"
+            width="2400"
+            height="1600"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          >
+        {%- elsif section.settings.image_url != blank -%}
+          <img
+            src="{{ section.settings.image_url | escape }}"
+            alt="{{ heading_display | escape }}"
+            loading="lazy"
+            class="product-glimpse__img"
+            width="2400"
+            height="1350"
+          >
+        {%- else -%}
+          <div
+            class="product-glimpse__placeholder"
+            role="img"
+            aria-label="{{ 'sections.home_product_glimpse.image_placeholder_label' | t }}"
+          ></div>
+        {%- endif -%}
+      </div>
+    </div>
 
-  <div class="product-glimpse__content">
-    {%- if eyebrow != blank -%}
-      <p class="product-glimpse__eyebrow">{{ eyebrow | escape }}</p>
-    {%- endif -%}
-
-    <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__title">
-      {%- if section.settings.logo_image != blank -%}
-        {{
-          section.settings.logo_image
-          | image_url: width: 600
-          | image_tag:
-            class: 'product-glimpse__logo',
-            widths: '200, 300, 400, 600',
-            sizes: '(min-width: 750px) 280px, 62vw',
-            alt: logo_alt,
-            loading: 'eager',
-            fetchpriority: 'high'
-        }}
-      {%- else -%}
-        <img
-          class="product-glimpse__logo"
-          src="{{ logo_fallback | asset_url }}"
-          alt="{{ logo_alt | escape }}"
-          width="400"
-          height="120"
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-        >
+    <div class="product-glimpse__copy">
+      {%- if show_logo -%}
+        <div class="product-glimpse__logo-row">
+          {%- if section.settings.logo_image != blank -%}
+            {{
+              section.settings.logo_image
+              | image_url: width: 400
+              | image_tag:
+                class: 'product-glimpse__logo',
+                widths: '120, 200, 300, 400',
+                sizes: '(min-width: 750px) 200px, 45vw',
+                alt: logo_alt,
+                loading: 'lazy'
+            }}
+          {%- else -%}
+            <img
+              class="product-glimpse__logo"
+              src="{{ logo_fallback | asset_url }}"
+              alt="{{ logo_alt | escape }}"
+              width="320"
+              height="96"
+              loading="lazy"
+              decoding="async"
+            >
+          {%- endif -%}
+        </div>
       {%- endif -%}
-    </h2>
 
-    {%- if subheading != blank -%}
-      <p class="product-glimpse__tagline">{{ subheading | escape }}</p>
-    {%- endif -%}
-
-    {%- if body != blank -%}
-      {%- if subheading != blank -%}
-        <hr class="product-glimpse__rule" aria-hidden="true">
+      {%- if eyebrow != blank -%}
+        <p class="product-glimpse__eyebrow">{{ eyebrow | escape }}</p>
       {%- endif -%}
-      <div class="product-glimpse__body">{{ body | escape | newline_to_br }}</div>
-    {%- endif -%}
 
-    {%- if cta_label != blank -%}
-      <a href="{{ cta_url }}" class="product-glimpse__cta">
-        {{- cta_label | escape -}}
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 14 14"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="2" y1="12" x2="12" y2="2" />
-          <polyline points="5,2 12,2 12,9" />
-        </svg>
-      </a>
-    {%- endif -%}
+      <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__heading">
+        {{ heading_display | escape }}
+      </h2>
+
+      {%- if subheading_display != blank -%}
+        <p class="product-glimpse__subtitle">{{ subheading_display | escape }}</p>
+      {%- endif -%}
+
+      {%- if body != blank -%}
+        <div class="product-glimpse__body">{{ body | escape | newline_to_br }}</div>
+      {%- endif -%}
+
+      {%- if cta_label != blank -%}
+        <a href="{{ cta_url }}" class="product-glimpse__cta">
+          {{- cta_label | escape -}}
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="2" y1="12" x2="12" y2="2" />
+            <polyline points="5,2 12,2 12,9" />
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
   </div>
 </section>
 
 {% stylesheet %}
-  .product-glimpse {
-    --pg-radius: clamp(18px, 2.4vw, 28px);
-    --pg-pad: clamp(1.5rem, 5vw, 4rem);
-    position: relative;
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
-    margin-block: var(--section-block-pad-y-md);
-    margin-inline: auto;
-    border-radius: var(--pg-radius);
+  .product-glimpse[data-surface='cream'] {
+    background: var(--moov-cream);
+    color: var(--moov-text-primary-light);
+    padding: clamp(3.5rem, 7vw, 6.25rem) 0 clamp(3rem, 6vw, 5.5rem);
     overflow: hidden;
-    isolation: isolate;
-    min-height: clamp(360px, 60vw, 620px);
-    display: grid;
-    color: var(--moov-cream);
   }
 
-  .product-glimpse__media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+  .product-glimpse__inner {
+    width: 100%;
+    max-width: min(
+      calc(var(--layout-max-width) + clamp(2rem, 6vw, 8.5rem)),
+      calc(100vw - 2 * var(--section-inline-pad))
+    );
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 var(--section-inline-pad);
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.58fr);
+    column-gap: clamp(56px, 8vw, 160px);
+    row-gap: clamp(1.75rem, 3vw, 2.75rem);
+    align-items: center;
+  }
+
+  .product-glimpse--image-right .product-glimpse__inner {
+    grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.55fr);
+  }
+
+  .product-glimpse--image-right .product-glimpse__copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .product-glimpse--image-right .product-glimpse__media-cell {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .product-glimpse__media-cell {
+    min-width: 0;
+    width: 100%;
+    position: sticky;
+    top: calc(var(--header-height, 5rem) + 1.5rem);
+    align-self: start;
+  }
+
+  .product-glimpse__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--moov-border-light);
+    background: var(--moov-cream-shadow);
   }
 
   .product-glimpse__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 32% center;
+    object-position: center;
     display: block;
   }
 
   .product-glimpse__placeholder {
     width: 100%;
     height: 100%;
+    min-height: 280px;
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--moov-cream) 62%, var(--moov-black)) 0%,
-      var(--moov-neutral-deep) 100%
+      var(--moov-wash-on-cream-4) 0%,
+      var(--moov-wash-on-cream-6) 100%
     );
   }
 
-  .product-glimpse__overlay--scrim {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: clamp(0.45, calc(0.28 + var(--pg-scrim-strength, 40) / 175), 0.92);
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      transparent 38%,
-      color-mix(in srgb, var(--moov-black) 20%, transparent) 54%,
-      color-mix(in srgb, var(--moov-black) 44%, transparent) 70%,
-      color-mix(in srgb, var(--moov-black) 78%, transparent) 100%
-    );
-  }
-
-  .product-glimpse__overlay--bottom {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-    background: linear-gradient(
-      to top,
-      color-mix(in srgb, var(--moov-black) 36%, transparent) 0%,
-      transparent 38%
-    );
-  }
-
-  .product-glimpse__content {
-    position: relative;
-    z-index: 3;
+  .product-glimpse__copy {
+    width: 100%;
+    min-width: 0;
+    max-width: 560px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    justify-self: end;
-    align-self: center;
-    text-align: right;
-    gap: clamp(7px, 1.05vw, 11px);
-    max-width: min(380px, 94vw);
-    padding: var(--pg-pad);
+    align-items: flex-start;
+    text-align: left;
+    gap: clamp(0.65rem, 1.2vw, 0.9rem);
+    padding-top: clamp(0.25rem, 0.8vw, 0.6rem);
   }
-  .product-glimpse__title {
-    margin: 0;
-    line-height: 0;
-    font-weight: inherit;
-    font-size: inherit;
+
+  .product-glimpse__logo-row {
     width: 100%;
-    display: flex;
-    justify-content: flex-end;
+    margin: 0 0 clamp(4px, 0.5vw, 8px);
   }
 
   .product-glimpse__logo {
     display: block;
     width: min(100%, var(--pg-logo-max));
     height: auto;
+    max-height: 3.25rem;
     object-fit: contain;
-    object-position: right center;
-    /* Monotone black marks read as cream/white over the darker scrim */
-    filter: brightness(0) invert(1);
-  }
-
-  .product-glimpse__tagline {
-    margin: 0;
-    font-family: var(--font-display, var(--font-body));
-    font-size: clamp(2.0625rem, 5vw, 2.875rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.015em;
-    text-transform: none;
-    color: var(--moov-cream);
-    max-width: 100%;
-    text-wrap: balance;
+    object-position: left center;
   }
 
   .product-glimpse__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-lg);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    text-transform: none;
-    color: color-mix(in srgb, var(--moov-cream) 84%, transparent);
-    line-height: 1.2;
-    text-wrap: balance;
-    max-width: 100%;
+    font-size: var(--text-xs);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--moov-eyebrow-accent);
   }
 
-  .product-glimpse__rule {
-    margin: 4px 0 2px;
-    border: none;
-    width: 2rem;
-    height: 1px;
-    background: color-mix(in srgb, var(--moov-cream) 42%, transparent);
-    align-self: flex-end;
+  .product-glimpse__heading {
+    margin: 0;
+    font-family: var(--font-hero);
+    font-size: clamp(1.85rem, 3.4vw, 2.85rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: 0.02em;
+    text-transform: var(--heading-text-transform, uppercase);
+    color: var(--moov-text-primary-light);
+    text-wrap: balance;
+  }
+
+  .product-glimpse__subtitle {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--moov-text-secondary-light);
+    max-width: 46ch;
+    text-wrap: balance;
   }
 
   .product-glimpse__body {
     margin: 0;
     font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 1.42;
-    font-style: normal;
-    color: color-mix(in srgb, var(--moov-cream) 90%, transparent);
-    max-width: 100%;
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-light);
+    max-width: 50ch;
     text-wrap: pretty;
   }
 
@@ -306,43 +321,53 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-top: clamp(6px, 1vw, 12px);
+    padding: clamp(13px, 1.2vw, 16px) clamp(26px, 2.8vw, 38px);
     border-radius: 999px;
-    padding: clamp(12px, 1.15vw, 15px) clamp(24px, 2.6vw, 34px);
     font-family: var(--font-body);
     font-size: var(--text-base);
     font-weight: 500;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     text-decoration: none;
-    color: var(--moov-black);
-    background: var(--moov-cream);
-    border: none;
-    margin-top: clamp(4px, 0.75vw, 8px);
-    box-shadow: none;
-    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    color: var(--moov-text-primary-dark);
+    background: var(--moov-black);
+    border: 0.5px solid var(--moov-black);
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
   }
 
   .product-glimpse__cta:hover {
-    background: color-mix(in srgb, var(--moov-cream) 94%, transparent);
+    background: var(--moov-amber);
+    border-color: var(--moov-amber);
+    color: var(--moov-black);
     transform: translateY(-1px);
-    box-shadow: 0 8px 22px color-mix(in srgb, var(--moov-black) 28%, transparent);
   }
 
   @media (max-width: 749px) {
-    .product-glimpse {
-      min-height: clamp(420px, 90vw, 560px);
+    .product-glimpse[data-surface='cream'] {
+      padding: clamp(2.75rem, 8vw, 4rem) 0;
     }
 
-    .product-glimpse__img {
-      object-position: 36%;
-      scale: 1.1;
-      transform-origin: center;
+    .product-glimpse__inner {
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .product-glimpse__content {
-      justify-self: end;
-      align-self: end;
-      align-items: flex-end;
-      padding-top: 2rem;
+    .product-glimpse--image-right .product-glimpse__copy,
+    .product-glimpse--image-right .product-glimpse__media-cell {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .product-glimpse__media-cell {
+      position: relative;
+      top: auto;
+    }
+
+    .product-glimpse__frame {
+      aspect-ratio: 4 / 3;
+    }
+
+    .product-glimpse__copy {
+      max-width: none;
     }
   }
 {% endstylesheet %}
@@ -355,6 +380,20 @@
   "settings": [
     {
       "type": "header",
+      "content": "t:sections.home_product_glimpse.layout_header"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.home_product_glimpse.image_position_label",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:sections.home_product_glimpse.image_left" },
+        { "value": "right", "label": "t:sections.home_product_glimpse.image_right" }
+      ]
+    },
+    {
+      "type": "header",
       "content": "t:sections.home_product_glimpse.content_header"
     },
     {
@@ -363,42 +402,16 @@
       "label": "t:labels.eyebrow_text"
     },
     {
-      "type": "header",
-      "content": "t:sections.home_product_glimpse.brand_header"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo_image",
-      "label": "t:sections.home_product_glimpse.logo_image_label",
-      "info": "t:sections.home_product_glimpse.logo_image_info"
-    },
-    {
-      "type": "range",
-      "id": "logo_max_width",
-      "label": "t:sections.home_product_glimpse.logo_max_width_label",
-      "min": 96,
-      "max": 340,
-      "step": 4,
-      "default": 296,
-      "unit": "px"
-    },
-    {
       "type": "text",
-      "id": "logo_alt",
-      "label": "t:sections.home_product_glimpse.logo_alt_label",
-      "info": "t:sections.home_product_glimpse.logo_alt_info"
-    },
-    {
-      "type": "text",
-      "id": "logo_fallback_asset",
-      "label": "t:sections.home_product_glimpse.logo_fallback_asset_label",
-      "info": "t:sections.home_product_glimpse.logo_fallback_asset_info",
-      "default": "moov-logo-black.png"
+      "id": "heading",
+      "label": "t:labels.heading",
+      "info": "t:sections.home_product_glimpse.heading_info"
     },
     {
       "type": "textarea",
       "id": "subheading",
-      "label": "t:sections.home_product_glimpse.tagline_label"
+      "label": "t:sections.home_product_glimpse.subtitle_label",
+      "info": "t:sections.home_product_glimpse.subtitle_info"
     },
     {
       "type": "textarea",
@@ -417,12 +430,52 @@
     },
     {
       "type": "header",
+      "content": "t:sections.home_product_glimpse.brand_header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_logo",
+      "label": "t:sections.home_product_glimpse.show_logo_label",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "t:sections.home_product_glimpse.logo_image_label",
+      "info": "t:sections.home_product_glimpse.logo_image_info"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "t:sections.home_product_glimpse.logo_max_width_label",
+      "min": 96,
+      "max": 280,
+      "step": 4,
+      "default": 200,
+      "unit": "px"
+    },
+    {
+      "type": "text",
+      "id": "logo_alt",
+      "label": "t:sections.home_product_glimpse.logo_alt_label",
+      "info": "t:sections.home_product_glimpse.logo_alt_info"
+    },
+    {
+      "type": "text",
+      "id": "logo_fallback_asset",
+      "label": "t:sections.home_product_glimpse.logo_fallback_asset_label",
+      "info": "t:sections.home_product_glimpse.logo_fallback_asset_info",
+      "default": "moov-logo-black.png"
+    },
+    {
+      "type": "header",
       "content": "t:sections.home_product_glimpse.image_header"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "t:labels.background_image"
+      "label": "t:sections.home_product_glimpse.product_image_label",
+      "info": "t:sections.home_product_glimpse.product_image_info"
     },
     {
       "type": "text",
@@ -436,32 +489,23 @@
       "id": "image_url",
       "label": "t:sections.home_product_glimpse.image_url_label",
       "info": "t:sections.home_product_glimpse.image_url_info"
-    },
-    {
-      "type": "range",
-      "id": "overlay_opacity",
-      "label": "t:sections.home_product_glimpse.overlay_label",
-      "min": 0,
-      "max": 80,
-      "step": 5,
-      "default": 40,
-      "unit": "%",
-      "info": "t:sections.home_product_glimpse.overlay_info"
     }
   ],
   "presets": [
     {
       "name": "t:sections.home_product_glimpse.name",
       "settings": {
+        "image_position": "left",
+        "show_logo": true,
         "eyebrow": "Introducing",
-        "logo_max_width": 296,
-        "subheading": "A better way to start your morning.",
+        "heading": "A better way to start your morning.",
+        "subheading": "",
         "body": "Built to get you out of bed — and into your day.",
         "cta_label": "Get your MOOV",
         "cta_url": "/pages/get-moov",
+        "logo_max_width": 200,
         "image_asset": "product-preiview-mainpage.png",
-        "image_url": "",
-        "overlay_opacity": 25
+        "image_url": ""
       }
     }
   ]

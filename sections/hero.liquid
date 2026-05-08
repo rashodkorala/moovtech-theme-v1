@@ -1,9 +1,11 @@
 {%- liquid
   assign overlay_opacity = section.settings.hero_overlay_opacity | default: 55
 
-  assign video_src = 'hero-bg-1.mp4' | asset_url
+  assign video_src = 'hero-bg-2.mov' | asset_url
+  assign hero_video_mime = 'video/quicktime'
   if section.settings.hero_video_mp4 != blank
     assign video_src = section.settings.hero_video_mp4
+    assign hero_video_mime = 'video/mp4'
   endif
 
   assign hero_overline = section.settings.hero_eyebrow
@@ -41,8 +43,10 @@
         {%- for block in section.blocks -%}
           {%- liquid
             assign slide_video = block.settings.video_mp4
+            assign slide_video_mime = 'video/mp4'
             if slide_video == blank
               assign slide_video = video_src
+              assign slide_video_mime = hero_video_mime
             endif
             assign slide_overlay = block.settings.overlay_opacity | default: overlay_opacity
           -%}
@@ -65,7 +69,7 @@
               {%- endif -%}
               aria-hidden="true"
             >
-              <source src="{{ slide_video }}" type="video/mp4">
+              <source src="{{ slide_video }}" type="{{ slide_video_mime }}">
               {%- if block.settings.video_webm != blank -%}
                 <source src="{{ block.settings.video_webm }}" type="video/webm">
               {%- endif -%}
@@ -93,7 +97,7 @@
         {%- endif -%}
         aria-hidden="true"
       >
-        <source src="{{ video_src }}" type="video/mp4">
+        <source src="{{ video_src }}" type="{{ hero_video_mime }}">
         {%- if section.settings.hero_video_webm != blank -%}
           <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
         {%- endif -%}
@@ -149,19 +153,42 @@
 </section>
 
 {% stylesheet %}
+  body:has(.moov-header--transparent) .moov-hero {
+    margin-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    scroll-margin-top: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+    min-height: calc(100vh - var(--header-height) - env(safe-area-inset-top, 0px));
+    min-height: calc(100svh - var(--header-height) - env(safe-area-inset-top, 0px));
+    min-height: calc(100dvh - var(--header-height) - env(safe-area-inset-top, 0px));
+  }
+
+  body:has(.moov-header--transparent .moov-announcement) .moov-hero {
+    margin-top: calc(
+      var(--header-height) + var(--moov-announcement-offset) + env(safe-area-inset-top, 0px)
+    );
+    scroll-margin-top: calc(
+      var(--header-height) + var(--moov-announcement-offset) + env(safe-area-inset-top, 0px)
+    );
+    min-height: calc(
+      100vh - var(--header-height) - var(--moov-announcement-offset) - env(safe-area-inset-top, 0px)
+    );
+    min-height: calc(
+      100svh - var(--header-height) - var(--moov-announcement-offset) - env(safe-area-inset-top, 0px)
+    );
+    min-height: calc(
+      100dvh - var(--header-height) - var(--moov-announcement-offset) - env(safe-area-inset-top, 0px)
+    );
+  }
+
   .moov-hero {
-    --hero-frame-radius: clamp(18px, 2.4vw, 28px);
-    --hero-inset-top: var(--section-block-pad-y-md);
-    --hero-inset-bottom: max(0.5rem, calc(var(--section-block-pad-y-sm) * 0.42));
     --hero-content-pad-x: var(--section-inline-pad);
     position: relative;
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
-    margin-inline: auto;
-    /* Fluid block height: avoids a rigid 100vh "skyscraper" on ultrawides and reduces mobile vw quirks */
-    min-height: clamp(520px, 72svh, 880px);
-    min-height: clamp(520px, 72dvh, 880px);
+    width: 100%;
+    margin-inline: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     box-sizing: border-box;
-    padding: var(--hero-inset-top) 0 var(--hero-inset-bottom);
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -172,9 +199,9 @@
   /* Inset media */
   .moov-hero__frame {
     position: absolute;
-    inset: var(--hero-inset-top) 0 var(--hero-inset-bottom);
+    inset: 0;
     z-index: 0;
-    border-radius: var(--hero-frame-radius);
+    border-radius: 0;
     overflow: hidden;
   }
 
@@ -331,7 +358,7 @@
   /* Carousel dots */
   .moov-hero__dots {
     position: absolute;
-    bottom: calc(var(--hero-inset-bottom) + clamp(1.5rem, 3vw, 2.5rem));
+    bottom: clamp(1.5rem, 3vw, 2.5rem);
     left: 50%;
     transform: translateX(-50%);
     display: flex;

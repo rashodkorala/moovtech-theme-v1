@@ -12,86 +12,78 @@
     "main": {
       "type": "our-story",
       "blocks": {
-        "step-1": {
-          "type": "step",
+        "milestone-1": {
+          "type": "story_milestone",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=1400&q=80",
-            "caption_headline": "It started with frustration",
-            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like: getting up earlier, feeling less rushed, starting the day with more intention. But knowing what to do and actually doing it are two different things."
+            "heading": "It started with frustration",
+            "body": "Like a lot of people, I knew what a better morning could look like. But knowing what to do and actually doing it are two different things."
           }
         },
-        "step-2": {
-          "type": "step",
+        "milestone-2": {
+          "type": "story_milestone",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1422190441165-ec2956dc9ecc?auto=format&fit=crop&w=1400&q=80",
-            "caption_headline": "The system, not motivation",
-            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty. I realized the issue wasn't motivation. It was the system."
+            "heading": "The system, not motivation",
+            "body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty."
           }
         },
-        "step-3": {
-          "type": "step",
+        "milestone-3": {
+          "type": "story_milestone",
           "settings": {
-            "image_url": "https://images.unsplash.com/photo-1762845872088-12c352bbb119?auto=format&fit=crop&w=1400&q=80",
-            "caption_headline": "For anyone tired of feeling behind",
-            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them. MOOV is for anyone who's tired of starting their day feeling behind."
+            "heading": "Building MOOV",
+            "body": "So I started building a product designed to make mornings easier \u2014 not by asking people to be more disciplined, but by changing the environment around them."
           }
         },
-        "value-1": {
-          "type": "value",
+        "letter-m": {
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Systems",
-            "value_title": "Systems over willpower",
-            "value_description": "We believe good systems beat good intentions. Make the right action the easy action."
+            "letter": "M",
+            "word": "Momentum",
+            "description": "Progress you feel in your body before you feel it in your calendar."
           }
         },
-        "value-2": {
-          "type": "value",
+        "letter-o1": {
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Mornings",
-            "value_title": "Mornings matter",
-            "value_description": "How you start your day shapes how the rest of it feels. One small action can change everything."
+            "letter": "O",
+            "word": "Output",
+            "description": "Finishing small, honest wins that stack."
           }
         },
-        "value-3": {
-          "type": "value",
+        "letter-o2": {
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Simple",
-            "value_title": "Simplicity wins",
-            "value_description": "No complexity, no guilt. Just a tool that makes getting up easier than staying in bed."
+            "letter": "O",
+            "word": "Optimism",
+            "description": "Mornings as a reset, not a verdict."
           }
         },
-        "value-4": {
-          "type": "value",
+        "letter-v": {
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Human",
-            "value_title": "Built for humans",
-            "value_description": "We design for real behaviour, not idealized routines. Meet people where they are."
+            "letter": "V",
+            "word": "Vitality",
+            "description": "Energy that comes from alignment, not adrenaline alone."
           }
         }
       },
       "block_order": [
-        "step-1",
-        "step-2",
-        "step-3",
-        "value-1",
-        "value-2",
-        "value-3",
-        "value-4"
+        "milestone-1",
+        "milestone-2",
+        "milestone-3",
+        "letter-m",
+        "letter-o1",
+        "letter-o2",
+        "letter-v"
       ],
       "settings": {
-        "hero_eyebrow": "Our story",
-        "hero_heading": "Built for the first hour",
-        "hero_body": "MOOV started from a simple frustration: knowing what a better morning looks like, but not living it.",
-        "hero_overlay_opacity": 55,
-        "hero_image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=2400&q=80",
-        "founder_eyebrow": "From the founder",
-        "founder_heading": "A note on why we built this",
-        "founder_body": "I started MOOV because I was tired of mornings that felt reactive. I knew what I wanted my day to look like, but the gap between intention and action felt impossible to close without changing the environment.",
-        "founder_cta_label": "Shop MOOV",
-        "founder_image_url": "https://images.unsplash.com/photo-1747372277831-bfefabee8e11?auto=format&fit=crop&w=1200&q=80",
-        "cta_heading": "Take back your mornings",
-        "cta_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
-        "cta_button_label": "Shop now"
+        "hero_heading": "I got tired of starting every morning the same way.",
+        "hero_body": "Snooze. Scroll. Rush. Repeat.",
+        "video_eyebrow": "From the founder",
+        "moov_heading": "Why MOOV?",
+        "moov_body": "One system. Four commitments. Fewer reactive starts.",
+        "closing_heading": "Welcome to MOOV",
+        "closing_body": "Better mornings don\u2019t happen overnight. But small changes create momentum. Welcome to MOOV.",
+        "closing_button_label": "Shop now"
       }
     }
   },

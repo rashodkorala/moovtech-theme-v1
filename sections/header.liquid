@@ -764,8 +764,9 @@
           if (elementAtNav) {
             var section = elementAtNav.closest('[data-surface]');
             if (section) {
-              var isOverCream = section.getAttribute('data-surface') === 'cream';
-              header.classList.toggle('nav--light', isOverCream);
+              var surface = section.getAttribute('data-surface');
+              var isOverLight = surface === 'cream' || surface === 'white';
+              header.classList.toggle('nav--light', isOverLight);
             }
           }
         }

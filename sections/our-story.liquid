@@ -1,10 +1,4 @@
 {%- liquid
-  assign hero_overlay = section.settings.hero_overlay_opacity | default: 55
-  assign panel_overlay = section.settings.panel_overlay_opacity | default: 20
-  assign hero_eyebrow = section.settings.hero_eyebrow
-  if hero_eyebrow == blank
-    assign hero_eyebrow = 'sections.our_story.default_hero_eyebrow' | t
-  endif
   assign hero_heading = section.settings.hero_heading
   if hero_heading == blank
     assign hero_heading = 'sections.our_story.default_hero_heading' | t
@@ -13,283 +7,277 @@
   if hero_body == blank
     assign hero_body = 'sections.our_story.default_hero_body' | t
   endif
-  assign hero_cta_label = section.settings.hero_cta_label
-  assign hero_cta_url = section.settings.hero_cta_url | default: routes.root_url
 
-  assign step_blocks = section.blocks | where: 'type', 'step'
+  assign video_eyebrow = section.settings.video_eyebrow
+  if video_eyebrow == blank
+    assign video_eyebrow = 'sections.our_story.default_video_eyebrow' | t
+  endif
 
-  assign founder_eyebrow = section.settings.founder_eyebrow
-  if founder_eyebrow == blank
-    assign founder_eyebrow = 'sections.our_story.default_founder_eyebrow' | t
+  assign moov_heading = section.settings.moov_heading
+  if moov_heading == blank
+    assign moov_heading = 'sections.our_story.default_moov_heading' | t
   endif
-  assign founder_heading = section.settings.founder_heading
-  if founder_heading == blank
-    assign founder_heading = 'sections.our_story.default_founder_heading' | t
+  assign moov_body = section.settings.moov_body
+  if moov_body == blank
+    assign moov_body = 'sections.our_story.default_moov_body' | t
   endif
-  assign founder_body = section.settings.founder_body
-  if founder_body == blank
-    assign founder_body = 'sections.our_story.default_founder_body' | t
-  endif
-  assign founder_cta_label = section.settings.founder_cta_label
-  assign founder_cta_url = section.settings.founder_cta_url | default: '/collections/all'
 
-  assign cta_heading = section.settings.cta_heading
-  if cta_heading == blank
-    assign cta_heading = 'sections.our_story.default_cta_heading' | t
+  assign closing_heading = section.settings.closing_heading
+  if closing_heading == blank
+    assign closing_heading = 'sections.our_story.default_closing_heading' | t
   endif
-  assign cta_body = section.settings.cta_body
-  if cta_body == blank
-    assign cta_body = 'sections.our_story.default_cta_body' | t
+  assign closing_body = section.settings.closing_body
+  if closing_body == blank
+    assign closing_body = 'sections.our_story.default_closing_body' | t
   endif
-  assign cta_button_label = section.settings.cta_button_label
-  if cta_button_label == blank
-    assign cta_button_label = 'sections.our_story.default_cta_button' | t
-  endif
-  assign cta_button_url = section.settings.cta_button_url | default: '/collections/all'
+  assign closing_button_label = section.settings.closing_button_label
+  assign closing_button_url = section.settings.closing_button_url | default: '/collections/all'
+
+  assign letter_blocks = section.blocks | where: 'type', 'moov_letter'
+  assign milestone_blocks = section.blocks | where: 'type', 'story_milestone'
 -%}
 
-{%- comment -%} ══ ZONE 1: HERO ══ {%- endcomment -%}
-<section class="story-hero full-width" data-surface="dark" style="--story-hero-overlay: color-mix(in srgb, var(--moov-black) {{ hero_overlay }}%, transparent);">
+{%- comment -%} ══ SECTION 1: HERO (split layout, founder-centric) ══ {%- endcomment -%}
+<section class="story-hero full-width" data-surface="cream">
   <div class="story-hero__wrap">
-    <div class="story-hero__frame">
-      <div class="story-hero__media">
+    <div class="story-hero__grid">
+      <div class="story-hero__media" data-animate="story-fade-up">
         {%- if section.settings.hero_image != blank -%}
-          {{ section.settings.hero_image | image_url: width: 2400 | image_tag: loading: 'eager', class: 'story-hero__img', sizes: '100vw', widths: '600, 900, 1200, 1800, 2400' }}
+          {{ section.settings.hero_image | image_url: width: 1200 | image_tag: loading: 'eager', class: 'story-hero__img', sizes: '(min-width: 750px) 55vw, 100vw', widths: '400, 600, 800, 1000, 1200' }}
         {%- elsif section.settings.hero_image_url != blank -%}
-          <img src="{{ section.settings.hero_image_url | escape }}" alt="" loading="eager" class="story-hero__img" width="2400" height="1350">
+          <img src="{{ section.settings.hero_image_url | escape }}" alt="" loading="eager" class="story-hero__img" width="900" height="1200">
         {%- else -%}
           <div class="story-hero__placeholder" aria-hidden="true"></div>
         {%- endif -%}
-        <div class="story-hero__overlay" aria-hidden="true"></div>
       </div>
 
       <div class="story-hero__content" data-animate="story-fade-up">
-        {%- if hero_eyebrow != blank -%}
-          <p class="story-hero__overline">{{ hero_eyebrow | escape }}</p>
-        {%- endif -%}
         <h1 class="story-hero__heading">{{ hero_heading | escape }}</h1>
         {%- if hero_body != blank -%}
           <p class="story-hero__body">{{ hero_body | escape }}</p>
         {%- endif -%}
-        {%- if hero_cta_label != blank -%}
-          <a href="{{ hero_cta_url }}" class="story-hero__cta">
-            {{- hero_cta_label | escape -}}
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2" y1="12" x2="12" y2="2"/><polyline points="5,2 12,2 12,9"/></svg>
-          </a>
-        {%- endif -%}
       </div>
     </div>
   </div>
 </section>
 
-{%- comment -%} ══ ZONE 2: ORIGIN STORY — CINEMATIC SCROLL PANELS ══ {%- endcomment -%}
-{%- if step_blocks.size > 0 -%}
-<section class="story-panels full-width" data-surface="dark">
-  <div class="story-panels__stack">
-    {%- for block in step_blocks -%}
-      {%- assign is_reversed = forloop.index | modulo: 2 -%}
-      <div class="story-panels__item">
-        <div class="story-panel__wrap">
-          <div class="story-panel__frame" data-surface="cream">
-            <div class="story-panel{% if is_reversed == 0 %} story-panel--reversed{% endif %}" data-animate="story-fade-up" style="--story-panel-overlay: color-mix(in srgb, var(--moov-black) {{ panel_overlay }}%, transparent);" {{ block.shopify_attributes }}>
-              <div class="story-panel__media">
-                {%- if block.settings.image != blank -%}
-                  {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', class: 'story-panel__img', sizes: '(min-width: 768px) 50vw, 100vw', widths: '400, 600, 800, 1000, 1400' }}
-                {%- elsif block.settings.image_url != blank -%}
-                  <img src="{{ block.settings.image_url | escape }}" alt="" loading="lazy" class="story-panel__img" width="1400" height="900">
-                {%- else -%}
-                  <div class="story-panel__placeholder" aria-hidden="true"></div>
-                {%- endif -%}
-                <div class="story-panel__overlay" aria-hidden="true"></div>
-              </div>
-              <div class="story-panel__text">
-                {%- if block.settings.caption_headline != blank -%}
-                  <h2 class="story-panel__heading">{{ block.settings.caption_headline | escape }}</h2>
-                {%- endif -%}
-                {%- if block.settings.caption_body != blank -%}
-                  <p class="story-panel__body">{{ block.settings.caption_body | escape }}</p>
-                {%- endif -%}
-              </div>
-            </div>
+{%- comment -%} ══ SECTION 2: FOUNDER VIDEO ══ {%- endcomment -%}
+<section class="story-video full-width" data-surface="dark">
+  <div class="story-video__wrap">
+    {%- if video_eyebrow != blank -%}
+      <p class="story-video__eyebrow" data-animate="story-fade-up">{{ video_eyebrow | escape }}</p>
+    {%- endif -%}
+    <div class="story-video__frame" data-animate="story-fade-up">
+      {%- if section.settings.video_url != blank -%}
+        {%- liquid
+          assign vurl = section.settings.video_url
+          assign is_youtube = false
+          assign is_vimeo = false
+          if vurl contains 'youtube.com' or vurl contains 'youtu.be'
+            assign is_youtube = true
+          endif
+          if vurl contains 'vimeo.com'
+            assign is_vimeo = true
+          endif
+        -%}
+        {%- if is_youtube -%}
+          {%- liquid
+            assign yt_id = ''
+            if vurl contains 'v='
+              assign yt_id = vurl | split: 'v=' | last | split: '&' | first
+            elsif vurl contains 'youtu.be/'
+              assign yt_id = vurl | split: 'youtu.be/' | last | split: '?' | first
+            endif
+          -%}
+          {%- if yt_id != blank -%}
+            <iframe
+              src="https://www.youtube.com/embed/{{ yt_id }}"
+              title="{{ video_eyebrow | escape }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+              class="story-video__embed"
+            ></iframe>
+          {%- endif -%}
+        {%- elsif is_vimeo -%}
+          {%- assign vimeo_id = vurl | split: 'vimeo.com/' | last | split: '?' | first | split: '/' | first -%}
+          {%- if vimeo_id != blank -%}
+            <iframe
+              src="https://player.vimeo.com/video/{{ vimeo_id }}"
+              title="{{ video_eyebrow | escape }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+              class="story-video__embed"
+            ></iframe>
+          {%- endif -%}
+        {%- endif -%}
+      {%- elsif section.settings.video_file_url != blank -%}
+        <video
+          class="story-video__player"
+          controls
+          playsinline
+          preload="metadata"
+          {%- if section.settings.video_poster != blank %}
+            poster="{{ section.settings.video_poster | image_url: width: 1200 }}"
+          {%- endif %}
+        >
+          <source src="{{ section.settings.video_file_url }}" type="video/mp4">
+        </video>
+        <div class="story-video__play-overlay" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="31" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <polygon points="26,20 26,44 46,32" fill="currentColor"/>
+          </svg>
+        </div>
+      {%- else -%}
+        <div class="story-video__placeholder" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="31" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+            <polygon points="26,20 26,44 46,32" fill="currentColor" opacity="0.3"/>
+          </svg>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ══ SECTION 3: TIMELINE / JOURNEY ══ {%- endcomment -%}
+{%- if milestone_blocks.size > 0 -%}
+<section class="story-timeline full-width" data-surface="cream">
+  <div class="story-timeline__wrap">
+    <div class="story-timeline__track">
+      <div class="story-timeline__line" aria-hidden="true"></div>
+      {%- for block in milestone_blocks -%}
+        <div class="story-timeline__milestone" data-animate="story-fade-up" {{ block.shopify_attributes }}>
+          <div class="story-timeline__dot" aria-hidden="true"></div>
+          <div class="story-timeline__content">
+            {%- if block.settings.heading != blank -%}
+              <h3 class="story-timeline__heading">{{ block.settings.heading | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="story-timeline__body">{{ block.settings.body | escape }}</p>
+            {%- endif -%}
           </div>
         </div>
-      </div>
-    {%- endfor -%}
-  </div>
-</section>
-{%- endif -%}
-
-{%- comment -%} ══ ZONE 3: VALUES — TYPOGRAPHIC TILES ══ {%- endcomment -%}
-{%- assign value_blocks = section.blocks | where: 'type', 'value' -%}
-{%- if value_blocks.size > 0 -%}
-<section class="story-values full-width" data-surface="dark">
-  <div class="story-values__grid">
-    {%- for block in value_blocks -%}
-      <div class="story-values__tile" style="--stagger: {{ forloop.index0 | times: 1 }}" data-animate="story-fade-up" {{ block.shopify_attributes }}>
-        <span class="story-values__watermark" aria-hidden="true">{{ block.settings.value_word | escape }}</span>
-        <h3 class="story-values__title">{{ block.settings.value_title | escape }}</h3>
-        <p class="story-values__desc">{{ block.settings.value_description | escape }}</p>
-      </div>
-    {%- endfor -%}
-  </div>
-</section>
-{%- endif -%}
-
-{%- comment -%} ══ ZONE 4: FOUNDER NOTE ══ {%- endcomment -%}
-<section class="story-founder full-width" data-surface="dark">
-  <div class="story-founder__wrap">
-    <div class="story-founder__frame" data-surface="cream">
-      <div class="story-founder__inner">
-        <div class="story-founder__media" data-animate="story-fade">
-          {%- if section.settings.founder_image != blank -%}
-            {{ section.settings.founder_image | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'story-founder__img', sizes: '(min-width: 768px) 45vw, 100vw', widths: '400, 600, 800, 1000, 1200' }}
-          {%- elsif section.settings.founder_image_url != blank -%}
-            <img src="{{ section.settings.founder_image_url | escape }}" alt="" loading="lazy" class="story-founder__img" width="1200" height="800">
-          {%- else -%}
-            <div class="story-founder__placeholder" aria-hidden="true"></div>
-          {%- endif -%}
-        </div>
-        <div class="story-founder__content" data-animate="story-slide-right">
-          {%- if founder_eyebrow != blank -%}
-            <p class="story-founder__eyebrow">{{ founder_eyebrow | escape }}</p>
-          {%- endif -%}
-          <h2 class="story-founder__heading">{{ founder_heading | escape }}</h2>
-          {%- if founder_body != blank -%}
-            <p class="story-founder__body">{{ founder_body | escape }}</p>
-          {%- endif -%}
-          {%- if founder_cta_label != blank -%}
-            <a href="{{ founder_cta_url }}" class="story-founder__cta">
-              {{- founder_cta_label | escape -}}
-            </a>
-          {%- endif -%}
-        </div>
-      </div>
+      {%- endfor -%}
     </div>
   </div>
 </section>
+{%- endif -%}
 
-{%- comment -%} ══ ZONE 5: BOTTOM CTA ══ {%- endcomment -%}
-<section class="story-cta full-width" data-surface="dark" data-animate="story-fade-up">
-  <div class="story-cta__inner">
-    <h2 class="story-cta__heading">{{ cta_heading | escape }}</h2>
-    {%- if cta_body != blank -%}
-      <p class="story-cta__body">{{ cta_body | escape }}</p>
+{%- comment -%} ══ SECTION 4: WHY MOOV (vertical stack) ══ {%- endcomment -%}
+{%- if letter_blocks.size > 0 or moov_heading != blank -%}
+<section class="story-moov full-width" data-surface="dark">
+  <div class="story-moov__wrap">
+    {%- if moov_heading != blank -%}
+      <h2 class="story-moov__heading" data-animate="story-fade-up">{{ moov_heading | escape }}</h2>
     {%- endif -%}
-    <a href="{{ cta_button_url }}" class="story-cta__btn">
-      {{- cta_button_label | escape -}}
-    </a>
+
+    {%- if letter_blocks.size > 0 -%}
+      <div class="story-moov__stack">
+        {%- for block in letter_blocks -%}
+          <div class="story-moov__item" data-animate="story-fade-up" {{ block.shopify_attributes }}>
+            <span class="story-moov__letter">{{ block.settings.letter | escape }}</span>
+            <div class="story-moov__word-wrap">
+              <span class="story-moov__word">{{ block.settings.word | escape }}</span>
+              {%- if block.settings.description != blank -%}
+                <p class="story-moov__desc">{{ block.settings.description | escape }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- unless forloop.last -%}
+            <div class="story-moov__separator" aria-hidden="true"></div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if moov_body != blank -%}
+      <p class="story-moov__body" data-animate="story-fade-up">{{ moov_body | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{%- comment -%} ══ SECTION 5: CLOSING (warm, welcoming) ══ {%- endcomment -%}
+<section class="story-closing full-width" data-surface="cream">
+  <div class="story-closing__wrap" data-animate="story-fade-up">
+    {%- if closing_heading != blank -%}
+      <h2 class="story-closing__heading">{{ closing_heading | escape }}</h2>
+    {%- endif -%}
+    {%- if closing_body != blank -%}
+      <p class="story-closing__body">{{ closing_body | escape }}</p>
+    {%- endif -%}
+    {%- if closing_button_label != blank -%}
+      <a href="{{ closing_button_url }}" class="story-closing__btn">
+        {{- closing_button_label | escape -}}
+      </a>
+    {%- endif -%}
   </div>
 </section>
 
 {% stylesheet %}
-  /* ══ ZONE 1: HERO ══ */
+  /* ══ SECTION 1: HERO (split layout) ══ */
   .story-hero {
-    position: relative;
-    background: var(--moov-black);
-    padding: calc(var(--section-block-pad-y-md) * 0.58) 0 calc(var(--section-block-pad-y-sm) * 0.58);
+    background: var(--moov-cream);
+    padding: var(--section-block-pad-y-lg) 0;
   }
 
   .story-hero__wrap {
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+    width: 100%;
+    max-width: min(
+      calc(var(--layout-max-width) + clamp(2rem, 6vw, 8.5rem)),
+      calc(100vw - 2 * var(--section-inline-pad))
+    );
+    box-sizing: border-box;
     margin-inline: auto;
-    max-width: none;
+    padding: 0 var(--section-inline-pad);
   }
 
-  .story-hero__frame {
-    position: relative;
-    display: flex;
+  .story-hero__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 5rem);
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: clamp(18px, 2.4vw, 28px);
-    min-height: min(70vh, 640px);
-    isolation: isolate;
-  }
-
-  @media (max-width: 749px) {
-    .story-hero__frame {
-      min-height: min(58vh, 520px);
-    }
   }
 
   .story-hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
+    border-radius: 16px;
+    overflow: hidden;
   }
 
   .story-hero__img {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 3 / 4;
     object-fit: cover;
     display: block;
   }
 
   .story-hero__placeholder {
     width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, color-mix(in srgb, var(--moov-cream) 20%, var(--moov-black)) 0%, var(--moov-black) 100%);
-  }
-
-  .story-hero__overlay {
-    position: absolute;
-    inset: 0;
-    background: var(--story-hero-overlay);
-    z-index: 1;
-    pointer-events: none;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(135deg, var(--moov-wash-on-cream-4) 0%, var(--moov-wash-on-cream-6) 100%);
+    border-radius: 16px;
   }
 
   .story-hero__content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    text-align: center;
-    padding: var(--section-block-pad-y-hero) var(--section-inline-pad) var(--section-block-pad-y-hero-bottom);
-    max-width: 720px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-
-  .story-hero__overline {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: var(--text-2xs);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
-    margin: 0 0 20px;
-  }
-
-  .story-hero__overline::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-accent, #ed9d09);
-    box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent, #ed9d09) 70%, transparent);
-    animation: story-pulse 2.4s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-
-  @keyframes story-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.25); opacity: 0.75; }
+    align-items: flex-start;
+    gap: clamp(1rem, 2vw, 1.5rem);
   }
 
   .story-hero__heading {
-    font-family: var(--font-hero);
-    font-weight: 700;
-    font-size: var(--text-5xl);
-    line-height: 1.1;
-    text-transform: uppercase;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 28px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-3xl);
+    line-height: 1.25;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+    text-wrap: balance;
   }
 
   .story-hero__body {
@@ -297,398 +285,322 @@
     font-size: var(--text-lg);
     font-weight: 400;
     line-height: 1.7;
-    color: var(--moov-text-secondary-dark);
-    margin: 0 0 36px;
-    max-width: 560px;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    max-width: 38ch;
   }
 
-  .story-hero__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border-radius: 999px;
-    padding: 14px 28px;
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-    background: #fff;
-    color: var(--moov-black);
-    border: none;
-    transition: opacity 0.2s ease;
+  @media (max-width: 749px) {
+    .story-hero__grid {
+      grid-template-columns: 1fr;
+      gap: clamp(1.5rem, 4vw, 2.5rem);
+    }
+
+    .story-hero__img {
+      aspect-ratio: 4 / 5;
+    }
+
+    .story-hero__placeholder {
+      aspect-ratio: 4 / 5;
+    }
+
+    .story-hero__heading {
+      font-size: var(--text-2xl);
+    }
   }
 
-  .story-hero__cta:hover {
-    opacity: 0.85;
-  }
-
-  /* ══ ZONE 2: CINEMATIC PANELS (inset rounded frames on dark, mirrors story-hero) ══ */
-  .story-panels {
+  /* ══ SECTION 2: FOUNDER VIDEO ══ */
+  .story-video {
     background: var(--moov-black);
-    padding: calc(var(--section-block-pad-y-md) * 0.58) 0 calc(var(--section-block-pad-y-sm) * 0.58);
+    padding: var(--section-block-pad-y-lg) 0;
   }
 
-  .story-panels__stack {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--section-block-pad-y-sm) * 0.5);
-  }
-
-  .story-panel__wrap {
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+  .story-video__wrap {
+    width: 100%;
+    max-width: 1000px;
     margin-inline: auto;
-    padding: 0;
+    padding: 0 var(--section-inline-pad);
+    box-sizing: border-box;
+    text-align: center;
   }
 
-  .story-panel__frame {
-    border-radius: clamp(18px, 2.4vw, 28px);
-    overflow: hidden;
-    background: var(--moov-cream);
-    isolation: isolate;
+  .story-video__eyebrow {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-eyebrow-accent);
+    margin: 0 0 clamp(1.25rem, 2vw, 2rem);
   }
 
-  .story-panel {
+  .story-video__frame {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: min(88vh, 880px);
-  }
-
-  .story-panel--reversed {
-    direction: rtl;
-  }
-
-  .story-panel--reversed > * {
-    direction: ltr;
-  }
-
-  .story-panel__media {
-    position: relative;
+    border-radius: 16px;
     overflow: hidden;
-    z-index: 0;
+    aspect-ratio: 16 / 9;
+    background: color-mix(in srgb, var(--moov-cream) 6%, var(--moov-black));
   }
 
-  .story-panel__overlay {
+  .story-video__embed {
     position: absolute;
     inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: var(--story-panel-overlay, color-mix(in srgb, var(--moov-black) 20%, transparent));
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
-  .story-panel__img {
+  .story-video__player {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .story-video__play-overlay {
     position: absolute;
     inset: 0;
-    z-index: 0;
-  }
-
-  .story-panel__placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--moov-wash-on-cream-6) 0%, var(--moov-wash-on-cream-4) 100%);
-    position: relative;
-    z-index: 0;
-  }
-
-  .story-panel__text {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: clamp(1rem, 2.5vw, 2rem) clamp(1.25rem, 3.25vw, 2.25rem);
-    max-width: none;
-    margin: 0;
-    height: 100%;
+    color: var(--moov-cream);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
 
-  .story-panel__heading {
-    font-family: var(--font-hero);
-    font-weight: 700;
-    font-size: clamp(2rem, 4.25vw, 3.75rem);
-    line-height: 1.08;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    color: var(--moov-text-primary-light);
-    margin: 0 0 clamp(0.75rem, 2vw, 1.25rem);
-    max-width: min(100%, 28rem);
-    hyphens: none;
-    overflow-wrap: normal;
-    word-break: normal;
-    text-wrap: balance;
+  .story-video__player:not(:paused) ~ .story-video__play-overlay {
+    opacity: 0;
   }
 
-  .story-panel__body {
-    font-family: var(--font-body);
-    font-size: var(--text-md);
-    font-weight: 400;
-    line-height: 1.75;
-    color: var(--moov-text-secondary-light);
-    margin: 0;
-    max-width: 75%;
+  .story-video__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--moov-text-secondary-dark);
   }
 
-  @media (min-width: 768px) and (max-width: 1279px) {
-    .story-panel {
-      grid-template-columns: 45fr 55fr;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .story-panel {
-      grid-template-columns: 1fr;
-      min-height: auto;
-    }
-
-    .story-panel--reversed {
-      direction: ltr;
-    }
-
-    .story-panel__wrap {
-      padding: 0;
-    }
-
-    .story-panel__media {
-      position: relative;
-      height: min(52vh, 420px);
-      min-height: 240px;
-    }
-
-    .story-panel__img {
-      position: absolute;
-    }
-
-    .story-panel__text {
-      padding: clamp(1.25rem, 3vw, 2.125rem) clamp(1.5rem, 5vw, 2.25rem);
-      max-width: none;
-      margin: 0;
-    }
-  }
-
-  /* ══ ZONE 3: VALUES ══ */
-  .story-values {
-    background: var(--moov-black);
+  /* ══ SECTION 3: TIMELINE / JOURNEY ══ */
+  .story-timeline {
+    background: var(--moov-cream);
     padding: var(--section-block-pad-y-xl) 0;
   }
 
-  .story-values__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+  .story-timeline__wrap {
+    width: 100%;
+    max-width: 720px;
     margin-inline: auto;
+    padding: 0 var(--section-inline-pad);
+    box-sizing: border-box;
   }
 
-  .story-values__tile {
+  .story-timeline__track {
     position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    border: 0.5px solid var(--moov-border-dark);
-    padding: 36px 28px;
-    transition: background 0.2s ease;
+    padding-left: 2rem;
   }
 
-  .story-values__tile:hover {
-    background: var(--moov-surface-dark-raised);
+  .story-timeline__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 4px;
+    width: 2px;
+    background: var(--moov-border-light);
   }
 
-  .story-values__watermark {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(3.5rem, 5vw, 6rem);
-    font-weight: 400;
-    text-transform: uppercase;
-    opacity: 0.06;
-    color: var(--moov-cream);
-    line-height: 1;
-    margin-bottom: 20px;
-    white-space: nowrap;
+  .story-timeline__milestone {
+    position: relative;
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
   }
 
-  .story-values__title {
+  .story-timeline__milestone:last-child {
+    padding-bottom: 0;
+  }
+
+  .story-timeline__dot {
+    position: absolute;
+    left: calc(-2rem + -1px);
+    top: 0.35em;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--moov-amber);
+  }
+
+  .story-timeline__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .story-timeline__heading {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    line-height: 1.3;
+    color: var(--moov-text-primary-light);
+    margin: 0;
+  }
+
+  .story-timeline__body {
     font-family: var(--font-body);
     font-size: var(--text-base);
-    font-weight: 700;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 12px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-light);
+    margin: 0;
+    max-width: 50ch;
   }
 
-  .story-values__desc {
+  /* Mobile: simpler left-border accent, no dots */
+  @media (max-width: 749px) {
+    .story-timeline__track {
+      padding-left: 1.25rem;
+    }
+
+    .story-timeline__line {
+      left: 0;
+    }
+
+    .story-timeline__dot {
+      display: none;
+    }
+  }
+
+  /* ══ SECTION 4: WHY MOOV ══ */
+  .story-moov {
+    background: var(--moov-black);
+    padding: var(--section-block-pad-y-lg) 0;
+  }
+
+  .story-moov__wrap {
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+    padding: 0 var(--section-inline-pad);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .story-moov__heading {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-3xl);
+    color: var(--moov-text-primary-dark);
+    margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: -0.01em;
+  }
+
+  .story-moov__stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+  }
+
+  .story-moov__item {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    width: 100%;
+    padding: clamp(1rem, 2vw, 1.5rem) 0;
+  }
+
+  .story-moov__letter {
+    font-family: var(--font-body);
+    font-size: var(--text-4xl);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--moov-amber);
+    flex-shrink: 0;
+    min-width: 2.5ch;
+  }
+
+  .story-moov__word-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding-top: 0.5em;
+  }
+
+  .story-moov__word {
+    font-family: var(--font-body);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--moov-text-primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .story-moov__desc {
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
     line-height: 1.7;
     color: var(--moov-text-secondary-dark);
     margin: 0;
+    max-width: 40ch;
   }
 
-  @media (max-width: 1279px) {
-    .story-values__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 767px) {
-    .story-values__grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-  }
-
-  /* ══ ZONE 4: FOUNDER NOTE (matches story-hero inset frame) ══ */
-  .story-founder {
-    position: relative;
-    background: var(--moov-black);
-    padding: calc(var(--section-block-pad-y-md) * 0.58) 0 calc(var(--section-block-pad-y-sm) * 0.58);
-  }
-
-  .story-founder__wrap {
-    width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
-    margin-inline: auto;
-    max-width: none;
-  }
-
-  .story-founder__frame {
-    position: relative;
-    overflow: hidden;
-    border-radius: clamp(18px, 2.4vw, 28px);
-    background: var(--moov-cream);
-    isolation: isolate;
-  }
-
-  .story-founder__inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(28px, 4vw, 80px);
-    align-items: center;
-    max-width: none;
+  .story-moov__separator {
     width: 100%;
-    margin: 0;
-    padding: clamp(2rem, 5vw, 3.75rem) clamp(1.25rem, 4vw, 2.5rem);
+    height: 1px;
+    background: var(--moov-border-dark);
   }
 
-  .story-founder__media {
-    overflow: hidden;
-  }
-
-  .story-founder__img {
-    width: 100%;
-    display: block;
-    object-fit: cover;
-    border-radius: 0;
-  }
-
-  .story-founder__placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    background: var(--moov-wash-on-cream-6);
-    border-radius: 0;
-  }
-
-  .story-founder__content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .story-founder__eyebrow {
-    font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 400;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
-    margin: 0 0 16px;
-  }
-
-  .story-founder__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: 700;
-    line-height: 1.15;
-    color: var(--moov-text-primary-light);
-    margin: 0 0 24px;
-  }
-
-  .story-founder__body {
+  .story-moov__body {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 400;
-    line-height: 1.75;
-    color: var(--moov-text-secondary-light);
-    margin: 0;
-    max-width: 440px;
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+    max-width: 50ch;
+    text-align: center;
   }
 
-  .story-founder__cta {
-    display: inline-block;
-    margin-top: 32px;
-    padding: 14px 28px;
-    background: var(--moov-black);
-    color: var(--moov-cream);
-    border-radius: 999px;
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-  }
-
-  .story-founder__cta:hover {
-    opacity: 0.85;
-  }
-
-  @media (min-width: 768px) and (max-width: 1279px) {
-    .story-founder__inner {
-      gap: 48px;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .story-founder__inner {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-  }
-
-  /* ══ ZONE 5: BOTTOM CTA ══ */
-  .story-cta {
-    background: var(--moov-black);
+  /* ══ SECTION 5: CLOSING ══ */
+  .story-closing {
+    background: var(--moov-cream);
     padding: var(--section-block-pad-y-lg) 0;
     text-align: center;
   }
 
-  .story-cta__inner {
-    width: min(600px, var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+  .story-closing__wrap {
+    width: 100%;
+    max-width: 640px;
     margin-inline: auto;
+    padding: 0 var(--section-inline-pad);
+    box-sizing: border-box;
   }
 
-  .story-cta__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-weight: 700;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 20px;
+  .story-closing__heading {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-2xl);
+    color: var(--moov-text-primary-light);
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    text-wrap: balance;
   }
 
-  .story-cta__body {
+  .story-closing__body {
     font-family: var(--font-body);
     font-size: var(--text-md);
     font-weight: 400;
     line-height: 1.7;
-    color: var(--moov-text-secondary-dark);
-    margin: 0 0 36px;
+    color: var(--moov-text-secondary-light);
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+    max-width: 50ch;
+    margin-inline: auto;
   }
 
-  .story-cta__btn {
+  .story-closing__btn {
     display: inline-block;
     padding: 14px 28px;
-    border: 0.5px solid var(--moov-border-amber);
+    border: 1.5px solid var(--moov-border-amber);
     border-radius: 999px;
-    color: var(--moov-amber);
+    color: var(--moov-text-primary-light);
     background: transparent;
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -698,7 +610,7 @@
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  .story-cta__btn:hover {
+  .story-closing__btn:hover {
     background: var(--moov-amber);
     color: var(--moov-black);
   }
@@ -710,40 +622,16 @@
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
 
-  [data-animate="story-fade"] {
-    opacity: 0;
-    transition: opacity 0.8s ease-out;
-    transition-delay: 0.15s;
-  }
-
-  [data-animate="story-slide-right"] {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  }
-
-  [data-animate="story-fade-up"].is-visible,
-  [data-animate="story-fade"].is-visible,
-  [data-animate="story-slide-right"].is-visible {
+  [data-animate="story-fade-up"].is-visible {
     opacity: 1;
     transform: none;
   }
 
-  .story-values__tile[data-animate="story-fade-up"] {
-    transition-delay: calc(var(--stagger, 0) * 100ms);
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    [data-animate="story-fade-up"],
-    [data-animate="story-fade"],
-    [data-animate="story-slide-right"] {
+    [data-animate="story-fade-up"] {
       opacity: 1;
       transform: none;
       transition: none;
-    }
-
-    .story-hero__overline::before {
-      animation: none;
     }
   }
 {% endstylesheet %}
@@ -776,50 +664,41 @@
   "class": "section-our-story",
   "blocks": [
     {
-      "type": "step",
-      "name": "t:sections.our_story.block_step",
+      "type": "story_milestone",
+      "name": "t:sections.our_story.block_story_milestone",
       "settings": [
         {
-          "type": "image_picker",
-          "id": "image",
-          "label": "t:labels.background_image"
-        },
-        {
-          "type": "url",
-          "id": "image_url",
-          "label": "t:sections.our_story.image_url_label",
-          "info": "t:sections.our_story.image_url_info"
-        },
-        {
           "type": "text",
-          "id": "caption_headline",
-          "label": "t:labels.heading"
+          "id": "heading",
+          "label": "t:sections.our_story.milestone_heading_label"
         },
         {
           "type": "textarea",
-          "id": "caption_body",
-          "label": "t:sections.our_story.panel_body_label"
+          "id": "body",
+          "label": "t:sections.our_story.milestone_body_label"
         }
       ]
     },
     {
-      "type": "value",
-      "name": "t:sections.our_story.block_value",
+      "type": "moov_letter",
+      "name": "t:sections.our_story.block_moov_letter",
       "settings": [
         {
           "type": "text",
-          "id": "value_word",
-          "label": "t:sections.our_story.value_word_label"
+          "id": "letter",
+          "label": "t:sections.our_story.letter_label",
+          "default": "M"
         },
         {
           "type": "text",
-          "id": "value_title",
-          "label": "t:sections.our_story.value_title_label"
+          "id": "word",
+          "label": "t:sections.our_story.word_label",
+          "default": "Momentum"
         },
         {
           "type": "textarea",
-          "id": "value_description",
-          "label": "t:sections.our_story.value_desc_label"
+          "id": "description",
+          "label": "t:sections.our_story.letter_desc_label"
         }
       ]
     }
@@ -832,39 +711,13 @@
     {
       "type": "image_picker",
       "id": "hero_image",
-      "label": "t:labels.background_image"
+      "label": "t:sections.our_story.hero_image_label"
     },
     {
       "type": "url",
       "id": "hero_image_url",
       "label": "t:sections.our_story.image_url_label",
       "info": "t:sections.our_story.image_url_info"
-    },
-    {
-      "type": "range",
-      "id": "hero_overlay_opacity",
-      "label": "t:sections.our_story.overlay_label",
-      "min": 20,
-      "max": 80,
-      "step": 5,
-      "default": 55,
-      "unit": "%"
-    },
-    {
-      "type": "range",
-      "id": "panel_overlay_opacity",
-      "label": "t:sections.our_story.panel_overlay_label",
-      "info": "t:sections.our_story.panel_overlay_info",
-      "min": 0,
-      "max": 45,
-      "step": 1,
-      "default": 20,
-      "unit": "%"
-    },
-    {
-      "type": "text",
-      "id": "hero_eyebrow",
-      "label": "t:labels.eyebrow_text"
     },
     {
       "type": "text",
@@ -877,77 +730,67 @@
       "label": "t:sections.our_story.hero_body_label"
     },
     {
-      "type": "text",
-      "id": "hero_cta_label",
-      "label": "t:labels.button_label"
-    },
-    {
-      "type": "url",
-      "id": "hero_cta_url",
-      "label": "t:labels.button_url"
-    },
-    {
       "type": "header",
-      "content": "t:sections.our_story.header_founder"
-    },
-    {
-      "type": "image_picker",
-      "id": "founder_image",
-      "label": "t:labels.background_image"
-    },
-    {
-      "type": "url",
-      "id": "founder_image_url",
-      "label": "t:sections.our_story.image_url_label",
-      "info": "t:sections.our_story.image_url_info"
+      "content": "t:sections.our_story.header_video"
     },
     {
       "type": "text",
-      "id": "founder_eyebrow",
+      "id": "video_eyebrow",
       "label": "t:labels.eyebrow_text"
     },
     {
       "type": "text",
-      "id": "founder_heading",
-      "label": "t:labels.heading"
-    },
-    {
-      "type": "textarea",
-      "id": "founder_body",
-      "label": "t:sections.our_story.founder_body_label"
-    },
-    {
-      "type": "text",
-      "id": "founder_cta_label",
-      "label": "t:labels.button_label"
+      "id": "video_url",
+      "label": "t:sections.our_story.video_url_label",
+      "info": "t:sections.our_story.video_url_info"
     },
     {
       "type": "url",
-      "id": "founder_cta_url",
-      "label": "t:labels.button_url"
+      "id": "video_file_url",
+      "label": "t:sections.our_story.video_file_label",
+      "info": "t:sections.our_story.video_file_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "t:sections.our_story.video_poster_label"
     },
     {
       "type": "header",
-      "content": "t:sections.our_story.header_cta"
+      "content": "t:sections.our_story.header_moov"
     },
     {
       "type": "text",
-      "id": "cta_heading",
+      "id": "moov_heading",
       "label": "t:labels.heading"
     },
     {
       "type": "textarea",
-      "id": "cta_body",
-      "label": "t:sections.our_story.cta_body_label"
+      "id": "moov_body",
+      "label": "t:sections.our_story.moov_body_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.our_story.header_closing"
     },
     {
       "type": "text",
-      "id": "cta_button_label",
+      "id": "closing_heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "closing_body",
+      "label": "t:sections.our_story.closing_body_label"
+    },
+    {
+      "type": "text",
+      "id": "closing_button_label",
       "label": "t:labels.button_label"
     },
     {
       "type": "url",
-      "id": "cta_button_url",
+      "id": "closing_button_url",
       "label": "t:labels.button_url"
     }
   ],
@@ -955,70 +798,67 @@
     {
       "name": "t:sections.our_story.name",
       "settings": {
-        "hero_eyebrow": "Our story",
-        "hero_heading": "Built for the first hour",
-        "hero_body": "MOOV started from a simple frustration: knowing what a better morning looks like, but not living it.",
-        "hero_overlay_opacity": 55,
-        "founder_eyebrow": "From the founder",
-        "founder_heading": "A note on why we built this",
-        "founder_body": "I started MOOV because I was tired of mornings that felt reactive. I knew what I wanted my day to look like, but the gap between intention and action felt impossible to close without changing the environment.",
-        "founder_cta_label": "Shop MOOV",
-        "cta_heading": "Take back your mornings",
-        "cta_body": "Ready to make getting up easier than staying in bed? Start with MOOV.",
-        "cta_button_label": "Shop now"
+        "hero_heading": "I got tired of starting every morning the same way.",
+        "hero_body": "Snooze. Scroll. Rush. Repeat.",
+        "video_eyebrow": "From the founder",
+        "moov_heading": "Why MOOV?",
+        "moov_body": "One system. Four commitments. Fewer reactive starts.",
+        "closing_heading": "Welcome to MOOV",
+        "closing_body": "Better mornings don't happen overnight. But small changes create momentum. Welcome to MOOV.",
+        "closing_button_label": "Shop now"
       },
       "blocks": [
         {
-          "type": "step",
+          "type": "story_milestone",
           "settings": {
-            "caption_headline": "It started with frustration",
-            "caption_body": "MOOV started from something simple: frustration. Like a lot of people, I knew what a better morning could look like but knowing what to do and actually doing it are two different things."
+            "heading": "It started with frustration",
+            "body": "Like a lot of people, I knew what a better morning could look like. But knowing what to do and actually doing it are two different things."
           }
         },
         {
-          "type": "step",
+          "type": "story_milestone",
           "settings": {
-            "caption_headline": "The system, not motivation",
-            "caption_body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty."
+            "heading": "The system, not motivation",
+            "body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty."
           }
         },
         {
-          "type": "step",
+          "type": "story_milestone",
           "settings": {
-            "caption_headline": "For anyone tired of feeling behind",
-            "caption_body": "So I started building MOOV: a product designed to make mornings easier, not by asking people to be more disciplined, but by changing the environment around them."
+            "heading": "Building MOOV",
+            "body": "So I started building a product designed to make mornings easier — not by asking people to be more disciplined, but by changing the environment around them."
           }
         },
         {
-          "type": "value",
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Systems",
-            "value_title": "Systems over willpower",
-            "value_description": "We believe good systems beat good intentions. Make the right action the easy action."
+            "letter": "M",
+            "word": "Momentum",
+            "description": "Progress you feel in your body before you feel it in your calendar."
           }
         },
         {
-          "type": "value",
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Mornings",
-            "value_title": "Mornings matter",
-            "value_description": "How you start your day shapes how the rest of it feels. One small action can change everything."
+            "letter": "O",
+            "word": "Output",
+            "description": "Finishing small, honest wins that stack."
           }
         },
         {
-          "type": "value",
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Simple",
-            "value_title": "Simplicity wins",
-            "value_description": "No complexity, no guilt. Just a tool that makes getting up easier than staying in bed."
+            "letter": "O",
+            "word": "Optimism",
+            "description": "Mornings as a reset, not a verdict."
           }
         },
         {
-          "type": "value",
+          "type": "moov_letter",
           "settings": {
-            "value_word": "Human",
-            "value_title": "Built for humans",
-            "value_description": "We design for real behaviour, not idealized routines. Meet people where they are."
+            "letter": "V",
+            "word": "Vitality",
+            "description": "Energy that comes from alignment, not adrenaline alone."
           }
         }
       ]

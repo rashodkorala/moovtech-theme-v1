@@ -16,7 +16,7 @@
 -%}
 
 <section
-  class="home-reviews"
+  class="home-reviews full-width"
   aria-labelledby="home-reviews-heading-{{ section.id }}"
   data-expanded="false"
 >
@@ -292,28 +292,24 @@
 
   /* Card */
   .review-card {
-    --card-radius: clamp(18px, 1.6vw, 24px);
+    --card-radius: 22px;
     display: flex;
     flex-direction: column;
     gap: clamp(0.85rem, 1.4vw, 1.15rem);
     padding: clamp(1.4rem, 2.2vw, 2rem);
     height: 100%;
     border-radius: var(--card-radius);
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--moov-cream) 5%, var(--moov-black)) 0%,
-      color-mix(in srgb, var(--moov-cream) 8%, var(--moov-black)) 100%
-    );
+    background: color-mix(in srgb, var(--moov-cream) 5%, var(--moov-black));
     border: 1px solid var(--moov-border-dark);
-    box-shadow: 0 12px 30px color-mix(in srgb, var(--moov-black) 45%, transparent);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--moov-cream) 8%, transparent);
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
   .home-reviews__item:hover .review-card,
   .home-reviews__item:focus-within .review-card {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--moov-cream) 22%, transparent);
-    box-shadow: 0 18px 44px color-mix(in srgb, var(--moov-black) 60%, transparent);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--moov-black) 35%, transparent);
   }
 
   .review-card__stars {
