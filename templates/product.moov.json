@@ -1,7 +1,7 @@
 {
   "sections": {
     "shop_main": {
-      "type": "shop",
+      "type": "product-moov",
       "settings": {
         "eyebrow": "Now shipping",
         "heading": "The MOOV device.",
