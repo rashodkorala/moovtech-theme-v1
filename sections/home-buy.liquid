@@ -1,0 +1,544 @@
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.home_buy.default_eyebrow' | t
+  endif
+
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'sections.home_buy.default_heading' | t
+  endif
+
+  assign description = section.settings.description | strip
+  if description == blank
+    assign description = 'sections.home_buy.default_description' | t
+  endif
+
+  assign price        = section.settings.price | strip
+  assign compare_price = section.settings.compare_price | strip
+  assign perk_1       = section.settings.perk_1 | strip
+  assign perk_2       = section.settings.perk_2 | strip
+  assign perk_3       = section.settings.perk_3 | strip
+
+  assign cta_label          = section.settings.cta_label | strip
+  assign cta_url            = section.settings.cta_url | default: '/collections/all'
+  assign cta_secondary_label = section.settings.cta_secondary_label | strip
+  assign cta_secondary_url  = section.settings.cta_secondary_url | default: '/pages/our-story'
+
+  assign image_asset = section.settings.image_asset | strip
+  if image_asset == blank
+    assign image_asset = '6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG'
+  endif
+-%}
+
+<section
+  class="home-buy full-width"
+  data-surface="dark"
+  aria-labelledby="home-buy-heading-{{ section.id }}"
+>
+  <div class="home-buy__inner">
+
+    <div class="home-buy__media-cell">
+      <div class="home-buy__frame">
+        {%- if section.settings.image != blank -%}
+          {%- assign media_alt = section.settings.image.alt | default: heading -%}
+          {{
+            section.settings.image
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              class: 'home-buy__img',
+              alt: media_alt,
+              sizes: '(min-width: 750px) 52vw, 100vw',
+              widths: '400, 600, 800, 1000, 1200, 1600'
+          }}
+        {%- elsif section.settings.image_url != blank -%}
+          <img
+            src="{{ section.settings.image_url | escape }}"
+            alt="{{ heading | escape }}"
+            loading="lazy"
+            class="home-buy__img"
+            width="1200"
+            height="1200"
+          >
+        {%- elsif image_asset != blank -%}
+          <img
+            class="home-buy__img"
+            src="{{ image_asset | asset_url }}"
+            alt="{{ heading | escape }}"
+            width="1200"
+            height="1200"
+            loading="lazy"
+            decoding="async"
+          >
+        {%- else -%}
+          <div
+            class="home-buy__placeholder"
+            role="img"
+            aria-label="{{ 'sections.home_buy.image_placeholder_label' | t }}"
+          ></div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="home-buy__copy">
+      {%- if eyebrow != blank -%}
+        <p class="home-buy__eyebrow">
+          <span class="home-buy__eyebrow-dot" aria-hidden="true"></span>
+          <span class="home-buy__eyebrow-text">{{ eyebrow | escape }}</span>
+        </p>
+      {%- endif -%}
+
+      <h2 id="home-buy-heading-{{ section.id }}" class="home-buy__heading">
+        {{ heading | escape }}
+      </h2>
+
+      {%- if description != blank -%}
+        <p class="home-buy__description">{{ description | escape }}</p>
+      {%- endif -%}
+
+      {%- if price != blank -%}
+        <div class="home-buy__price-row">
+          <span class="home-buy__price">{{ price | escape }}</span>
+          {%- if compare_price != blank -%}
+            <span class="home-buy__compare-price">{{ compare_price | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.show_stock -%}
+            <span class="home-buy__stock">
+              <span class="home-buy__stock-dot" aria-hidden="true"></span>
+              {{- 'sections.home_buy.in_stock' | t -}}
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if perk_1 != blank or perk_2 != blank or perk_3 != blank -%}
+        <div class="home-buy__perks">
+          {%- if perk_1 != blank -%}<span>{{ perk_1 | escape }}</span>{%- endif -%}
+          {%- if perk_2 != blank -%}<span>{{ perk_2 | escape }}</span>{%- endif -%}
+          {%- if perk_3 != blank -%}<span>{{ perk_3 | escape }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if cta_label != blank or cta_secondary_label != blank -%}
+        <div class="home-buy__cta-row">
+          {%- if cta_label != blank -%}
+            <a href="{{ cta_url }}" class="home-buy__cta home-buy__cta--primary">
+              {{- cta_label | escape -}}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="2.5" y1="11.5" x2="11" y2="3" />
+                <polyline points="5,3 11,3 11,9" />
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if cta_secondary_label != blank -%}
+            <a href="{{ cta_secondary_url }}" class="home-buy__cta home-buy__cta--ghost">
+              {{- cta_secondary_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% stylesheet %}
+  .home-buy[data-surface='dark'] {
+    background: var(--moov-black);
+    color: var(--moov-text-primary-dark);
+    padding: clamp(3.5rem, 7vw, 6.25rem) 0;
+    overflow: hidden;
+  }
+
+  .home-buy__inner {
+    width: 100%;
+    max-width: min(
+      calc(var(--layout-max-width) + clamp(2rem, 6vw, 8.5rem)),
+      calc(100vw - 2 * var(--section-inline-pad))
+    );
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 var(--section-inline-pad);
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+
+  .home-buy__media-cell {
+    min-width: 0;
+    width: 100%;
+    position: sticky;
+    top: calc(var(--header-height, 5rem) + 1.5rem);
+    align-self: start;
+  }
+
+  .home-buy__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--moov-border-dark);
+    background: var(--moov-surface-dark-elevated);
+  }
+
+  .home-buy__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: grayscale(0.2) brightness(0.92) contrast(1.04);
+  }
+
+  .home-buy__placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    background: linear-gradient(
+      135deg,
+      var(--moov-neutral-deep) 0%,
+      var(--moov-black) 60%,
+      var(--moov-neutral-mid) 100%
+    );
+  }
+
+  .home-buy__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+
+  .home-buy__eyebrow {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-amber);
+  }
+
+  .home-buy__eyebrow-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--moov-amber);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--moov-amber) 65%, transparent);
+    animation: hb-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes hb-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.75; }
+  }
+
+  .home-buy__heading {
+    margin: 0;
+    font-family: var(--font-hero);
+    font-size: var(--text-heading-xl);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--moov-text-primary-dark);
+    text-wrap: balance;
+  }
+
+  .home-buy__description {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-dark);
+    max-width: 42ch;
+    text-wrap: pretty;
+  }
+
+  .home-buy__price-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+  }
+
+  .home-buy__price {
+    font-family: var(--font-hero);
+    font-size: var(--text-heading-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--moov-text-primary-dark);
+  }
+
+  .home-buy__compare-price {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--moov-text-tertiary-dark);
+    text-decoration: line-through;
+  }
+
+  .home-buy__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moov-success);
+    background: var(--moov-success-bg);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  .home-buy__stock-dot {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--moov-success);
+  }
+
+  .home-buy__perks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .home-buy__perks span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .home-buy__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .home-buy__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: clamp(12px, 1.1vw, 15px) clamp(22px, 2.5vw, 34px);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .home-buy__cta--primary {
+    background: var(--moov-cream);
+    color: var(--moov-black);
+    border: 1px solid var(--moov-cream);
+  }
+
+  .home-buy__cta--primary:hover {
+    background: var(--moov-amber);
+    border-color: var(--moov-amber);
+    color: var(--moov-black);
+    transform: translateY(-1px);
+  }
+
+  .home-buy__cta--ghost {
+    background: transparent;
+    color: var(--moov-text-primary-dark);
+    border: 1px solid var(--moov-border-dark);
+  }
+
+  .home-buy__cta--ghost:hover {
+    background: var(--moov-cream);
+    border-color: var(--moov-cream);
+    color: var(--moov-black);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 749px) {
+    .home-buy[data-surface='dark'] {
+      padding: clamp(2.75rem, 8vw, 4rem) 0;
+    }
+
+    .home-buy__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(1.75rem, 5vw, 2.5rem);
+    }
+
+    .home-buy__media-cell {
+      position: relative;
+      top: auto;
+    }
+
+    .home-buy__frame {
+      aspect-ratio: 4 / 3;
+    }
+
+    .home-buy__cta {
+      flex: 1 1 0;
+      min-width: 0;
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.home_buy.name",
+  "tag": "section",
+  "class": "section-home-buy",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.home_buy.content_header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "t:sections.home_buy.description_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.home_buy.pricing_header"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "t:sections.home_buy.price_label",
+      "info": "t:sections.home_buy.price_info"
+    },
+    {
+      "type": "text",
+      "id": "compare_price",
+      "label": "t:sections.home_buy.compare_price_label",
+      "info": "t:sections.home_buy.compare_price_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock",
+      "label": "t:sections.home_buy.show_stock_label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.home_buy.perks_header"
+    },
+    {
+      "type": "text",
+      "id": "perk_1",
+      "label": "t:sections.home_buy.perk_1_label"
+    },
+    {
+      "type": "text",
+      "id": "perk_2",
+      "label": "t:sections.home_buy.perk_2_label"
+    },
+    {
+      "type": "text",
+      "id": "perk_3",
+      "label": "t:sections.home_buy.perk_3_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.home_buy.cta_header"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "t:sections.home_buy.cta_primary_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "t:sections.home_buy.cta_primary_url"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "t:sections.home_buy.cta_secondary_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "t:sections.home_buy.cta_secondary_url"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.home_buy.image_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.background_image"
+    },
+    {
+      "type": "text",
+      "id": "image_asset",
+      "label": "t:sections.home_buy.image_asset_label",
+      "info": "t:sections.home_buy.image_asset_info",
+      "default": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG"
+    },
+    {
+      "type": "url",
+      "id": "image_url",
+      "label": "t:sections.home_buy.image_url_label",
+      "info": "t:sections.home_buy.image_url_info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.home_buy.name",
+      "settings": {
+        "eyebrow": "Now shipping",
+        "heading": "The MOOV device.",
+        "description": "Wall-mounted. Battery-powered. White ceramic finish. One job — get you out of bed.",
+        "price": "$129",
+        "compare_price": "$159",
+        "show_stock": true,
+        "perk_1": "Free shipping over $50",
+        "perk_2": "30-day trial",
+        "perk_3": "1-year warranty",
+        "cta_label": "Add to cart",
+        "cta_url": "/collections/all",
+        "cta_secondary_label": "Read our story",
+        "cta_secondary_url": "/pages/our-story",
+        "image_asset": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG",
+        "image_url": ""
+      }
+    }
+  ]
+}
+{% endschema %}

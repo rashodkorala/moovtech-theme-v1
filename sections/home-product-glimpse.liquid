@@ -28,10 +28,10 @@
     assign subheading_display = ''
   endif
 
+  assign body_lead = section.settings.body_lead | strip
+  assign body_emphasis = section.settings.body_emphasis | strip
+  assign body_trail = section.settings.body_trail | strip
   assign body = section.settings.body
-  if body == blank
-    assign body = 'sections.home_product_glimpse.default_body' | t
-  endif
 
   assign cta_label = section.settings.cta_label
   if cta_label == blank
@@ -39,6 +39,10 @@
   endif
 
   assign cta_url = section.settings.cta_url | default: '/pages/get-moov'
+
+  assign cta_secondary_label = section.settings.cta_secondary_label | strip
+
+  assign cta_secondary_url = section.settings.cta_secondary_url | default: '/pages/our-story'
 
   assign image_asset = section.settings.image_asset | strip
   if section.settings.image == blank
@@ -54,11 +58,23 @@
   if section.settings.show_logo == false
     assign show_logo = false
   endif
+
+  assign use_split_body = false
+  if body_lead != blank
+    assign use_split_body = true
+  endif
+  if body_emphasis != blank
+    assign use_split_body = true
+  endif
+  if body_trail != blank
+    assign use_split_body = true
+  endif
 -%}
 
 <section
+  id="shop"
   class="product-glimpse full-width product-glimpse--image-{{ image_position }}"
-  data-surface="cream"
+  data-surface="dark"
   aria-labelledby="product-glimpse-heading-{{ section.id }}"
   style="--pg-logo-max: {{ logo_max_width }}px;"
 >
@@ -108,6 +124,13 @@
     </div>
 
     <div class="product-glimpse__copy">
+      {%- if eyebrow != blank -%}
+        <p class="product-glimpse__eyebrow">
+          <span class="product-glimpse__eyebrow-dot" aria-hidden="true"></span>
+          <span class="product-glimpse__eyebrow-text">{{ eyebrow | escape }}</span>
+        </p>
+      {%- endif -%}
+
       {%- if show_logo -%}
         <div class="product-glimpse__logo-row">
           {%- if section.settings.logo_image != blank -%}
@@ -123,7 +146,7 @@
             }}
           {%- else -%}
             <img
-              class="product-glimpse__logo"
+              class="product-glimpse__logo product-glimpse__logo--fallback"
               src="{{ logo_fallback | asset_url }}"
               alt="{{ logo_alt | escape }}"
               width="320"
@@ -135,10 +158,6 @@
         </div>
       {%- endif -%}
 
-      {%- if eyebrow != blank -%}
-        <p class="product-glimpse__eyebrow">{{ eyebrow | escape }}</p>
-      {%- endif -%}
-
       <h2 id="product-glimpse-heading-{{ section.id }}" class="product-glimpse__heading">
         {{ heading_display | escape }}
       </h2>
@@ -147,37 +166,64 @@
         <p class="product-glimpse__subtitle">{{ subheading_display | escape }}</p>
       {%- endif -%}
 
-      {%- if body != blank -%}
-        <div class="product-glimpse__body">{{ body | escape | newline_to_br }}</div>
+      {%- if use_split_body -%}
+        <p class="product-glimpse__lede">
+          {%- if body_lead != blank -%}
+            {{- body_lead | escape -}}
+          {%- endif -%}
+          {%- if body_emphasis != blank -%}
+            {%- if body_lead != blank -%}
+              {{ ' ' }}
+            {%- endif -%}
+            <em>{{ body_emphasis | escape }}</em>
+          {%- endif -%}
+          {%- if body_trail != blank -%}
+            {%- if body_lead != blank or body_emphasis != blank -%}
+              {{ ' ' }}
+            {%- endif -%}
+            {{- body_trail | escape -}}
+          {%- endif -%}
+        </p>
+      {%- elsif body != blank -%}
+        <div class="product-glimpse__lede">{{ body | escape | newline_to_br }}</div>
       {%- endif -%}
 
-      {%- if cta_label != blank -%}
-        <a href="{{ cta_url }}" class="product-glimpse__cta">
-          {{- cta_label | escape -}}
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="2" y1="12" x2="12" y2="2" />
-            <polyline points="5,2 12,2 12,9" />
-          </svg>
-        </a>
+      {%- if cta_label != blank or cta_secondary_label != blank -%}
+        <div class="product-glimpse__cta-row">
+          {%- if cta_label != blank -%}
+            <a href="{{ cta_url }}" class="product-glimpse__cta product-glimpse__cta--outline">
+              {{- cta_label | escape -}}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="2" y1="12" x2="12" y2="2" />
+                <polyline points="5,2 12,2 12,9" />
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if cta_secondary_label != blank -%}
+            <a href="{{ cta_secondary_url }}" class="product-glimpse__cta product-glimpse__cta--outline-amber">
+              {{- cta_secondary_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
       {%- endif -%}
     </div>
   </div>
 </section>
 
 {% stylesheet %}
-  .product-glimpse[data-surface='cream'] {
-    background: var(--moov-cream);
-    color: var(--moov-text-primary-light);
+  .product-glimpse[data-surface='dark'] {
+    background: var(--moov-black);
+    color: var(--moov-text-primary-dark);
     padding: clamp(3.5rem, 7vw, 6.25rem) 0 clamp(3rem, 6vw, 5.5rem);
     overflow: hidden;
   }
@@ -192,14 +238,14 @@
     margin: 0 auto;
     padding: 0 var(--section-inline-pad);
     display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.58fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: clamp(56px, 8vw, 160px);
     row-gap: clamp(1.75rem, 3vw, 2.75rem);
     align-items: center;
   }
 
   .product-glimpse--image-right .product-glimpse__inner {
-    grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.55fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .product-glimpse--image-right .product-glimpse__copy {
@@ -223,11 +269,12 @@
   .product-glimpse__frame {
     position: relative;
     width: 100%;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 5;
+    max-height: min(92vh, 920px);
     overflow: hidden;
     border-radius: 16px;
-    border: 1px solid var(--moov-border-light);
-    background: var(--moov-cream-shadow);
+    border: 1px solid var(--moov-border-dark);
+    background: var(--moov-surface-dark-elevated);
   }
 
   .product-glimpse__img {
@@ -238,14 +285,19 @@
     display: block;
   }
 
+  .product-glimpse[data-surface='dark'] .product-glimpse__img {
+    filter: grayscale(0.2) brightness(0.92) contrast(1.04);
+  }
+
   .product-glimpse__placeholder {
     width: 100%;
     height: 100%;
     min-height: 280px;
     background: linear-gradient(
-      135deg,
-      var(--moov-wash-on-cream-4) 0%,
-      var(--moov-wash-on-cream-6) 100%
+      160deg,
+      var(--moov-neutral-deep) 0%,
+      var(--moov-black) 55%,
+      var(--moov-neutral-mid) 100%
     );
   }
 
@@ -257,7 +309,7 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    gap: clamp(0.65rem, 1.2vw, 0.9rem);
+    gap: 18px;
     padding-top: clamp(0.25rem, 0.8vw, 0.6rem);
   }
 
@@ -275,25 +327,47 @@
     object-position: left center;
   }
 
+  .product-glimpse[data-surface='dark'] .product-glimpse__logo--fallback {
+    filter: invert(1) brightness(1.6);
+  }
+
   .product-glimpse__eyebrow {
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    color: var(--moov-eyebrow-accent);
+    color: var(--moov-amber);
+  }
+
+  .product-glimpse__eyebrow-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--moov-amber);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--moov-amber) 65%, transparent);
+    animation: pg-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pg-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.75; }
   }
 
   .product-glimpse__heading {
     margin: 0;
     font-family: var(--font-hero);
-    font-size: clamp(1.85rem, 3.4vw, 2.85rem);
-    font-weight: 500;
+    font-size: var(--text-heading-xl);
+    font-weight: 600;
     line-height: 1.08;
     letter-spacing: 0.02em;
-    text-transform: var(--heading-text-transform, uppercase);
-    color: var(--moov-text-primary-light);
+    text-transform: uppercase;
+    color: var(--moov-text-primary-dark);
     text-wrap: balance;
   }
 
@@ -302,48 +376,78 @@
     font-family: var(--font-body);
     font-size: var(--text-base);
     line-height: 1.6;
-    color: var(--moov-text-secondary-light);
+    color: var(--moov-text-secondary-dark);
     max-width: 46ch;
     text-wrap: balance;
   }
 
-  .product-glimpse__body {
+  .product-glimpse__lede {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-base);
+    font-size: var(--text-md);
     line-height: 1.65;
-    color: var(--moov-text-secondary-light);
-    max-width: 50ch;
+    color: var(--moov-text-secondary-dark);
+    max-width: 44ch;
     text-wrap: pretty;
+  }
+
+  .product-glimpse__lede em {
+    font-style: italic;
+    color: var(--moov-text-primary-dark);
+  }
+
+  .product-glimpse__cta-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px 12px;
+    margin-top: clamp(8px, 1.2vw, 14px);
   }
 
   .product-glimpse__cta {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: clamp(6px, 1vw, 12px);
-    padding: clamp(13px, 1.2vw, 16px) clamp(26px, 2.8vw, 38px);
+    padding: clamp(12px, 1.1vw, 15px) clamp(22px, 2.5vw, 34px);
     border-radius: 999px;
     font-family: var(--font-body);
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     font-weight: 500;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     text-decoration: none;
-    color: var(--moov-text-primary-dark);
-    background: var(--moov-black);
-    border: 0.5px solid var(--moov-black);
+    text-transform: uppercase;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
   }
 
-  .product-glimpse__cta:hover {
-    background: var(--moov-amber);
-    border-color: var(--moov-amber);
+  .product-glimpse__cta--outline {
+    color: var(--moov-text-primary-dark);
+    background: transparent;
+    border: 1px solid var(--moov-text-primary-dark);
+  }
+
+  .product-glimpse__cta--outline:hover {
+    background: var(--moov-cream);
     color: var(--moov-black);
+    border-color: var(--moov-cream);
+    transform: translateY(-1px);
+  }
+
+  .product-glimpse__cta--outline-amber {
+    color: var(--moov-amber);
+    background: transparent;
+    border: 1px solid var(--moov-amber);
+  }
+
+  .product-glimpse__cta--outline-amber:hover {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    border-color: var(--moov-amber);
     transform: translateY(-1px);
   }
 
   @media (max-width: 749px) {
-    .product-glimpse[data-surface='cream'] {
+    .product-glimpse[data-surface='dark'] {
       padding: clamp(2.75rem, 8vw, 4rem) 0;
     }
 
@@ -363,11 +467,27 @@
     }
 
     .product-glimpse__frame {
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 4 / 5;
+      max-height: min(80vw, 560px);
     }
 
     .product-glimpse__copy {
       max-width: none;
+    }
+
+    .product-glimpse__cta-row {
+      flex-wrap: nowrap;
+      width: 100%;
+      gap: 8px;
+    }
+
+    .product-glimpse__cta {
+      flex: 1 1 0;
+      min-width: 0;
+      justify-content: center;
+      padding-left: clamp(10px, 2.2vw, 16px);
+      padding-right: clamp(10px, 2.2vw, 16px);
+      font-size: clamp(0.6875rem, 0.8vw + 0.55rem, 0.8125rem);
     }
   }
 {% endstylesheet %}
@@ -415,18 +535,47 @@
     },
     {
       "type": "textarea",
+      "id": "body_lead",
+      "label": "t:sections.home_product_glimpse.body_lead_label",
+      "info": "t:sections.home_product_glimpse.body_split_info"
+    },
+    {
+      "type": "textarea",
+      "id": "body_emphasis",
+      "label": "t:sections.home_product_glimpse.body_emphasis_label",
+      "info": "t:sections.home_product_glimpse.body_emphasis_info"
+    },
+    {
+      "type": "textarea",
+      "id": "body_trail",
+      "label": "t:sections.home_product_glimpse.body_trail_label",
+      "info": "t:sections.home_product_glimpse.body_split_info"
+    },
+    {
+      "type": "textarea",
       "id": "body",
-      "label": "t:labels.body"
+      "label": "t:sections.home_product_glimpse.body_fallback_label",
+      "info": "t:sections.home_product_glimpse.body_fallback_info"
     },
     {
       "type": "text",
       "id": "cta_label",
-      "label": "t:labels.button_label"
+      "label": "t:sections.home_product_glimpse.cta_primary_label"
     },
     {
       "type": "url",
       "id": "cta_url",
-      "label": "t:labels.button_url"
+      "label": "t:sections.home_product_glimpse.cta_primary_url"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "t:sections.home_product_glimpse.cta_secondary_label"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "t:sections.home_product_glimpse.cta_secondary_url"
     },
     {
       "type": "header",
@@ -442,7 +591,7 @@
       "type": "image_picker",
       "id": "logo_image",
       "label": "t:sections.home_product_glimpse.logo_image_label",
-      "info": "t:sections.home_product_glimpse.logo_image_info"
+      "info": "t:sections.home_product_glimpse.logo_image_dark_info"
     },
     {
       "type": "range",
@@ -464,7 +613,7 @@
       "type": "text",
       "id": "logo_fallback_asset",
       "label": "t:sections.home_product_glimpse.logo_fallback_asset_label",
-      "info": "t:sections.home_product_glimpse.logo_fallback_asset_info",
+      "info": "t:sections.home_product_glimpse.logo_fallback_dark_info",
       "default": "moov-logo-black.png"
     },
     {
@@ -497,14 +646,20 @@
       "settings": {
         "image_position": "left",
         "show_logo": true,
-        "eyebrow": "Introducing",
-        "heading": "A better way to start your morning.",
+        "eyebrow": "The Morning Device",
+        "heading": "Reclaim your morning.",
         "subheading": "",
-        "body": "Built to get you out of bed — and into your day.",
+        "body_lead": "Quit losing your morning to bad phone habits.",
+        "body_emphasis": "MOOV is designed to get you up and into action",
+        "body_trail": "— one press of the ring, once you've already crossed the room.",
+        "body": "",
         "cta_label": "Get your MOOV",
         "cta_url": "/pages/get-moov",
+        "cta_secondary_label": "Our story",
+        "cta_secondary_url": "/pages/our-story",
         "logo_max_width": 200,
-        "image_asset": "product-preiview-mainpage.png",
+        "logo_fallback_asset": "moov-logo-black.png",
+        "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG",
         "image_url": ""
       }
     }

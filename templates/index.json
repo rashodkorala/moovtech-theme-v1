@@ -28,17 +28,21 @@
       "settings": {
         "image_position": "left",
         "show_logo": true,
-        "eyebrow": "Introducing",
-        "heading": "A better way to start your morning.",
+        "eyebrow": "The Morning Device",
+        "heading": "Reclaim your morning.",
         "subheading": "",
-        "body": "Built to get you out of bed — and into your day.",
+        "body_lead": "Quit losing your morning to bad phone habits.",
+        "body_emphasis": "MOOV is designed to get you up and into action",
+        "body_trail": "— one press of the ring, once you've already crossed the room.",
+        "body": "",
         "cta_label": "Get your MOOV",
         "cta_url": "/pages/get-moov",
+        "cta_secondary_label": "Our story",
+        "cta_secondary_url": "/pages/our-story",
         "logo_max_width": 200,
         "logo_alt": "",
         "logo_fallback_asset": "moov-logo-black.png",
-        "image": "shopify://shop_images/product-preiview-mainpage.png",
-        "image_asset": "product-preiview-mainpage.png",
+        "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG",
         "image_url": ""
       }
     },
@@ -89,17 +93,24 @@
         "cta_url": "/pages/how-it-works"
       }
     },
-    "founder_story": {
-      "type": "home-founder-story",
+    "home_buy": {
+      "type": "home-buy",
       "settings": {
-        "image_position": "left",
-        "eyebrow": "Our story",
-        "heading": "We're building for the first hour",
-        "body": "MOOV started from frustration with mornings that felt reactive, not intentional. Read how we're designing a system that meets people where they are.",
-        "cta_label": "Read our story",
-        "cta_url": "/pages/our-story",
-        "image_url": "https://images.unsplash.com/photo-1631312113214-8f2f03a6962f?auto=format&fit=crop&w=2400&q=80",
-        "overlay_opacity": 25
+        "eyebrow": "Now shipping",
+        "heading": "The MOOV device.",
+        "description": "Wall-mounted. Battery-powered. White ceramic finish. One job — get you out of bed.",
+        "price": "$129",
+        "compare_price": "$159",
+        "show_stock": true,
+        "perk_1": "Free shipping over $50",
+        "perk_2": "30-day trial",
+        "perk_3": "1-year warranty",
+        "cta_label": "Add to cart",
+        "cta_url": "/collections/all",
+        "cta_secondary_label": "Read our story",
+        "cta_secondary_url": "/pages/our-story",
+        "image_asset": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG",
+        "image_url": ""
       }
     },
     "reviews_grid": {
@@ -190,7 +201,7 @@
     "hero",
     "product_glimpse",
     "how_it_works_glimpse",
-    "founder_story",
+    "home_buy",
     "reviews_grid"
   ]
 }

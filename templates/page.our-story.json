@@ -11,79 +11,10 @@
   "sections": {
     "main": {
       "type": "our-story",
-      "blocks": {
-        "milestone-1": {
-          "type": "story_milestone",
-          "settings": {
-            "heading": "It started with frustration",
-            "body": "Like a lot of people, I knew what a better morning could look like. But knowing what to do and actually doing it are two different things."
-          }
-        },
-        "milestone-2": {
-          "type": "story_milestone",
-          "settings": {
-            "heading": "The system, not motivation",
-            "body": "The real problem was never the alarm. It was what came after: the snooze button, the comfort of staying in bed, the scroll that turns five minutes into thirty."
-          }
-        },
-        "milestone-3": {
-          "type": "story_milestone",
-          "settings": {
-            "heading": "Building MOOV",
-            "body": "So I started building a product designed to make mornings easier \u2014 not by asking people to be more disciplined, but by changing the environment around them."
-          }
-        },
-        "letter-m": {
-          "type": "moov_letter",
-          "settings": {
-            "letter": "M",
-            "word": "Momentum",
-            "description": "Progress you feel in your body before you feel it in your calendar."
-          }
-        },
-        "letter-o1": {
-          "type": "moov_letter",
-          "settings": {
-            "letter": "O",
-            "word": "Output",
-            "description": "Finishing small, honest wins that stack."
-          }
-        },
-        "letter-o2": {
-          "type": "moov_letter",
-          "settings": {
-            "letter": "O",
-            "word": "Optimism",
-            "description": "Mornings as a reset, not a verdict."
-          }
-        },
-        "letter-v": {
-          "type": "moov_letter",
-          "settings": {
-            "letter": "V",
-            "word": "Vitality",
-            "description": "Energy that comes from alignment, not adrenaline alone."
-          }
-        }
-      },
-      "block_order": [
-        "milestone-1",
-        "milestone-2",
-        "milestone-3",
-        "letter-m",
-        "letter-o1",
-        "letter-o2",
-        "letter-v"
-      ],
       "settings": {
-        "hero_heading": "I got tired of starting every morning the same way.",
-        "hero_body": "Snooze. Scroll. Rush. Repeat.",
-        "video_eyebrow": "From the founder",
-        "moov_heading": "Why MOOV?",
-        "moov_body": "One system. Four commitments. Fewer reactive starts.",
-        "closing_heading": "Welcome to MOOV",
-        "closing_body": "Better mornings don\u2019t happen overnight. But small changes create momentum. Welcome to MOOV.",
-        "closing_button_label": "Shop now"
+        "video_poster_asset": "CFC86724-4271-4448-BD4D-1BFC891817C5.PNG",
+        "cta_primary_url": "/pages/get-moov",
+        "cta_secondary_url": "/pages/how-it-works"
       }
     }
   },
