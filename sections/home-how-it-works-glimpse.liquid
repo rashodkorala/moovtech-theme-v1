@@ -20,10 +20,11 @@
   endif
 
   assign cta_url = section.settings.cta_url | default: '/pages/how-it-works'
+  assign surface = section.settings.surface | default: 'dark'
 -%}
 
 <section
-  class="hiw-glimpse full-width"
+  class="hiw-glimpse hiw-glimpse--{{ surface }} full-width"
   aria-labelledby="hiw-glimpse-heading-{{ section.id }}"
 >
   <div class="hiw-glimpse__inner">
@@ -138,9 +139,17 @@
 
 {% stylesheet %}
   .hiw-glimpse {
+    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
+  }
+
+  .hiw-glimpse--dark {
     background: var(--moov-black);
     color: var(--moov-cream);
-    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
+  }
+
+  .hiw-glimpse--cream {
+    background: var(--moov-cream);
+    color: var(--moov-black);
   }
 
   .hiw-glimpse__inner {
@@ -178,6 +187,10 @@
     color: var(--moov-text-tertiary-dark);
   }
 
+  .hiw-glimpse--cream .hiw-glimpse__eyebrow {
+    color: var(--moov-amber);
+  }
+
   .hiw-glimpse__heading {
     margin: 0;
     font-family: var(--font-hero);
@@ -189,6 +202,10 @@
     color: var(--moov-text-primary-dark);
   }
 
+  .hiw-glimpse--cream .hiw-glimpse__heading {
+    color: var(--moov-black);
+  }
+
   .hiw-glimpse__intro {
     margin: 0;
     font-family: var(--font-body);
@@ -196,6 +213,10 @@
     line-height: 1.65;
     color: var(--moov-text-secondary-dark);
     max-width: 44ch;
+  }
+
+  .hiw-glimpse--cream .hiw-glimpse__intro {
+    color: var(--moov-text-secondary-light);
   }
 
   .hiw-glimpse__footer {
@@ -222,10 +243,21 @@
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
+  .hiw-glimpse--cream .hiw-glimpse__cta {
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-color: transparent;
+  }
+
   .hiw-glimpse__cta:hover {
     background: var(--moov-cream-shadow);
     transform: translateY(-1px);
     box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 30%, transparent);
+  }
+
+  .hiw-glimpse--cream .hiw-glimpse__cta:hover {
+    background: color-mix(in srgb, var(--moov-black) 85%, var(--moov-cream));
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 20%, transparent);
   }
 
   .hiw-glimpse__grid {
@@ -259,6 +291,11 @@
     border-radius: 16px;
     background: var(--moov-surface-dark-elevated);
     border: 1px solid var(--moov-border-dark);
+  }
+
+  .hiw-glimpse--cream .hiw-glimpse__media {
+    background: color-mix(in srgb, var(--moov-black) 8%, var(--moov-cream));
+    border-color: color-mix(in srgb, var(--moov-black) 12%, transparent);
   }
 
   .hiw-glimpse__img {
@@ -319,6 +356,10 @@
     color: var(--moov-text-tertiary-dark);
   }
 
+  .hiw-glimpse--cream .hiw-glimpse__kicker {
+    color: var(--moov-text-tertiary-light);
+  }
+
   .hiw-glimpse__step-title {
     margin: 0;
     font-family: var(--font-hero);
@@ -330,12 +371,20 @@
     color: var(--moov-text-primary-dark);
   }
 
+  .hiw-glimpse--cream .hiw-glimpse__step-title {
+    color: var(--moov-black);
+  }
+
   .hiw-glimpse__step-text {
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-sm);
     line-height: 1.5;
     color: var(--moov-text-secondary-dark);
+  }
+
+  .hiw-glimpse--cream .hiw-glimpse__step-text {
+    color: var(--moov-text-secondary-light);
   }
 
   @media (max-width: 880px) {
@@ -360,6 +409,16 @@
   "tag": "section",
   "class": "section-hiw-glimpse",
   "settings": [
+    {
+      "type": "select",
+      "id": "surface",
+      "label": "t:labels.surface",
+      "default": "dark",
+      "options": [
+        { "value": "dark", "label": "t:options.surface.dark" },
+        { "value": "cream", "label": "t:options.surface.cream" }
+      ]
+    },
     {
       "type": "header",
       "content": "t:sections.home_how_glimpse.content_header"

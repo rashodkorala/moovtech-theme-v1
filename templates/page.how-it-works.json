@@ -15,229 +15,40 @@
         "step-1": {
           "type": "step",
           "settings": {
-            "kicker": "Device and mobile app",
-            "title": "Place MOOV device on the wall in your desired location (max 30 ft)",
-            "body": "<p>10-second, damage-free install with 3M tape. We recommend placing it where you usually go first.</p>",
-            "explain_title": "Why this step matters",
-            "explain_body": "<p>Distance creates intention. When you have to move to silence the alarm, your body wakes before your mind can negotiate a snooze.</p>",
-            "image_url": "https://images.unsplash.com/photo-1757693223749-d5ce2dff34f4?auto=format&fit=crop&w=1400&q=80"
+            "title": "Mount it across the room.",
+            "text": "Bathroom, hallway, kitchen — anywhere you don't sleep. The brass cleat takes ten minutes and two anchors. Renters can use the optional adhesive cleat.",
+            "image_asset": "step-1-how it works.jpg"
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
-            "kicker": "Configure your alarm",
-            "title": "Set your desired get-up time in the MOOV app",
-            "body": "<p>Choose your alarm sound and volume. Set a pre-alert for 1-2 minutes before your main alarm so you wake lightly before needing to get up.</p>",
-            "explain_title": "Why this step matters",
-            "explain_body": "<p>Pre-alert and sound controls help reduce sleep shock, so your wake-up feels smoother and easier to follow through on.</p>",
-            "image_url": "https://images.unsplash.com/photo-1771499931747-5a383e3bd54d?auto=format&fit=crop&w=1400&q=80"
+            "title": "Pair once, set the alarm.",
+            "text": "Open the MOOV app, pair over Bluetooth, choose a wake-up sound and the pre-alert window. The app then disappears — there's nothing else inside it.",
+            "image_asset": "step-2 hot it works.PNG"
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
-            "kicker": "Get up to silence",
-            "title": "When the alarm rings, you get up to turn it off",
-            "body": "<p>The phone plays the alarm. You must interact with the MOOV device to silence it.</p>",
-            "explain_title": "Why this step matters",
-            "explain_body": "<p>The alarm ends only after action, reinforcing a repeatable morning habit that favors getting up over staying in bed.</p>",
-            "image_url": "https://images.unsplash.com/photo-1632466477918-66ed5a901be2?auto=format&fit=crop&w=1400&q=80"
+            "title": "Wake, walk, press.",
+            "text": "When MOOV rings, you have to get up to dismiss it. By the time your palm meets the ring, you're already standing. The phone stays in the kitchen.",
+            "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG"
           }
         }
       },
-      "block_order": [
-        "step-1",
-        "step-2",
-        "step-3"
-      ],
+      "block_order": ["step-1", "step-2", "step-3"],
       "settings": {
-        "headline": "Design over discipline",
-        "subheadline": "MOOV works with a wall-mounted device and mobile app to make getting out of bed easier than staying in it.",
-        "hero_image": "shopify://shop_images/CFC86724-4271-4448-BD4D-1BFC891817C5.png",
-        "hero_image_url": "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=2400&q=80",
-        "hero_overlay_opacity": 30,
-        "step_prefix": "Step",
-        "steps_sidebar_title": "How it works"
-      }
-    },
-    "phone_app": {
-      "type": "how-it-works-phone-app",
-      "blocks": {
-        "app-img-1": {
-          "type": "app_image",
-          "settings": {
-            "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=2000&q=80",
-            "image_alt": ""
-          }
-        },
-        "app-img-2": {
-          "type": "app_image",
-          "settings": {
-            "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=2000&q=80",
-            "image_alt": ""
-          }
-        },
-        "app-img-3": {
-          "type": "app_image",
-          "settings": {
-            "image_url": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=2000&q=80",
-            "image_alt": ""
-          }
-        },
-        "app-f1": {
-          "type": "feature",
-          "settings": {
-            "title": "Alarms and sounds",
-            "text": "Set your get-up time, pre-alert, and volume so waking up matches how you want to feel."
-          }
-        },
-        "app-f2": {
-          "type": "feature",
-          "settings": {
-            "title": "Device pairing",
-            "text": "Connect MOOV over Bluetooth so silencing the alarm always means you have reached the device."
-          }
-        },
-        "app-f3": {
-          "type": "feature",
-          "settings": {
-            "title": "Streaks and rhythm",
-            "text": "See the mornings you followed through — small feedback that reinforces the routine, not another dashboard."
-          }
-        }
-      },
-      "block_order": [
-        "app-img-1",
-        "app-img-2",
-        "app-img-3",
-        "app-f1",
-        "app-f2",
-        "app-f3"
-      ],
-      "settings": {
-        "eyebrow": "The MOOV app",
-        "heading": "Your alarm lives on the phone. The habit lives in the room.",
-        "body": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll.",
-        "footnote": "iOS and Android. Bluetooth keeps your device and phone in sync.",
-        "cta_label": "Shop MOOV",
-        "cta_url": "shopify://products/t",
-        "show_store_badges": true,
-        "app_store_url": "https://apps.apple.com/app/",
-        "google_play_url": "https://play.google.com/store/apps/",
-        "image_position": "right",
-        "mobile_image_first": true,
-        "image_url": ""
-      }
-    },
-    "cta": {
-      "type": "how-it-works-cta",
-      "settings": {
-        "background_image_url": "https://images.unsplash.com/photo-1747372277831-bfefabee8e11?auto=format&fit=crop&w=2400&q=80",
-        "surface": "dark",
-        "eyebrow": "Take back your mornings",
-        "heading": "Ready to try it out?",
-        "highlight_word": "Ready",
-        "subheading": "Normal alarms wake you up. MOOV gets you up. Start tomorrow with less rush and more control.",
-        "button_label": "Shop now",
-        "button_url": "shopify://products/t"
-      }
-    },
-    "faq": {
-      "type": "faq",
-      "blocks": {
-        "faq-1": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How is MOOV different from a normal alarm?",
-            "answer": "MOOV does not just wake you up. It gets you up. A normal alarm goes off beside your bed, where it is easy to hit snooze half-asleep. MOOV changes that by making you physically get out of bed and walk to your device to turn it off."
-          }
-        },
-        "faq-2": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Can’t I just put my phone across the room instead?",
-            "answer": "You can, but most people do not stick with it. MOOV is designed to make getting up automatic, not dependent on willpower."
-          }
-        },
-        "faq-3": {
-          "type": "faq_item",
-          "settings": {
-            "question": "What if I just get up, turn it off, and go back to bed?",
-            "answer": "That is possible, but MOOV makes it far less likely. That first bit of movement is often the hardest part, and MOOV helps you get past it."
-          }
-        },
-        "faq-4": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Does MOOV make the alarm sound?",
-            "answer": "No. Your phone plays the alarm sound. MOOV works with the app and the wall-mounted device."
-          }
-        },
-        "faq-5": {
-          "type": "faq_item",
-          "settings": {
-            "question": "How does the device work?",
-            "answer": "Set your alarm in the app, mount MOOV away from your bed, and when the alarm sounds, get up and press the device to stop it."
-          }
-        },
-        "faq-6": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Is it hard to install?",
-            "answer": "No. MOOV is designed for simple setup with adhesive strips or a wall mount. It only takes a few minutes."
-          }
-        },
-        "faq-7": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Will MOOV work if my phone disconnects?",
-            "answer": "MOOV is being built to prioritize reliable Bluetooth connection and dependable alarm performance."
-          }
-        },
-        "faq-8": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Who is MOOV for?",
-            "answer": "People who hit snooze too much, struggle getting out of bed, scroll first thing, or feel rushed every morning."
-          }
-        },
-        "faq-9": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Is MOOV just for productivity people?",
-            "answer": "No. MOOV is about helping people feel less stressed, less rushed, and more in control."
-          }
-        },
-        "faq-10": {
-          "type": "faq_item",
-          "settings": {
-            "question": "Why does waking up better matter?",
-            "answer": "Because how you start your morning affects everything that follows. A better start creates more calm, confidence, and momentum. Normal alarms wake you up. MOOV gets you up. Big difference."
-          }
-        }
-      },
-      "block_order": [
-        "faq-1",
-        "faq-2",
-        "faq-3",
-        "faq-4",
-        "faq-5",
-        "faq-6",
-        "faq-7",
-        "faq-8",
-        "faq-9",
-        "faq-10"
-      ],
-      "settings": {
-        "heading": "10 Smart FAQs"
+        "hero_heading": "Wake up. Walk across the room. Press the ring.",
+        "hero_sub": "MOOV is a wall-mounted alarm with one job. The walk is the feature. No screens, no notifications, no scroll — just an object on a wall, and a small, ordinary triumph at 6:30 a.m.",
+        "cta_heading": "Live with MOOV for thirty days.",
+        "cta_sub": "Free shipping, no restocking fee, a real person on the other end of every email.",
+        "cta_primary_label": "Buy MOOV — $129",
+        "cta_primary_url": "/pages/shop",
+        "cta_secondary_label": "Read our story",
+        "cta_secondary_url": "/pages/our-story"
       }
     }
   },
-  "order": [
-    "main",
-    "phone_app",
-    "cta",
-    "faq"
-  ]
+  "order": ["main"]
 }

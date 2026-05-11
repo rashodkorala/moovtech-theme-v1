@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:api.anthropic.com)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Read(//Users/rashodkorala/Documents/Clients/Moovtech/**)",
+      "Bash(unzip -o \"Moov Design System-handoff.zip\" -d moov-design-system-handoff)"
     ]
   }
 }

@@ -40,33 +40,40 @@
               assign nav_lbl = section.settings.nav_1_label
               assign nav_url = section.settings.nav_1_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.shop' | t
+                assign nav_lbl = 'How it works'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/how-it-works'
               endif
             when 2
               assign nav_lbl = section.settings.nav_2_label
               assign nav_url = section.settings.nav_2_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.sale' | t
+                assign nav_lbl = 'Our story'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/our-story'
               endif
             when 3
               assign nav_lbl = section.settings.nav_3_label
               assign nav_url = section.settings.nav_3_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.about' | t
+                assign nav_lbl = 'Support'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/support'
               endif
             when 4
               assign nav_lbl = section.settings.nav_4_label
               assign nav_url = section.settings.nav_4_url
-              if nav_lbl == blank and nav_url != blank
-                assign nav_lbl = 'general.nav.features' | t
-              endif
           endcase
         -%}
         {%- if nav_lbl != blank -%}
           <li>
             <a
               href="{{ nav_url | default: routes.root_url }}"
-              class="moov-nav__link"
+              class="moov-nav__link{% if nav_url == request.path %} moov-nav__link--active{% endif %}"
+              {% if nav_url == request.path %}aria-current="page"{% endif %}
             >
               {{- nav_lbl | escape -}}
             </a>
@@ -168,30 +175,40 @@
               assign nav_lbl = section.settings.nav_1_label
               assign nav_url = section.settings.nav_1_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.shop' | t
+                assign nav_lbl = 'How it works'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/how-it-works'
               endif
             when 2
               assign nav_lbl = section.settings.nav_2_label
               assign nav_url = section.settings.nav_2_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.sale' | t
+                assign nav_lbl = 'Our story'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/our-story'
               endif
             when 3
               assign nav_lbl = section.settings.nav_3_label
               assign nav_url = section.settings.nav_3_url
               if nav_lbl == blank
-                assign nav_lbl = 'general.nav.about' | t
+                assign nav_lbl = 'Support'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/support'
               endif
             when 4
               assign nav_lbl = section.settings.nav_4_label
               assign nav_url = section.settings.nav_4_url
-              if nav_lbl == blank and nav_url != blank
-                assign nav_lbl = 'general.nav.features' | t
-              endif
           endcase
         -%}
         {%- if nav_lbl != blank -%}
-          <a href="{{ nav_url | default: routes.root_url }}" class="moov-drawer__link">{{ nav_lbl | escape }}</a>
+          <a
+            href="{{ nav_url | default: routes.root_url }}"
+            class="moov-drawer__link{% if nav_url == request.path %} moov-drawer__link--active{% endif %}"
+            {% if nav_url == request.path %}aria-current="page"{% endif %}
+          >{{- nav_lbl | escape -}}</a>
         {%- endif -%}
       {%- endfor -%}
     </nav>
@@ -326,6 +343,21 @@
     opacity: 0.55;
   }
 
+  .moov-nav__link--active {
+    position: relative;
+  }
+
+  .moov-nav__link--active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.45;
+  }
+
   /* Right utilities group */
   .moov-nav__right {
     display: flex;
@@ -387,7 +419,7 @@
     padding: 0 4px;
     border-radius: 999px;
     border: 1px solid var(--moov-black);
-    background: #fff;
+    background: var(--moov-cream);
     font-family: var(--font-body);
     font-size: 10px;
     font-weight: 600;
@@ -491,7 +523,7 @@
   }
 
   .moov-header--transparent .moov-nav__cart-badge {
-    background: #fff;
+    background: var(--moov-cream);
     color: var(--moov-black);
     border-color: color-mix(in srgb, var(--moov-cream) 45%, transparent);
   }
@@ -560,7 +592,7 @@
   }
 
   .moov-header--transparent.nav--light .moov-nav__cart-badge {
-    background: #fff;
+    background: var(--moov-cream);
     color: var(--moov-black);
     border-color: var(--moov-black);
   }
@@ -657,6 +689,10 @@
     color: var(--moov-text-primary-dark);
   }
 
+  .moov-drawer__link--active {
+    color: var(--moov-text-primary-dark);
+  }
+
   .moov-drawer__get-moov {
     display: block;
     text-align: center;
@@ -714,7 +750,7 @@
   }
 
   [data-theme="dark"] .moov-nav__cart-badge {
-    background: #fff;
+    background: var(--moov-cream);
     color: var(--moov-black);
     border-color: var(--moov-border-dark);
   }

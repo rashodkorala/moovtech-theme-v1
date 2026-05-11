@@ -1,0 +1,1092 @@
+{%- liquid
+  assign email_address  = section.settings.email_address  | default: 'help@moov.co'
+  assign phone_number   = section.settings.phone_number   | default: '(415) 555-0142'
+  assign phone_raw      = section.settings.phone_raw      | default: '+14155550142'
+  assign book_url       = section.settings.book_url       | default: '#book'
+  assign cta_primary    = section.settings.cta_primary_url | default: 'mailto:help@moov.co'
+  assign cta_secondary  = section.settings.cta_secondary_url | default: 'tel:+14155550142'
+-%}
+
+<div class="sup-page full-width">
+
+  {%- comment -%}01 HERO — dark{%- endcomment -%}
+  <section class="sup-hero sup-dark" aria-label="Support introduction">
+    <div class="sup-inner">
+      <div class="sup-hero-grid">
+        <div class="sup-hero-copy">
+          <p class="sup-eyebrow">Support</p>
+          <h1 class="sup-hero-h1">Talk to a person.<br>Send it back if it's<br>not for you.</h1>
+        </div>
+        <p class="sup-hero-sub">
+          A real human answers every email, usually within four hours. Live with MOOV for thirty days — if it doesn't change your morning, mail it back. We pay return shipping. <em>No restocking fee, ever.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}02 CONTACT — cream{%- endcomment -%}
+  <section class="sup-contact sup-cream" aria-label="Contact options">
+    <div class="sup-inner">
+      <div class="sup-contact-grid">
+
+        <article class="sup-contact-card">
+          <p class="sup-eyebrow sup-eyebrow--amber">Email</p>
+          <h3>{{ email_address | escape }}</h3>
+          <p>The fastest way. We answer Mon–Fri, 8a–6p PT. Expect a real reply, not a ticket number.</p>
+          <a class="sup-contact-cta" href="mailto:{{ email_address | escape }}">
+            Send an email
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2.5" y1="9.5" x2="9.5" y2="2.5"/><polyline points="3,2.5 9.5,2.5 9.5,9"/></svg>
+          </a>
+        </article>
+
+        <article class="sup-contact-card">
+          <p class="sup-eyebrow sup-eyebrow--amber">Phone</p>
+          <h3>{{ phone_number | escape }}</h3>
+          <p>Call Devi on the support line. Mon–Fri, 9a–5p PT. If you get voicemail, leave a number and she'll call back the same day.</p>
+          <a class="sup-contact-cta" href="tel:{{ phone_raw | escape }}">
+            Call support
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2.5" y1="9.5" x2="9.5" y2="2.5"/><polyline points="3,2.5 9.5,2.5 9.5,9"/></svg>
+          </a>
+        </article>
+
+        <article class="sup-contact-card">
+          <p class="sup-eyebrow sup-eyebrow--amber">Live install</p>
+          <h3>Walk you through it on FaceTime.</h3>
+          <p>Stuck on the mount? Book a fifteen-minute call and we'll guide the install — drill, anchor, cleat — in real time.</p>
+          <a class="sup-contact-cta" href="{{ book_url }}">
+            Book a call
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2.5" y1="9.5" x2="9.5" y2="2.5"/><polyline points="3,2.5 9.5,2.5 9.5,9"/></svg>
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}03 RETURNS HEADLINE — dark{%- endcomment -%}
+  <section class="sup-returns-hl sup-dark" aria-label="Returns promise">
+    <div class="sup-inner">
+      <div class="sup-returns-hl-grid">
+        <p class="sup-eyebrow">The promise</p>
+        <h2 class="sup-returns-hl-h2">
+          Thirty days on your wall. Mail it back if it doesn't earn its keep.
+          <span class="sup-amber"> We refund every dollar — shipping included.</span>
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}04 RETURNS STEPS — cream{%- endcomment -%}
+  <section class="sup-returns-steps sup-cream" aria-label="Return process">
+    <div class="sup-inner">
+      <div class="sup-section-head">
+        <p class="sup-eyebrow sup-eyebrow--amber">How a return works</p>
+        <h2 class="sup-section-h2 sup-h2-dark">Four steps.<br>None involve waiting on hold.</h2>
+      </div>
+      <ol class="sup-step-list" role="list">
+        <li>
+          <span class="sup-step-n">01</span>
+          <div class="sup-step-copy">
+            <h4>Email us.</h4>
+            <p>Reply to your order receipt or write help@moov.co. Tell us the order number — that's all we need.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sup-step-n">02</span>
+          <div class="sup-step-copy">
+            <h4>We send a label.</h4>
+            <p>Pre-paid UPS within an hour during business hours. Box up MOOV with the brass cleat and the USB-C cable. The ceramic shell ships safely in the original kraft box.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sup-step-n">03</span>
+          <div class="sup-step-copy">
+            <h4>Drop it off.</h4>
+            <p>Any UPS counter. No printer needed — we send the label as a QR code. You're out the door in two minutes.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sup-step-n">04</span>
+          <div class="sup-step-copy">
+            <h4>Refund.</h4>
+            <p>We refund the moment the package arrives at our workshop — not the day the bank decides. Card refunds clear in three to five business days.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  {%- comment -%}05 RETURNS POLICY — dark{%- endcomment -%}
+  <section class="sup-policy sup-dark" aria-label="Return policy details">
+    <div class="sup-inner">
+      <div class="sup-policy-grid">
+        <div class="sup-policy-head">
+          <p class="sup-eyebrow">The fine print</p>
+          <h2 class="sup-section-h2">What we cover,<br>and the few things we don't.</h2>
+          <p class="sup-policy-note">We try to write a policy you can read in two minutes. If anything below is unclear, email us — the rule we apply in person is more generous than the rule on this page.</p>
+        </div>
+        <dl class="sup-policy-list">
+          <div>
+            <dt>Window</dt>
+            <dd>Thirty days from the day MOOV arrives. The clock starts at delivery, not order.</dd>
+          </div>
+          <div>
+            <dt>Condition</dt>
+            <dd>Light wear is fine. Scuffs from a drill, a fingerprint on the ring, the kraft box without its sleeve — none of it affects your refund.</dd>
+          </div>
+          <div>
+            <dt>Return shipping</dt>
+            <dd>On us. Domestic UPS, both ways, every time. We don't deduct shipping from the refund.</dd>
+          </div>
+          <div>
+            <dt>Restocking fee</dt>
+            <dd>None. We resell or donate returned units. No deduction, no surprise charges.</dd>
+          </div>
+          <div>
+            <dt>Refund timing</dt>
+            <dd>Processed the day your package reaches us. Card refunds clear in 3–5 business days; PayPal in 1–2.</dd>
+          </div>
+          <div>
+            <dt>Gifts</dt>
+            <dd>Returnable by the recipient with the order number on the gift card. Refund is issued as MOOV credit unless the original purchaser approves a card refund.</dd>
+          </div>
+          <div>
+            <dt>Exchanges</dt>
+            <dd>Easiest as a fresh order + return of the original. We send the new color out the same day; you ship the old one back when convenient.</dd>
+          </div>
+          <div>
+            <dt>Excluded</dt>
+            <dd>Custom engravings. Limited drops marked Final Sale. Gift cards. Damage from a fall or water exposure outside the bathroom rating.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}06 REFUNDS BREAKDOWN — cream{%- endcomment -%}
+  <section class="sup-refunds sup-cream" aria-label="Refund breakdown">
+    <div class="sup-inner">
+      <div class="sup-refunds-grid">
+        <div class="sup-refunds-head">
+          <p class="sup-eyebrow sup-eyebrow--amber">What gets refunded</p>
+          <h2 class="sup-section-h2 sup-h2-dark">Every dollar.<br>Itemized.</h2>
+          <p class="sup-refunds-note">An example, for a typical order. Yours will look similar.</p>
+        </div>
+        <div class="sup-refunds-table" role="table" aria-label="Refund breakdown">
+          <div class="sup-refunds-row sup-refunds-head-row" role="row">
+            <span role="columnheader">Item</span>
+            <span role="columnheader">Paid</span>
+            <span class="sup-rl-refunded" role="columnheader">Refunded</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">MOOV device — Cream</span>
+            <span class="sup-rl-paid" role="cell">$129.00</span>
+            <span class="sup-rl-refunded" role="cell">$129.00</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">Wall mount — Brass</span>
+            <span class="sup-rl-paid" role="cell">$24.00</span>
+            <span class="sup-rl-refunded" role="cell">$24.00</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">Charge cable — USB-C, 2m</span>
+            <span class="sup-rl-paid" role="cell">$18.00</span>
+            <span class="sup-rl-refunded" role="cell">$18.00</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">Outbound shipping</span>
+            <span class="sup-rl-paid" role="cell">Free</span>
+            <span class="sup-rl-refunded" role="cell">—</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">Return shipping</span>
+            <span class="sup-rl-paid" role="cell">—</span>
+            <span class="sup-rl-refunded" role="cell">We pay</span>
+          </div>
+          <div class="sup-refunds-row" role="row">
+            <span class="sup-rl-label" role="cell">Restocking fee</span>
+            <span class="sup-rl-paid" role="cell">—</span>
+            <span class="sup-rl-refunded" role="cell">None</span>
+          </div>
+          <div class="sup-refunds-row sup-refunds-total" role="row">
+            <span class="sup-rl-label" role="cell">Refund total</span>
+            <span class="sup-rl-paid" role="cell">$171.00 paid</span>
+            <span class="sup-rl-refunded sup-amber" role="cell">$171.00 back</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}07 WARRANTY — dark{%- endcomment -%}
+  <section class="sup-warranty sup-dark" aria-label="Warranty information">
+    <div class="sup-inner">
+      <div class="sup-warranty-grid">
+        <div class="sup-warranty-head">
+          <p class="sup-eyebrow">After thirty days</p>
+          <h2 class="sup-section-h2">One-year warranty. Two years on the battery.</h2>
+          <p class="sup-warranty-lede">If anything stops working in normal use, we replace it. Email help@moov.co with the order number and a short video of the issue — most replacements ship the same day.</p>
+        </div>
+        <div class="sup-warranty-cols">
+          <div class="sup-warranty-col">
+            <h4>Covered</h4>
+            <ul>
+              <li>Manufacturing defects in the ceramic shell, mount, or ring</li>
+              <li>Battery capacity below 70% within 2 years of normal use</li>
+              <li>Speaker failure, USB-C port failure, LED failure</li>
+              <li>Firmware bugs we can't resolve over Bluetooth</li>
+            </ul>
+          </div>
+          <div class="sup-warranty-col">
+            <h4>Not covered</h4>
+            <ul>
+              <li>Cracks from drops or being knocked off the wall</li>
+              <li>Water damage outside the IPX4 bathroom rating</li>
+              <li>Cosmetic wear — the finish develops a soft patina by design</li>
+              <li>Aftermarket modifications or third-party mounts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}08 FAQ — cream{%- endcomment -%}
+  <section class="sup-faq sup-cream" aria-labelledby="sup-faq-heading">
+    <div class="sup-inner">
+      <div class="sup-faq-grid">
+        <div class="sup-faq-head">
+          <p class="sup-eyebrow sup-eyebrow--amber">Common questions</p>
+          <h2 id="sup-faq-heading" class="sup-section-h2 sup-h2-dark">The six we get most about returns.</h2>
+        </div>
+        <ul class="sup-faq-list" role="list">
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>Can I keep the box and still return it?</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">Yes. The kraft box and inner sleeve aren't required. If you have them, reuse them — they're tested for the round trip. If not, any padded box works.</p>
+            </details>
+          </li>
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>What if MOOV arrived damaged?</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">Send a photo within 48 hours of delivery. We ship a replacement the same business day and email you a return label for the damaged unit. No questions, no extra steps.</p>
+            </details>
+          </li>
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>I bought MOOV as a gift — can the recipient return it?</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">Yes. They'll need the order number from the gift card. By default the refund goes to MOOV credit so the original purchaser isn't charged back, but we can refund the card with their permission.</p>
+            </details>
+          </li>
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>Do you ship internationally? What about returns from outside the US?</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">We ship to Canada and the UK. International returns are accepted within 30 days; we cover return shipping up to $25, and the customer pays the difference. Duties paid on import are not refundable.</p>
+            </details>
+          </li>
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>I want to exchange Cream for Charcoal.</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">Order the Charcoal as a fresh order — we'll ship it the same day. Return the Cream whenever convenient on the pre-paid label. We refund the original order on arrival.</p>
+            </details>
+          </li>
+          <li>
+            <details class="sup-faq-item">
+              <summary class="sup-faq-q">
+                <span>Is there a re-mount kit if I move?</span>
+                <span class="sup-faq-caret" aria-hidden="true"></span>
+              </summary>
+              <p class="sup-faq-a">Yes. We send a free replacement cleat and anchors to anyone who's owned MOOV for at least 90 days. Email moving@moov.co with your shipping address.</p>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}09 CTA — dark{%- endcomment -%}
+  <section class="sup-cta sup-dark" aria-label="Get in touch">
+    <div class="sup-inner">
+      <div class="sup-cta-inner">
+        <p class="sup-eyebrow">Still stuck?</p>
+        <h2 class="sup-cta-h2">Write Devi. She'll write back.</h2>
+        <p class="sup-cta-sub">Every email goes to a real person on the team. No bots, no upsell, no ticket numbers — just a reply.</p>
+        <div class="sup-cta-actions">
+          <a href="{{ cta_primary }}" class="sup-btn sup-btn--primary">
+            {{ email_address | escape }}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="2" y1="7" x2="11" y2="7"/><polyline points="7,3.5 11,7 7,10.5"/></svg>
+          </a>
+          <a href="{{ cta_secondary }}" class="sup-btn sup-btn--outline">
+            {{ phone_number | escape }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% stylesheet %}
+
+/* ── Shared ── */
+.sup-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.sup-inner {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--section-inline-pad);
+}
+
+.sup-dark  { background: var(--moov-black); color: var(--moov-cream); }
+.sup-cream { background: var(--moov-cream); color: var(--moov-black); }
+
+.sup-eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moov-text-tertiary-dark);
+}
+
+.sup-eyebrow--amber { color: var(--moov-amber); }
+.sup-amber          { color: var(--moov-amber); }
+
+.sup-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.sup-section-h2 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-heading-xl);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--moov-cream);
+}
+
+.sup-h2-dark { color: var(--moov-black); }
+
+/* ── Buttons ── */
+.sup-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sup-btn--primary {
+  background: var(--moov-cream);
+  color: var(--moov-black);
+  border: 1px solid transparent;
+}
+
+.sup-btn--primary:hover {
+  background: var(--moov-cream-shadow);
+  transform: translateY(-1px);
+}
+
+.sup-btn--outline {
+  background: transparent;
+  color: var(--moov-cream);
+  border: 1px solid var(--moov-border-dark);
+}
+
+.sup-btn--outline:hover {
+  background: var(--moov-surface-dark-raised);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   01 HERO
+   ========================================================== */
+.sup-hero {
+  padding-block: clamp(4rem, 8vw, 7rem);
+  border-bottom: 1px solid var(--moov-border-dark);
+}
+
+.sup-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: end;
+}
+
+.sup-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sup-hero-h1 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--moov-cream);
+}
+
+.sup-hero-sub {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-dark);
+  max-width: 44ch;
+  align-self: end;
+  padding-bottom: 0.4rem;
+}
+
+.sup-hero-sub em {
+  font-style: italic;
+  color: var(--moov-amber);
+}
+
+/* ==========================================================
+   02 CONTACT CARDS
+   ========================================================== */
+.sup-contact {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid color-mix(in srgb, var(--moov-black) 10%, transparent);
+}
+
+.sup-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.sup-contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 28px 30px;
+  background: var(--moov-cream);
+  border: 1px solid var(--moov-border-light);
+  border-radius: var(--radius-card, 16px);
+  min-height: 240px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sup-contact-card:hover {
+  border-color: rgba(10, 10, 9, 0.22);
+  background: var(--moov-wash-on-cream-4);
+}
+
+.sup-contact-card h3 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-heading-md);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--moov-black);
+}
+
+.sup-contact-card p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-light);
+  max-width: 36ch;
+  flex: 1;
+}
+
+.sup-contact-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--moov-border-light);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moov-black);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.sup-contact-cta:hover { opacity: 0.6; }
+
+/* ==========================================================
+   03 RETURNS HEADLINE
+   ========================================================== */
+.sup-returns-hl {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid var(--moov-border-dark);
+}
+
+.sup-returns-hl-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 22ch;
+}
+
+.sup-returns-hl-h2 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--moov-cream);
+}
+
+/* ==========================================================
+   04 RETURN STEPS
+   ========================================================== */
+.sup-returns-steps {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid color-mix(in srgb, var(--moov-black) 10%, transparent);
+}
+
+.sup-step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--moov-border-light);
+}
+
+.sup-step-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 26px 24px 30px 0;
+  border-right: 1px solid var(--moov-border-light);
+  min-height: 220px;
+}
+
+.sup-step-list li:last-child { border-right: none; }
+
+.sup-step-n {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moov-amber);
+}
+
+.sup-step-copy h4 {
+  margin: 0 0 8px;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-heading-md);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--moov-black);
+}
+
+.sup-step-copy p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-light);
+  max-width: 32ch;
+}
+
+/* ==========================================================
+   05 RETURNS POLICY
+   ========================================================== */
+.sup-policy {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid var(--moov-border-dark);
+}
+
+.sup-policy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+
+.sup-policy-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: calc(var(--header-height, 5rem) + 24px);
+}
+
+.sup-policy-note {
+  margin: 4px 0 0;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--moov-text-secondary-dark);
+  max-width: 36ch;
+}
+
+.sup-policy-list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sup-policy-list > div {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 28px;
+  padding: 20px 0;
+  border-top: 1px solid var(--moov-border-dark);
+}
+
+.sup-policy-list > div:last-child { border-bottom: 1px solid var(--moov-border-dark); }
+
+.sup-policy-list dt {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moov-amber);
+  padding-top: 3px;
+}
+
+.sup-policy-list dd {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.65;
+  color: var(--moov-text-secondary-dark);
+}
+
+/* ==========================================================
+   06 REFUNDS BREAKDOWN
+   ========================================================== */
+.sup-refunds {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid color-mix(in srgb, var(--moov-black) 10%, transparent);
+}
+
+.sup-refunds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+
+.sup-refunds-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sup-refunds-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-light);
+  max-width: 32ch;
+}
+
+.sup-refunds-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.sup-refunds-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 18px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--moov-border-light);
+}
+
+.sup-refunds-row:last-child { border-bottom: 1px solid var(--moov-border-light); }
+
+.sup-refunds-head-row {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moov-text-tertiary-light);
+  padding-bottom: 10px;
+}
+
+.sup-rl-label {
+  font-size: var(--text-base);
+  color: var(--moov-black);
+}
+
+.sup-rl-paid {
+  font-size: var(--text-sm);
+  color: var(--moov-text-secondary-light);
+}
+
+.sup-rl-refunded {
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-md);
+  letter-spacing: -0.01em;
+  color: var(--moov-black);
+  text-align: right;
+}
+
+.sup-refunds-total .sup-rl-label,
+.sup-refunds-total .sup-rl-paid {
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-md);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--moov-black);
+}
+
+.sup-refunds-total .sup-rl-refunded { font-size: var(--text-heading-sm); }
+
+/* ==========================================================
+   07 WARRANTY
+   ========================================================== */
+.sup-warranty {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid var(--moov-border-dark);
+}
+
+.sup-warranty-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+
+.sup-warranty-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sup-warranty-lede {
+  margin: 4px 0 0;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-dark);
+  max-width: 38ch;
+}
+
+.sup-warranty-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.sup-warranty-col {
+  padding: 22px 22px 24px;
+  border: 1px solid var(--moov-border-dark);
+  border-radius: var(--radius-card, 16px);
+  background: var(--moov-surface-dark-raised);
+}
+
+.sup-warranty-col h4 {
+  margin: 0 0 14px;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: var(--text-heading-sm);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--moov-cream);
+}
+
+.sup-warranty-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sup-warranty-col li {
+  position: relative;
+  padding-left: 18px;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--moov-text-secondary-dark);
+}
+
+.sup-warranty-col li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 8px;
+  height: 1.5px;
+  background: var(--moov-amber);
+}
+
+/* ==========================================================
+   08 FAQ
+   ========================================================== */
+.sup-faq {
+  padding-block: var(--section-block-pad-y-md);
+  border-bottom: 1px solid color-mix(in srgb, var(--moov-black) 10%, transparent);
+}
+
+.sup-faq-grid {
+  display: grid;
+  grid-template-columns: minmax(200px, 340px) 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.sup-faq-head {
+  position: sticky;
+  top: calc(var(--header-height, 5rem) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sup-faq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--moov-border-light);
+}
+
+.sup-faq-item {
+  border-bottom: 1px solid var(--moov-border-light);
+}
+
+.sup-faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--moov-black);
+  user-select: none;
+}
+
+.sup-faq-q::-webkit-details-marker { display: none; }
+
+.sup-faq-caret {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--moov-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  position: relative;
+  transition: border-color 0.2s ease;
+}
+
+.sup-faq-caret::before,
+.sup-faq-caret::after {
+  content: "";
+  position: absolute;
+  background: var(--moov-black);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.sup-faq-caret::before { width: 8px; height: 1.5px; }
+.sup-faq-caret::after  { width: 1.5px; height: 8px; }
+
+details[open] .sup-faq-caret::after { transform: rotate(90deg); opacity: 0; }
+details[open] .sup-faq-q { color: var(--moov-amber); }
+
+.sup-faq-a {
+  margin: 0;
+  padding: 0 0 20px;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--moov-text-secondary-light);
+  max-width: 54ch;
+}
+
+/* ==========================================================
+   09 CTA
+   ========================================================== */
+.sup-cta {
+  padding-block: var(--section-block-pad-y-md);
+  text-align: center;
+}
+
+.sup-cta-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+.sup-cta-h2 {
+  margin: 0;
+  font-family: var(--font-hero);
+  font-weight: 500;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--moov-cream);
+}
+
+.sup-cta-sub {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--moov-text-secondary-dark);
+  max-width: 44ch;
+}
+
+.sup-cta-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 880px) {
+  .sup-hero-grid      { grid-template-columns: 1fr; }
+  .sup-contact-grid   { grid-template-columns: 1fr; }
+  .sup-policy-grid    { grid-template-columns: 1fr; }
+  .sup-policy-head    { position: static; }
+  .sup-refunds-grid   { grid-template-columns: 1fr; }
+  .sup-warranty-grid  { grid-template-columns: 1fr; }
+  .sup-faq-grid       { grid-template-columns: 1fr; }
+  .sup-faq-head       { position: static; }
+}
+
+@media (max-width: 980px) {
+  .sup-step-list { grid-template-columns: repeat(2, 1fr); }
+  .sup-step-list li { border-bottom: 1px solid var(--moov-border-light); padding-right: 18px; }
+  .sup-step-list li:nth-child(2n) { border-right: none; }
+  .sup-step-list li:nth-last-child(-n+2) { border-bottom: none; }
+}
+
+@media (max-width: 560px) {
+  .sup-step-list { grid-template-columns: 1fr; }
+  .sup-step-list li { border-right: none; }
+  .sup-step-list li:not(:last-child) { border-bottom: 1px solid var(--moov-border-light); }
+  .sup-policy-list > div { grid-template-columns: 1fr; gap: 6px; }
+  .sup-refunds-row { grid-template-columns: 1fr; gap: 4px; }
+  .sup-rl-refunded { text-align: left; }
+  .sup-warranty-cols { grid-template-columns: 1fr; }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Support",
+  "tag": "section",
+  "class": "section-support",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contact details"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email address",
+      "default": "help@moov.co"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone number (display)",
+      "default": "(415) 555-0142"
+    },
+    {
+      "type": "text",
+      "id": "phone_raw",
+      "label": "Phone number (tel: link)",
+      "default": "+14155550142",
+      "info": "Use international format, e.g. +14155550142"
+    },
+    {
+      "type": "url",
+      "id": "book_url",
+      "label": "Book a call URL"
+    },
+    {
+      "type": "header",
+      "content": "CTA section"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_url",
+      "label": "Primary CTA URL",
+      "info": "Defaults to mailto: your email"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_url",
+      "label": "Secondary CTA URL",
+      "info": "Defaults to tel: your phone number"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Support",
+      "settings": {
+        "email_address": "help@moov.co",
+        "phone_number": "(415) 555-0142",
+        "phone_raw": "+14155550142"
+      }
+    }
+  ]
+}
+{% endschema %}

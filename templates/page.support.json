@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "support",
+      "settings": {
+        "email_address": "help@moov.co",
+        "phone_number": "(415) 555-0142",
+        "phone_raw": "+14155550142",
+        "cta_primary_url": "mailto:help@moov.co",
+        "cta_secondary_url": "tel:+14155550142"
+      }
+    }
+  },
+  "order": ["main"]
+}
