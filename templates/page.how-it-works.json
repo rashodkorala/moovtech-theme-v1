@@ -121,7 +121,7 @@
         "body": "Pair the app with your wall device, set wake times, pick sounds, and track consistency — the same kind of control you expect, without the morning turning into another scroll.",
         "footnote": "iOS and Android. Bluetooth keeps your device and phone in sync.",
         "cta_label": "Shop MOOV",
-        "cta_url": "shopify://products/t",
+        "cta_url": "shopify://products/moov",
         "show_store_badges": true,
         "app_store_url": "https://apps.apple.com/app/",
         "google_play_url": "https://play.google.com/store/apps/",
@@ -140,7 +140,7 @@
         "highlight_word": "Ready",
         "subheading": "Normal alarms wake you up. MOOV gets you up. Start tomorrow with less rush and more control.",
         "button_label": "Shop now",
-        "button_url": "shopify://products/t"
+        "button_url": "shopify://products/moov"
       }
     },
     "faq": {
