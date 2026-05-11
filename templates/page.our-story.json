@@ -13,7 +13,7 @@
       "type": "our-story",
       "settings": {
         "video_poster_asset": "CFC86724-4271-4448-BD4D-1BFC891817C5.PNG",
-        "cta_primary_url": "/pages/get-moov",
+        "cta_primary_url": "/products/moov",
         "cta_secondary_url": "/pages/how-it-works"
       }
     }

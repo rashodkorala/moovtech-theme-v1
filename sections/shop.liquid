@@ -26,7 +26,7 @@
   if cta_primary_label == blank
     assign cta_primary_label = 'sections.shop.cta_primary_default' | t
   endif
-  assign cta_primary_url = section.settings.cta_primary_url | default: '/collections/all'
+  assign cta_primary_url = section.settings.cta_primary_url | default: '/products/moov'
 
   assign cta_secondary_label = section.settings.cta_secondary_label | strip
   if cta_secondary_label == blank

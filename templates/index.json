@@ -20,7 +20,7 @@
         "hero_headline": "Reclaim your morning",
         "hero_subheadline": "",
         "cta_primary_label": "",
-        "cta_primary_url": "/collections/all"
+        "cta_primary_url": "/products/moov"
       }
     },
     "product_glimpse": {
@@ -36,7 +36,7 @@
         "body_trail": "— one press of the ring, once you've already crossed the room.",
         "body": "",
         "cta_label": "Get your MOOV",
-        "cta_url": "/pages/get-moov",
+        "cta_url": "/products/moov",
         "cta_secondary_label": "Our story",
         "cta_secondary_url": "/pages/our-story",
         "logo_max_width": 200,
@@ -106,7 +106,7 @@
         "perk_2": "30-day trial",
         "perk_3": "1-year warranty",
         "cta_label": "Add to cart",
-        "cta_url": "/collections/all",
+        "cta_url": "/products/moov",
         "cta_secondary_label": "Read our story",
         "cta_secondary_url": "/pages/our-story",
         "image_asset": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG",
