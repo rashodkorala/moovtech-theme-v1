@@ -4,10 +4,6 @@
       "type": "product-moov",
       "settings": {
         "eyebrow": "Now shipping",
-        "heading": "The MOOV device.",
-        "description": "Wall-mounted. Battery-powered. White ceramic finish. One job — get you out of bed.",
-        "price": "$129",
-        "compare_price": "$159",
         "show_stock": true,
         "rating_score": "4.9",
         "rating_count": "200+ reviews",
