@@ -1,57 +1,153 @@
 {%- liquid
-  assign shop_eyebrow = section.settings.eyebrow
-  if shop_eyebrow == blank
-    assign shop_eyebrow = 'store_marketing.collection_heading' | t
-  endif
-
-  assign shop_desc = collection.description | strip_html | strip
-  if shop_desc == blank
-    assign shop_desc = 'store_marketing.collection_subheading' | t
-  endif
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign active_tag = current_tags | first
 -%}
 
-{%- comment -%} ═══ SHOP — HEADER ═══ {%- endcomment -%}
-<div class="shop-header full-width" data-surface="dark">
-  <div class="shop-header__inner">
-    <p class="shop-header__eyebrow">{{ shop_eyebrow | escape }}</p>
-    <h1 class="shop-header__heading">{{ collection.title | default: 'All products' }}</h1>
-    {%- if shop_desc != blank -%}
-      <p class="shop-header__desc">{{ shop_desc | escape }}</p>
-    {%- endif -%}
+{%- comment -%}── 01 HERO ──{%- endcomment -%}
+<section class="mc-hero full-width" data-surface="cream">
+  <div class="mc-inner">
+    <div class="mc-hero-grid">
+      <div class="mc-hero-copy">
+        <p class="mc-eyebrow">{{ section.settings.eyebrow | default: 'Shop' | escape }}</p>
+        <h1 class="mc-hero-h1">{{ section.settings.heading | default: 'The device, and what it lives with.' | escape }}</h1>
+      </div>
+      <p class="mc-hero-sub">
+        {{ section.settings.sub | default: 'Six things. The alarm itself, the brass it hangs from, the cable that keeps it going, and a pack of sounds to wake to.' | escape }}
+        {%- if section.settings.sub_em != blank -%}
+          <em>{{ section.settings.sub_em | escape }}</em>
+        {%- else -%}
+          <em>That's the whole catalog.</em>
+        {%- endif -%}
+      </p>
+    </div>
   </div>
-</div>
+</section>
 
-{%- comment -%} ═══ SHOP — PRODUCT GRID ═══ {%- endcomment -%}
-<div class="shop-grid full-width" data-surface="cream">
-  <div class="shop-grid__inner">
+{%- comment -%}── 02 FILTERS + GRID ──{%- endcomment -%}
+<section class="mc-grid-section full-width" data-surface="cream">
+  <div class="mc-inner">
 
+    {%- comment -%} Filter + sort bar {%- endcomment -%}
+    <div class="mc-filters" role="region" aria-label="Filter and sort products">
+      <div class="mc-filter-row" role="list">
+        <a
+          href="{{ collection.url }}"
+          class="mc-filter-chip{% unless active_tag %} is-active{% endunless %}"
+          role="listitem"
+          aria-current="{% unless active_tag %}true{% else %}false{% endunless %}"
+        >All</a>
+        {%- for tag in collection.all_tags -%}
+          <a
+            href="{{ routes.collections_url }}/{{ collection.handle }}/{{ tag | handleize }}"
+            class="mc-filter-chip{% if current_tags contains tag %} is-active{% endif %}"
+            role="listitem"
+            aria-current="{{ current_tags contains tag }}"
+          >{{ tag | escape }}</a>
+        {%- endfor -%}
+      </div>
+
+      <label class="mc-sort">
+        <span>Sort</span>
+        <select class="mc-sort-select" aria-label="Sort products" onchange="window.location = this.value">
+          <option value="{{ collection.url }}?sort_by=manual"{% if sort_by == 'manual' %} selected{% endif %}>Featured</option>
+          <option value="{{ collection.url }}?sort_by=price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price — Low to high</option>
+          <option value="{{ collection.url }}?sort_by=price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price — High to low</option>
+          <option value="{{ collection.url }}?sort_by=created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Newest</option>
+        </select>
+      </label>
+    </div>
+
+    {%- comment -%} Product grid {%- endcomment -%}
     {%- paginate collection.products by 12 -%}
-      {%- if collection.products.size > 0 -%}
-        <div class="shop-grid__products">
+      {%- if collection.products_count > 0 -%}
+        <div class="mc-grid">
           {%- for product in collection.products -%}
-            <a href="{{ product.url }}" class="shop-card" data-animate="shop-card" style="--card-delay: {{ forloop.index0 | times: 60 }}ms;">
-              <div class="shop-card__image-wrap">
+            {%- liquid
+              assign is_first = forloop.first
+              assign has_sale = false
+              if product.compare_at_price > product.price
+                assign has_sale = true
+              endif
+              assign color_option = nil
+              for opt in product.options_with_values
+                assign opt_lower = opt.name | downcase
+                if opt_lower == 'color' or opt_lower == 'colour'
+                  assign color_option = opt
+                  break
+                endif
+              endfor
+            -%}
+            <a href="{{ product.url }}" class="mc-card">
+              <div class="mc-card__media">
                 {%- if product.featured_image -%}
-                  {{ product.featured_image | image_url: width: 640, height: 640, crop: 'center' | image_tag: class: 'shop-card__image', loading: 'lazy', alt: product.title | escape }}
+                  {{
+                    product.featured_image
+                    | image_url: width: 640, height: 800, crop: 'center'
+                    | image_tag:
+                      class: 'mc-card__img',
+                      loading: 'lazy',
+                      alt: product.featured_image.alt | default: product.title,
+                      widths: '320, 480, 640',
+                      sizes: '(min-width: 980px) 33vw, (min-width: 560px) 50vw, 100vw'
+                  }}
                 {%- else -%}
-                  <div class="shop-card__placeholder">
+                  <div class="mc-card__placeholder" aria-hidden="true">
                     {{ 'product-1' | placeholder_svg_tag }}
                   </div>
                 {%- endif -%}
 
                 {%- if product.available == false -%}
-                  <span class="shop-card__badge shop-card__badge--sold-out">{{ 'shop.sold_out' | t }}</span>
-                {%- elsif product.compare_at_price > product.price -%}
-                  <span class="shop-card__badge shop-card__badge--sale">{{ 'shop.sale' | t }}</span>
+                  <span class="mc-card__badge">Sold out</span>
+                {%- elsif has_sale -%}
+                  <span class="mc-card__badge mc-card__badge--sale">Sale</span>
+                {%- elsif is_first -%}
+                  <span class="mc-card__badge">Now shipping</span>
                 {%- endif -%}
               </div>
 
-              <div class="shop-card__info">
-                <h3 class="shop-card__title">{{ product.title }}</h3>
-                <div class="shop-card__price">
-                  <span class="shop-card__price-current">{{ product.price | money }}</span>
-                  {%- if product.compare_at_price > product.price -%}
-                    <span class="shop-card__price-compare">{{ product.compare_at_price | money }}</span>
+              <div class="mc-card__meta">
+                <div class="mc-card__head">
+                  <span class="mc-card__eyebrow">{{ product.type | default: product.vendor | escape }}</span>
+                  <h4 class="mc-card__title">{{ product.title | escape }}</h4>
+                </div>
+                <div class="mc-card__foot">
+                  <span class="mc-card__price">
+                    {%- if product.price_varies -%}
+                      {{ product.price_min | money }} – {{ product.price_max | money }}
+                    {%- else -%}
+                      {{ product.price | money }}
+                    {%- endif -%}
+                    {%- if has_sale -%}
+                      <span class="mc-card__was">{{ product.compare_at_price | money }}</span>
+                    {%- endif -%}
+                  </span>
+
+                  {%- if color_option -%}
+                    <div class="mc-card__swatches" aria-hidden="true">
+                      {%- for value in color_option.values -%}
+                        {%- liquid
+                          assign swatch_hex = '#cccccc'
+                          assign v = value | downcase | replace: ' ', ''
+                          case v
+                            when 'white', 'cream', 'ivory'
+                              assign swatch_hex = '#deddd8'
+                            when 'black', 'obsidian', 'charcoal', 'dark'
+                              assign swatch_hex = '#0a0a09'
+                            when 'brass', 'gold', 'bronze'
+                              assign swatch_hex = '#c79a4a'
+                            when 'amber', 'orange'
+                              assign swatch_hex = '#ed9d09'
+                            when 'silver', 'chrome', 'slate'
+                              assign swatch_hex = '#8a8a85'
+                          endcase
+                        -%}
+                        <span
+                          class="mc-card__swatch"
+                          style="background: {{ swatch_hex }};"
+                          title="{{ value | escape }}"
+                        ></span>
+                      {%- endfor -%}
+                    </div>
                   {%- endif -%}
                 </div>
               </div>
@@ -60,139 +156,244 @@
         </div>
 
         {%- if paginate.pages > 1 -%}
-          <div class="shop-grid__pagination">
+          <nav class="mc-pagination" aria-label="Collection pagination">
             {%- if paginate.previous -%}
-              <a href="{{ paginate.previous.url }}" class="shop-grid__page-link">&larr; {{ 'shop.previous' | t }}</a>
+              <a href="{{ paginate.previous.url }}" class="mc-page-link">&larr; Previous</a>
             {%- endif -%}
-
             {%- for part in paginate.parts -%}
               {%- if part.is_link -%}
-                <a href="{{ part.url }}" class="shop-grid__page-link">{{ part.title }}</a>
+                <a href="{{ part.url }}" class="mc-page-link">{{ part.title }}</a>
               {%- else -%}
-                <span class="shop-grid__page-link shop-grid__page-link--current">{{ part.title }}</span>
+                <span class="mc-page-link mc-page-link--current" aria-current="page">{{ part.title }}</span>
               {%- endif -%}
             {%- endfor -%}
-
             {%- if paginate.next -%}
-              <a href="{{ paginate.next.url }}" class="shop-grid__page-link">{{ 'shop.next' | t }} &rarr;</a>
+              <a href="{{ paginate.next.url }}" class="mc-page-link">Next &rarr;</a>
             {%- endif -%}
-          </div>
+          </nav>
         {%- endif -%}
 
       {%- else -%}
-        <div class="shop-grid__empty">
-          <p class="shop-grid__empty-text">{{ 'store_marketing.collection_empty' | t }}</p>
-          <a href="{{ routes.root_url }}" class="shop-grid__empty-btn">{{ 'shop.back_home' | t }}</a>
+        <div class="mc-empty">
+          <p class="mc-empty-text">{{ 'store_marketing.collection_empty' | t }}</p>
+          <a href="{{ routes.root_url }}" class="mc-empty-btn">{{ 'shop.back_home' | t }}</a>
         </div>
       {%- endif -%}
     {%- endpaginate -%}
 
   </div>
-</div>
+</section>
+
+{%- comment -%}── 03 ASSURANCE ──{%- endcomment -%}
+<section class="mc-assurance full-width" data-surface="cream">
+  <div class="mc-inner">
+    <div class="mc-assurance-grid">
+      <article class="mc-assure">
+        <h5>{{ section.settings.assure_1_title | default: 'Free shipping over $50' | escape }}</h5>
+        <p>{{ section.settings.assure_1_body | default: 'From Sausalito, anywhere in the US. Two to four business days.' | escape }}</p>
+      </article>
+      <article class="mc-assure">
+        <h5>{{ section.settings.assure_2_title | default: '30-day risk-free trial' | escape }}</h5>
+        <p>{{ section.settings.assure_2_body | default: "Live with it for a month. Send it back if it doesn't change your morning." | escape }}</p>
+      </article>
+      <article class="mc-assure">
+        <h5>{{ section.settings.assure_3_title | default: 'One-year warranty' | escape }}</h5>
+        <p>{{ section.settings.assure_3_body | default: 'We replace anything that fails. Email the team, talk to a person.' | escape }}</p>
+      </article>
+      <article class="mc-assure">
+        <h5>{{ section.settings.assure_4_title | default: 'Made in California' | escape }}</h5>
+        <p>{{ section.settings.assure_4_body | default: 'Glazed in Sausalito, assembled in Berkeley. Designed for a long life.' | escape }}</p>
+      </article>
+    </div>
+  </div>
+</section>
 
 {% stylesheet %}
-  /* ─── Header ─── */
-  .shop-header {
-    background: var(--moov-black);
-    padding: var(--section-block-pad-y-hero) 0 var(--section-block-pad-y-xl);
-    text-align: center;
-  }
 
-  .shop-header__inner {
-    width: min(720px, var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
+  /* ── Shared inner ── */
+  .mc-inner {
+    width: 100%;
+    max-width: var(--layout-max-width);
     margin-inline: auto;
+    padding-inline: var(--section-inline-pad);
   }
 
-  .shop-header__eyebrow {
+  /* ══════════════════════════════════════════
+     01 HERO
+  ══════════════════════════════════════════ */
+  .mc-hero {
+    background: var(--moov-cream);
+    color: var(--moov-black);
+    padding: calc(var(--header-height, 72px) + clamp(2rem, 5vw, 4rem)) 0 clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .mc-hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(28px, 5vw, 80px);
+    align-items: end;
+  }
+
+  .mc-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .mc-eyebrow {
+    margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-2xs);
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: 500;
     letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--moov-eyebrow-accent);
-    margin: 0 0 20px;
   }
 
-  .shop-header__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--moov-text-primary-dark);
-    margin: 0 0 20px;
-  }
-
-  .shop-header__desc {
-    font-family: var(--font-body);
-    font-size: var(--text-md);
-    font-weight: 400;
-    line-height: 1.7;
-    color: var(--moov-text-secondary-dark);
+  .mc-hero-h1 {
     margin: 0;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--moov-black);
   }
 
-  /* ─── Grid ─── */
-  .shop-grid {
+  .mc-hero-sub {
+    margin: 0;
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-light);
+    max-width: 44ch;
+    align-self: end;
+    padding-bottom: 6px;
+  }
+
+  .mc-hero-sub em {
+    color: var(--moov-text-primary-light);
+    font-style: italic;
+  }
+
+  @media (max-width: 880px) {
+    .mc-hero-grid { grid-template-columns: 1fr; }
+    .mc-hero-sub { max-width: 100%; }
+  }
+
+  /* ══════════════════════════════════════════
+     02 FILTERS + GRID
+  ══════════════════════════════════════════ */
+  .mc-grid-section {
     background: var(--moov-cream);
-    padding: var(--section-block-pad-y-lg) var(--section-inline-pad) var(--section-block-pad-y-xl);
+    padding-bottom: var(--section-block-pad-y-md);
   }
 
-  .shop-grid__inner {
-    max-width: var(--layout-max-width);
-    margin: 0 auto;
+  .mc-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 18px 0;
+    border-top: 1px solid var(--moov-border-light);
+    border-bottom: 1px solid var(--moov-border-light);
+    margin-bottom: 32px;
   }
 
-  .shop-grid__products {
+  .mc-filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mc-filter-chip {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--moov-text-secondary-light);
+    border: 1px solid var(--moov-border-light);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .mc-filter-chip:hover { opacity: 0.7; }
+
+  .mc-filter-chip.is-active {
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border-color: var(--moov-black);
+  }
+
+  .mc-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-light);
+  }
+
+  .mc-sort-select {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--moov-black);
+    background: transparent;
+    border: 1px solid var(--moov-border-light);
+    border-radius: 999px;
+    padding: 8px 32px 8px 14px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230a0a09' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  .mc-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    gap: 32px 28px;
   }
 
-  /* ─── Product card ─── */
-  .shop-card {
-    display: block;
+  /* ── Product card ── */
+  .mc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: inherit;
     text-decoration: none;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    transition-delay: var(--card-delay, 0ms);
   }
 
-  .shop-card.is-visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .shop-card__image-wrap {
-    position: relative;
+  .mc-card__media {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card, 16px);
     overflow: hidden;
-    border-radius: 12px;
-    background: var(--moov-cream-shadow);
-    aspect-ratio: 1 / 1;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--moov-black) 6%, transparent);
-    transition: box-shadow 0.4s ease;
+    background: color-mix(in srgb, var(--moov-black) 5%, var(--moov-cream));
+    position: relative;
+    transition: opacity 0.2s ease;
   }
 
-  .shop-card:hover .shop-card__image-wrap {
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 12%, transparent);
-  }
-
-  .shop-card__image {
+  .mc-card__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s ease;
   }
 
-  .shop-card:hover .shop-card__image {
-    transform: scale(1.04);
-  }
+  .mc-card:hover .mc-card__img { transform: scale(1.03); }
 
-  .shop-card__placeholder {
+  .mc-card__placeholder {
     width: 100%;
     height: 100%;
     display: flex;
@@ -201,80 +402,112 @@
     opacity: 0.15;
   }
 
-  .shop-card__badge {
+  .mc-card__badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 14px;
+    left: 14px;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 400;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 6px 12px;
-    border-radius: 999px;
-  }
-
-  .shop-card__badge--sold-out {
-    background: var(--moov-black);
     color: var(--moov-cream);
+    background: rgba(10, 10, 9, 0.7);
+    padding: 5px 11px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
   }
 
-  .shop-card__badge--sale {
+  .mc-card__badge--sale {
     background: var(--moov-amber);
     color: var(--moov-black);
   }
 
-  .shop-card__info {
-    padding: 16px 4px 0;
+  .mc-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .shop-card__title {
+  .mc-card__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mc-card__eyebrow {
     font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 400;
-    color: var(--moov-text-primary-light);
-    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-light);
+  }
+
+  .mc-card__title {
+    margin: 0;
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: var(--text-heading-sm);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--moov-black);
     transition: color 0.2s ease;
   }
 
-  .shop-card:hover .shop-card__title {
-    color: var(--moov-amber);
-  }
+  .mc-card:hover .mc-card__title { color: var(--moov-amber); }
 
-  .shop-card__price {
+  .mc-card__foot {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
   }
 
-  .shop-card__price-current {
-    font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 400;
-    color: var(--moov-text-primary-light);
+  .mc-card__price {
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: var(--text-md);
+    letter-spacing: -0.01em;
+    color: var(--moov-black);
   }
 
-  .shop-card__price-compare {
-    font-family: var(--font-body);
+  .mc-card__was {
+    margin-left: 8px;
     font-size: var(--text-sm);
-    font-weight: 400;
     color: var(--moov-text-tertiary-light);
     text-decoration: line-through;
+    font-family: var(--font-body);
+    font-weight: 400;
   }
 
-  /* ─── Pagination ─── */
-  .shop-grid__pagination {
+  .mc-card__swatches {
+    display: flex;
+    gap: 6px;
+  }
+
+  .mc-card__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 1px solid var(--moov-border-light);
+    flex-shrink: 0;
+  }
+
+  /* ── Pagination ── */
+  .mc-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
     margin-top: 64px;
+    flex-wrap: wrap;
   }
 
-  .shop-grid__page-link {
+  .mc-page-link {
     font-family: var(--font-body);
     font-size: var(--text-sm);
-    font-weight: 400;
     color: var(--moov-text-secondary-light);
     text-decoration: none;
     padding: 10px 16px;
@@ -282,32 +515,33 @@
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  .shop-grid__page-link:hover {
-    background: var(--moov-cream-shadow);
+  .mc-page-link:hover {
+    background: color-mix(in srgb, var(--moov-black) 6%, transparent);
     color: var(--moov-text-primary-light);
   }
 
-  .shop-grid__page-link--current {
+  .mc-page-link--current {
     background: var(--moov-black);
     color: var(--moov-cream);
-    font-weight: 400;
   }
 
-  /* ─── Empty state ─── */
-  .shop-grid__empty {
+  /* ── Empty state ── */
+  .mc-empty {
     text-align: center;
     padding: var(--section-block-pad-y-lg) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
   }
 
-  .shop-grid__empty-text {
-    font-family: var(--font-body);
+  .mc-empty-text {
+    margin: 0;
     font-size: var(--text-md);
-    font-weight: 400;
     color: var(--moov-text-secondary-light);
-    margin: 0 0 24px;
   }
 
-  .shop-grid__empty-btn {
+  .mc-empty-btn {
     display: inline-block;
     padding: 14px 28px;
     background: var(--moov-black);
@@ -315,67 +549,169 @@
     border-radius: 999px;
     font-family: var(--font-body);
     font-size: var(--text-sm);
-    font-weight: 400;
-    letter-spacing: 0.03em;
+    font-weight: 500;
     text-decoration: none;
     transition: opacity 0.2s ease;
   }
 
-  .shop-grid__empty-btn:hover {
-    opacity: 0.85;
+  .mc-empty-btn:hover { opacity: 0.8; }
+
+  /* ── Responsive ── */
+  @media (max-width: 980px) {
+    .mc-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* ─── Tablet ─── */
-  @media (min-width: 768px) and (max-width: 1279px) {
-    .shop-grid__products {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
-    }
+  @media (max-width: 560px) {
+    .mc-grid { grid-template-columns: 1fr; gap: 24px; }
+    .mc-filters { flex-direction: column; align-items: flex-start; }
   }
 
-  /* ─── Mobile ─── */
-  @media (max-width: 767px) {
-    .shop-grid__products {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-
-    .shop-card__info {
-      padding: 12px 2px 0;
-    }
+  /* ══════════════════════════════════════════
+     03 ASSURANCE
+  ══════════════════════════════════════════ */
+  .mc-assurance {
+    background: var(--moov-cream);
+    padding-block: var(--section-block-pad-y-sm);
+    border-top: 1px solid var(--moov-border-light);
   }
+
+  .mc-assurance-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .mc-assure {
+    padding: 8px 24px 8px 0;
+    border-right: 1px solid var(--moov-border-light);
+  }
+
+  .mc-assure:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .mc-assure h5 {
+    margin: 0 0 6px;
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: var(--text-heading-sm);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--moov-black);
+  }
+
+  .mc-assure p {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-light);
+    max-width: 28ch;
+  }
+
+  @media (max-width: 880px) {
+    .mc-assurance-grid { grid-template-columns: repeat(2, 1fr); }
+    .mc-assure {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--moov-border-light);
+    }
+    .mc-assure:nth-child(2n) { border-right: none; }
+    .mc-assure:nth-last-child(-n+2) { border-bottom: none; }
+  }
+
+  @media (max-width: 520px) {
+    .mc-assurance-grid { grid-template-columns: 1fr; }
+    .mc-assure { border-right: none; }
+    .mc-assure:not(:last-child) { border-bottom: 1px solid var(--moov-border-light); }
+    .mc-assure:last-child { border-bottom: none; }
+  }
+
 {% endstylesheet %}
-
-{% javascript %}
-  (function () {
-    var cards = document.querySelectorAll('[data-animate="shop-card"]');
-    if (!cards.length) return;
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
-
-    cards.forEach(function (el) { observer.observe(el); });
-  })();
-{% endjavascript %}
 
 {% schema %}
 {
   "name": "MOOV Collection",
   "settings": [
     {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
       "default": "Shop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The device, and what it lives with."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Sub text",
+      "default": "Six things. The alarm itself, the brass it hangs from, the cable that keeps it going, and a pack of sounds to wake to."
+    },
+    {
+      "type": "text",
+      "id": "sub_em",
+      "label": "Sub text — italic close",
+      "default": "That's the whole catalog."
+    },
+    {
+      "type": "header",
+      "content": "Assurance row"
+    },
+    {
+      "type": "text",
+      "id": "assure_1_title",
+      "label": "Perk 1 title",
+      "default": "Free shipping over $50"
+    },
+    {
+      "type": "textarea",
+      "id": "assure_1_body",
+      "label": "Perk 1 body",
+      "default": "From Sausalito, anywhere in the US. Two to four business days."
+    },
+    {
+      "type": "text",
+      "id": "assure_2_title",
+      "label": "Perk 2 title",
+      "default": "30-day risk-free trial"
+    },
+    {
+      "type": "textarea",
+      "id": "assure_2_body",
+      "label": "Perk 2 body",
+      "default": "Live with it for a month. Send it back if it doesn't change your morning."
+    },
+    {
+      "type": "text",
+      "id": "assure_3_title",
+      "label": "Perk 3 title",
+      "default": "One-year warranty"
+    },
+    {
+      "type": "textarea",
+      "id": "assure_3_body",
+      "label": "Perk 3 body",
+      "default": "We replace anything that fails. Email the team, talk to a person."
+    },
+    {
+      "type": "text",
+      "id": "assure_4_title",
+      "label": "Perk 4 title",
+      "default": "Made in California"
+    },
+    {
+      "type": "textarea",
+      "id": "assure_4_body",
+      "label": "Perk 4 body",
+      "default": "Glazed in Sausalito, assembled in Berkeley. Designed for a long life."
     }
   ],
   "presets": [
