@@ -523,7 +523,21 @@
       "feature_3_body": "No screen, no notifications, no scroll. One ring. One press. You\u2019re standing.",
       "cta_eyebrow": "Now shipping",
       "cta_heading": "Better mornings start today.",
-      "cta_sub": "One device. One habit. Yours from the first morning."
+      "cta_sub": "One device. One habit. Yours from the first morning.",
+      "tagline_label": "Tagline (italic, shown below heading)",
+      "header_specs": "Specifications section",
+      "specs_eyebrow_label": "Eyebrow",
+      "specs_heading_label": "Heading",
+      "spec_dt_label": "Spec label",
+      "spec_dd_label": "Spec value",
+      "header_pairs": "Pairs with section",
+      "pairs_eyebrow_label": "Eyebrow",
+      "pairs_heading_label": "Heading",
+      "pairs_card_image_label": "Card image",
+      "pairs_card_eyebrow_label": "Card eyebrow",
+      "pairs_card_title_label": "Card title",
+      "pairs_card_price_label": "Card price",
+      "pairs_card_url_label": "Card link URL"
     },
     "home_buy": {
       "default_eyebrow": "Now shipping",
