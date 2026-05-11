@@ -41,7 +41,7 @@
             href="{{ routes.collections_url }}/{{ collection.handle }}/{{ tag | handleize }}"
             class="mc-filter-chip{% if current_tags contains tag %} is-active{% endif %}"
             role="listitem"
-            aria-current="{{ current_tags contains tag }}"
+            aria-current="{% if current_tags contains tag %}true{% else %}false{% endif %}"
           >{{ tag | escape }}</a>
         {%- endfor -%}
       </div>
