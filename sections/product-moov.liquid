@@ -382,7 +382,9 @@
 <section class="shop-hiw full-width" data-surface="dark">
   <div class="shop-hiw__inner">
 
-    <p class="shop-hiw__eyebrow">{{ 'sections.shop.hiw_eyebrow' | t }}</p>
+    {%- assign _hiw_eyebrow = section.settings.hiw_eyebrow | strip -%}
+    {%- if _hiw_eyebrow == blank -%}{%- assign _hiw_eyebrow = 'sections.shop.hiw_eyebrow' | t -%}{%- endif -%}
+    <p class="shop-hiw__eyebrow">{{ _hiw_eyebrow | escape }}</p>
 
     <div class="shop-hiw__steps">
       {%- for i in (1..3) -%}
@@ -418,10 +420,18 @@
   <div class="shop-founder__inner">
 
     <div class="shop-founder__copy">
-      <p class="shop-founder__limit">{{ 'sections.shop.founder_limit_badge' | t }}</p>
-      <p class="shop-founder__eyebrow">{{ 'sections.shop.founder_eyebrow' | t }}</p>
-      <h2 class="shop-founder__heading">{{ 'sections.shop.founder_heading' | t }}</h2>
-      <p class="shop-founder__body">{{ 'sections.shop.founder_body' | t }}</p>
+      {%- assign _founder_limit = section.settings.founder_limit_badge | strip -%}
+      {%- if _founder_limit == blank -%}{%- assign _founder_limit = 'sections.shop.founder_limit_badge' | t -%}{%- endif -%}
+      {%- assign _founder_eyebrow = section.settings.founder_eyebrow | strip -%}
+      {%- if _founder_eyebrow == blank -%}{%- assign _founder_eyebrow = 'sections.shop.founder_eyebrow' | t -%}{%- endif -%}
+      {%- assign _founder_heading = section.settings.founder_heading | strip -%}
+      {%- if _founder_heading == blank -%}{%- assign _founder_heading = 'sections.shop.founder_heading' | t -%}{%- endif -%}
+      {%- assign _founder_body = section.settings.founder_body | strip -%}
+      {%- if _founder_body == blank -%}{%- assign _founder_body = 'sections.shop.founder_body' | t -%}{%- endif -%}
+      <p class="shop-founder__limit">{{ _founder_limit | escape }}</p>
+      <p class="shop-founder__eyebrow">{{ _founder_eyebrow | escape }}</p>
+      <h2 class="shop-founder__heading">{{ _founder_heading | escape }}</h2>
+      <p class="shop-founder__body">{{ _founder_body | escape }}</p>
     </div>
 
     <div class="shop-founder__media">
@@ -530,26 +540,43 @@
 <section class="shop-features full-width" data-surface="dark">
   <div class="shop-features__inner">
 
+    {%- assign _features_eyebrow = section.settings.features_eyebrow | strip -%}
+    {%- if _features_eyebrow == blank -%}{%- assign _features_eyebrow = 'sections.shop.features_eyebrow' | t -%}{%- endif -%}
+    {%- assign _features_heading = section.settings.features_heading | strip -%}
+    {%- if _features_heading == blank -%}{%- assign _features_heading = 'sections.shop.features_heading' | t -%}{%- endif -%}
+    {%- assign _feature_1_title = section.settings.feature_1_title | strip -%}
+    {%- if _feature_1_title == blank -%}{%- assign _feature_1_title = 'sections.shop.feature_1_title' | t -%}{%- endif -%}
+    {%- assign _feature_1_body = section.settings.feature_1_body | strip -%}
+    {%- if _feature_1_body == blank -%}{%- assign _feature_1_body = 'sections.shop.feature_1_body' | t -%}{%- endif -%}
+    {%- assign _feature_2_title = section.settings.feature_2_title | strip -%}
+    {%- if _feature_2_title == blank -%}{%- assign _feature_2_title = 'sections.shop.feature_2_title' | t -%}{%- endif -%}
+    {%- assign _feature_2_body = section.settings.feature_2_body | strip -%}
+    {%- if _feature_2_body == blank -%}{%- assign _feature_2_body = 'sections.shop.feature_2_body' | t -%}{%- endif -%}
+    {%- assign _feature_3_title = section.settings.feature_3_title | strip -%}
+    {%- if _feature_3_title == blank -%}{%- assign _feature_3_title = 'sections.shop.feature_3_title' | t -%}{%- endif -%}
+    {%- assign _feature_3_body = section.settings.feature_3_body | strip -%}
+    {%- if _feature_3_body == blank -%}{%- assign _feature_3_body = 'sections.shop.feature_3_body' | t -%}{%- endif -%}
+
     <div class="shop-features__head">
-      <p class="shop-features__eyebrow">{{ 'sections.shop.features_eyebrow' | t }}</p>
-      <h2 class="shop-features__heading">{{ 'sections.shop.features_heading' | t }}</h2>
+      <p class="shop-features__eyebrow">{{ _features_eyebrow | escape }}</p>
+      <h2 class="shop-features__heading">{{ _features_heading | escape }}</h2>
     </div>
 
     <div class="shop-features__grid">
       <article class="shop-feature">
         <span class="shop-feature__num">01</span>
-        <h4 class="shop-feature__title">{{ 'sections.shop.feature_1_title' | t }}</h4>
-        <p class="shop-feature__body">{{ 'sections.shop.feature_1_body' | t }}</p>
+        <h4 class="shop-feature__title">{{ _feature_1_title | escape }}</h4>
+        <p class="shop-feature__body">{{ _feature_1_body | escape }}</p>
       </article>
       <article class="shop-feature">
         <span class="shop-feature__num">02</span>
-        <h4 class="shop-feature__title">{{ 'sections.shop.feature_2_title' | t }}</h4>
-        <p class="shop-feature__body">{{ 'sections.shop.feature_2_body' | t }}</p>
+        <h4 class="shop-feature__title">{{ _feature_2_title | escape }}</h4>
+        <p class="shop-feature__body">{{ _feature_2_body | escape }}</p>
       </article>
       <article class="shop-feature">
         <span class="shop-feature__num">03</span>
-        <h4 class="shop-feature__title">{{ 'sections.shop.feature_3_title' | t }}</h4>
-        <p class="shop-feature__body">{{ 'sections.shop.feature_3_body' | t }}</p>
+        <h4 class="shop-feature__title">{{ _feature_3_title | escape }}</h4>
+        <p class="shop-feature__body">{{ _feature_3_body | escape }}</p>
       </article>
     </div>
 
@@ -560,9 +587,15 @@
 {%- comment -%}── 07 CLOSING CTA ──{%- endcomment -%}
 <section class="shop-cta full-width" data-surface="dark">
   <div class="shop-cta__inner">
-    <p class="shop-cta__eyebrow">{{ 'sections.shop.cta_eyebrow' | t }}</p>
-    <h2 class="shop-cta__heading">{{ 'sections.shop.cta_heading' | t }}</h2>
-    <p class="shop-cta__sub">{{ 'sections.shop.cta_sub' | t }}</p>
+    {%- assign _cta_eyebrow = section.settings.cta_eyebrow | strip -%}
+    {%- if _cta_eyebrow == blank -%}{%- assign _cta_eyebrow = 'sections.shop.cta_eyebrow' | t -%}{%- endif -%}
+    {%- assign _cta_heading = section.settings.cta_heading | strip -%}
+    {%- if _cta_heading == blank -%}{%- assign _cta_heading = 'sections.shop.cta_heading' | t -%}{%- endif -%}
+    {%- assign _cta_sub = section.settings.cta_sub | strip -%}
+    {%- if _cta_sub == blank -%}{%- assign _cta_sub = 'sections.shop.cta_sub' | t -%}{%- endif -%}
+    <p class="shop-cta__eyebrow">{{ _cta_eyebrow | escape }}</p>
+    <h2 class="shop-cta__heading">{{ _cta_heading | escape }}</h2>
+    <p class="shop-cta__sub">{{ _cta_sub | escape }}</p>
     <div class="shop-cta__btns">
       <a href="{{ cta_primary_url }}" class="shop-cta__btn shop-cta__btn--primary">
         {{- cta_primary_label | escape -}}
@@ -2211,6 +2244,12 @@
     },
     {
       "type": "text",
+      "id": "hiw_eyebrow",
+      "label": "t:sections.shop.hiw_eyebrow_label",
+      "default": "How it works"
+    },
+    {
+      "type": "text",
       "id": "hiw_step_1_title",
       "label": "t:sections.shop.hiw_step_title_label",
       "default": "Set your alarm"
@@ -2253,6 +2292,30 @@
     {
       "type": "header",
       "content": "t:sections.shop.header_founder"
+    },
+    {
+      "type": "text",
+      "id": "founder_limit_badge",
+      "label": "t:sections.shop.founder_limit_badge_label",
+      "default": "Limited to 500 units"
+    },
+    {
+      "type": "text",
+      "id": "founder_eyebrow",
+      "label": "t:sections.shop.founder_eyebrow_label",
+      "default": "The Founder Drop"
+    },
+    {
+      "type": "text",
+      "id": "founder_heading",
+      "label": "t:sections.shop.founder_heading_label",
+      "default": "The original MOOV release."
+    },
+    {
+      "type": "textarea",
+      "id": "founder_body",
+      "label": "t:sections.shop.founder_body_label",
+      "default": "The first MOOV Founder Drop will be limited to 500 Ivory White devices. Created for early supporters who believe mornings deserve more intention."
     },
     {
       "type": "image_picker",
@@ -2380,6 +2443,80 @@
       "type": "textarea",
       "id": "spec_9_dd",
       "label": "t:sections.shop.spec_dd_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop.header_features"
+    },
+    {
+      "type": "text",
+      "id": "features_eyebrow",
+      "label": "t:sections.shop.features_eyebrow_label",
+      "default": "Why MOOV"
+    },
+    {
+      "type": "text",
+      "id": "features_heading",
+      "label": "t:sections.shop.features_heading_label",
+      "default": "Built for better mornings."
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "t:sections.shop.feature_title_label",
+      "default": "Gets you out of bed"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1_body",
+      "label": "t:sections.shop.feature_body_label",
+      "default": "Designed around physical movement instead of another tap from bed."
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "t:sections.shop.feature_title_label",
+      "default": "Reduces morning distractions"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2_body",
+      "label": "t:sections.shop.feature_body_label",
+      "default": "Optional Focus Mode helps block distracting apps during your morning routine."
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "t:sections.shop.feature_title_label",
+      "default": "Builds morning momentum"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3_body",
+      "label": "t:sections.shop.feature_body_label",
+      "default": "Start the day with more intention, movement, and control."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop.header_cta_section"
+    },
+    {
+      "type": "text",
+      "id": "cta_eyebrow",
+      "label": "t:sections.shop.cta_eyebrow_label",
+      "default": "Now shipping"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "t:sections.shop.cta_heading_label",
+      "default": "Better mornings start with movement."
+    },
+    {
+      "type": "textarea",
+      "id": "cta_sub",
+      "label": "t:sections.shop.cta_sub_label",
+      "default": "Reserve your place in the first 500 for $1."
     }
   ],
   "presets": [
