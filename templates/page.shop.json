@@ -26,7 +26,20 @@
         "cta_primary_label": "Get your MOOV",
         "cta_primary_url": "/products/moov",
         "cta_secondary_label": "How it works",
-        "cta_secondary_url": "/pages/how-it-works"
+        "cta_secondary_url": "/pages/how-it-works",
+        "specs_eyebrow": "Tech specs",
+        "specs_heading": "Built with intention.",
+        "specs_intro": "Everything you need to know about MOOV hardware, connectivity, and setup at a glance.",
+        "spec_1_dt": "Design",
+        "spec_1_dd": "Build | Minimal, low-profile wall-mounted form\nLED | Soft white light ring\nControl | Single-button interaction\nMounting | Magnetic mount with 3M Command Strip\nSetup | Tool-free, peel-and-stick installation",
+        "spec_2_dt": "Dimensions",
+        "spec_2_dd": "Length | 130 mm / 5.1 in\nWidth | 40 mm / 1.6 in\nDepth | 15 mm / 0.6 in\nBattery | 3–4 months per charge\nCharging | USB rechargeable",
+        "spec_3_dt": "Connectivity",
+        "spec_3_dd": "Protocol | Bluetooth Low Energy (BLE)\nAndroid | Available now\niOS | Coming soon\nAlarm | Plays through your phone\nDismiss | Press the device to turn off",
+        "spec_4_dt": "Mounting",
+        "spec_4_dd": "System | Magnetic mount\nInstallation | 3M Command Strip, no tools needed\nWall block | Stays in place permanently\nDevice | Attaches and detaches easily",
+        "spec_5_dt": "In the box",
+        "spec_5_dd": "1× | MOOV Device\n1× | Magnetic Wall Mount\n1× | 3M Command Strip (pre-installed)\n1× | USB Charging Cable\n1× | Quick Start Guide"
       }
     },
     "reviews_grid": {

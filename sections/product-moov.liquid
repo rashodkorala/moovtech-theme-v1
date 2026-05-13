@@ -438,29 +438,37 @@
 {%- comment -%}── 05 SPECS ──{%- endcomment -%}
 {%- assign specs_eyebrow = section.settings.specs_eyebrow | strip -%}
 {%- assign specs_heading = section.settings.specs_heading | strip -%}
+{%- assign specs_intro   = section.settings.specs_intro | strip -%}
 <section class="shop-specs full-width" data-surface="dark" id="specs-{{ section.id }}">
   <div class="shop-specs__inner">
 
-    <div class="shop-specs__lead">
-      {%- if specs_eyebrow != blank -%}
-        <p class="shop-specs__eyebrow">{{ specs_eyebrow | escape }}</p>
-      {%- endif -%}
-      {%- if specs_heading != blank -%}
-        <h2 class="shop-specs__heading">{{ specs_heading | escape }}</h2>
-      {%- endif -%}
-    </div>
+    {%- if specs_eyebrow != blank or specs_heading != blank or specs_intro != blank -%}
+      <div class="shop-specs__head">
+        <div class="shop-specs__head-copy">
+          {%- if specs_eyebrow != blank -%}
+            <p class="shop-specs__eyebrow">{{ specs_eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if specs_heading != blank -%}
+            <h2 class="shop-specs__heading">{{ specs_heading | escape }}</h2>
+          {%- endif -%}
+        </div>
+        {%- if specs_intro != blank -%}
+          <p class="shop-specs__intro">{{ specs_intro | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
-    {%- comment -%} Build active spec list first to know tab count {%- endcomment -%}
-    {%- assign first_tab = true -%}
-    <div class="shop-specs__tabs" data-specs-tabs>
+    <div class="shop-specs__ui" data-specs-tabs>
 
-      <div class="shop-specs__tab-bar" role="tablist" aria-label="{{ specs_heading | escape }}">
+      {%- comment -%} Pill tab bar {%- endcomment -%}
+      <div class="shop-specs__pills" role="tablist">
+        {%- assign first_tab = true -%}
         {%- for i in (1..9) -%}
           {%- assign dt_key = 'spec_' | append: i | append: '_dt' -%}
           {%- assign spec_dt = section.settings[dt_key] | strip -%}
           {%- if spec_dt != blank -%}
             <button
-              class="shop-specs__tab{%- if first_tab %} shop-specs__tab--active{%- endif -%}"
+              class="shop-specs__pill{%- if first_tab %} shop-specs__pill--active{%- endif -%}"
               role="tab"
               aria-selected="{%- if first_tab -%}true{%- else -%}false{%- endif -%}"
               aria-controls="spec-panel-{{ section.id }}-{{ i }}"
@@ -471,6 +479,7 @@
         {%- endfor -%}
       </div>
 
+      {%- comment -%} Panels {%- endcomment -%}
       <div class="shop-specs__panels">
         {%- assign first_panel = true -%}
         {%- for i in (1..9) -%}
@@ -488,14 +497,23 @@
             >
               {%- if spec_dd != blank -%}
                 {%- assign lines = spec_dd | split: "\n" -%}
-                <ul class="shop-specs__lines" role="list">
-                  {%- for line in lines -%}
-                    {%- assign trimmed = line | strip -%}
-                    {%- if trimmed != blank -%}
-                      <li class="shop-specs__line">{{ trimmed | escape }}</li>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </ul>
+                {%- assign line_count = 0 -%}
+                {%- for line in lines -%}
+                  {%- assign _ls = line | strip -%}
+                  {%- if _ls != blank -%}{%- assign line_count = line_count | plus: 1 -%}{%- endif -%}
+                {%- endfor -%}
+                {%- assign row_num = 0 -%}
+                {%- for line in lines -%}
+                  {%- assign trimmed = line | strip -%}
+                  {%- if trimmed != blank -%}
+                    {%- assign row_num = row_num | plus: 1 -%}
+                    {%- assign parts = trimmed | split: " | " -%}
+                    <div class="shop-specs__row{%- if row_num == line_count %} shop-specs__row--last{%- endif -%}">
+                      <span class="shop-specs__row-label">{{ parts[0] | strip | escape }}</span>
+                      <span class="shop-specs__row-val">{{ parts[1] | strip | escape }}</span>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
               {%- endif -%}
             </div>
             {%- assign first_panel = false -%}
@@ -1287,7 +1305,7 @@
   }
 
   /* ══════════════════════════════════════════
-     05 SPECS (dark, tabbed)
+     05 SPECS
   ══════════════════════════════════════════ */
   .shop-specs {
     background: var(--moov-black);
@@ -1296,16 +1314,21 @@
     border-top: 1px solid var(--moov-border-dark);
   }
 
-  .shop-specs__inner {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(32px, 4vw, 48px);
+  /* Optional header */
+  .shop-specs__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 6vw, 88px);
+    align-items: end;
+    padding-bottom: clamp(40px, 5vw, 64px);
+    border-bottom: 1px solid var(--moov-border-dark);
+    margin-bottom: clamp(32px, 4vw, 48px);
   }
 
-  .shop-specs__lead {
+  .shop-specs__head-copy {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   }
 
   .shop-specs__eyebrow {
@@ -1322,91 +1345,121 @@
     margin: 0;
     font-family: var(--font-hero);
     font-weight: 500;
-    font-size: var(--text-heading-xl);
-    line-height: 1.05;
+    font-size: clamp(2.4rem, 3.5vw, 4rem);
+    line-height: 1.02;
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: var(--moov-cream);
-    max-width: 22ch;
     text-wrap: balance;
   }
 
-  /* Tab bar */
-  .shop-specs__tab-bar {
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--moov-border-dark);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .shop-specs__tab-bar::-webkit-scrollbar { display: none; }
-
-  .shop-specs__tab {
-    flex-shrink: 0;
-    padding: 12px 20px;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
+  .shop-specs__intro {
+    margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--moov-text-tertiary-dark);
+    font-size: var(--text-md);
+    line-height: 1.7;
+    color: var(--moov-text-secondary-dark);
+    max-width: 38ch;
+    align-self: end;
+  }
+
+  /* Outer container */
+  .shop-specs__ui {
+    border: 1px solid var(--moov-border-dark);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--moov-cream) 3%, var(--moov-black));
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Pill tab bar */
+  .shop-specs__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .shop-specs__pill {
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--moov-border-dark);
+    background: transparent;
+    color: color-mix(in srgb, var(--moov-cream) 55%, transparent);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
     white-space: nowrap;
+    line-height: 1;
   }
 
-  .shop-specs__tab:hover {
+  .shop-specs__pill:hover {
     color: var(--moov-cream);
+    border-color: color-mix(in srgb, var(--moov-cream) 35%, transparent);
   }
 
-  .shop-specs__tab--active {
-    color: var(--moov-cream);
-    border-bottom-color: var(--moov-amber);
+  .shop-specs__pill--active {
+    background: var(--moov-amber);
+    border-color: var(--moov-amber);
+    color: var(--moov-black);
+    font-weight: 500;
   }
 
-  /* Tab panels */
-  .shop-specs__panels {
-    min-height: 140px;
+  .shop-specs__pill--active:hover {
+    background: var(--moov-amber);
+    border-color: var(--moov-amber);
+    color: var(--moov-black);
   }
 
-  .shop-specs__panel {
-    display: none;
-  }
+  /* Panels */
+  .shop-specs__panels { display: contents; }
+  .shop-specs__panel { display: none; }
 
   .shop-specs__panel--active {
     display: block;
+    border: 1px solid var(--moov-border-dark);
+    border-radius: 14px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--moov-cream) 2%, var(--moov-black));
   }
 
-  .shop-specs__lines {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* Rows inside panel */
+  .shop-specs__row {
     display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .shop-specs__line {
-    font-family: var(--font-body);
-    font-size: var(--text-md);
-    line-height: 1.65;
-    color: var(--moov-text-secondary-dark);
-    padding: 14px 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 28px;
     border-bottom: 1px solid var(--moov-border-dark);
   }
 
-  .shop-specs__line:first-child {
-    padding-top: 0;
+  .shop-specs__row--last { border-bottom: none; }
+
+  .shop-specs__row-label {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    color: color-mix(in srgb, var(--moov-cream) 40%, transparent);
+    flex-shrink: 0;
   }
 
-  @media (max-width: 600px) {
-    .shop-specs__tab { padding: 12px 14px; font-size: 10px; }
+  .shop-specs__row-val {
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    color: var(--moov-cream);
+    text-align: right;
+  }
+
+  @media (max-width: 760px) {
+    .shop-specs__head { grid-template-columns: 1fr; align-items: start; }
+    .shop-specs__intro { max-width: none; }
+  }
+
+  @media (max-width: 480px) {
+    .shop-specs__ui { padding: 16px; }
+    .shop-specs__row { padding: 16px 20px; }
   }
 
   /* Reservation note */
@@ -1990,32 +2043,29 @@
       });
     });
 
-    /* ── Specs tab switching ── */
-    document.querySelectorAll('[data-specs-tabs]').forEach(function (container) {
-      var tabs = Array.prototype.slice.call(container.querySelectorAll('.shop-specs__tab'));
-      var panels = Array.prototype.slice.call(container.querySelectorAll('.shop-specs__panel'));
+    /* ── Specs pill tab switching ── */
+    document.querySelectorAll('[data-specs-tabs]').forEach(function (ui) {
+      var pills  = Array.prototype.slice.call(ui.querySelectorAll('.shop-specs__pill'));
+      var panels = Array.prototype.slice.call(ui.querySelectorAll('.shop-specs__panel'));
 
-      tabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-          var idx = tab.dataset.specTab;
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          var idx = pill.dataset.specTab;
 
-          tabs.forEach(function (t) {
-            t.classList.remove('shop-specs__tab--active');
-            t.setAttribute('aria-selected', 'false');
+          pills.forEach(function (p) {
+            p.classList.remove('shop-specs__pill--active');
+            p.setAttribute('aria-selected', 'false');
           });
           panels.forEach(function (p) {
             p.classList.remove('shop-specs__panel--active');
             p.hidden = true;
           });
 
-          tab.classList.add('shop-specs__tab--active');
-          tab.setAttribute('aria-selected', 'true');
+          pill.classList.add('shop-specs__pill--active');
+          pill.setAttribute('aria-selected', 'true');
 
-          var target = container.querySelector('[data-spec-panel="' + idx + '"]');
-          if (target) {
-            target.classList.add('shop-specs__panel--active');
-            target.hidden = false;
-          }
+          var target = ui.querySelector('[data-spec-panel="' + idx + '"]');
+          if (target) { target.classList.add('shop-specs__panel--active'); target.hidden = false; }
         });
       });
     });
@@ -2217,7 +2267,7 @@
       "type": "text",
       "id": "specs_eyebrow",
       "label": "t:sections.shop.specs_eyebrow_label",
-      "default": "Technical specs"
+      "default": "Tech specs"
     },
     {
       "type": "text",
@@ -2226,88 +2276,90 @@
       "default": "Built with intention."
     },
     {
+      "type": "textarea",
+      "id": "specs_intro",
+      "label": "t:sections.shop.specs_intro_label",
+      "default": "Everything you need to know about MOOV hardware, connectivity, and setup at a glance."
+    },
+    {
       "type": "text",
       "id": "spec_1_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Dimensions"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_1_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "130 mm × 40 mm × 15 mm\n5.1 in × 1.6 in × 0.6 in"
-    },
-    {
-      "type": "text",
-      "id": "spec_2_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Battery life"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_2_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "3–4 months per charge (normal use)\nRechargeable (USB)"
-    },
-    {
-      "type": "text",
-      "id": "spec_3_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Compatibility"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_3_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "Android (available now)\niOS (coming soon)"
-    },
-    {
-      "type": "text",
-      "id": "spec_4_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Connectivity"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_4_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "Bluetooth Low Energy (BLE)"
-    },
-    {
-      "type": "text",
-      "id": "spec_5_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Alarm"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_5_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "Alarm plays through your phone\nDevice must be pressed to turn it off"
-    },
-    {
-      "type": "text",
-      "id": "spec_6_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Mounting"
-    },
-    {
-      "type": "textarea",
-      "id": "spec_6_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "3M Command Strip installation\nMagnetic mounting system\nWall block stays in place, device attaches and detaches easily"
-    },
-    {
-      "type": "text",
-      "id": "spec_7_dt",
       "label": "t:sections.shop.spec_dt_label",
       "default": "Design"
     },
     {
       "type": "textarea",
-      "id": "spec_7_dd",
+      "id": "spec_1_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "Minimal, low-profile build\nClean wall-mounted form\nSoft white LED light ring"
+      "default": "Build | Minimal, low-profile wall-mounted form\nLED | Soft white light ring\nControl | Single-button interaction\nMounting | Magnetic mount with 3M Command Strip\nSetup | Tool-free, peel-and-stick installation"
+    },
+    {
+      "type": "text",
+      "id": "spec_2_dt",
+      "label": "t:sections.shop.spec_dt_label",
+      "default": "Dimensions"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_2_dd",
+      "label": "t:sections.shop.spec_dd_label",
+      "default": "Length | 130 mm / 5.1 in\nWidth | 40 mm / 1.6 in\nDepth | 15 mm / 0.6 in\nBattery | 3–4 months per charge\nCharging | USB rechargeable"
+    },
+    {
+      "type": "text",
+      "id": "spec_3_dt",
+      "label": "t:sections.shop.spec_dt_label",
+      "default": "Connectivity"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_3_dd",
+      "label": "t:sections.shop.spec_dd_label",
+      "default": "Protocol | Bluetooth Low Energy (BLE)\nAndroid | Available now\niOS | Coming soon\nAlarm | Plays through your phone\nDismiss | Press the device to turn off"
+    },
+    {
+      "type": "text",
+      "id": "spec_4_dt",
+      "label": "t:sections.shop.spec_dt_label",
+      "default": "Mounting"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_4_dd",
+      "label": "t:sections.shop.spec_dd_label",
+      "default": "System | Magnetic mount\nInstallation | 3M Command Strip, no tools needed\nWall block | Stays in place permanently\nDevice | Attaches and detaches easily"
+    },
+    {
+      "type": "text",
+      "id": "spec_5_dt",
+      "label": "t:sections.shop.spec_dt_label",
+      "default": "In the box"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_5_dd",
+      "label": "t:sections.shop.spec_dd_label",
+      "default": "1× | MOOV Device\n1× | Magnetic Wall Mount\n1× | 3M Command Strip (pre-installed)\n1× | USB Charging Cable\n1× | Quick Start Guide"
+    },
+    {
+      "type": "text",
+      "id": "spec_6_dt",
+      "label": "t:sections.shop.spec_dt_label"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_6_dd",
+      "label": "t:sections.shop.spec_dd_label"
+    },
+    {
+      "type": "text",
+      "id": "spec_7_dt",
+      "label": "t:sections.shop.spec_dt_label"
+    },
+    {
+      "type": "textarea",
+      "id": "spec_7_dd",
+      "label": "t:sections.shop.spec_dd_label"
     },
     {
       "type": "text",
