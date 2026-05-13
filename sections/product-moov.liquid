@@ -324,6 +324,10 @@
               {{- cta_secondary_label | escape -}}
             </a>
           </div>
+          {%- assign reservation_note = section.settings.reservation_note | strip -%}
+          {%- if reservation_note != blank -%}
+            <p class="shop-buy__reservation">{{ reservation_note | escape }}</p>
+          {%- endif -%}
         {%- endform -%}
       {%- else -%}
         <div class="shop-buy__cta-group">
@@ -374,10 +378,67 @@
   </div>
 </section>
 
-{%- comment -%}── 03 SPECS ──{%- endcomment -%}
+{%- comment -%}── 03 HOW IT WORKS ──{%- endcomment -%}
+<section class="shop-hiw full-width" data-surface="dark">
+  <div class="shop-hiw__inner">
+
+    <p class="shop-hiw__eyebrow">{{ 'sections.shop.hiw_eyebrow' | t }}</p>
+
+    <div class="shop-hiw__steps">
+      {%- for i in (1..3) -%}
+        {%- assign _kt = 'hiw_step_' | append: i | append: '_title' -%}
+        {%- assign _kb = 'hiw_step_' | append: i | append: '_body' -%}
+        {%- assign step_title = section.settings[_kt] | strip -%}
+        {%- assign step_body  = section.settings[_kb] | strip -%}
+        {%- if step_title == blank -%}{%- assign step_title = 'sections.shop.' | append: _kt | t -%}{%- endif -%}
+        {%- if step_body  == blank -%}{%- assign step_body  = 'sections.shop.' | append: _kb | t -%}{%- endif -%}
+        <div class="shop-hiw__step">
+          <span class="shop-hiw__num">0{{ i }}</span>
+          <h4 class="shop-hiw__title">{{ step_title | escape }}</h4>
+          <p class="shop-hiw__body">{{ step_body | escape }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.hiw_url != blank -%}
+      <a href="{{ section.settings.hiw_url }}" class="shop-hiw__link">
+        {{ 'sections.shop.hiw_link' | t }}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="1" y1="6" x2="10" y2="6"/><polyline points="6.5,2.5 10,6 6.5,9.5"/>
+        </svg>
+      </a>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- comment -%}── 04 FOUNDER DROP ──{%- endcomment -%}
+{%- assign founder_img = section.settings.founder_image -%}
+<section class="shop-founder full-width" data-surface="cream">
+  <div class="shop-founder__inner">
+
+    <div class="shop-founder__copy">
+      <p class="shop-founder__limit">{{ 'sections.shop.founder_limit_badge' | t }}</p>
+      <p class="shop-founder__eyebrow">{{ 'sections.shop.founder_eyebrow' | t }}</p>
+      <h2 class="shop-founder__heading">{{ 'sections.shop.founder_heading' | t }}</h2>
+      <p class="shop-founder__body">{{ 'sections.shop.founder_body' | t }}</p>
+    </div>
+
+    <div class="shop-founder__media">
+      {%- if founder_img != blank -%}
+        {{ founder_img | image_url: width: 900 | image_tag: loading: 'lazy', class: 'shop-founder__img', alt: 'MOOV Founder Drop' }}
+      {%- else -%}
+        <div class="shop-founder__placeholder"></div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{%- comment -%}── 05 SPECS ──{%- endcomment -%}
 {%- assign specs_eyebrow = section.settings.specs_eyebrow | strip -%}
 {%- assign specs_heading = section.settings.specs_heading | strip -%}
-<section class="shop-specs full-width" data-surface="cream">
+<section class="shop-specs full-width" data-surface="dark" id="specs-{{ section.id }}">
   <div class="shop-specs__inner">
 
     <div class="shop-specs__lead">
@@ -389,79 +450,65 @@
       {%- endif -%}
     </div>
 
-    <dl class="shop-specs__list">
-      {%- for i in (1..9) -%}
-        {%- assign dt_key = 'spec_' | append: i | append: '_dt' -%}
-        {%- assign dd_key = 'spec_' | append: i | append: '_dd' -%}
-        {%- assign spec_dt = section.settings[dt_key] | strip -%}
-        {%- assign spec_dd = section.settings[dd_key] | strip -%}
-        {%- if spec_dt != blank or spec_dd != blank -%}
-          <div class="shop-specs__row">
-            <dt class="shop-specs__term">{{ spec_dt | escape }}</dt>
-            <dd class="shop-specs__desc">{{ spec_dd | escape }}</dd>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </dl>
+    {%- comment -%} Build active spec list first to know tab count {%- endcomment -%}
+    {%- assign first_tab = true -%}
+    <div class="shop-specs__tabs" data-specs-tabs>
 
-  </div>
-</section>
+      <div class="shop-specs__tab-bar" role="tablist" aria-label="{{ specs_heading | escape }}">
+        {%- for i in (1..9) -%}
+          {%- assign dt_key = 'spec_' | append: i | append: '_dt' -%}
+          {%- assign spec_dt = section.settings[dt_key] | strip -%}
+          {%- if spec_dt != blank -%}
+            <button
+              class="shop-specs__tab{%- if first_tab %} shop-specs__tab--active{%- endif -%}"
+              role="tab"
+              aria-selected="{%- if first_tab -%}true{%- else -%}false{%- endif -%}"
+              aria-controls="spec-panel-{{ section.id }}-{{ i }}"
+              data-spec-tab="{{ i }}"
+            >{{ spec_dt | escape }}</button>
+            {%- assign first_tab = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
 
-{%- comment -%}── 04 IN THE BOX ──{%- endcomment -%}
-<section class="shop-box full-width" data-surface="cream">
-  <div class="shop-box__inner">
+      <div class="shop-specs__panels">
+        {%- assign first_panel = true -%}
+        {%- for i in (1..9) -%}
+          {%- assign dt_key = 'spec_' | append: i | append: '_dt' -%}
+          {%- assign dd_key = 'spec_' | append: i | append: '_dd' -%}
+          {%- assign spec_dt = section.settings[dt_key] | strip -%}
+          {%- assign spec_dd = section.settings[dd_key] | strip -%}
+          {%- if spec_dt != blank -%}
+            <div
+              class="shop-specs__panel{%- if first_panel %} shop-specs__panel--active{%- endif -%}"
+              role="tabpanel"
+              id="spec-panel-{{ section.id }}-{{ i }}"
+              data-spec-panel="{{ i }}"
+              {%- unless first_panel %} hidden{%- endunless %}
+            >
+              {%- if spec_dd != blank -%}
+                {%- assign lines = spec_dd | split: "\n" -%}
+                <ul class="shop-specs__lines" role="list">
+                  {%- for line in lines -%}
+                    {%- assign trimmed = line | strip -%}
+                    {%- if trimmed != blank -%}
+                      <li class="shop-specs__line">{{ trimmed | escape }}</li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+            {%- assign first_panel = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
 
-    <div class="shop-box__head">
-      <p class="shop-box__eyebrow">{{ 'sections.shop.box_eyebrow' | t }}</p>
-      <h2 class="shop-box__heading">{{ 'sections.shop.box_heading' | t }}</h2>
-    </div>
-
-    <div class="shop-box__grid">
-      <div class="shop-box__item">
-        <div class="shop-box__icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="14" cy="14" r="10"/>
-            <circle cx="14" cy="14" r="4"/>
-          </svg>
-        </div>
-        <h4 class="shop-box__item-title">{{ 'sections.shop.box_item_1_title' | t }}</h4>
-        <p class="shop-box__item-body">{{ 'sections.shop.box_item_1_body' | t }}</p>
-      </div>
-      <div class="shop-box__item">
-        <div class="shop-box__icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="8" width="18" height="14" rx="2"/>
-            <path d="M10 8V6a4 4 0 0 1 8 0v2"/>
-          </svg>
-        </div>
-        <h4 class="shop-box__item-title">{{ 'sections.shop.box_item_2_title' | t }}</h4>
-        <p class="shop-box__item-body">{{ 'sections.shop.box_item_2_body' | t }}</p>
-      </div>
-      <div class="shop-box__item">
-        <div class="shop-box__icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 4v8m0 0c0 1.1-.9 2-2 2H9a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-3a2 2 0 0 1-2-2z"/>
-          </svg>
-        </div>
-        <h4 class="shop-box__item-title">{{ 'sections.shop.box_item_3_title' | t }}</h4>
-        <p class="shop-box__item-body">{{ 'sections.shop.box_item_3_body' | t }}</p>
-      </div>
-      <div class="shop-box__item">
-        <div class="shop-box__icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="7" y="3" width="14" height="22" rx="3"/>
-            <circle cx="14" cy="20" r="1.2" fill="currentColor" stroke="none"/>
-          </svg>
-        </div>
-        <h4 class="shop-box__item-title">{{ 'sections.shop.box_item_4_title' | t }}</h4>
-        <p class="shop-box__item-body">{{ 'sections.shop.box_item_4_body' | t }}</p>
-      </div>
     </div>
 
   </div>
 </section>
 
-{%- comment -%}── 05 KEY FEATURES ──{%- endcomment -%}
+{%- comment -%}── 06 CORE BENEFITS ──{%- endcomment -%}
 <section class="shop-features full-width" data-surface="dark">
   <div class="shop-features__inner">
 
@@ -491,60 +538,6 @@
   </div>
 </section>
 
-{%- comment -%}── 06 PAIRS WITH ──{%- endcomment -%}
-{%- assign pairs_eyebrow = section.settings.pairs_eyebrow | strip -%}
-{%- assign pairs_heading = section.settings.pairs_heading | strip -%}
-<section class="shop-pairs full-width" data-surface="cream">
-  <div class="shop-pairs__inner">
-
-    {%- if pairs_eyebrow != blank -%}
-      <p class="shop-pairs__eyebrow">{{ pairs_eyebrow | escape }}</p>
-    {%- endif -%}
-    {%- if pairs_heading != blank -%}
-      <h2 class="shop-pairs__heading">{{ pairs_heading | escape }}</h2>
-    {%- endif -%}
-
-    <div class="shop-pairs__grid">
-      {%- for i in (1..3) -%}
-        {%- liquid
-          assign _k = 'pairs_card_' | append: i | append: '_image'
-          assign card_img   = section.settings[_k]
-          assign _k = 'pairs_card_' | append: i | append: '_title'
-          assign card_title = section.settings[_k] | strip
-          assign _k = 'pairs_card_' | append: i | append: '_eyebrow'
-          assign card_brow  = section.settings[_k] | strip
-          assign _k = 'pairs_card_' | append: i | append: '_price'
-          assign card_price = section.settings[_k] | strip
-          assign _k = 'pairs_card_' | append: i | append: '_url'
-          assign card_url   = section.settings[_k]
-        -%}
-        <a
-          href="{{ card_url | default: '#' }}"
-          class="shop-pairs__card"
-          {% if card_url == blank %}tabindex="-1" aria-hidden="true"{% endif %}
-        >
-          <div class="shop-pairs__card-media">
-            {%- if card_img != blank -%}
-              {{ card_img | image_url: width: 600 | image_tag: loading: 'lazy', class: 'shop-pairs__card-img', alt: card_title }}
-            {%- else -%}
-              <div class="shop-pairs__card-placeholder"></div>
-            {%- endif -%}
-          </div>
-          <div class="shop-pairs__card-body">
-            {%- if card_brow != blank -%}
-              <p class="shop-pairs__card-eyebrow">{{ card_brow | escape }}</p>
-            {%- endif -%}
-            <p class="shop-pairs__card-title">{{ card_title | default: 'Accessory' | escape }}</p>
-            {%- if card_price != blank -%}
-              <p class="shop-pairs__card-price">{{ card_price | escape }}</p>
-            {%- endif -%}
-          </div>
-        </a>
-      {%- endfor -%}
-    </div>
-
-  </div>
-</section>
 
 {%- comment -%}── 07 CLOSING CTA ──{%- endcomment -%}
 <section class="shop-cta full-width" data-surface="dark">
@@ -573,10 +566,10 @@
   .shop-crumbs__inner,
   .shop-hero__inner,
   .shop-buy__inner,
+  .shop-hiw__inner,
+  .shop-founder__inner,
   .shop-specs__inner,
-  .shop-box__inner,
   .shop-features__inner,
-  .shop-pairs__inner,
   .shop-cta__inner {
     width: 100%;
     max-width: var(--layout-max-width);
@@ -1294,28 +1287,25 @@
   }
 
   /* ══════════════════════════════════════════
-     03 SPECS
+     05 SPECS (dark, tabbed)
   ══════════════════════════════════════════ */
   .shop-specs {
-    background: var(--moov-cream);
-    color: var(--moov-black);
+    background: var(--moov-black);
+    color: var(--moov-cream);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-light);
+    border-top: 1px solid var(--moov-border-dark);
   }
 
   .shop-specs__inner {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: clamp(40px, 6vw, 88px);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 4vw, 48px);
   }
 
   .shop-specs__lead {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    position: sticky;
-    top: calc(var(--header-height, 72px) + 24px);
+    gap: 12px;
   }
 
   .shop-specs__eyebrow {
@@ -1325,7 +1315,7 @@
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
+    color: var(--moov-amber);
   }
 
   .shop-specs__heading {
@@ -1336,81 +1326,241 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-black);
-    max-width: 14ch;
+    color: var(--moov-cream);
+    max-width: 22ch;
     text-wrap: balance;
   }
 
-  .shop-specs__list {
+  /* Tab bar */
+  .shop-specs__tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--moov-border-dark);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .shop-specs__tab-bar::-webkit-scrollbar { display: none; }
+
+  .shop-specs__tab {
+    flex-shrink: 0;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--moov-text-tertiary-dark);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .shop-specs__tab:hover {
+    color: var(--moov-cream);
+  }
+
+  .shop-specs__tab--active {
+    color: var(--moov-cream);
+    border-bottom-color: var(--moov-amber);
+  }
+
+  /* Tab panels */
+  .shop-specs__panels {
+    min-height: 140px;
+  }
+
+  .shop-specs__panel {
+    display: none;
+  }
+
+  .shop-specs__panel--active {
+    display: block;
+  }
+
+  .shop-specs__lines {
+    list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--moov-border-light);
+    gap: 0;
   }
 
-  .shop-specs__row {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 20px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--moov-border-light);
-    align-items: baseline;
-  }
-
-  .shop-specs__term {
+  .shop-specs__line {
     font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--moov-text-secondary-light);
+    font-size: var(--text-md);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-dark);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--moov-border-dark);
   }
 
-  .shop-specs__desc {
+  .shop-specs__line:first-child {
+    padding-top: 0;
+  }
+
+  @media (max-width: 600px) {
+    .shop-specs__tab { padding: 12px 14px; font-size: 10px; }
+  }
+
+  /* Reservation note */
+  .shop-buy__reservation {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-sm);
-    line-height: 1.6;
-    color: var(--moov-black);
-  }
-
-  @media (max-width: 860px) {
-    .shop-specs__inner { grid-template-columns: 1fr; }
-    .shop-specs__lead { position: static; }
-  }
-
-  @media (max-width: 520px) {
-    .shop-specs__row { grid-template-columns: 1fr; gap: 4px; }
+    font-size: var(--text-xs);
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--moov-text-tertiary-dark);
+    text-align: center;
   }
 
   /* ══════════════════════════════════════════
-     04 IN THE BOX
+     03 HOW IT WORKS
   ══════════════════════════════════════════ */
-  .shop-box {
-    background: var(--moov-cream);
-    color: var(--moov-black);
+  .shop-hiw {
+    background: var(--moov-black);
+    color: var(--moov-cream);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
+    border-top: 1px solid var(--moov-border-dark);
   }
 
-  .shop-box__head {
+  .shop-hiw__inner {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: clamp(40px, 5vw, 60px);
+    gap: clamp(32px, 4vw, 48px);
   }
 
-  .shop-box__eyebrow {
+  .shop-hiw__eyebrow {
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-2xs);
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
+    color: var(--moov-amber);
   }
 
-  .shop-box__heading {
+  .shop-hiw__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--moov-border-dark);
+  }
+
+  .shop-hiw__step {
+    padding: 32px 28px 40px;
+    border-right: 1px solid var(--moov-border-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .shop-hiw__step:last-child { border-right: none; }
+
+  .shop-hiw__num {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-amber);
+    opacity: 0.85;
+  }
+
+  .shop-hiw__title {
+    margin: 0;
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: var(--text-heading-md);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--moov-cream);
+    text-wrap: balance;
+  }
+
+  .shop-hiw__body {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .shop-hiw__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--moov-cream);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .shop-hiw__link:hover { color: var(--moov-amber); }
+
+  @media (max-width: 860px) {
+    .shop-hiw__steps { grid-template-columns: 1fr; }
+    .shop-hiw__step { border-right: none; }
+    .shop-hiw__step:not(:last-child) { border-bottom: 1px solid var(--moov-border-dark); }
+  }
+
+  /* ══════════════════════════════════════════
+     04 FOUNDER DROP
+  ══════════════════════════════════════════ */
+  .shop-founder {
+    background: var(--moov-cream);
+    color: var(--moov-black);
+    padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
+    border-top: 1px solid var(--moov-border-light);
+  }
+
+  .shop-founder__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 88px);
+    align-items: center;
+  }
+
+  .shop-founder__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .shop-founder__limit {
+    margin: 0;
+    display: inline-flex;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moov-eyebrow-accent);
+    border: 1px solid currentColor;
+    padding: 5px 14px;
+    border-radius: 999px;
+  }
+
+  .shop-founder__eyebrow {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moov-text-secondary-light);
+  }
+
+  .shop-founder__heading {
     margin: 0;
     font-family: var(--font-hero);
     font-weight: 500;
@@ -1419,72 +1569,51 @@
     letter-spacing: -0.02em;
     text-transform: uppercase;
     color: var(--moov-black);
-    max-width: 18ch;
+    max-width: 16ch;
+    text-wrap: balance;
   }
 
-  .shop-box__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--moov-border-light);
-  }
-
-  .shop-box__item {
-    padding: 32px 28px 40px;
-    border-right: 1px solid var(--moov-border-light);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .shop-box__item:last-child { border-right: none; }
-
-  .shop-box__icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--moov-black) 6%, transparent);
-    color: var(--moov-black);
-    flex-shrink: 0;
-  }
-
-  .shop-box__item-title {
+  .shop-founder__body {
     margin: 0;
-    font-family: var(--font-hero);
-    font-weight: 500;
-    font-size: var(--text-heading-sm);
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: var(--moov-black);
-  }
-
-  .shop-box__item-body {
-    margin: 0;
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     line-height: 1.65;
     color: var(--moov-text-secondary-light);
+    max-width: 42ch;
   }
 
-  @media (max-width: 900px) {
-    .shop-box__grid { grid-template-columns: repeat(2, 1fr); }
-    .shop-box__item { border-bottom: 1px solid var(--moov-border-light); }
-    .shop-box__item:nth-child(2n) { border-right: none; }
-    .shop-box__item:nth-last-child(-n+2) { border-bottom: none; }
+  .shop-founder__media {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card, 16px);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--moov-black) 6%, var(--moov-cream));
+    border: 1px solid var(--moov-border-light);
   }
 
-  @media (max-width: 520px) {
-    .shop-box__grid { grid-template-columns: 1fr; }
-    .shop-box__item { border-right: none; }
-    .shop-box__item:not(:last-child) { border-bottom: 1px solid var(--moov-border-light); }
-    .shop-box__item:last-child { border-bottom: none; }
+  .shop-founder__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .shop-founder__placeholder {
+    width: 100%;
+    height: 100%;
+    background: color-mix(in srgb, var(--moov-black) 5%, var(--moov-cream));
+  }
+
+  @media (max-width: 860px) {
+    .shop-founder__inner {
+      grid-template-columns: 1fr;
+    }
+    .shop-founder__media {
+      aspect-ratio: 3 / 2;
+      order: -1;
+    }
   }
 
   /* ══════════════════════════════════════════
-     05 KEY FEATURES
+     06 CORE BENEFITS
   ══════════════════════════════════════════ */
   .shop-features {
     background: var(--moov-black);
@@ -1572,132 +1701,6 @@
     .shop-features__grid { grid-template-columns: 1fr; }
     .shop-feature { border-right: none; }
     .shop-feature:not(:last-child) { border-bottom: 1px solid var(--moov-border-dark); }
-  }
-
-  /* ══════════════════════════════════════════
-     06 PAIRS WITH
-  ══════════════════════════════════════════ */
-  .shop-pairs {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-light);
-  }
-
-  .shop-pairs__eyebrow {
-    margin: 0 0 12px;
-    font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
-  }
-
-  .shop-pairs__heading {
-    margin: 0 0 clamp(36px, 5vw, 56px);
-    font-family: var(--font-hero);
-    font-weight: 500;
-    font-size: var(--text-heading-xl);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: var(--moov-black);
-    max-width: 20ch;
-    text-wrap: balance;
-  }
-
-  .shop-pairs__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(16px, 2.5vw, 28px);
-  }
-
-  .shop-pairs__card {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    text-decoration: none;
-    color: inherit;
-    border-radius: var(--radius-card, 16px);
-    overflow: hidden;
-    border: 1px solid var(--moov-border-light);
-    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    background: color-mix(in srgb, var(--moov-black) 3%, var(--moov-cream));
-  }
-
-  .shop-pairs__card:hover {
-    border-color: color-mix(in srgb, var(--moov-black) 30%, transparent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px color-mix(in srgb, var(--moov-black) 10%, transparent);
-  }
-
-  .shop-pairs__card-media {
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: color-mix(in srgb, var(--moov-black) 5%, var(--moov-cream));
-  }
-
-  .shop-pairs__card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-
-  .shop-pairs__card:hover .shop-pairs__card-img {
-    transform: scale(1.04);
-  }
-
-  .shop-pairs__card-placeholder {
-    width: 100%;
-    height: 100%;
-    background: color-mix(in srgb, var(--moov-black) 8%, var(--moov-cream));
-  }
-
-  .shop-pairs__card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 20px 24px;
-  }
-
-  .shop-pairs__card-eyebrow {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--moov-text-secondary-light);
-  }
-
-  .shop-pairs__card-title {
-    margin: 0;
-    font-family: var(--font-hero);
-    font-weight: 500;
-    font-size: var(--text-heading-sm);
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: var(--moov-black);
-    line-height: 1.1;
-  }
-
-  .shop-pairs__card-price {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--moov-text-secondary-light);
-  }
-
-  @media (max-width: 860px) {
-    .shop-pairs__grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 520px) {
-    .shop-pairs__grid { grid-template-columns: 1fr; }
   }
 
   /* ══════════════════════════════════════════
@@ -1987,6 +1990,36 @@
       });
     });
 
+    /* ── Specs tab switching ── */
+    document.querySelectorAll('[data-specs-tabs]').forEach(function (container) {
+      var tabs = Array.prototype.slice.call(container.querySelectorAll('.shop-specs__tab'));
+      var panels = Array.prototype.slice.call(container.querySelectorAll('.shop-specs__panel'));
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var idx = tab.dataset.specTab;
+
+          tabs.forEach(function (t) {
+            t.classList.remove('shop-specs__tab--active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach(function (p) {
+            p.classList.remove('shop-specs__panel--active');
+            p.hidden = true;
+          });
+
+          tab.classList.add('shop-specs__tab--active');
+          tab.setAttribute('aria-selected', 'true');
+
+          var target = container.querySelector('[data-spec-panel="' + idx + '"]');
+          if (target) {
+            target.classList.add('shop-specs__panel--active');
+            target.hidden = false;
+          }
+        });
+      });
+    });
+
   })();
 {% endjavascript %}
 
@@ -2114,6 +2147,70 @@
     },
     {
       "type": "header",
+      "content": "t:sections.shop.header_reservation"
+    },
+    {
+      "type": "text",
+      "id": "reservation_note",
+      "label": "t:sections.shop.reservation_note_label",
+      "default": "Your $1 reservation secures priority access to the first MOOV Founder Drop."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop.header_hiw"
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_1_title",
+      "label": "t:sections.shop.hiw_step_title_label",
+      "default": "Set your alarm"
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_1_body",
+      "label": "t:sections.shop.hiw_step_body_label",
+      "default": "Set your wake-up time directly in the MOOV app."
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_2_title",
+      "label": "t:sections.shop.hiw_step_title_label",
+      "default": "Get moving"
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_2_body",
+      "label": "t:sections.shop.hiw_step_body_label",
+      "default": "Move to your MOOV device to begin your morning."
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_3_title",
+      "label": "t:sections.shop.hiw_step_title_label",
+      "default": "Stay focused"
+    },
+    {
+      "type": "text",
+      "id": "hiw_step_3_body",
+      "label": "t:sections.shop.hiw_step_body_label",
+      "default": "Optional Focus Mode helps reduce distracting app usage after waking up."
+    },
+    {
+      "type": "url",
+      "id": "hiw_url",
+      "label": "t:sections.shop.hiw_url_label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop.header_founder"
+    },
+    {
+      "type": "image_picker",
+      "id": "founder_image",
+      "label": "t:sections.shop.founder_image_label"
+    },
+    {
+      "type": "header",
       "content": "t:sections.shop.header_specs"
     },
     {
@@ -2135,206 +2232,102 @@
       "default": "Dimensions"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_1_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "138 mm Ø · 42 mm depth"
+      "default": "130 mm × 40 mm × 15 mm\n5.1 in × 1.6 in × 0.6 in"
     },
     {
       "type": "text",
       "id": "spec_2_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Weight"
+      "default": "Battery life"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_2_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "412 g (shell + mount)"
+      "default": "3–4 months per charge (normal use)\nRechargeable (USB)"
     },
     {
       "type": "text",
       "id": "spec_3_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Shell"
+      "default": "Compatibility"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_3_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "Glazed white ceramic"
+      "default": "Android (available now)\niOS (coming soon)"
     },
     {
       "type": "text",
       "id": "spec_4_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Ring"
+      "default": "Connectivity"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_4_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "Anodized aluminum, warm-amber LED, 4 brightness levels"
+      "default": "Bluetooth Low Energy (BLE)"
     },
     {
       "type": "text",
       "id": "spec_5_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Mount"
+      "default": "Alarm"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_5_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "Solid brass French-cleat"
+      "default": "Alarm plays through your phone\nDevice must be pressed to turn it off"
     },
     {
       "type": "text",
       "id": "spec_6_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Battery"
+      "default": "Mounting"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_6_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "8 months typical, USB-C, 90 min charge"
+      "default": "3M Command Strip installation\nMagnetic mounting system\nWall block stays in place, device attaches and detaches easily"
     },
     {
       "type": "text",
       "id": "spec_7_dt",
       "label": "t:sections.shop.spec_dt_label",
-      "default": "Speaker"
+      "default": "Design"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_7_dd",
       "label": "t:sections.shop.spec_dd_label",
-      "default": "Front-facing full-range driver"
+      "default": "Minimal, low-profile build\nClean wall-mounted form\nSoft white LED light ring"
     },
     {
       "type": "text",
       "id": "spec_8_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "Connectivity"
+      "label": "t:sections.shop.spec_dt_label"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_8_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "Bluetooth 5.3, no Wi-Fi required"
+      "label": "t:sections.shop.spec_dd_label"
     },
     {
       "type": "text",
       "id": "spec_9_dt",
-      "label": "t:sections.shop.spec_dt_label",
-      "default": "In the box"
+      "label": "t:sections.shop.spec_dt_label"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "spec_9_dd",
-      "label": "t:sections.shop.spec_dd_label",
-      "default": "Device · mount · hardware · USB-C cable · setup card"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.shop.header_pairs"
-    },
-    {
-      "type": "text",
-      "id": "pairs_eyebrow",
-      "label": "t:sections.shop.pairs_eyebrow_label",
-      "default": "Pairs with"
-    },
-    {
-      "type": "text",
-      "id": "pairs_heading",
-      "label": "t:sections.shop.pairs_heading_label",
-      "default": "Complete your setup."
-    },
-    {
-      "type": "image_picker",
-      "id": "pairs_card_1_image",
-      "label": "t:sections.shop.pairs_card_image_label"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_1_eyebrow",
-      "label": "t:sections.shop.pairs_card_eyebrow_label",
-      "default": "French-cleat plate"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_1_title",
-      "label": "t:sections.shop.pairs_card_title_label",
-      "default": "Wall mount — Brass"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_1_price",
-      "label": "t:sections.shop.pairs_card_price_label",
-      "default": "$24"
-    },
-    {
-      "type": "url",
-      "id": "pairs_card_1_url",
-      "label": "t:sections.shop.pairs_card_url_label"
-    },
-    {
-      "type": "image_picker",
-      "id": "pairs_card_2_image",
-      "label": "t:sections.shop.pairs_card_image_label"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_2_eyebrow",
-      "label": "t:sections.shop.pairs_card_eyebrow_label",
-      "default": "Braided USB-C, 2m"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_2_title",
-      "label": "t:sections.shop.pairs_card_title_label",
-      "default": "Charge cable"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_2_price",
-      "label": "t:sections.shop.pairs_card_price_label",
-      "default": "$18"
-    },
-    {
-      "type": "url",
-      "id": "pairs_card_2_url",
-      "label": "t:sections.shop.pairs_card_url_label"
-    },
-    {
-      "type": "image_picker",
-      "id": "pairs_card_3_image",
-      "label": "t:sections.shop.pairs_card_image_label"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_3_eyebrow",
-      "label": "t:sections.shop.pairs_card_eyebrow_label",
-      "default": "Five recorded wakes"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_3_title",
-      "label": "t:sections.shop.pairs_card_title_label",
-      "default": "Sound pack — Field"
-    },
-    {
-      "type": "text",
-      "id": "pairs_card_3_price",
-      "label": "t:sections.shop.pairs_card_price_label",
-      "default": "Free"
-    },
-    {
-      "type": "url",
-      "id": "pairs_card_3_url",
-      "label": "t:sections.shop.pairs_card_url_label"
+      "label": "t:sections.shop.spec_dd_label"
     }
   ],
   "presets": [

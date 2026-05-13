@@ -5,6 +5,8 @@
     assign faq_heading = product.metafields.custom.faq_heading
   endif
 
+  assign faq_eyebrow = section.settings.eyebrow | strip
+
   assign faq_items_mf = nil
   if product
     assign faq_items_mf = product.metafields.custom.faq_items.value
@@ -15,13 +17,19 @@
   endif
 -%}
 
-<div class="faq full-width" data-surface="dark">
+<div class="faq full-width" data-surface="cream">
   <div class="faq__inner">
 
     {%- comment -%} Left — section label {%- endcomment -%}
     <div class="faq__label-col">
+      {%- if faq_eyebrow != blank -%}
+        <p class="faq__eyebrow" data-animate="faq-label">
+          <span class="faq__eyebrow-dot" aria-hidden="true"></span>
+          {{ faq_eyebrow | escape | upcase }}
+        </p>
+      {%- endif -%}
       <h2 class="faq__label" data-animate="faq-label">
-        {{- faq_heading | escape -}}
+        {{- faq_heading | escape | upcase -}}
       </h2>
     </div>
 
@@ -99,7 +107,8 @@
 
 {% stylesheet %}
   .faq {
-    background: var(--moov-black);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-hero) var(--section-inline-pad);
   }
 
@@ -112,35 +121,62 @@
     margin: 0 auto;
   }
 
-  .faq__label {
+  /* Left col */
+  .faq__label-col {
     position: sticky;
-    top: 160px;
+    top: calc(var(--header-height, 72px) + 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .faq__eyebrow {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--moov-eyebrow-accent);
+  }
+
+  .faq__eyebrow-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--moov-amber);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--moov-amber) 55%, transparent);
+  }
+
+  .faq__label {
     font-family: var(--font-display);
-    font-size: clamp(4.5rem, 8vw, 8rem);
+    font-size: clamp(3.2rem, 6vw, 6.5rem);
     font-weight: 700;
-    line-height: 1;
-    color: var(--moov-text-primary-dark);
+    line-height: 0.95;
+    color: var(--moov-black);
     margin: 0;
     letter-spacing: -0.03em;
+    text-transform: uppercase;
   }
 
   .faq__accordion {
     width: 100%;
+    border-top: 1px solid var(--moov-border-light);
   }
 
-  /* FAQ item — base */
+  /* FAQ item */
   .faq__item {
-    border-bottom: 0.5px solid var(--moov-border-dark);
-    border-radius: 0;
+    border-bottom: 1px solid var(--moov-border-light);
     background: transparent;
     transition:
-      background 0.25s ease,
-      border-radius 0.25s ease,
       opacity 0.6s ease-out,
       transform 0.6s ease-out;
-    transition-delay: 0s, 0s, var(--item-delay, 0ms), var(--item-delay, 0ms);
+    transition-delay: var(--item-delay, 0ms), var(--item-delay, 0ms);
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
     cursor: pointer;
   }
 
@@ -150,68 +186,54 @@
     transition-delay: 0s;
   }
 
-  /* FAQ item — open */
-  .faq__item--open {
-    background: var(--moov-surface-dark-raised);
-    border-radius: 12px;
-    border-bottom: none;
-    margin: -1px 0;
-  }
-
   /* Question button */
   .faq__question {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 24px;
     width: 100%;
-    padding: 24px 0;
+    padding: 22px 0;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    transition: padding 0.25s ease;
-  }
-
-  .faq__item--open .faq__question {
-    padding: 24px 28px;
   }
 
   .faq__question-text {
     font-family: var(--font-body);
-    font-size: var(--text-md);
-    font-weight: 400;
-    color: var(--moov-text-secondary-dark);
-    transition: color 0.2s ease, font-weight 0.2s ease;
-  }
-
-  .faq__item:hover .faq__question-text {
-    color: var(--moov-text-primary-dark);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--moov-black);
+    transition: color 0.2s ease;
   }
 
   .faq__item--open .faq__question-text {
-    font-weight: 500;
-    color: var(--moov-text-primary-dark);
+    color: color-mix(in srgb, var(--moov-black) 65%, transparent);
   }
 
   /* Indicator */
   .faq__indicator {
     font-family: var(--font-body);
     font-size: var(--text-lg);
-    font-weight: 400;
-    color: var(--moov-text-tertiary-dark);
+    font-weight: 300;
+    color: var(--moov-black);
     flex-shrink: 0;
     line-height: 1;
-    transition: color 0.2s ease;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--moov-border-light);
+    border-radius: 50%;
+    transition: border-color 0.2s ease, color 0.2s ease;
   }
 
   .faq__item:hover .faq__indicator {
-    color: var(--moov-text-secondary-dark);
-  }
-
-  .faq__item--open .faq__indicator {
-    font-size: var(--text-lg);
-    color: var(--moov-text-secondary-dark);
+    border-color: var(--moov-black);
   }
 
   .faq__indicator-times {
@@ -231,17 +253,14 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    padding: 0;
     transition:
       max-height 0.4s ease,
-      opacity 0.3s ease 0.05s,
-      padding 0.25s ease;
+      opacity 0.3s ease 0.05s;
   }
 
   .faq__item--open .faq__answer {
     max-height: 400px;
     opacity: 1;
-    padding: 0 28px 24px;
   }
 
   .faq__answer-text {
@@ -249,16 +268,16 @@
     font-size: var(--text-base);
     font-weight: 400;
     line-height: 1.75;
-    color: var(--moov-text-secondary-dark);
-    max-width: 520px;
-    margin: 12px 0 0;
+    color: color-mix(in srgb, var(--moov-black) 60%, transparent);
+    max-width: 52ch;
+    margin: 0 0 22px;
   }
 
-  /* Section label scroll animation */
+  /* Animations */
   [data-animate="faq-label"] {
     opacity: 0;
-    transform: translateX(-16px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transform: translateX(-12px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
   }
 
   [data-animate="faq-label"].is-visible {
@@ -266,24 +285,20 @@
     transform: none;
   }
 
-  @media (min-width: 768px) and (max-width: 1279px) {
+  @media (min-width: 768px) and (max-width: 1100px) {
     .faq__inner {
       grid-template-columns: 30fr 70fr;
       gap: 48px;
-    }
-
-    .faq__label {
-      top: 100px;
     }
   }
 
   @media (max-width: 767px) {
     .faq__inner {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: 36px;
     }
 
-    .faq__label {
+    .faq__label-col {
       position: static;
     }
   }
@@ -342,9 +357,15 @@
   "settings": [
     {
       "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow_text",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
       "id": "heading",
       "label": "t:labels.heading",
-      "default": "FAQs"
+      "default": "The five we get most."
     }
   ],
   "blocks": [
