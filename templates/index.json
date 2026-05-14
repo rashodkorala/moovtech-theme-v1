@@ -96,16 +96,16 @@
     "home_buy": {
       "type": "home-buy",
       "settings": {
-        "eyebrow": "Now shipping",
-        "heading": "The MOOV device.",
-        "description": "Wall-mounted. Battery-powered. White ceramic finish. One job — get you out of bed.",
-        "price": "$129",
-        "compare_price": "$159",
+        "eyebrow": "Founder Drop · Limited to 500",
+        "heading": "Reserve your MOOV.",
+        "description": "$1 reservation secures your priority access to the first 500 Ivory White devices.",
+        "price": "$1",
+        "compare_price": "$129 at launch",
         "show_stock": true,
-        "perk_1": "Free shipping over $50",
-        "perk_2": "30-day trial",
-        "perk_3": "1-year warranty",
-        "cta_label": "Add to cart",
+        "perk_1": "Early access priority",
+        "perk_2": "Founder Drop packaging",
+        "perk_3": "Lock in launch price",
+        "cta_label": "Reserve for $1",
         "cta_url": "/products/moov",
         "cta_secondary_label": "Read our story",
         "cta_secondary_url": "/pages/our-story",
@@ -199,9 +199,9 @@
   },
   "order": [
     "hero",
-    "product_glimpse",
-    "how_it_works_glimpse",
     "home_buy",
+    "how_it_works_glimpse",
+    "product_glimpse",
     "reviews_grid"
   ]
 }

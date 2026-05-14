@@ -31,9 +31,9 @@
   {%- endif -%}
 
   <nav class="moov-nav" aria-label="{{ 'general.accessibility.nav_label' | t }}">
-    {%- comment -%} Left — Nav links (Shop-style row) {%- endcomment -%}
+    {%- comment -%} Left — Nav links (nav_1 + nav_2) {%- endcomment -%}
     <ul class="moov-nav__links" role="list">
-      {%- for i in (1..4) -%}
+      {%- for i in (1..2) -%}
         {%- liquid
           case i
             when 1
@@ -48,24 +48,6 @@
             when 2
               assign nav_lbl = section.settings.nav_2_label
               assign nav_url = section.settings.nav_2_url
-              if nav_lbl == blank
-                assign nav_lbl = 'Our story'
-              endif
-              if nav_url == blank
-                assign nav_url = '/pages/our-story'
-              endif
-            when 3
-              assign nav_lbl = section.settings.nav_3_label
-              assign nav_url = section.settings.nav_3_url
-              if nav_lbl == blank
-                assign nav_lbl = 'Support'
-              endif
-              if nav_url == blank
-                assign nav_url = '/pages/support'
-              endif
-            when 4
-              assign nav_lbl = section.settings.nav_4_label
-              assign nav_url = section.settings.nav_4_url
           endcase
         -%}
         {%- if nav_lbl != blank -%}
@@ -98,27 +80,18 @@
       {%- endif -%}
     </a>
 
-    {%- comment -%} Right — Utilities + optional CTA {%- endcomment -%}
+    {%- comment -%} Right — nav_3 link + CTA + icons {%- endcomment -%}
     <div class="moov-nav__right">
-      {%- comment -%} Account {%- endcomment -%}
-      {%- if shop.customer_accounts_enabled -%}
-        <a href="{{ routes.account_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.account' | t }}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </a>
+      {%- comment -%} Nav link 3 (right side) {%- endcomment -%}
+      {%- assign right_lbl = section.settings.nav_3_label -%}
+      {%- assign right_url = section.settings.nav_3_url -%}
+      {%- if right_lbl != blank -%}
+        <a
+          href="{{ right_url | default: routes.root_url }}"
+          class="moov-nav__link{% if right_url == request.path %} moov-nav__link--active{% endif %}"
+          {% if right_url == request.path %}aria-current="page"{% endif %}
+        >{{- right_lbl | escape -}}</a>
       {%- endif -%}
-
-      {%- comment -%} Cart — bag icon + count badge {%- endcomment -%}
-      <a href="{{ routes.cart_url }}" class="moov-nav__cart" aria-label="{{ 'general.accessibility.cart' | t }}">
-        <svg class="moov-nav__cart-bag" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
-        <span class="moov-nav__cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
-      </a>
 
       {%- if section.settings.show_nav_cta -%}
         <a
@@ -128,6 +101,26 @@
           {{- get_moov_label | escape -}}
         </a>
       {%- endif -%}
+
+      {%- comment -%} Icons group — account + cart, separated by vertical rule {%- endcomment -%}
+      <div class="moov-nav__icons">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{{ routes.account_url }}" class="moov-nav__icon" aria-label="{{ 'general.accessibility.account' | t }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="moov-nav__cart" aria-label="{{ 'general.accessibility.cart' | t }}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="moov-nav__cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
+        </a>
+      </div>
     </div>
 
     {%- comment -%} Mobile hamburger {%- endcomment -%}
@@ -168,7 +161,7 @@
       </button>
     </div>
     <nav class="moov-drawer__nav">
-      {%- for i in (1..4) -%}
+      {%- for i in (1..6) -%}
         {%- liquid
           case i
             when 1
@@ -201,6 +194,18 @@
             when 4
               assign nav_lbl = section.settings.nav_4_label
               assign nav_url = section.settings.nav_4_url
+              if nav_lbl == blank
+                assign nav_lbl = 'Shop'
+              endif
+              if nav_url == blank
+                assign nav_url = '/collections/all'
+              endif
+            when 5
+              assign nav_lbl = section.settings.nav_5_label
+              assign nav_url = section.settings.nav_5_url
+            when 6
+              assign nav_lbl = section.settings.nav_6_label
+              assign nav_url = section.settings.nav_6_url
           endcase
         -%}
         {%- if nav_lbl != blank -%}
@@ -232,13 +237,13 @@
     justify-content: center;
     min-height: 40px;
     padding: 10px var(--section-inline-pad);
-    background: var(--moov-black);
+    background: var(--moov-amber);
     font-family: var(--font-body);
     font-size: clamp(0.8125rem, 0.2vw + 0.72rem, 0.9375rem);
     font-weight: 500;
-    letter-spacing: 0.01em;
-    text-transform: none;
-    color: var(--moov-cream);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--moov-black);
   }
 
   .moov-announcement__link {
@@ -260,43 +265,70 @@
     overflow-wrap: break-word;
   }
 
-  /* ── Header ── */
+  /* ── Header shell ── */
   .moov-header {
     position: relative;
     left: 0;
     right: 0;
     z-index: 100;
-    background: var(--color-background);
-    border-bottom: 1px solid var(--moov-border-light);
-    transition: background 0.3s ease, border-color 0.3s ease;
+    background: var(--moov-black);
+    border-bottom: 0.5px solid color-mix(in srgb, var(--moov-white) 7%, transparent);
+    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
   }
 
+  /* Frosted glass on scroll */
+  .moov-header.is-scrolled {
+    background: color-mix(in srgb, var(--moov-black) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: color-mix(in srgb, var(--moov-white) 5%, transparent);
+  }
+
+  /* ── Nav grid ── */
   .moov-nav {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    column-gap: clamp(1.5rem, 3vw, 3rem);
     align-items: center;
-    height: var(--header-height);
+    height: 82px;
     box-sizing: border-box;
     width: min(var(--layout-max-width), calc(100% - 2 * var(--section-inline-pad)));
     margin-inline: auto;
     padding: 0;
   }
 
-  /* Wordmark — center column (bold sans, reference style) */
+  /* ── Wordmark ── */
   .moov-nav__wordmark {
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: clamp(1.25rem, 1.5vw, 1.625rem);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--moov-cream);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
     text-decoration: none;
     justify-self: center;
     transition: opacity 0.2s;
   }
 
   .moov-nav__wordmark:hover {
-    opacity: 0.7;
+    opacity: 0.75;
+  }
+
+  .moov-nav__wordmark-text {
+    font-family: var(--font-hero), 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    letter-spacing: 0.32em;
+    font-weight: 300;
+    color: var(--moov-white);
+    line-height: 1;
+    padding-right: 4px;
+  }
+
+  .moov-nav__reg {
+    font-size: 8px;
+    color: color-mix(in srgb, var(--moov-white) 32%, transparent);
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 7px;
+    letter-spacing: 0;
+    vertical-align: top;
   }
 
   .moov-nav__logo-img {
@@ -312,12 +344,11 @@
     max-height: 32px;
   }
 
-  /* Left nav links */
+  /* ── Nav links (shared) ── */
   .moov-nav__links {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: clamp(12px, 1.25vw, 24px);
+    gap: 40px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -327,134 +358,123 @@
 
   .moov-nav__link {
     font-family: var(--font-body);
-    font-weight: 500;
-    font-size: clamp(1.0625rem, 0.2vw + 0.9rem, 1.125rem);
-    letter-spacing: 0.02em;
-    color: var(--moov-cream);
+    font-weight: 400;
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--moov-white);
     text-decoration: none;
-    transition: opacity 0.2s;
-    white-space: normal;
-    overflow-wrap: break-word;
-    line-height: 1.35;
-    max-width: 100%;
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
   }
 
   .moov-nav__link:hover {
-    opacity: 0.55;
+    opacity: 0.65;
   }
 
   .moov-nav__link--active {
-    position: relative;
+    opacity: 0.65;
   }
 
-  .moov-nav__link--active::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.45;
-  }
-
-  /* Right utilities group */
+  /* ── Right group ── */
   .moov-nav__right {
     display: flex;
     align-items: center;
-    gap: clamp(8px, 0.75vw, 16px);
+    gap: 30px;
     justify-content: flex-end;
     flex-shrink: 0;
-    flex-wrap: wrap;
     min-width: 0;
+  }
+
+  /* ── Get MOOV pill ── */
+  .moov-nav__get-moov {
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-sm);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--moov-amber);
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .moov-nav__get-moov:hover {
+    background: var(--moov-amber-hover);
+    border-color: var(--moov-amber-hover);
+    color: var(--moov-white);
+  }
+
+  /* ── Icons group (account + cart with vertical separator) ── */
+  .moov-nav__icons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-left: 0.5px solid color-mix(in srgb, var(--moov-white) 10%, transparent);
+    padding-left: 22px;
   }
 
   .moov-nav__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    color: var(--moov-cream);
+    color: var(--moov-white);
     text-decoration: none;
     background: none;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s ease;
     padding: 0;
-    border-radius: 50%;
+  }
+
+  .moov-nav__icon svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5;
   }
 
   .moov-nav__icon:hover {
-    opacity: 0.55;
+    opacity: 0.65;
   }
 
-  /* Cart — bag + circular count (reference style) */
+  /* ── Cart ── */
   .moov-nav__cart {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
     text-decoration: none;
-    color: var(--moov-cream);
-    transition: opacity 0.2s;
+    color: var(--moov-white);
+    transition: opacity 0.2s ease;
   }
 
   .moov-nav__cart:hover {
-    opacity: 0.55;
-  }
-
-  .moov-nav__cart-bag {
-    flex-shrink: 0;
+    opacity: 0.65;
   }
 
   .moov-nav__cart-badge {
     position: absolute;
-    top: 2px;
-    right: -2px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    border-radius: 999px;
-    border: 1px solid var(--moov-black);
-    background: var(--moov-cream);
+    top: -5px;
+    right: -7px;
+    background: var(--moov-amber);
+    color: var(--moov-white);
     font-family: var(--font-body);
-    font-size: 10px;
+    font-size: 7px;
     font-weight: 600;
-    line-height: 16px;
-    text-align: center;
-    color: var(--moov-black);
-    box-sizing: border-box;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
 
-  /* Get MOOV pill */
-  .moov-nav__get-moov {
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: var(--text-sm);
-    letter-spacing: 0.03em;
-    color: var(--moov-black);
-    text-decoration: none;
-    border: 1px solid color-mix(in srgb, var(--moov-black) 20%, transparent);
-    border-radius: var(--style-border-radius-buttons);
-    padding: clamp(8px, 0.6vw, 12px) clamp(18px, 1.4vw, 28px);
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-    white-space: normal;
-    overflow-wrap: break-word;
-    text-align: center;
-    line-height: 1.3;
-    max-width: min(11rem, 100%);
-  }
-
-  .moov-nav__get-moov:hover {
-    background: var(--moov-black);
-    color: var(--moov-cream);
-    border-color: var(--moov-black);
-  }
-
-  /* Hamburger — mobile only */
+  /* ── Hamburger — mobile only ── */
   .moov-nav__hamburger {
     display: none;
     align-items: center;
@@ -462,13 +482,13 @@
     background: none;
     border: none;
     padding: 0;
-    color: var(--moov-text-primary-light);
+    color: var(--moov-white);
     cursor: pointer;
   }
 
   .moov-nav__hamburger svg {
-    width: clamp(22px, 1.5vw, 28px);
-    height: clamp(22px, 1.5vw, 28px);
+    width: 22px;
+    height: 22px;
   }
 
   /* ── Sticky modifier ── */
@@ -495,75 +515,28 @@
   }
 
   .moov-header--transparent .moov-announcement {
-    background: color-mix(in srgb, var(--moov-black) 70%, transparent);
-  }
-
-  .moov-header--transparent .moov-nav__wordmark {
-    color: var(--moov-text-primary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__link {
-    color: var(--moov-text-secondary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__link:hover {
-    color: var(--moov-text-primary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__icon {
-    color: var(--moov-text-secondary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__icon:hover {
-    color: var(--moov-text-primary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__cart {
-    color: var(--moov-text-secondary-dark);
-  }
-
-  .moov-header--transparent .moov-nav__cart-badge {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    border-color: color-mix(in srgb, var(--moov-cream) 45%, transparent);
-  }
-
-  .moov-header--transparent .moov-nav__get-moov {
-    color: var(--moov-amber);
-    border-color: var(--moov-border-amber);
-  }
-
-  .moov-header--transparent .moov-nav__get-moov:hover {
     background: var(--moov-amber);
-    color: var(--moov-black);
-    border-color: var(--moov-amber);
   }
 
-  .moov-header--transparent .moov-nav__hamburger {
-    color: var(--moov-text-primary-dark);
-  }
-
-  /* Transparent + scrolled: solid dark bg */
+  /* Transparent + scrolled: frosted dark */
   .moov-header--transparent.is-scrolled {
-    background: var(--moov-black);
-    border-bottom-color: var(--moov-border-dark);
+    background: color-mix(in srgb, var(--moov-black) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: color-mix(in srgb, var(--moov-white) 5%, transparent);
   }
 
-  .moov-header--transparent.is-scrolled .moov-announcement {
-    background: var(--moov-black);
-  }
-
-  /* Transparent + over cream section: flip to cream bg with dark text */
+  /* Transparent + over cream section: flip to cream bg */
   .moov-header--transparent.nav--light {
     background: var(--moov-cream);
     border-bottom-color: var(--moov-border-light);
   }
 
   .moov-header--transparent.nav--light .moov-announcement {
-    background: var(--moov-black);
+    background: var(--moov-amber);
   }
 
-  .moov-header--transparent.nav--light .moov-nav__wordmark {
+  .moov-header--transparent.nav--light .moov-nav__wordmark-text {
     color: var(--moov-text-primary-light);
   }
 
@@ -579,27 +552,18 @@
     color: var(--moov-text-primary-light);
   }
 
-  .moov-header--transparent.nav--light .moov-nav__icon {
-    color: var(--moov-text-secondary-light);
-  }
-
-  .moov-header--transparent.nav--light .moov-nav__icon:hover {
-    color: var(--moov-text-primary-light);
-  }
-
+  .moov-header--transparent.nav--light .moov-nav__icon,
   .moov-header--transparent.nav--light .moov-nav__cart {
     color: var(--moov-text-secondary-light);
   }
 
-  .moov-header--transparent.nav--light .moov-nav__cart-badge {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    border-color: var(--moov-black);
+  .moov-header--transparent.nav--light .moov-nav__icon:hover,
+  .moov-header--transparent.nav--light .moov-nav__cart:hover {
+    color: var(--moov-text-primary-light);
   }
 
-  .moov-header--transparent.nav--light .moov-nav__get-moov {
-    color: var(--moov-text-primary-light);
-    border-color: color-mix(in srgb, var(--moov-black) 25%, transparent);
+  .moov-header--transparent.nav--light .moov-nav__icons {
+    border-left-color: color-mix(in srgb, var(--moov-black) 10%, transparent);
   }
 
   .moov-header--transparent.nav--light .moov-nav__hamburger {
@@ -649,22 +613,13 @@
     margin-bottom: 48px;
   }
 
-  .moov-drawer__wordmark {
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: var(--text-lg);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--moov-text-primary-dark);
-  }
-
   .moov-drawer__close {
     display: flex;
     align-items: center;
     justify-content: center;
     background: none;
     border: none;
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-white);
     cursor: pointer;
     padding: 0;
   }
@@ -680,97 +635,64 @@
     font-family: var(--font-body);
     font-weight: 400;
     font-size: var(--text-2xl);
-    color: var(--moov-text-secondary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: color-mix(in srgb, var(--moov-white) 48%, transparent);
     text-decoration: none;
     transition: color 0.2s;
   }
 
-  .moov-drawer__link:hover {
-    color: var(--moov-text-primary-dark);
-  }
-
+  .moov-drawer__link:hover,
   .moov-drawer__link--active {
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-white);
   }
 
   .moov-drawer__get-moov {
     display: block;
     text-align: center;
     font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 500;
     font-size: var(--text-base);
-    letter-spacing: 0.03em;
-    color: var(--moov-amber);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--moov-amber);
+    color: var(--moov-white);
     text-decoration: none;
-    border: 0.5px solid var(--moov-border-amber);
-    border-radius: 999px;
+    border: 1px solid var(--moov-amber);
+    border-radius: 100px;
     padding: 14px 28px;
     margin-top: auto;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease;
   }
 
   .moov-drawer__get-moov:hover {
-    background: var(--moov-amber);
-    color: var(--moov-black);
+    background: var(--moov-amber-hover);
+    border-color: var(--moov-amber-hover);
   }
 
-  /* ── Dark mode — header ── */
-  [data-theme="dark"] .moov-header {
-    background: var(--color-background);
-    border-bottom-color: var(--moov-border-dark);
-  }
-
-  [data-theme="dark"] .moov-announcement {
-    background: var(--moov-black);
-    border-bottom: 0.5px solid var(--moov-border-dark);
-  }
-
-  [data-theme="dark"] .moov-nav__wordmark {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__link {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__link:hover {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__icon {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__icon:hover {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__cart {
-    color: var(--moov-cream);
-  }
-
-  [data-theme="dark"] .moov-nav__cart-badge {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    border-color: var(--moov-border-dark);
-  }
-
-  [data-theme="dark"] .moov-nav__get-moov {
-    color: var(--moov-text-primary-dark);
-    border-color: var(--moov-border-dark);
-  }
-
-  [data-theme="dark"] .moov-nav__get-moov:hover {
-    background: var(--moov-text-primary-dark);
-    color: var(--moov-black);
-    border-color: var(--moov-text-primary-dark);
-  }
-
-  /* ── Responsive ── */
+  /* ── Mobile: below 768px ── */
   @media (max-width: 767px) {
-    .moov-nav__links,
-    .moov-nav__right {
+    .moov-nav {
+      grid-template-columns: auto 1fr auto;
+      height: 64px;
+    }
+
+    .moov-nav__links {
       display: none;
+    }
+
+    .moov-nav__right .moov-nav__link,
+    .moov-nav__right .moov-nav__get-moov {
+      display: none;
+    }
+
+    .moov-nav__icons {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    .moov-nav__wordmark {
+      justify-self: flex-start;
     }
 
     .moov-nav__hamburger {
@@ -787,11 +709,12 @@
   if (header) {
     var isTransparent = header.getAttribute('data-transparent') === 'true';
 
-    if (isTransparent) {
-      window.addEventListener('scroll', function() {
-        header.classList.toggle('is-scrolled', window.scrollY > 20);
-      });
+    // Frosted glass on scroll — applies to all header types
+    window.addEventListener('scroll', function() {
+      header.classList.toggle('is-scrolled', window.scrollY > 20);
+    }, { passive: true });
 
+    if (isTransparent) {
       var allSurfaceSections = document.querySelectorAll('[data-surface]');
       if (allSurfaceSections.length > 0) {
         function checkNavColor() {
@@ -923,7 +846,7 @@
       "type": "text",
       "id": "nav_1_label",
       "label": "Nav link 1 label",
-      "info": "Leave blank to use the default translation (Shop)."
+      "default": "How it works"
     },
     {
       "type": "url",
@@ -934,7 +857,7 @@
       "type": "text",
       "id": "nav_2_label",
       "label": "Nav link 2 label",
-      "info": "Leave blank to use the default translation (Sale)."
+      "default": "Our story"
     },
     {
       "type": "url",
@@ -945,7 +868,7 @@
       "type": "text",
       "id": "nav_3_label",
       "label": "Nav link 3 label",
-      "info": "Leave blank to use the default translation (About)."
+      "default": "Support"
     },
     {
       "type": "url",
@@ -956,12 +879,32 @@
       "type": "text",
       "id": "nav_4_label",
       "label": "Nav link 4 label",
-      "info": "Leave blank to use the default translation (Features)."
+      "default": "Shop"
     },
     {
       "type": "url",
       "id": "nav_4_url",
       "label": "Nav link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "nav_5_label",
+      "label": "Nav link 5 label"
+    },
+    {
+      "type": "url",
+      "id": "nav_5_url",
+      "label": "Nav link 5 URL"
+    },
+    {
+      "type": "text",
+      "id": "nav_6_label",
+      "label": "Nav link 6 label"
+    },
+    {
+      "type": "url",
+      "id": "nav_6_url",
+      "label": "Nav link 6 URL"
     },
     {
       "type": "header",

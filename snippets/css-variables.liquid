@@ -63,6 +63,7 @@
 
     /* Brand palette: cream “white”, near-black, accent (editable under Theme settings → Colors) */
     --moov-black: {{ moov_black }};
+    --moov-white: #ffffff;
     --moov-cream: {{ moov_cream }};
     --moov-cream-shadow: {{ moov_cream | color_darken: 6 }};
     --moov-amber: {{ moov_accent }};
@@ -77,13 +78,13 @@
     --moov-surface-dark-divider: {{ moov_cream | color_modify: 'alpha', 0.07 }};
 
     --moov-text-primary-dark: {{ moov_cream }};
-    --moov-text-secondary-dark: {{ moov_cream | color_modify: 'alpha', 0.55 }};
-    --moov-text-tertiary-dark: {{ moov_cream | color_modify: 'alpha', 0.3 }};
-    --moov-text-quaternary-dark: {{ moov_cream | color_modify: 'alpha', 0.2 }};
+    --moov-text-secondary-dark: {{ moov_cream | color_modify: 'alpha', 0.96 }};
+    --moov-text-tertiary-dark: {{ moov_cream | color_modify: 'alpha', 0.88 }};
+    --moov-text-quaternary-dark: {{ moov_cream | color_modify: 'alpha', 0.72 }};
 
     --moov-text-primary-light: {{ moov_black }};
-    --moov-text-secondary-light: {{ moov_black | color_modify: 'alpha', 0.5 }};
-    --moov-text-tertiary-light: {{ moov_black | color_modify: 'alpha', 0.3 }};
+    --moov-text-secondary-light: {{ moov_black | color_modify: 'alpha', 0.90 }};
+    --moov-text-tertiary-light: {{ moov_black | color_modify: 'alpha', 0.80 }};
 
     --moov-border-dark: {{ moov_cream | color_modify: 'alpha', 0.1 }};
     --moov-border-light: {{ moov_black | color_modify: 'alpha', 0.1 }};
@@ -107,13 +108,13 @@
       Fluid type scale — same ratio from mobile to large screens (clamp min / preferred / max).
       Tuned so body copy stays readable (~15px+) on small viewports.
     */
-    --text-2xs: clamp(0.6875rem, 0.15vw + 0.58rem, 0.875rem);
-    --text-xs: clamp(0.75rem, 0.15vw + 0.64rem, 0.9375rem);
-    --text-sm: clamp(0.8125rem, 0.2vw + 0.66rem, 1.0625rem);
-    --text-base: clamp(0.9375rem, 0.2vw + 0.78rem, 1.125rem);
-    --text-md: clamp(1rem, 0.2vw + 0.84rem, 1.25rem);
-    --text-lg: clamp(1.125rem, 0.25vw + 0.93rem, 1.375rem);
-    --text-xl: clamp(1.375rem, 0.35vw + 1.1rem, 1.75rem);
+    --text-2xs: clamp(0.75rem, 0.15vw + 0.64rem, 0.9375rem);
+    --text-xs: clamp(0.8125rem, 0.15vw + 0.7rem, 1rem);
+    --text-sm: clamp(0.875rem, 0.2vw + 0.72rem, 1.125rem);
+    --text-base: clamp(1rem, 0.25vw + 0.85rem, 1.1875rem);
+    --text-md: clamp(1.0625rem, 0.25vw + 0.9rem, 1.3125rem);
+    --text-lg: clamp(1.1875rem, 0.3vw + 0.99rem, 1.4375rem);
+    --text-xl: clamp(1.4375rem, 0.4vw + 1.15rem, 1.8125rem);
     --text-2xl: clamp(1.75rem, 0.5vw + 1.35rem, 2.25rem);
     --text-3xl: clamp(2rem, 0.8vw + 1.44rem, 2.75rem);
     --text-4xl: clamp(2.5rem, 1.2vw + 1.66rem, 3.5rem);

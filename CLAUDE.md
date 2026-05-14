@@ -29,6 +29,7 @@ snippets/css-variables.liquid    ← CSS custom properties output
 |---|---|
 | `--moov-black` | Primary dark surface |
 | `--moov-cream` | Primary light surface |
+| `--moov-white` | Pure white (`#ffffff`) — use for text on dark surfaces where max brightness is needed (e.g. header nav). Do NOT use `--moov-cream` or hard-code `#fff` in headers — always use this token. |
 | `--moov-amber` | Accent / eyebrow / highlights |
 | `--moov-border-dark` | Borders on dark surfaces |
 | `--moov-border-light` | Borders on cream surfaces |
