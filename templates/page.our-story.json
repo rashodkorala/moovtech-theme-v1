@@ -12,6 +12,7 @@
     "main": {
       "type": "our-story",
       "settings": {
+        "hero_sub": "Snooze. Scroll. Rush. Repeat. This is the story of how that cycle ended — and why movement had to come first.",
         "video_poster_asset": "CFC86724-4271-4448-BD4D-1BFC891817C5.PNG",
         "cta_primary_url": "/products/moov",
         "cta_secondary_url": "/pages/how-it-works"

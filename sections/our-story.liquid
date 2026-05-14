@@ -113,7 +113,7 @@
 </section>
 
 {%- comment -%}── 02 ORIGIN LETTER ──{%- endcomment -%}
-<section class="os-origin full-width" data-surface="dark" id="origin">
+<section class="os-origin full-width" data-surface="cream" id="origin">
   <div class="os-inner">
     <div class="origin-grid">
 
@@ -309,13 +309,13 @@
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-2xs);
-    font-weight: 500;
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-amber);
   }
   .os-eyebrow--accent {
-    color: var(--moov-eyebrow-accent);
+    color: var(--moov-amber);
   }
 
   /* ── Shared media placeholder ── */
@@ -367,13 +367,14 @@
     flex-direction: column;
     gap: 22px;
     padding-bottom: 12px;
+    justify-content: space-between;
   }
 
   .story-hero-h1 {
     margin: 0;
     font-family: var(--font-hero);
     font-weight: 500;
-    font-size: clamp(2.6rem, 5.5vw, 5rem);
+    font-size: clamp(2.2rem, 4.7vw, 4.25rem);
     line-height: 1.02;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -383,7 +384,7 @@
 
   .story-hero-sub {
     margin: 0;
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     line-height: 1.55;
     color: var(--moov-text-secondary-dark);
     max-width: 38ch;
@@ -444,10 +445,10 @@
      02 ORIGIN LETTER
   ══════════════════════════════════════════ */
   .os-origin {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-md) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .origin-grid {
@@ -474,7 +475,7 @@
     text-transform: uppercase;
     letter-spacing: -0.01em;
     font-size: var(--text-lg);
-    color: var(--moov-cream);
+    color: var(--moov-black);
   }
 
   .origin-meta-role {
@@ -482,7 +483,7 @@
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.14em;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-text-tertiary-light);
   }
 
   .origin-body {
@@ -496,11 +497,11 @@
     margin: 0;
     font-size: var(--text-md);
     line-height: 1.75;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
   }
 
   .origin-body p em {
-    color: var(--moov-text-primary-dark);
+    color: var(--moov-text-primary-light);
     font-style: italic;
   }
 
@@ -511,7 +512,7 @@
     line-height: 1.18;
     letter-spacing: -0.01em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     margin-bottom: 4px;
   }
 
@@ -549,7 +550,7 @@
     flex-direction: column;
     gap: 14px;
     margin-bottom: clamp(28px, 4vw, 48px);
-    max-width: 60ch;
+    max-width: 80ch;
   }
 
   .fv-head-h2 {
@@ -810,7 +811,7 @@
 
   .principle-num {
     font-family: var(--font-hero);
-    font-size: clamp(4rem, 7vw, 7rem);
+    font-size: clamp(3.4rem, 6vw, 6rem);
     font-weight: 500;
     line-height: 1;
     letter-spacing: -0.02em;
