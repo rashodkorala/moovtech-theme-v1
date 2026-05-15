@@ -77,6 +77,16 @@
           {% endfor %}
         </div>
 
+        {%- assign today_total = 0 -%}
+        {%- for item in cart.items -%}
+          {%- if item.selling_plan_allocation -%}
+            {%- assign item_today = item.selling_plan_allocation.checkout_charge_amount | times: item.quantity -%}
+          {%- else -%}
+            {%- assign item_today = item.final_line_price -%}
+          {%- endif -%}
+          {%- assign today_total = today_total | plus: item_today -%}
+        {%- endfor -%}
+
         <div class="moov-cart__summary">
           <div class="moov-cart__summary-inner">
             <p class="moov-cart__summary-label">{{ 'cart.order_summary' | t }}</p>
@@ -84,19 +94,14 @@
 
             <div class="moov-cart__summary-row">
               <span>{{ 'cart.subtotal' | t }}</span>
-              <span>{{ cart.total_price | money }}</span>
-            </div>
-
-            <div class="moov-cart__summary-row moov-cart__summary-row--shipping">
-              <span>{{ 'cart.shipping_label' | t }}</span>
-              <span class="moov-cart__shipping-value">{{ 'cart.shipping_value' | t }}</span>
+              <span>{{ today_total | money }}</span>
             </div>
 
             <div class="moov-cart__summary-divider"></div>
 
             <div class="moov-cart__summary-row moov-cart__summary-row--total">
               <span>{{ 'cart.total' | t }}</span>
-              <span>{{ cart.total_price | money }}</span>
+              <span>{{ today_total | money }}</span>
             </div>
 
             {% if section.settings.preorder_ship_date != blank %}
