@@ -67,14 +67,15 @@
 
               <div class="moov-cart__item-price">
                 {% if item.selling_plan_allocation %}
-                  {%- assign item_deferred = item.original_price | minus: item.selling_plan_allocation.checkout_charge_amount -%}
+                  {%- assign line_checkout_charge = item.selling_plan_allocation.checkout_charge_amount | times: item.quantity -%}
+                  {%- assign line_deferred = item.original_line_price | minus: line_checkout_charge -%}
                   <div class="moov-cart__item-price-today">
-                    <s class="moov-cart__item-price-original">{{ item.variant.compare_at_price | money }}</s>
-                    <span>{{ item.selling_plan_allocation.checkout_charge_amount | money }} due today</span>
+                    <s class="moov-cart__item-price-original">{{ item.variant.compare_at_price | times: item.quantity | money }}</s>
+                    <span>{{ line_checkout_charge | money }} due today</span>
                   </div>
-                  <div class="moov-cart__item-price-deferred">{{ item_deferred | money }} on shipment</div>
+                  <div class="moov-cart__item-price-deferred">{{ line_deferred | money }} on shipment</div>
                 {% else %}
-                  {{ item.original_price | money }}
+                  {{ item.original_line_price | money }}
                 {% endif %}
               </div>
             </div>
