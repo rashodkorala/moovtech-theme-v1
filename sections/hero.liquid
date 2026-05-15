@@ -102,6 +102,19 @@
           <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
         {%- endif -%}
       </video>
+      {%- if section.settings.hero_mobile_image != blank -%}
+        {{
+          section.settings.hero_mobile_image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'moov-hero__mobile-img',
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: section.settings.hero_headline,
+            sizes: '100vw',
+            widths: '400, 600, 800, 1000, 1200'
+        }}
+      {%- endif -%}
       <div class="moov-hero__overlay" aria-hidden="true"></div>
     </div>
   {%- endif -%}
@@ -383,6 +396,18 @@
     width: 56px;
   }
 
+  /* Mobile image */
+  .moov-hero__mobile-img {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
   /* Responsive */
   @media (max-width: 767px) {
     .moov-hero__heading {
@@ -392,6 +417,14 @@
 
     .moov-hero__overlay {
       background: color-mix(in srgb, var(--moov-black) 65%, transparent);
+    }
+
+    .moov-hero__mobile-img {
+      display: block;
+    }
+
+    .moov-hero__video {
+      display: none;
     }
   }
 {% endstylesheet %}
@@ -512,6 +545,12 @@
       "id": "hero_poster",
       "label": "Video poster image",
       "info": "Shown before the video loads."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_mobile_image",
+      "label": "Mobile image",
+      "info": "Shown instead of the video on screens under 768px. Recommended: portrait crop, 1200×1600px."
     },
     {
       "type": "range",

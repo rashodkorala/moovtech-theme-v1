@@ -1043,6 +1043,7 @@
     font-weight: 500;
     letter-spacing: 0.03em;
     text-decoration: none;
+    white-space: nowrap;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   }
 
@@ -1165,6 +1166,8 @@
     .shop-buy__inner { grid-template-columns: 1fr; }
     .shop-buy__media-col { position: static; }
     .shop-buy__frame { aspect-ratio: 4 / 3; }
+    .shop-buy__cta-group { flex-direction: column; }
+    .shop-buy__cta { width: 100%; justify-content: center; }
   }
 
   /* ══════════════════════════════════════════
