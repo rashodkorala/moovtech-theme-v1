@@ -12,9 +12,9 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "hero_video_mp4": "",
-        "hero_video_webm": "",
-        "hero_overlay_opacity": 55,
+        "hero_video": "shopify://files/videos/hero-bg-2.mp4",
+        "hero_mobile_image": "shopify://shop_images/CDB146EA-3404-44E1-B8F6-96E0E056E90C_de48d341-51c3-42db-86c0-298fbfd0b745.png",
+        "hero_overlay_opacity": 75,
         "hero_desaturate_video": false,
         "hero_eyebrow": "",
         "hero_headline": "Reclaim your morning",
