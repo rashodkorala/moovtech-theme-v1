@@ -23,26 +23,24 @@
         "cta_primary_url": "/products/moov"
       }
     },
-    "product_glimpse": {
-      "type": "home-product-glimpse",
+    "home_buy": {
+      "type": "home-buy",
       "settings": {
-        "image_position": "left",
-        "show_logo": true,
-        "eyebrow": "The Morning Device",
-        "heading": "Reclaim your morning.",
-        "subheading": "",
-        "body_lead": "Quit losing your morning to bad phone habits.",
-        "body_emphasis": "MOOV is designed to get you up and into action",
-        "body_trail": "— one press of the ring, once you've already crossed the room.",
-        "body": "",
-        "cta_label": "Get your MOOV",
+        "eyebrow": "Founder Drop · Limited to 500",
+        "heading": "Reserve your MOOV.",
+        "description": "$1 reservation secures your priority access to the first 500 Ivory White devices.",
+        "product": "moov",
+        "price": "",
+        "compare_price": "",
+        "show_stock": true,
+        "perk_1": "Early access priority",
+        "perk_2": "Founder Drop packaging",
+        "perk_3": "Lock in launch price",
+        "cta_label": "Reserve for $1",
         "cta_url": "/products/moov",
-        "cta_secondary_label": "Our story",
+        "cta_secondary_label": "Read our story",
         "cta_secondary_url": "/pages/our-story",
-        "logo_max_width": 200,
-        "logo_alt": "",
-        "logo_fallback_asset": "moov-logo-black.png",
-        "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG",
+        "image_asset": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG",
         "image_url": ""
       }
     },
@@ -86,6 +84,7 @@
         "hiw-step-3"
       ],
       "settings": {
+        "surface": "dark",
         "eyebrow": "The morning system",
         "heading": "How it works",
         "body": "Three steps — place, configure, act. See the full story on the next page.",
@@ -93,23 +92,26 @@
         "cta_url": "/pages/how-it-works"
       }
     },
-    "home_buy": {
-      "type": "home-buy",
+    "product_glimpse": {
+      "type": "home-product-glimpse",
       "settings": {
-        "eyebrow": "Founder Drop · Limited to 500",
-        "heading": "Reserve your MOOV.",
-        "description": "$1 reservation secures your priority access to the first 500 Ivory White devices.",
-        "price": "$1",
-        "compare_price": "$129 at launch",
-        "show_stock": true,
-        "perk_1": "Early access priority",
-        "perk_2": "Founder Drop packaging",
-        "perk_3": "Lock in launch price",
-        "cta_label": "Reserve for $1",
+        "image_position": "left",
+        "eyebrow": "The Morning Device",
+        "heading": "Reclaim your morning.",
+        "subheading": "",
+        "body_lead": "Quit losing your morning to bad phone habits.",
+        "body_emphasis": "MOOV is designed to get you up and into action",
+        "body_trail": "— one press of the ring, once you've already crossed the room.",
+        "body": "",
+        "cta_label": "Get your MOOV",
         "cta_url": "/products/moov",
-        "cta_secondary_label": "Read our story",
+        "cta_secondary_label": "Our story",
         "cta_secondary_url": "/pages/our-story",
-        "image_asset": "6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG",
+        "show_logo": true,
+        "logo_max_width": 200,
+        "logo_alt": "",
+        "logo_fallback_asset": "moov-logo-black.png",
+        "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG",
         "image_url": ""
       }
     },
