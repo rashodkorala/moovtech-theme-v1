@@ -14,14 +14,18 @@
     assign description = 'sections.home_buy.default_description' | t
   endif
 
-  # Pull live prices from product if one is selected
   assign price        = section.settings.price | strip
   assign compare_price = section.settings.compare_price | strip
   assign discount_pct = 0
   assign linked_product = section.settings.product
+  if linked_product == blank
+    assign linked_product = all_products['moov']
+  endif
   if linked_product != blank
     assign variant = linked_product.selected_or_first_available_variant
-    assign price = variant.price | money
+    if variant.price != blank
+      assign price = variant.price | money
+    endif
     if variant.compare_at_price > variant.price
       assign compare_price = variant.compare_at_price | money
       assign discount_pct = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price
