@@ -4,7 +4,8 @@
       "WebFetch(domain:api.anthropic.com)",
       "Bash(python3:*)",
       "Read(//Users/rashodkorala/Documents/Clients/Moovtech/**)",
-      "Bash(unzip -o \"Moov Design System-handoff.zip\" -d moov-design-system-handoff)"
+      "Bash(unzip -o \"Moov Design System-handoff.zip\" -d moov-design-system-handoff)",
+      "Bash(awk 'NR==582,/^{% endstylesheet %}/' /Users/rashodkorala/Documents/Clients/Moovtech/theme-v1/sections/product-moov.liquid)"
     ]
   }
 }

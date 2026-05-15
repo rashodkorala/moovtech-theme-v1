@@ -1267,10 +1267,10 @@
 
   .moov-specs__panel.is-active {
     display: block;
-    border: 1px solid var(--moov-border-light);
+    border: 1px solid rgba(10, 10, 9, 0.08);
     border-radius: 14px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--moov-black) 2%, var(--moov-cream));
+    background: #ffffff;
   }
 
   /* Rows */
@@ -1285,7 +1285,7 @@
     justify-content: space-between;
     gap: 24px;
     padding: 22px 28px;
-    border-bottom: 1px solid var(--moov-border-light);
+    border-bottom: 1px solid rgba(10, 10, 9, 0.06);
   }
 
   .moov-specs__row--last { border-bottom: none; }
@@ -1308,10 +1308,34 @@
   @media (max-width: 860px) {
     .moov-specs__layout { grid-template-columns: 1fr; }
     .moov-specs__aside { position: static; }
+    .moov-specs__tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .moov-specs__tabs::-webkit-scrollbar { display: none; }
   }
 
-  @media (max-width: 480px) {
-    .moov-specs__row { padding: 16px 20px; }
+  @media (max-width: 640px) {
+    .moov-specs__tab {
+      padding: 8px 16px;
+      font-size: var(--text-xs, 12px);
+    }
+    .moov-specs__row {
+      padding: 16px 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .moov-specs__row dd {
+      text-align: left;
+      font-size: var(--text-sm);
+    }
+    .moov-specs__row dt {
+      font-size: var(--text-sm);
+    }
   }
 
   /* Reservation note */
@@ -1369,12 +1393,11 @@
 
   .shop-hiw__num {
     font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--moov-amber);
-    opacity: 0.85;
   }
 
   .shop-hiw__title {

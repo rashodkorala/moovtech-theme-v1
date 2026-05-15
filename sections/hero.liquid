@@ -1,8 +1,8 @@
 {%- liquid
   assign overlay_opacity = section.settings.hero_overlay_opacity | default: 55
 
-  assign video_src = 'hero-bg-2.mov' | asset_url
-  assign hero_video_mime = 'video/quicktime'
+  assign video_src = 'hero-bg-1.mp4' | asset_url
+  assign hero_video_mime = 'video/mp4'
   if section.settings.hero_video_mp4 != blank
     assign video_src = section.settings.hero_video_mp4
     assign hero_video_mime = 'video/mp4'

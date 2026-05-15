@@ -17,7 +17,7 @@
   endif
 -%}
 
-<div class="faq full-width" data-surface="cream">
+<div class="faq full-width" data-surface="dark">
   <div class="faq__inner">
 
     {%- comment -%} Left — section label {%- endcomment -%}
@@ -107,8 +107,8 @@
 
 {% stylesheet %}
   .faq {
-    background: var(--moov-cream);
-    color: var(--moov-black);
+    background: var(--moov-black);
+    color: var(--moov-cream);
     padding: var(--section-block-pad-y-hero) var(--section-inline-pad);
   }
 
@@ -139,7 +139,7 @@
     font-size: var(--text-eyebrow);
     font-weight: 700;
     letter-spacing: 0.14em;
-    color: var(--moov-eyebrow-accent);
+    color: var(--moov-amber);
   }
 
   .faq__eyebrow-dot {
@@ -156,7 +156,7 @@
     font-size: clamp(2.7rem, 5vw, 5.5rem);
     font-weight: 700;
     line-height: 0.95;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     margin: 0;
     letter-spacing: -0.03em;
     text-transform: uppercase;
@@ -164,12 +164,12 @@
 
   .faq__accordion {
     width: 100%;
-    border-top: 1px solid var(--moov-border-light);
+    border-top: 1px solid var(--moov-border-dark);
   }
 
   /* FAQ item */
   .faq__item {
-    border-bottom: 1px solid var(--moov-border-light);
+    border-bottom: 1px solid var(--moov-border-dark);
     background: transparent;
     transition:
       opacity 0.6s ease-out,
@@ -206,12 +206,12 @@
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     transition: color 0.2s ease;
   }
 
   .faq__item--open .faq__question-text {
-    color: color-mix(in srgb, var(--moov-black) 65%, transparent);
+    color: color-mix(in srgb, var(--moov-cream) 65%, transparent);
   }
 
   /* Indicator */
@@ -219,7 +219,7 @@
     font-family: var(--font-body);
     font-size: var(--text-lg);
     font-weight: 300;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     flex-shrink: 0;
     line-height: 1;
     width: 24px;
@@ -227,13 +227,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--moov-border-light);
+    border: 1px solid var(--moov-border-dark);
     border-radius: 50%;
     transition: border-color 0.2s ease, color 0.2s ease;
   }
 
   .faq__item:hover .faq__indicator {
-    border-color: var(--moov-black);
+    border-color: var(--moov-cream);
   }
 
   .faq__indicator-times {
@@ -268,7 +268,7 @@
     font-size: var(--text-base);
     font-weight: 400;
     line-height: 1.75;
-    color: color-mix(in srgb, var(--moov-black) 60%, transparent);
+    color: color-mix(in srgb, var(--moov-cream) 60%, transparent);
     max-width: 52ch;
     margin: 0 0 22px;
   }
