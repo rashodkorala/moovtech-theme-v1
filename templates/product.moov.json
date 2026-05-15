@@ -1,19 +1,54 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "shop_main": {
       "type": "product-moov",
       "settings": {
+        "show_hiw": true,
+        "show_founder": true,
+        "show_specs": true,
+        "show_features": true,
+        "show_cta": true,
+        "show_tagline": true,
+        "show_description": true,
+        "show_perks": true,
         "eyebrow": "Now shipping",
+        "heading": "",
+        "description": "",
+        "tagline": "A better way to start your morning.",
+        "price": "",
+        "compare_price": "",
         "show_stock": true,
         "rating_score": "4.9",
         "rating_count": "200+ reviews",
-        "perk_1": "Free shipping over $50",
+        "perk_1": "Free shipping",
         "perk_2": "30-day risk-free trial",
         "perk_3": "1-year warranty",
         "cta_primary_label": "Get your MOOV",
         "cta_primary_url": "/products/moov",
         "cta_secondary_label": "How it works",
         "cta_secondary_url": "/pages/how-it-works",
+        "reservation_note": "Your $1 reservation secures priority access to the first MOOV Founder Drop.",
+        "hiw_eyebrow": "How it works",
+        "hiw_step_1_title": "Set your alarm",
+        "hiw_step_1_body": "Set your wake-up time directly in the MOOV app.",
+        "hiw_step_2_title": "Get moving",
+        "hiw_step_2_body": "Move to your MOOV device to begin your morning.",
+        "hiw_step_3_title": "Stay focused",
+        "hiw_step_3_body": "Optional Focus Mode helps reduce distracting app usage after waking up.",
+        "hiw_url": "",
+        "founder_limit_badge": "Limited to 500 units",
+        "founder_eyebrow": "The Founder Drop",
+        "founder_heading": "The original MOOV release.",
+        "founder_body": "The first MOOV Founder Drop will be limited to 500 Ivory White devices. Created for early supporters who believe mornings deserve more intention.",
         "specs_eyebrow": "Tech specs",
         "specs_heading": "Built with intention.",
         "specs_intro": "Everything you need to know about MOOV hardware, connectivity, and setup at a glance.",
@@ -26,7 +61,26 @@
         "spec_4_dt": "Mounting",
         "spec_4_dd": "System | Magnetic mount\nInstallation | 3M Command Strip, no tools needed\nWall block | Stays in place permanently\nDevice | Attaches and detaches easily",
         "spec_5_dt": "In the box",
-        "spec_5_dd": "1× | MOOV Device\n1× | Magnetic Wall Mount\n1× | 3M Command Strip (pre-installed)\n1× | USB Charging Cable\n1× | Quick Start Guide"
+        "spec_5_dd": "1× | MOOV Device\n1× | Magnetic Wall Mount\n1× | 3M Command Strip (pre-installed)\n1× | USB Charging Cable\n1× | Quick Start Guide",
+        "spec_6_dt": "",
+        "spec_6_dd": "",
+        "spec_7_dt": "",
+        "spec_7_dd": "",
+        "spec_8_dt": "",
+        "spec_8_dd": "",
+        "spec_9_dt": "",
+        "spec_9_dd": "",
+        "features_eyebrow": "Why MOOV",
+        "features_heading": "Built for better mornings.",
+        "feature_1_title": "Gets you out of bed",
+        "feature_1_body": "Designed around physical movement instead of another tap from bed.",
+        "feature_2_title": "Reduces morning distractions",
+        "feature_2_body": "Optional Focus Mode helps block distracting apps during your morning routine.",
+        "feature_3_title": "Builds morning momentum",
+        "feature_3_body": "Start the day with more intention, movement, and control.",
+        "cta_eyebrow": "Now shipping",
+        "cta_heading": "Better mornings start with movement.",
+        "cta_sub": "Reserve your place in the first 500 for $1."
       }
     },
     "faq_section": {
@@ -68,12 +122,21 @@
           }
         }
       },
-      "block_order": ["faq-1", "faq-2", "faq-3", "faq-4", "faq-5"],
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5"
+      ],
       "settings": {
-        "heading": "The five we get most.",
-        "eyebrow": "Questions"
+        "eyebrow": "Questions",
+        "heading": "The five we get most."
       }
     }
   },
-  "order": ["shop_main", "faq_section"]
+  "order": [
+    "shop_main",
+    "faq_section"
+  ]
 }
