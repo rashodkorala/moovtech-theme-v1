@@ -23,7 +23,7 @@
     assign first_allocation = variant.selling_plan_allocations | first
     if first_allocation != blank
       assign price         = first_allocation.checkout_charge_amount | money
-      assign compare_price = variant.price | money
+      assign compare_price = variant.compare_at_price | money
     elsif variant.price != blank
       assign price         = variant.price | money
       if variant.compare_at_price > variant.price

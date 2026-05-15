@@ -67,8 +67,12 @@
 
               <div class="moov-cart__item-price">
                 {% if item.selling_plan_allocation %}
-                  <s>{{ item.original_price | money }}</s>
-                  <span>{{ item.selling_plan_allocation.checkout_charge_amount | money }}</span>
+                  {%- assign item_deferred = item.original_price | minus: item.selling_plan_allocation.checkout_charge_amount -%}
+                  <div class="moov-cart__item-price-today">
+                    <s class="moov-cart__item-price-original">{{ item.variant.compare_at_price | money }}</s>
+                    <span>{{ item.selling_plan_allocation.checkout_charge_amount | money }} due today</span>
+                  </div>
+                  <div class="moov-cart__item-price-deferred">{{ item_deferred | money }} on shipment</div>
                 {% else %}
                   {{ item.original_price | money }}
                 {% endif %}
@@ -353,6 +357,26 @@
     color: var(--moov-text-primary-dark);
     flex-shrink: 0;
     text-align: right;
+  }
+
+  .moov-cart__item-price-today {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .moov-cart__item-price-original {
+    font-size: var(--text-sm);
+    color: var(--moov-text-tertiary-dark);
+    font-weight: 400;
+  }
+
+  .moov-cart__item-price-deferred {
+    font-size: var(--text-xs);
+    color: var(--moov-text-tertiary-dark);
+    margin-top: 4px;
   }
 
   /* ── Order summary ── */
