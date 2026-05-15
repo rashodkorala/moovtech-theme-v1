@@ -1,11 +1,16 @@
 {%- liquid
   assign overlay_opacity = section.settings.hero_overlay_opacity | default: 55
 
+  assign hero_video = section.settings.hero_video
   assign video_src = 'hero-bg-1.mp4' | asset_url
   assign hero_video_mime = 'video/mp4'
-  if section.settings.hero_video_mp4 != blank
-    assign video_src = section.settings.hero_video_mp4
-    assign hero_video_mime = 'video/mp4'
+  if hero_video != blank
+    for source in hero_video.sources
+      if source.mime_type == 'video/mp4'
+        assign video_src = source.url
+        assign hero_video_mime = 'video/mp4'
+      endif
+    endfor
   endif
 
   assign hero_overline = section.settings.hero_eyebrow
@@ -42,11 +47,16 @@
       <div class="moov-hero__slides">
         {%- for block in section.blocks -%}
           {%- liquid
-            assign slide_video = block.settings.video_mp4
-            assign slide_video_mime = 'video/mp4'
-            if slide_video == blank
-              assign slide_video = video_src
-              assign slide_video_mime = hero_video_mime
+            assign slide_video_obj = block.settings.video
+            assign slide_video = video_src
+            assign slide_video_mime = hero_video_mime
+            if slide_video_obj != blank
+              for source in slide_video_obj.sources
+                if source.mime_type == 'video/mp4'
+                  assign slide_video = source.url
+                  assign slide_video_mime = 'video/mp4'
+                endif
+              endfor
             endif
             assign slide_overlay = block.settings.overlay_opacity | default: overlay_opacity
           -%}
@@ -70,9 +80,6 @@
               aria-hidden="true"
             >
               <source src="{{ slide_video }}" type="{{ slide_video_mime }}">
-              {%- if block.settings.video_webm != blank -%}
-                <source src="{{ block.settings.video_webm }}" type="video/webm">
-              {%- endif -%}
             </video>
             <div
               class="moov-hero__overlay"
@@ -98,9 +105,6 @@
         aria-hidden="true"
       >
         <source src="{{ video_src }}" type="{{ hero_video_mime }}">
-        {%- if section.settings.hero_video_webm != blank -%}
-          <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
-        {%- endif -%}
       </video>
       {%- if section.settings.hero_mobile_image != blank -%}
         {{
@@ -493,16 +497,9 @@
       "limit": 5,
       "settings": [
         {
-          "type": "text",
-          "id": "video_mp4",
-          "label": "Slide video URL (MP4)",
-          "info": "Upload to Shopify Files and paste the URL here."
-        },
-        {
-          "type": "text",
-          "id": "video_webm",
-          "label": "Slide video URL (WebM)",
-          "info": "Optional smaller-file alternative for Chrome/Firefox."
+          "type": "video",
+          "id": "video",
+          "label": "Slide video"
         },
         {
           "type": "image_picker",
@@ -529,16 +526,9 @@
       "content": "Default video (used when no slides are added)"
     },
     {
-      "type": "text",
-      "id": "hero_video_mp4",
-      "label": "Hero video URL (MP4)",
-      "info": "Upload your video to Shopify Files and paste the URL here."
-    },
-    {
-      "type": "text",
-      "id": "hero_video_webm",
-      "label": "Hero video URL (WebM)",
-      "info": "Optional but recommended for smaller file size on Chrome and Firefox."
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video"
     },
     {
       "type": "image_picker",
