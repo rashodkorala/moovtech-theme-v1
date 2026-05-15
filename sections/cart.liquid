@@ -97,6 +97,11 @@
               <span>{{ today_total | money }}</span>
             </div>
 
+            <div class="moov-cart__summary-row moov-cart__summary-row--shipping">
+              <span>{{ 'cart.shipping_label' | t }}</span>
+              <span class="moov-cart__shipping-value">{{ 'cart.shipping_value' | t }}</span>
+            </div>
+
             <div class="moov-cart__summary-divider"></div>
 
             <div class="moov-cart__summary-row moov-cart__summary-row--total">
@@ -104,11 +109,6 @@
               <span>{{ today_total | money }}</span>
             </div>
 
-            {% if section.settings.preorder_ship_date != blank %}
-              <p class="moov-cart__preorder-notice">
-                {{ 'cart.preorder_ship_html' | t: date: section.settings.preorder_ship_date }}
-              </p>
-            {% endif %}
 
             <a href="/checkout" class="moov-cart__solid-btn moov-cart__solid-btn--full">
               {{ 'cart.checkout_proceed' | t }}
