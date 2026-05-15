@@ -23,12 +23,17 @@
   endif
   if linked_product != blank
     assign variant = linked_product.selected_or_first_available_variant
-    if variant.price != blank
-      assign price = variant.price | money
-    endif
-    if variant.compare_at_price > variant.price
+    assign first_allocation = variant.selling_plan_allocations | first
+    if first_allocation != blank
+      assign price         = first_allocation.price | money
+      assign compare_price = variant.price | money
+      assign discount_pct  = variant.price | minus: first_allocation.price | times: 100 | divided_by: variant.price
+    elsif variant.compare_at_price > variant.price
+      assign price         = variant.price | money
       assign compare_price = variant.compare_at_price | money
-      assign discount_pct = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price
+      assign discount_pct  = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price
+    elsif variant.price != blank
+      assign price = variant.price | money
     endif
   endif
 
