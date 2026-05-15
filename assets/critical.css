@@ -15,8 +15,8 @@ body {
 }
 
 /* Keep reading copy at or above 11pt. */
-.main-content p,
-.main-content li {
+.main-content p:not([class*="eyebrow"]),
+.main-content li:not([class*="eyebrow"]) {
   font-size: max(11pt, 1em);
 }
 

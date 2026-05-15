@@ -133,7 +133,7 @@
 
       <h2 class="shop-buy__heading">{{ heading | escape }}</h2>
 
-      {%- if tagline != blank -%}
+      {%- if tagline != blank and section.settings.show_tagline != false -%}
         <p class="shop-buy__tagline"><em>{{ tagline | escape }}</em></p>
       {%- endif -%}
 
@@ -156,7 +156,7 @@
         </div>
       {%- endif -%}
 
-      {%- if description != blank -%}
+      {%- if description != blank and section.settings.show_description != false -%}
         <p class="shop-buy__description">{{ description }}</p>
       {%- endif -%}
 
@@ -298,6 +298,7 @@
         </div>
       {%- endif -%}
 
+      {%- if section.settings.show_perks != false -%}
       {%- if perk_1 != blank or perk_2 != blank or perk_3 != blank -%}
         <ul class="shop-buy__perks" role="list">
           {%- if perk_1 != blank -%}
@@ -326,14 +327,16 @@
           {%- endif -%}
         </ul>
       {%- endif -%}
+      {%- endif -%}
 
     </div>
 
   </div>
 </section>
 
+{%- if section.settings.show_hiw != false -%}
 {%- comment -%}── 03 HOW IT WORKS ──{%- endcomment -%}
-<section class="shop-hiw full-width" data-surface="dark">
+<section class="shop-hiw full-width" data-surface="cream">
   <div class="shop-hiw__inner">
 
     {%- assign _hiw_eyebrow = section.settings.hiw_eyebrow | strip -%}
@@ -367,10 +370,12 @@
 
   </div>
 </section>
+{%- endif -%}
 
+{%- if section.settings.show_founder != false -%}
 {%- comment -%}── 04 FOUNDER DROP ──{%- endcomment -%}
 {%- assign founder_img = section.settings.founder_image -%}
-<section class="shop-founder full-width" data-surface="cream">
+<section class="shop-founder full-width" data-surface="dark">
   <div class="shop-founder__inner">
 
     <div class="shop-founder__copy">
@@ -398,7 +403,9 @@
 
   </div>
 </section>
+{%- endif -%}
 
+{%- if section.settings.show_specs != false -%}
 {%- comment -%}── 05 SPECS ──{%- endcomment -%}
 {%- assign specs_eyebrow = section.settings.specs_eyebrow | strip -%}
 {%- if specs_eyebrow == blank -%}{%- assign specs_eyebrow = 'Tech specs' -%}{%- endif -%}
@@ -406,7 +413,7 @@
 {%- if specs_heading == blank -%}{%- assign specs_heading = 'product.specs.title' | t -%}{%- endif -%}
 {%- assign specs_intro = section.settings.specs_intro | strip -%}
 {%- if specs_intro == blank -%}{%- assign specs_intro = 'Everything you need to know about MOOV hardware, connectivity, and in-box setup at a glance.' -%}{%- endif -%}
-<section class="moov-specs full-width" data-surface="dark" id="moov-specs-{{ section.id }}">
+<section class="moov-specs full-width" data-surface="cream" id="moov-specs-{{ section.id }}">
   <div class="moov-specs__inner">
     <div class="moov-specs__layout">
 
@@ -484,7 +491,9 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
+{%- if section.settings.show_features != false -%}
 {%- comment -%}── 06 CORE BENEFITS ──{%- endcomment -%}
 <section class="shop-features full-width" data-surface="dark">
   <div class="shop-features__inner">
@@ -531,10 +540,11 @@
 
   </div>
 </section>
+{%- endif -%}
 
-
+{%- if section.settings.show_cta != false -%}
 {%- comment -%}── 07 CLOSING CTA ──{%- endcomment -%}
-<section class="shop-cta full-width" data-surface="dark">
+<section class="shop-cta full-width" data-surface="cream">
   <div class="shop-cta__inner">
     {%- assign _cta_eyebrow = section.settings.cta_eyebrow | strip -%}
     {%- if _cta_eyebrow == blank -%}{%- assign _cta_eyebrow = 'sections.shop.cta_eyebrow' | t -%}{%- endif -%}
@@ -559,6 +569,7 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% stylesheet %}
 
@@ -610,6 +621,11 @@
     object-fit: cover;
     display: block;
     filter: grayscale(0.15) brightness(0.92) contrast(1.04);
+    transition: opacity 0.6s ease;
+  }
+
+  .shop-buy__img.is-fading {
+    opacity: 0;
   }
 
   .shop-buy__placeholder {
@@ -667,8 +683,8 @@
     align-items: center;
     gap: 8px;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--moov-amber);
@@ -1133,10 +1149,10 @@
      05 SPECS
   ══════════════════════════════════════════ */
   .moov-specs {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .moov-specs__layout {
@@ -1157,8 +1173,8 @@
   .moov-specs__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     color: var(--moov-amber);
   }
@@ -1171,14 +1187,14 @@
     line-height: 1.02;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
   }
 
   .moov-specs__intro {
     margin: 0;
     font-size: var(--text-sm);
     line-height: 1.7;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
   }
 
   .moov-specs__content {
@@ -1197,9 +1213,9 @@
   .moov-specs__tab {
     padding: 10px 22px;
     border-radius: 999px;
-    border: 1px solid var(--moov-border-dark);
+    border: 1px solid var(--moov-border-light);
     background: transparent;
-    color: color-mix(in srgb, var(--moov-cream) 55%, transparent);
+    color: color-mix(in srgb, var(--moov-black) 55%, transparent);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
@@ -1210,8 +1226,8 @@
   }
 
   .moov-specs__tab:hover {
-    color: var(--moov-cream);
-    border-color: color-mix(in srgb, var(--moov-cream) 35%, transparent);
+    color: var(--moov-black);
+    border-color: color-mix(in srgb, var(--moov-black) 35%, transparent);
   }
 
   .moov-specs__tab.is-active {
@@ -1226,10 +1242,10 @@
 
   .moov-specs__panel.is-active {
     display: block;
-    border: 1px solid var(--moov-border-dark);
+    border: 1px solid var(--moov-border-light);
     border-radius: 14px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--moov-cream) 2%, var(--moov-black));
+    background: color-mix(in srgb, var(--moov-black) 2%, var(--moov-cream));
   }
 
   /* Rows */
@@ -1244,7 +1260,7 @@
     justify-content: space-between;
     gap: 24px;
     padding: 22px 28px;
-    border-bottom: 1px solid var(--moov-border-dark);
+    border-bottom: 1px solid var(--moov-border-light);
   }
 
   .moov-specs__row--last { border-bottom: none; }
@@ -1252,7 +1268,7 @@
   .moov-specs__row dt {
     font-family: var(--font-body);
     font-size: var(--text-md);
-    color: color-mix(in srgb, var(--moov-cream) 40%, transparent);
+    color: color-mix(in srgb, var(--moov-black) 40%, transparent);
     flex-shrink: 0;
   }
 
@@ -1260,7 +1276,7 @@
     margin: 0;
     font-family: var(--font-body);
     font-size: var(--text-md);
-    color: var(--moov-cream);
+    color: var(--moov-black);
     text-align: right;
   }
 
@@ -1288,10 +1304,10 @@
      03 HOW IT WORKS
   ══════════════════════════════════════════ */
   .shop-hiw {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .shop-hiw__inner {
@@ -1303,8 +1319,8 @@
   .shop-hiw__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--moov-amber);
@@ -1313,12 +1329,12 @@
   .shop-hiw__steps {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .shop-hiw__step {
     padding: 32px 28px 40px;
-    border-right: 1px solid var(--moov-border-dark);
+    border-right: 1px solid var(--moov-border-light);
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -1344,7 +1360,7 @@
     line-height: 1.05;
     letter-spacing: -0.01em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     text-wrap: balance;
   }
 
@@ -1352,7 +1368,7 @@
     margin: 0;
     font-size: var(--text-sm);
     line-height: 1.65;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
   }
 
   .shop-hiw__link {
@@ -1363,7 +1379,7 @@
     font-size: var(--text-sm);
     font-weight: 500;
     letter-spacing: 0.04em;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     text-decoration: none;
     transition: color 0.15s ease;
   }
@@ -1373,17 +1389,17 @@
   @media (max-width: 860px) {
     .shop-hiw__steps { grid-template-columns: 1fr; }
     .shop-hiw__step { border-right: none; }
-    .shop-hiw__step:not(:last-child) { border-bottom: 1px solid var(--moov-border-dark); }
+    .shop-hiw__step:not(:last-child) { border-bottom: 1px solid var(--moov-border-light); }
   }
 
   /* ══════════════════════════════════════════
      04 FOUNDER DROP
   ══════════════════════════════════════════ */
   .shop-founder {
-    background: var(--moov-cream);
-    color: var(--moov-black);
+    background: var(--moov-black);
+    color: var(--moov-cream);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-light);
+    border-top: 1px solid var(--moov-border-dark);
   }
 
   .shop-founder__inner {
@@ -1404,12 +1420,13 @@
     display: inline-flex;
     align-self: flex-start;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--moov-eyebrow-accent);
-    border: 1px solid currentColor;
+    color: var(--moov-black);
+    background-color: var(--moov-amber);
+    border: 1px solid var(--moov-amber);
     padding: 5px 14px;
     border-radius: 999px;
   }
@@ -1417,11 +1434,11 @@
   .shop-founder__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--moov-text-secondary-light);
+    color: var(--moov-text-secondary-dark);
   }
 
   .shop-founder__heading {
@@ -1432,7 +1449,7 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     max-width: 16ch;
     text-wrap: balance;
   }
@@ -1441,7 +1458,7 @@
     margin: 0;
     font-size: var(--text-md);
     line-height: 1.65;
-    color: var(--moov-text-secondary-light);
+    color: var(--moov-text-secondary-dark);
     max-width: 42ch;
   }
 
@@ -1449,8 +1466,8 @@
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-card, 16px);
     overflow: hidden;
-    background: color-mix(in srgb, var(--moov-black) 6%, var(--moov-cream));
-    border: 1px solid var(--moov-border-light);
+    background: color-mix(in srgb, var(--moov-cream) 6%, var(--moov-black));
+    border: 1px solid var(--moov-border-dark);
   }
 
   .shop-founder__img {
@@ -1463,7 +1480,7 @@
   .shop-founder__placeholder {
     width: 100%;
     height: 100%;
-    background: color-mix(in srgb, var(--moov-black) 5%, var(--moov-cream));
+    background: color-mix(in srgb, var(--moov-cream) 5%, var(--moov-black));
   }
 
   @media (max-width: 860px) {
@@ -1496,8 +1513,8 @@
   .shop-features__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--moov-amber);
@@ -1571,10 +1588,10 @@
      07 CLOSING CTA
   ══════════════════════════════════════════ */
   .shop-cta {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .shop-cta__inner {
@@ -1589,8 +1606,8 @@
   .shop-cta__eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
-    font-weight: 500;
+    font-size: var(--text-eyebrow);
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--moov-amber);
@@ -1604,7 +1621,7 @@
     line-height: 1.08;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     text-wrap: balance;
   }
 
@@ -1612,7 +1629,7 @@
     margin: 0;
     font-size: var(--text-md);
     line-height: 1.65;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     max-width: 38ch;
   }
 
@@ -1639,9 +1656,9 @@
   }
 
   .shop-cta__btn--primary {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    border: 1px solid var(--moov-cream);
+    background: var(--moov-black);
+    color: var(--moov-cream);
+    border: 1px solid var(--moov-black);
   }
 
   .shop-cta__btn--primary:hover {
@@ -1653,8 +1670,8 @@
 
   .shop-cta__btn--ghost {
     background: transparent;
-    color: var(--moov-text-secondary-dark);
-    border: 1px solid var(--moov-border-dark);
+    color: var(--moov-text-secondary-light);
+    border: 1px solid var(--moov-border-light);
   }
 
   .shop-cta__btn--ghost:hover {
@@ -1751,20 +1768,74 @@
 
       if (!mainImg) return;
 
-      thumbs.forEach(function (btn, idx) {
-        btn.addEventListener('click', function () {
+      var autoTimer = null;
+      var SLIDE_DELAY = 3500;
+      var FADE_DURATION = 600;
+
+      function goTo(idx, fromAuto) {
+        var btn = thumbs[idx];
+        if (!btn) return;
+        if (!fromAuto) resetTimer();
+
+        mainImg.classList.add('is-fading');
+        setTimeout(function () {
           mainImg.src = btn.dataset.shopThumb;
-          thumbs.forEach(function (b) {
-            b.classList.toggle('shop-buy__thumb--active', b === btn);
-          });
-          if (counter) {
-            var n = idx + 1;
-            counter.textContent =
-              (n < 10 ? '0' + n : String(n)) + ' / ' +
-              (total < 10 ? '0' + total : String(total));
-          }
+          mainImg.removeAttribute('srcset');
+          mainImg.removeAttribute('sizes');
+          mainImg.classList.remove('is-fading');
+        }, FADE_DURATION);
+
+        thumbs.forEach(function (b) {
+          b.classList.toggle('shop-buy__thumb--active', b === btn);
         });
+        if (counter) {
+          var n = idx + 1;
+          counter.textContent =
+            (n < 10 ? '0' + n : String(n)) + ' / ' +
+            (total < 10 ? '0' + total : String(total));
+        }
+      }
+
+      function currentIndex() {
+        return thumbs.findIndex(function (b) {
+          return b.classList.contains('shop-buy__thumb--active');
+        });
+      }
+
+      function startTimer() {
+        autoTimer = setInterval(function () {
+          var next = (currentIndex() + 1) % total;
+          goTo(next, true);
+        }, SLIDE_DELAY);
+      }
+
+      function resetTimer() {
+        clearInterval(autoTimer);
+        startTimer();
+      }
+
+      thumbs.forEach(function (btn, idx) {
+        btn.addEventListener('click', function () { goTo(idx); });
       });
+
+      /* ── Swipe support ── */
+      if (frame) {
+        var touchStartX = 0;
+        frame.addEventListener('touchstart', function (e) {
+          touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        frame.addEventListener('touchend', function (e) {
+          var dx = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(dx) < 40) return;
+          var next = dx < 0
+            ? Math.min(currentIndex() + 1, total - 1)
+            : Math.max(currentIndex() - 1, 0);
+          if (next !== currentIndex()) goTo(next);
+        }, { passive: true });
+      }
+
+      /* ── Start auto-advance ── */
+      if (total > 1) startTimer();
     });
 
     /* ── Swatch clicks ── */
@@ -1883,6 +1954,70 @@
   "tag": "div",
   "class": "section-shop",
   "settings": [
+    {
+      "type": "header",
+      "content": "Product data"
+    },
+    {
+      "type": "paragraph",
+      "content": "Title, description, price, images, and variants are pulled automatically from the Shopify product assigned to this template. Leave text fields blank to use product data. Fill them in to override."
+    },
+    {
+      "type": "header",
+      "content": "Section visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hiw",
+      "label": "Show How It Works",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_founder",
+      "label": "Show Founder Drop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_specs",
+      "label": "Show Tech Specs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Show Core Benefits",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show Closing CTA",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Buy box visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tagline",
+      "label": "Show tagline",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_perks",
+      "label": "Show trust perks",
+      "default": true
+    },
     {
       "type": "header",
       "content": "t:sections.shop.header_content"

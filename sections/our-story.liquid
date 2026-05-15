@@ -67,17 +67,27 @@
   endif
 -%}
 
-{%- comment -%}── 01 STORY HERO ──{%- endcomment -%}
-<section class="os-story-hero full-width" data-surface="dark">
+{%- comment -%}── 01 STORY HERO (combined with origin letter) ──{%- endcomment -%}
+<section class="os-story-hero full-width" data-surface="dark" id="origin">
   <div class="os-inner">
     <div class="story-hero-grid">
 
       <div class="story-hero-copy">
-        <p class="os-eyebrow">{{ 'sections.our_story.hero_eyebrow' | t }}</p>
-        <h1 class="story-hero-h1">{{ hero_heading | escape }}</h1>
-        {%- if hero_sub != blank -%}
-          <p class="story-hero-sub">{{ hero_sub | escape }}</p>
-        {%- endif -%}
+        <div class="story-hero-top">
+          <p class="os-eyebrow">{{ 'sections.our_story.hero_eyebrow' | t }}</p>
+          <h1 class="story-hero-h1">{{ hero_heading | escape }}</h1>
+        </div>
+
+        <div class="story-hero-origin">
+          <hr class="story-hero-rule" aria-hidden="true">
+          <div class="origin-body">
+            <p class="lede">I've always cared about productivity, goals, and building a better life. But mornings were still a struggle.</p>
+            <p>I'd hit snooze. Scroll my phone. Rush into the day already feeling behind.</p>
+            <p>Eventually I realized most alarms don't actually get you out of bed.</p>
+            <p>So I started building MOOV, a system designed to create movement first.</p>
+            <p class="sign-off">Not motivation. Not guilt. Just action.</p>
+          </div>
+        </div>
       </div>
 
       <div class="story-hero-media">
@@ -89,7 +99,7 @@
               loading: 'eager',
               class: 'story-hero-img',
               alt: section.settings.hero_image.alt,
-              sizes: '(min-width: 880px) 48vw, 100vw',
+              sizes: '(min-width: 880px) 45vw, 100vw',
               widths: '400, 600, 800, 1000, 1200'
           }}
         {%- elsif hero_image_asset != blank -%}
@@ -112,33 +122,8 @@
   </div>
 </section>
 
-{%- comment -%}── 02 ORIGIN LETTER ──{%- endcomment -%}
-<section class="os-origin full-width" data-surface="cream" id="origin">
-  <div class="os-inner">
-    <div class="origin-grid">
-
-      <aside class="origin-aside">
-        <p class="os-eyebrow">{{ 'sections.our_story.origin_eyebrow' | t }}</p>
-        <div class="origin-meta">
-          <span>{{ 'sections.our_story.origin_founder_name' | t }}</span>
-          <span class="origin-meta-role">{{ 'sections.our_story.origin_founder_role' | t }}</span>
-        </div>
-      </aside>
-
-      <div class="origin-body">
-        <p class="lede">I've always cared about productivity, goals, and building a better life. But mornings were still a struggle.</p>
-        <p>I'd hit snooze. Scroll my phone. Rush into the day already feeling behind.</p>
-        <p>Eventually I realized most alarms don't actually get you out of bed.</p>
-        <p>So I started building MOOV — a system designed to create movement first.</p>
-        <p class="sign-off">Not motivation. Not guilt. Just action.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 {%- comment -%}── 03 FOUNDER VIDEO ──{%- endcomment -%}
-<section class="os-founder-video full-width" data-surface="dark" id="film">
+<section class="os-founder-video full-width" data-surface="cream" id="film">
   <div class="os-inner">
 
     <div class="fv-head">
@@ -234,7 +219,7 @@
 </section>
 
 {%- comment -%}── 04 MANIFESTO (cream) ──{%- endcomment -%}
-<section class="os-manifesto full-width" data-surface="cream">
+<section class="os-manifesto full-width" data-surface="dark">
   <div class="os-inner">
 
     <div class="manifesto-head">
@@ -271,7 +256,7 @@
 </section>
 
 {%- comment -%}── 05 STORY CTA ──{%- endcomment -%}
-<section class="os-story-cta full-width" data-surface="dark">
+<section class="os-story-cta full-width" data-surface="cream">
   <div class="os-inner">
     <div class="story-cta-inner">
       <p class="os-eyebrow">{{ 'sections.our_story.cta_eyebrow' | t }}</p>
@@ -308,9 +293,9 @@
   .os-eyebrow {
     margin: 0;
     font-family: var(--font-body);
-    font-size: var(--text-2xs);
+    font-size: var(--text-eyebrow);
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--moov-amber);
   }
@@ -347,27 +332,34 @@
   }
 
   /* ══════════════════════════════════════════
-     01 STORY HERO
+     01 STORY HERO (combined with origin letter, dark surface)
   ══════════════════════════════════════════ */
   .os-story-hero {
     background: var(--moov-black);
     color: var(--moov-cream);
     padding: calc(var(--header-height, 72px) + clamp(2rem, 5vw, 5rem)) var(--section-inline-pad) var(--section-block-pad-y-md);
+    border-bottom: 1px solid var(--moov-border-dark);
   }
 
   .story-hero-grid {
     display: grid;
     grid-template-columns: 1.05fr 1fr;
     gap: clamp(32px, 5vw, 80px);
-    align-items: end;
+    align-items: start;
   }
 
+  /* Copy column */
   .story-hero-copy {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding-bottom: 12px;
-    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-top: clamp(1rem, 2vw, 2rem);
+  }
+
+  .story-hero-top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .story-hero-h1 {
@@ -382,20 +374,69 @@
     text-wrap: balance;
   }
 
-  .story-hero-sub {
+  /* Divider */
+  .story-hero-rule {
+    border: none;
+    border-top: 2px solid var(--moov-amber);
     margin: 0;
-    font-size: var(--text-xl);
-    line-height: 1.55;
-    color: var(--moov-text-secondary-dark);
-    max-width: 38ch;
+    width: 48px;
+    opacity: 0.85;
   }
-  .story-hero-sub em {
+
+  /* Origin content as sub-section */
+  .story-hero-origin {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .story-origin-h2 {
+    margin: 0;
+    font-family: var(--font-hero);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--moov-cream);
+  }
+
+  .origin-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 56ch;
+  }
+
+  .origin-body p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: var(--moov-text-secondary-dark);
+  }
+
+  .origin-body p em {
     color: var(--moov-text-primary-dark);
     font-style: italic;
   }
 
+  .origin-body .lede {
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    font-weight: 500;
+    color: var(--moov-cream);
+  }
+
+  .origin-body .sign-off {
+    font-weight: 600;
+    color: var(--moov-amber);
+    letter-spacing: 0.01em;
+  }
+
+  /* Media column */
   .story-hero-media {
-    position: relative;
+    position: sticky;
+    top: calc(var(--header-height, 72px) + 2rem);
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-card, 16px);
     overflow: hidden;
@@ -437,112 +478,24 @@
   }
 
   @media (max-width: 880px) {
-    .story-hero-grid { grid-template-columns: 1fr; }
-    .story-hero-media { aspect-ratio: 4 / 5; max-height: min(80vw, 520px); }
-  }
-
-  /* ══════════════════════════════════════════
-     02 ORIGIN LETTER
-  ══════════════════════════════════════════ */
-  .os-origin {
-    background: var(--moov-cream);
-    color: var(--moov-black);
-    padding: var(--section-block-pad-y-md) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-light);
-  }
-
-  .origin-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: clamp(32px, 6vw, 100px);
-    align-items: start;
-  }
-
-  .origin-aside {
-    position: sticky;
-    top: calc(var(--header-height, 72px) + 24px);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .origin-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-family: var(--font-hero);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    font-size: var(--text-lg);
-    color: var(--moov-black);
-  }
-
-  .origin-meta-role {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    color: var(--moov-text-tertiary-light);
-  }
-
-  .origin-body {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    max-width: 60ch;
-  }
-
-  .origin-body p {
-    margin: 0;
-    font-size: var(--text-md);
-    line-height: 1.75;
-    color: var(--moov-text-secondary-light);
-  }
-
-  .origin-body p em {
-    color: var(--moov-text-primary-light);
-    font-style: italic;
-  }
-
-  .origin-body .lede {
-    font-family: var(--font-hero);
-    font-weight: 500;
-    font-size: var(--text-heading-md);
-    line-height: 1.18;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: var(--moov-black);
-    margin-bottom: 4px;
-  }
-
-  .origin-body .lede em {
-    font-style: italic;
-    color: var(--moov-amber);
-  }
-
-  .origin-body .sign-off {
-    font-family: var(--font-hero);
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    color: var(--moov-amber);
-    font-size: var(--text-md);
-    margin-top: 4px;
-  }
-
-  @media (max-width: 880px) {
-    .origin-grid { grid-template-columns: 1fr; }
-    .origin-aside { position: static; }
+    .story-hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .story-hero-media {
+      position: static;
+      aspect-ratio: 4 / 5;
+      max-height: min(80vw, 520px);
+    }
   }
 
   /* ══════════════════════════════════════════
      03 FOUNDER VIDEO
   ══════════════════════════════════════════ */
   .os-founder-video {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-md) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .fv-head {
@@ -561,14 +514,14 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
   }
 
   .fv-head-sub {
     margin: 0;
-    font-size: var(--text-md);
+    font-size: var(--text-base);
     line-height: 1.65;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     max-width: 50ch;
   }
 
@@ -754,7 +707,7 @@
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--moov-text-tertiary-dark);
+    color: var(--moov-text-tertiary-light);
     padding-top: 4px;
   }
 
@@ -764,11 +717,11 @@
   }
 
   /* ══════════════════════════════════════════
-     04 MANIFESTO (cream surface)
+     04 MANIFESTO (dark surface)
   ══════════════════════════════════════════ */
   .os-manifesto {
-    background: var(--moov-cream);
-    color: var(--moov-black);
+    background: var(--moov-black);
+    color: var(--moov-cream);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
   }
 
@@ -787,7 +740,7 @@
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     max-width: 16ch;
   }
 
@@ -795,12 +748,12 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
-    border-top: 1px solid var(--moov-border-light);
+    border-top: 1px solid var(--moov-border-dark);
   }
 
   .principle {
     padding: 28px 24px 36px;
-    border-right: 1px solid var(--moov-border-light);
+    border-right: 1px solid var(--moov-border-dark);
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -828,20 +781,20 @@
     line-height: 1.05;
     letter-spacing: -0.01em;
     text-transform: uppercase;
-    color: var(--moov-black);
+    color: var(--moov-cream);
     text-wrap: balance;
   }
 
   .principle p {
     margin: 0;
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     line-height: 1.65;
-    color: var(--moov-text-secondary-light);
+    color: var(--moov-text-secondary-dark);
   }
 
   @media (max-width: 980px) {
     .manifesto-grid { grid-template-columns: repeat(2, 1fr); }
-    .principle { border-bottom: 1px solid var(--moov-border-light); }
+    .principle { border-bottom: 1px solid var(--moov-border-dark); }
     .principle:nth-child(2n) { border-right: none; }
     .principle:nth-last-child(-n+2) { border-bottom: none; }
   }
@@ -849,16 +802,16 @@
   @media (max-width: 560px) {
     .manifesto-grid { grid-template-columns: 1fr; }
     .principle { border-right: none; }
-    .principle:not(:last-child) { border-bottom: 1px solid var(--moov-border-light); }
-    .principle:nth-last-child(-n+2) { border-bottom: 1px solid var(--moov-border-light); }
+    .principle:not(:last-child) { border-bottom: 1px solid var(--moov-border-dark); }
+    .principle:nth-last-child(-n+2) { border-bottom: 1px solid var(--moov-border-dark); }
     .principle:last-child { border-bottom: none; }
   }
 
   .manifesto-sub {
     margin: clamp(36px, 4vw, 52px) auto 0;
-    font-size: var(--text-md);
+    font-size: var(--text-base);
     line-height: 1.65;
-    color: var(--moov-text-secondary-light);
+    color: var(--moov-text-secondary-dark);
     text-align: center;
     max-width: 50ch;
   }
@@ -867,10 +820,10 @@
      05 STORY CTA
   ══════════════════════════════════════════ */
   .os-story-cta {
-    background: var(--moov-black);
-    color: var(--moov-cream);
+    background: var(--moov-cream);
+    color: var(--moov-black);
     padding: var(--section-block-pad-y-lg) var(--section-inline-pad);
-    border-top: 1px solid var(--moov-border-dark);
+    border-top: 1px solid var(--moov-border-light);
   }
 
   .story-cta-inner {
@@ -891,15 +844,15 @@
     line-height: 1.08;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     text-wrap: balance;
   }
 
   .story-cta-sub {
     margin: 0;
-    font-size: var(--text-md);
+    font-size: var(--text-base);
     line-height: 1.65;
-    color: var(--moov-text-secondary-dark);
+    color: var(--moov-text-secondary-light);
     max-width: 38ch;
   }
 
@@ -923,9 +876,9 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--moov-black);
-    background: var(--moov-cream);
-    border: 1px solid var(--moov-cream);
+    color: var(--moov-cream);
+    background: var(--moov-black);
+    border: 1px solid var(--moov-black);
     transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -933,7 +886,7 @@
     background: var(--moov-amber);
     border-color: var(--moov-amber);
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 30%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--moov-black) 20%, transparent);
   }
 
   .os-btn-ghost {
@@ -948,15 +901,15 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--moov-cream);
+    color: var(--moov-black);
     background: transparent;
-    border: 1px solid var(--moov-border-dark);
+    border: 1px solid var(--moov-border-light);
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
   .os-btn-ghost:hover {
-    background: color-mix(in srgb, var(--moov-cream) 12%, transparent);
-    border-color: var(--moov-cream);
+    background: color-mix(in srgb, var(--moov-black) 8%, transparent);
+    border-color: var(--moov-black);
     transform: translateY(-1px);
   }
 
