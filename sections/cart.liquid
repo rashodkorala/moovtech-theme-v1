@@ -78,6 +78,7 @@
         </div>
 
         {%- assign today_total = 0 -%}
+        {%- assign full_total = 0 -%}
         {%- for item in cart.items -%}
           {%- if item.selling_plan_allocation -%}
             {%- assign item_today = item.selling_plan_allocation.checkout_charge_amount | times: item.quantity -%}
@@ -85,7 +86,9 @@
             {%- assign item_today = item.final_line_price -%}
           {%- endif -%}
           {%- assign today_total = today_total | plus: item_today -%}
+          {%- assign full_total = full_total | plus: item.original_line_price -%}
         {%- endfor -%}
+        {%- assign deferred_total = full_total | minus: today_total -%}
 
         <div class="moov-cart__summary">
           <div class="moov-cart__summary-inner">
@@ -94,8 +97,15 @@
 
             <div class="moov-cart__summary-row">
               <span>{{ 'cart.subtotal' | t }}</span>
-              <span>{{ today_total | money }}</span>
+              <span>{{ full_total | money }}</span>
             </div>
+
+            {% if deferred_total > 0 %}
+              <div class="moov-cart__summary-row moov-cart__summary-row--deferred">
+                <span>Due on shipment</span>
+                <span>-{{ deferred_total | money }}</span>
+              </div>
+            {% endif %}
 
             <div class="moov-cart__summary-row moov-cart__summary-row--shipping">
               <span>{{ 'cart.shipping_label' | t }}</span>
@@ -105,7 +115,7 @@
             <div class="moov-cart__summary-divider"></div>
 
             <div class="moov-cart__summary-row moov-cart__summary-row--total">
-              <span>{{ 'cart.total' | t }}</span>
+              <span>Due Today</span>
               <span>{{ today_total | money }}</span>
             </div>
 
@@ -388,6 +398,11 @@
   }
 
   .moov-cart__summary-row--shipping .moov-cart__shipping-value {
+    font-size: var(--text-sm);
+    color: var(--moov-text-tertiary-dark);
+  }
+
+  .moov-cart__summary-row--deferred {
     font-size: var(--text-sm);
     color: var(--moov-text-tertiary-dark);
   }

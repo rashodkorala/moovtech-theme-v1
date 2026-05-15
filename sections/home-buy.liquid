@@ -14,8 +14,24 @@
     assign description = 'sections.home_buy.default_description' | t
   endif
 
+  # Pull live prices from product if one is selected
   assign price        = section.settings.price | strip
   assign compare_price = section.settings.compare_price | strip
+  assign linked_product = section.settings.product
+  if linked_product != blank
+    assign variant = linked_product.selected_or_first_available_variant
+    assign first_allocation = variant.selling_plan_allocations | first
+    if first_allocation != blank
+      assign price         = first_allocation.checkout_charge_amount | money
+      assign compare_price = variant.price | money
+    elsif variant.price != blank
+      assign price         = variant.price | money
+      if variant.compare_at_price > variant.price
+        assign compare_price = variant.compare_at_price | money
+      endif
+    endif
+  endif
+
   assign perk_1       = section.settings.perk_1 | strip
   assign perk_2       = section.settings.perk_2 | strip
   assign perk_3       = section.settings.perk_3 | strip
@@ -433,6 +449,12 @@
     {
       "type": "header",
       "content": "t:sections.home_buy.pricing_header"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product (pulls live price)",
+      "info": "When set, price and compare price are pulled automatically from the product. Manual price fields below are used as fallback."
     },
     {
       "type": "text",
