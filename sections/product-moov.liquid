@@ -26,6 +26,7 @@
 
   assign price = section.settings.price | strip
   assign compare_price = section.settings.compare_price | strip
+  assign discount_pct = 0
   if product != blank
     assign current_variant = product.selected_or_first_available_variant
     if price == blank
@@ -35,6 +36,10 @@
       if current_variant.compare_at_price > current_variant.price
         assign compare_price = current_variant.compare_at_price | money
       endif
+    endif
+    assign first_allocation = current_variant.selling_plan_allocations | first
+    if first_allocation != blank
+      assign discount_pct = current_variant.price | minus: first_allocation.price | times: 100 | divided_by: current_variant.price
     endif
   endif
 
@@ -139,9 +144,12 @@
 
       {%- if price != blank -%}
         <div class="shop-buy__price-row">
-          <span class="shop-buy__price">{{ price | escape }}</span>
           {%- if compare_price != blank -%}
             <span class="shop-buy__compare">{{ compare_price | escape }}</span>
+          {%- endif -%}
+          <span class="shop-buy__price">{{ price | escape }}</span>
+          {%- if discount_pct > 0 -%}
+            <span class="shop-buy__discount-badge">Save {{ discount_pct }}%</span>
           {%- endif -%}
           {%- if product_available and section.settings.show_stock -%}
             <span class="shop-buy__stock">
@@ -744,6 +752,20 @@
     font-size: var(--text-sm);
     color: var(--moov-text-tertiary-dark);
     text-decoration: line-through;
+  }
+
+  .shop-buy__discount-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--moov-amber);
+    color: var(--moov-black);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
   }
 
   .shop-buy__stock {
