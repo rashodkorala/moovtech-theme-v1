@@ -68,7 +68,7 @@
               <div class="moov-cart__item-price">
                 {% if item.selling_plan_allocation %}
                   <s>{{ item.original_price | money }}</s>
-                  <span>Pay {{ item.selling_plan_allocation.per_delivery_price | money }} today</span>
+                  <span>Pay {{ item.selling_plan_allocation.checkout_charge_amount | money }} today</span>
                 {% else %}
                   {{ item.original_price | money }}
                 {% endif %}
