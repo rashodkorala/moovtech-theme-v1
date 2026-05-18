@@ -6,7 +6,12 @@
       "Read(//Users/rashodkorala/Documents/Clients/Moovtech/**)",
       "Bash(unzip -o \"Moov Design System-handoff.zip\" -d moov-design-system-handoff)",
       "Bash(awk 'NR==582,/^{% endstylesheet %}/' /Users/rashodkorala/Documents/Clients/Moovtech/theme-v1/sections/product-moov.liquid)",
-      "Bash(grep -E \"\\\\.js$\")"
+      "Bash(grep -E \"\\\\.js$\")",
+      "mcp__Claude_in_Chrome__computer",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__resize_window",
+      "mcp__Claude_in_Chrome__navigate"
     ]
   }
 }

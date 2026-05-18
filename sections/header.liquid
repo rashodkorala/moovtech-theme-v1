@@ -137,97 +137,97 @@
       </svg>
     </button>
   </nav>
-</header>
 
-{%- comment -%} Mobile drawer — kept outside <header> so backdrop-filter on the header does not create a new containing block for these position:fixed elements (Chrome bug) {%- endcomment -%}
-<div id="moov-mobile-drawer" class="moov-drawer" aria-hidden="true">
-  <div class="moov-drawer__header">
-    {%- if section.settings.logo_image != blank -%}
-      {{ section.settings.logo_image | image_url: width: 200 | image_tag: class: 'moov-nav__logo-img moov-nav__logo-img--drawer', alt: shop.name, loading: 'lazy' }}
-    {%- else -%}
-      <img
-        src="{{ 'moov-logo.png' | asset_url }}"
-        alt="{{ shop.name }}"
-        class="moov-nav__logo-img moov-nav__logo-img--drawer"
-        loading="lazy"
-        width="96"
-        height="32"
-      >
-    {%- endif -%}
-    <button class="moov-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-  </div>
-  <nav class="moov-drawer__nav">
-    {%- for i in (1..6) -%}
-      {%- liquid
-        case i
-          when 1
-            assign nav_lbl = section.settings.nav_1_label
-            assign nav_url = section.settings.nav_1_url
-            if nav_lbl == blank
-              assign nav_lbl = 'How it works'
-            endif
-            if nav_url == blank
-              assign nav_url = '/pages/how-it-works'
-            endif
-          when 2
-            assign nav_lbl = section.settings.nav_2_label
-            assign nav_url = section.settings.nav_2_url
-            if nav_lbl == blank
-              assign nav_lbl = 'Our story'
-            endif
-            if nav_url == blank
-              assign nav_url = '/pages/our-story'
-            endif
-          when 3
-            assign nav_lbl = section.settings.nav_3_label
-            assign nav_url = section.settings.nav_3_url
-            if nav_lbl == blank
-              assign nav_lbl = 'Support'
-            endif
-            if nav_url == blank
-              assign nav_url = '/pages/support'
-            endif
-          when 4
-            assign nav_lbl = section.settings.nav_4_label
-            assign nav_url = section.settings.nav_4_url
-            if nav_lbl == blank
-              assign nav_lbl = 'Shop'
-            endif
-            if nav_url == blank
-              assign nav_url = '/collections/all'
-            endif
-          when 5
-            assign nav_lbl = section.settings.nav_5_label
-            assign nav_url = section.settings.nav_5_url
-          when 6
-            assign nav_lbl = section.settings.nav_6_label
-            assign nav_url = section.settings.nav_6_url
-        endcase
-      -%}
-      {%- if nav_lbl != blank -%}
-        <a
-          href="{{ nav_url | default: routes.root_url }}"
-          class="moov-drawer__link{% if nav_url == request.path %} moov-drawer__link--active{% endif %}"
-          {% if nav_url == request.path %}aria-current="page"{% endif %}
-        >{{- nav_lbl | escape -}}</a>
+  {%- comment -%} Mobile drawer {%- endcomment -%}
+  <div id="moov-mobile-drawer" class="moov-drawer" aria-hidden="true">
+    <div class="moov-drawer__header">
+      {%- if section.settings.logo_image != blank -%}
+        {{ section.settings.logo_image | image_url: width: 200 | image_tag: class: 'moov-nav__logo-img moov-nav__logo-img--drawer', alt: shop.name, loading: 'lazy' }}
+      {%- else -%}
+        <img
+          src="{{ 'moov-logo.png' | asset_url }}"
+          alt="{{ shop.name }}"
+          class="moov-nav__logo-img moov-nav__logo-img--drawer"
+          loading="lazy"
+          width="96"
+          height="32"
+        >
       {%- endif -%}
-    {%- endfor -%}
-  </nav>
-  {%- if section.settings.show_nav_cta -%}
-    <a
-      href="{{ section.settings.get_moov_url | default: routes.root_url }}"
-      class="moov-drawer__get-moov"
-    >
-      {{- get_moov_label | escape -}}
-    </a>
-  {%- endif -%}
-</div>
-<div class="moov-drawer__backdrop" aria-hidden="true"></div>
+      <button class="moov-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="moov-drawer__nav">
+      {%- for i in (1..6) -%}
+        {%- liquid
+          case i
+            when 1
+              assign nav_lbl = section.settings.nav_1_label
+              assign nav_url = section.settings.nav_1_url
+              if nav_lbl == blank
+                assign nav_lbl = 'How it works'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/how-it-works'
+              endif
+            when 2
+              assign nav_lbl = section.settings.nav_2_label
+              assign nav_url = section.settings.nav_2_url
+              if nav_lbl == blank
+                assign nav_lbl = 'Our story'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/our-story'
+              endif
+            when 3
+              assign nav_lbl = section.settings.nav_3_label
+              assign nav_url = section.settings.nav_3_url
+              if nav_lbl == blank
+                assign nav_lbl = 'Support'
+              endif
+              if nav_url == blank
+                assign nav_url = '/pages/support'
+              endif
+            when 4
+              assign nav_lbl = section.settings.nav_4_label
+              assign nav_url = section.settings.nav_4_url
+              if nav_lbl == blank
+                assign nav_lbl = 'Shop'
+              endif
+              if nav_url == blank
+                assign nav_url = '/collections/all'
+              endif
+            when 5
+              assign nav_lbl = section.settings.nav_5_label
+              assign nav_url = section.settings.nav_5_url
+            when 6
+              assign nav_lbl = section.settings.nav_6_label
+              assign nav_url = section.settings.nav_6_url
+          endcase
+        -%}
+        {%- if nav_lbl != blank -%}
+          <a
+            href="{{ nav_url | default: routes.root_url }}"
+            class="moov-drawer__link{% if nav_url == request.path %} moov-drawer__link--active{% endif %}"
+            {% if nav_url == request.path %}aria-current="page"{% endif %}
+          >{{- nav_lbl | escape -}}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+    {%- if section.settings.show_nav_cta -%}
+      <a
+        href="{{ section.settings.get_moov_url | default: routes.root_url }}"
+        class="moov-drawer__get-moov"
+      >
+        {{- get_moov_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+  <div class="moov-drawer__backdrop" aria-hidden="true"></div>
+</header>
 
 {% stylesheet %}
   /* ── Announcement bar ── */
@@ -273,15 +273,31 @@
     z-index: 100;
     background: var(--moov-black);
     border-bottom: 0.5px solid color-mix(in srgb, var(--moov-white) 7%, transparent);
-    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
 
-  /* Frosted glass on scroll */
-  .moov-header.is-scrolled {
-    background: color-mix(in srgb, var(--moov-black) 82%, transparent);
+  /* Frosted glass on scroll — applied via ::before so the header element itself never
+     gets backdrop-filter, which in Chrome would make it a containing block for the
+     position:fixed drawer children and break their viewport-relative positioning. */
+  .moov-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .moov-header.is-scrolled {
+    background: color-mix(in srgb, var(--moov-black) 82%, transparent);
     border-bottom-color: color-mix(in srgb, var(--moov-white) 5%, transparent);
+  }
+
+  .moov-header.is-scrolled::before {
+    opacity: 1;
   }
 
   /* ── Nav grid ── */
@@ -518,11 +534,9 @@
     background: var(--moov-amber);
   }
 
-  /* Transparent + scrolled: frosted dark */
+  /* Transparent + scrolled: frosted dark (blur via ::before, same reason as above) */
   .moov-header--transparent.is-scrolled {
     background: color-mix(in srgb, var(--moov-black) 82%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-bottom-color: color-mix(in srgb, var(--moov-white) 5%, transparent);
   }
 
