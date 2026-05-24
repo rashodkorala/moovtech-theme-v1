@@ -45,13 +45,6 @@
   assign cta_secondary_url = section.settings.cta_secondary_url | default: '/pages/our-story'
 
   assign image_asset = section.settings.image_asset | strip
-  if section.settings.image == blank
-    if section.settings.image_url == blank
-      if image_asset == blank
-        assign image_asset = 'product-preiview-mainpage.png'
-      endif
-    endif
-  endif
 
   assign image_position = section.settings.image_position | default: 'left'
   assign show_logo = true

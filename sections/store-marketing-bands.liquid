@@ -59,12 +59,21 @@
   >
     <div class="store-marketing-bands__inner">
       <h2 class="store-marketing-bands__heading">{{ who_heading | escape }}</h2>
-      <ul class="store-marketing-bands__list" role="list">
-        <li>{{ 'store_marketing.who_for_1' | t | escape }}</li>
-        <li>{{ 'store_marketing.who_for_2' | t | escape }}</li>
-        <li>{{ 'store_marketing.who_for_3' | t | escape }}</li>
-      </ul>
-      <p class="store-marketing-bands__not">{{ 'store_marketing.who_for_not' | t | escape }}</p>
+      {%- assign who_for_blocks = section.blocks | where: 'type', 'who_for_item' -%}
+      {%- if who_for_blocks.size > 0 -%}
+        <ul class="store-marketing-bands__list" role="list">
+          {%- for block in who_for_blocks -%}
+            <li {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- assign who_for_not = section.settings.who_for_not -%}
+      {%- if who_for_not == blank -%}
+        {%- assign who_for_not = 'store_marketing.who_for_not' | t -%}
+      {%- endif -%}
+      {%- if who_for_not != blank -%}
+        <p class="store-marketing-bands__not">{{ who_for_not | escape }}</p>
+      {%- endif -%}
     </div>
   </div>
 {%- endif -%}
@@ -311,7 +320,13 @@
       "type": "text",
       "id": "who_heading",
       "label": "Heading",
-      "info": "Leave blank for store_marketing.who_for_heading"
+      "info": "Leave blank to use theme translation (store_marketing.who_for_heading)."
+    },
+    {
+      "type": "textarea",
+      "id": "who_for_not",
+      "label": "\"Not for you\" note",
+      "info": "Shown below the list. Leave blank to use theme translation (store_marketing.who_for_not)."
     },
     {
       "type": "header",
@@ -355,9 +370,43 @@
       "info": "Default: /pages/about"
     }
   ],
+  "blocks": [
+    {
+      "type": "who_for_item",
+      "name": "Who it's for — item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "Describe who this product is for."
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Store marketing bands"
+      "name": "Store marketing bands",
+      "blocks": [
+        {
+          "type": "who_for_item",
+          "settings": {
+            "text": "You've hit snooze more mornings than you'd like to admit"
+          }
+        },
+        {
+          "type": "who_for_item",
+          "settings": {
+            "text": "You know the first phone-check sets the tone for the whole day"
+          }
+        },
+        {
+          "type": "who_for_item",
+          "settings": {
+            "text": "You've tried \"just being more disciplined\" and found willpower runs out"
+          }
+        }
+      ]
     }
   ]
 }

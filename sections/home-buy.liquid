@@ -47,9 +47,6 @@
   assign cta_secondary_url  = section.settings.cta_secondary_url | default: '/pages/our-story'
 
   assign image_asset = section.settings.image_asset | strip
-  if image_asset == blank
-    assign image_asset = '6B79FD92-7B28-4EF0-AF4B-2A7F70A0B56E.PNG'
-  endif
 -%}
 
 <section

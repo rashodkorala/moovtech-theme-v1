@@ -77,15 +77,7 @@
             alt: section.settings.product_image.alt | escape
         }}
       {%- else -%}
-        <img
-          class="product-intro__render"
-          src="{{ 'product-preiview-mainpage.PNG' | asset_url }}"
-          alt="{{ section.settings.product_image_alt | default: intro_heading | escape }}"
-          width="1200"
-          height="800"
-          loading="lazy"
-          decoding="async"
-        >
+        <div class="product-intro__render product-intro__render--placeholder" role="img" aria-label="Product image — upload via theme editor"></div>
       {%- endif -%}
     </div>
 

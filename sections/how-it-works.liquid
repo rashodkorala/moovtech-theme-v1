@@ -9,10 +9,85 @@
     assign hero_sub = 'MOOV is a wall-mounted alarm with one job. The walk is the feature. No screens, no notifications, no scroll — just an object on a wall, and a small, ordinary triumph at 6:30 a.m.'
   endif
 
-  assign step_blocks = section.blocks | where: 'type', 'step'
+  assign step_blocks     = section.blocks | where: 'type', 'step'
+  assign timeline_blocks = section.blocks | where: 'type', 'timeline_item'
+  assign mount_steps     = section.blocks | where: 'type', 'mount_step'
+  assign anatomy_blocks  = section.blocks | where: 'type', 'anatomy_part'
+  assign versus_blocks   = section.blocks | where: 'type', 'versus_row'
+  assign hiw_faq_blocks  = section.blocks | where: 'type', 'hiw_faq_item'
 
-  assign mount_image = section.settings.mount_image
+  assign mount_image   = section.settings.mount_image
   assign anatomy_image = section.settings.anatomy_image
+
+  assign steps_eyebrow = section.settings.steps_eyebrow
+  if steps_eyebrow == blank
+    assign steps_eyebrow = 'Three steps'
+  endif
+  assign steps_heading = section.settings.steps_heading
+  if steps_heading == blank
+    assign steps_heading = 'Simple by design.'
+  endif
+
+  assign timeline_eyebrow = section.settings.timeline_eyebrow
+  if timeline_eyebrow == blank
+    assign timeline_eyebrow = 'Why it works'
+  endif
+  assign timeline_heading = section.settings.timeline_heading
+  if timeline_heading == blank
+    assign timeline_heading = 'Most alarms wake you up. MOOV gets you moving.'
+  endif
+
+  assign mount_eyebrow     = section.settings.mount_eyebrow
+  if mount_eyebrow == blank
+    assign mount_eyebrow = 'Mounting'
+  endif
+  assign mount_heading     = section.settings.mount_heading
+  if mount_heading == blank
+    assign mount_heading = 'Ten minutes, two anchors, one screw.'
+  endif
+  assign mount_body        = section.settings.mount_body
+  assign mount_rental_note = section.settings.mount_rental_note
+
+  assign anatomy_eyebrow = section.settings.anatomy_eyebrow
+  if anatomy_eyebrow == blank
+    assign anatomy_eyebrow = 'The object'
+  endif
+  assign anatomy_heading = section.settings.anatomy_heading
+  if anatomy_heading == blank
+    assign anatomy_heading = 'Six parts. Nothing else inside.'
+  endif
+
+  assign versus_eyebrow   = section.settings.versus_eyebrow
+  if versus_eyebrow == blank
+    assign versus_eyebrow = 'MOOV vs. the phone in the bed'
+  endif
+  assign versus_heading   = section.settings.versus_heading
+  if versus_heading == blank
+    assign versus_heading = 'The difference, line by line.'
+  endif
+  assign versus_col_moov  = section.settings.versus_col_moov
+  if versus_col_moov == blank
+    assign versus_col_moov = 'MOOV'
+  endif
+  assign versus_col_phone = section.settings.versus_col_phone
+  if versus_col_phone == blank
+    assign versus_col_phone = 'Phone alarm'
+  endif
+
+  assign faq_eyebrow = section.settings.faq_eyebrow
+  if faq_eyebrow == blank
+    assign faq_eyebrow = 'Reasonable concerns'
+  endif
+  assign faq_heading = section.settings.faq_heading
+  if faq_heading == blank
+    assign faq_heading = 'The five we hear most.'
+  endif
+
+  assign cta_eyebrow     = section.settings.cta_eyebrow
+  if cta_eyebrow == blank
+    assign cta_eyebrow = 'Try it on your wall'
+  endif
+  assign cta_inline_note = section.settings.cta_inline_note
 
   assign cta_heading = section.settings.cta_heading
   if cta_heading == blank
@@ -54,8 +129,8 @@
   <section class="hiw-flow hiw-cream" aria-label="Three steps">
     <div class="hiw-inner">
       <div class="hiw-section-head">
-        <p class="hiw-eyebrow hiw-eyebrow--amber">Three steps</p>
-        <h2 class="hiw-section-h2 hiw-h2-dark">Simple by design.</h2>
+        {%- if steps_eyebrow != blank -%}<p class="hiw-eyebrow hiw-eyebrow--amber">{{ steps_eyebrow | escape }}</p>{%- endif -%}
+        {%- if steps_heading != blank -%}<h2 class="hiw-section-h2 hiw-h2-dark">{{ steps_heading | escape }}</h2>{%- endif -%}
       </div>
       {%- if step_blocks.size > 0 -%}
         <ol class="hiw-flow-grid" role="list">
@@ -94,7 +169,7 @@
                     <span class="hiw-placeholder-label">{{ block.settings.title | default: 'Step image' | escape }}<br>Upload via theme editor</span>
                   </div>
                 {%- endif -%}
-                <span class="hiw-step-num" aria-hidden="true">Step · {{ step_badge }}</span>
+                <span class="hiw-step-num" aria-hidden="true">Step -{{ step_badge }}</span>
               </div>
               {%- if block.settings.title != blank -%}
                 <h3 class="hiw-step-title">{{ block.settings.title | escape }}</h3>
@@ -113,59 +188,29 @@
   <section class="hiw-timeline hiw-dark" aria-label="Morning timeline">
     <div class="hiw-inner">
       <div class="hiw-section-head">
-        <p class="hiw-eyebrow">Why it works</p>
-        <h2 class="hiw-section-h2">Most alarms wake you up.<br><em>MOOV gets you moving.</em></h2>
+        {%- if timeline_eyebrow != blank -%}<p class="hiw-eyebrow">{{ timeline_eyebrow | escape }}</p>{%- endif -%}
+        {%- if timeline_heading != blank -%}<h2 class="hiw-section-h2">{{ timeline_heading | escape }}</h2>{%- endif -%}
       </div>
-      <ol class="hiw-time-list" role="list">
-        <li>
-          <span class="hiw-time-stamp">10:30 p.m.</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>Phone goes in the kitchen.</h4>
-            <p>On the charger, face down. MOOV has nothing to do until morning.</p>
-          </div>
-        </li>
-        <li>
-          <span class="hiw-time-stamp">6:25 a.m.</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>Soft pre-alert.</h4>
-            <p>A two second amber pulse and a gentle chime. If you sleep through, the main alarm follows.</p>
-          </div>
-        </li>
-        <li>
-          <span class="hiw-time-stamp">6:30 a.m.</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>MOOV rings.</h4>
-            <p>Full volume, front facing speaker. Tuned for tile rooms, bathrooms, hallways, kitchens.</p>
-          </div>
-        </li>
-        <li>
-          <span class="hiw-time-stamp">6:30:14</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>You're upright.</h4>
-            <p>By second fourteen, most testers have at least one foot on the floor. By twenty, both.</p>
-          </div>
-        </li>
-        <li>
-          <span class="hiw-time-stamp">6:30:28</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>Palm on the ring.</h4>
-            <p>One press. No snooze, no swipe, no second screen. The chime stops the moment you make contact.</p>
-          </div>
-        </li>
-        <li>
-          <span class="hiw-time-stamp">6:31 a.m.</span>
-          <span class="hiw-time-dot" aria-hidden="true"></span>
-          <div class="hiw-time-copy">
-            <h4>Day starts.</h4>
-            <p>You're already in the kitchen with the phone. The first conscious minute belonged to you.</p>
-          </div>
-        </li>
-      </ol>
+      {%- if timeline_blocks.size > 0 -%}
+        <ol class="hiw-time-list" role="list">
+          {%- for block in timeline_blocks -%}
+            <li {{ block.shopify_attributes }}>
+              {%- if block.settings.time != blank -%}
+                <span class="hiw-time-stamp">{{ block.settings.time | escape }}</span>
+              {%- endif -%}
+              <span class="hiw-time-dot" aria-hidden="true"></span>
+              <div class="hiw-time-copy">
+                {%- if block.settings.title != blank -%}
+                  <h4>{{ block.settings.title | escape }}</h4>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <p>{{ block.settings.body | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      {%- endif -%}
     </div>
   </section>
 
@@ -174,28 +219,30 @@
     <div class="hiw-inner">
       <div class="hiw-mount-grid">
         <div class="hiw-mount-copy">
-          <p class="hiw-eyebrow hiw-eyebrow--amber">Mounting</p>
-          <h2 class="hiw-section-h2 hiw-h2-dark">Ten minutes,<br>two anchors,<br>one screw.</h2>
-          <p class="hiw-mount-lede">The brass cleat ships with everything you need — a paper template, two drywall anchors, and a single hidden screw. MOOV slides onto it with a soft click.</p>
-          <ol class="hiw-mount-list" role="list">
-            <li><span>01</span>Tape the paper template at eye level, level it, drill two pilots.</li>
-            <li><span>02</span>Hammer the anchors flush, drive the cleat with the included Torx key.</li>
-            <li><span>03</span>Hang MOOV. Done before the kettle whistles.</li>
-          </ol>
-          <p class="hiw-mount-rental">Renting? The optional adhesive cleat replaces the anchors on most painted drywall — holds the 412 g shell with no holes left behind.</p>
+          {%- if mount_eyebrow != blank -%}<p class="hiw-eyebrow hiw-eyebrow--amber">{{ mount_eyebrow | escape }}</p>{%- endif -%}
+          {%- if mount_heading != blank -%}<h2 class="hiw-section-h2 hiw-h2-dark">{{ mount_heading | escape }}</h2>{%- endif -%}
+          {%- if mount_body != blank -%}<p class="hiw-mount-lede">{{ mount_body | escape }}</p>{%- endif -%}
+          {%- if mount_steps.size > 0 -%}
+            <ol class="hiw-mount-list" role="list">
+              {%- for block in mount_steps -%}
+                {%- liquid
+                  if forloop.index < 10
+                    assign step_n = forloop.index | prepend: '0'
+                  else
+                    assign step_n = forloop.index | append: ''
+                  endif
+                -%}
+                <li {{ block.shopify_attributes }}><span>{{ step_n }}</span>{{ block.settings.text | escape }}</li>
+              {%- endfor -%}
+            </ol>
+          {%- endif -%}
+          {%- if mount_rental_note != blank -%}<p class="hiw-mount-rental">{{ mount_rental_note | escape }}</p>{%- endif -%}
         </div>
         <figure class="hiw-mount-media" aria-hidden="true">
           {%- if mount_image != blank -%}
             {{ mount_image | image_url: width: 1000 | image_tag: loading: 'lazy', class: 'hiw-mount-img', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1000' }}
           {%- else -%}
-            <img
-              src="{{ 'step-1-how it works.jpg' | asset_url }}"
-              alt="Mounting a MOOV cleat to a wall"
-              loading="lazy"
-              class="hiw-mount-img"
-              width="1000"
-              height="1250"
-            >
+            <div class="hiw-step-placeholder" role="img" aria-label="Mounting guide image — upload via theme editor"></div>
           {%- endif -%}
         </figure>
       </div>
@@ -206,50 +253,37 @@
   <section class="hiw-anatomy hiw-dark" aria-label="Product anatomy">
     <div class="hiw-inner">
       <div class="hiw-section-head">
-        <p class="hiw-eyebrow">The object</p>
-        <h2 class="hiw-section-h2">Six parts.<br>Nothing else inside.</h2>
+        {%- if anatomy_eyebrow != blank -%}<p class="hiw-eyebrow">{{ anatomy_eyebrow | escape }}</p>{%- endif -%}
+        {%- if anatomy_heading != blank -%}<h2 class="hiw-section-h2">{{ anatomy_heading | escape }}</h2>{%- endif -%}
       </div>
       <div class="hiw-anatomy-grid">
         <figure class="hiw-anatomy-shot">
           {%- if anatomy_image != blank -%}
             {{ anatomy_image | image_url: width: 900 | image_tag: loading: 'lazy', class: 'hiw-anatomy-img', sizes: '(min-width: 990px) 40vw, 100vw', widths: '400, 600, 900' }}
           {%- else -%}
-            <img
-              src="{{ 'CFC86724-4271-4448-BD4D-1BFC891817C5.PNG' | asset_url }}"
-              alt="Detail of MOOV ceramic shell and brass mount"
-              loading="lazy"
-              class="hiw-anatomy-img"
-              width="900"
-              height="1125"
-            >
+            <div class="hiw-step-placeholder" role="img" aria-label="Product anatomy image — upload via theme editor"></div>
           {%- endif -%}
         </figure>
-        <ol class="hiw-parts-list" role="list">
-          <li>
-            <span class="hiw-part-n">01</span>
-            <div><h4>Glazed ceramic shell</h4><p>Soft white finish. Wall-mount ready. Built to live in your space.</p></div>
-          </li>
-          <li>
-            <span class="hiw-part-n">02</span>
-            <div><h4>Warm-amber LED ring</h4><p>Four brightness levels. Visible from the doorway, invisible from the pillow.</p></div>
-          </li>
-          <li>
-            <span class="hiw-part-n">03</span>
-            <div><h4>Capacitive dismiss</h4><p>One palm press, anywhere on the ring. No buttons to find in the dark.</p></div>
-          </li>
-          <li>
-            <span class="hiw-part-n">04</span>
-            <div><h4>Front-facing speaker</h4><p>Full-range driver, tuned for hard surfaces. Plenty of volume, never harsh.</p></div>
-          </li>
-          <li>
-            <span class="hiw-part-n">05</span>
-            <div><h4>Brass French-cleat</h4><p>Solid brass, single hidden screw. Lifts off in two seconds for charging.</p></div>
-          </li>
-          <li>
-            <span class="hiw-part-n">06</span>
-            <div><h4>USB-C port</h4><p>Around the back. Ninety minutes to full. Charge twice a year.</p></div>
-          </li>
-        </ol>
+        {%- if anatomy_blocks.size > 0 -%}
+          <ol class="hiw-parts-list" role="list">
+            {%- for block in anatomy_blocks -%}
+              {%- liquid
+                if forloop.index < 10
+                  assign part_n = forloop.index | prepend: '0'
+                else
+                  assign part_n = forloop.index | append: ''
+                endif
+              -%}
+              <li {{ block.shopify_attributes }}>
+                <span class="hiw-part-n">{{ part_n }}</span>
+                <div>
+                  {%- if block.settings.title != blank -%}<h4>{{ block.settings.title | escape }}</h4>{%- endif -%}
+                  {%- if block.settings.body != blank -%}<p>{{ block.settings.body | escape }}</p>{%- endif -%}
+                </div>
+              </li>
+            {%- endfor -%}
+          </ol>
+        {%- endif -%}
       </div>
     </div>
   </section>
@@ -258,56 +292,25 @@
   <section class="hiw-versus hiw-cream" aria-label="MOOV vs phone alarm comparison">
     <div class="hiw-inner">
       <div class="hiw-section-head">
-        <p class="hiw-eyebrow hiw-eyebrow--amber">MOOV vs. the phone in the bed</p>
-        <h2 class="hiw-section-h2 hiw-h2-dark">The difference,<br>line by line.</h2>
+        {%- if versus_eyebrow != blank -%}<p class="hiw-eyebrow hiw-eyebrow--amber">{{ versus_eyebrow | escape }}</p>{%- endif -%}
+        {%- if versus_heading != blank -%}<h2 class="hiw-section-h2 hiw-h2-dark">{{ versus_heading | escape }}</h2>{%- endif -%}
       </div>
-      <div class="hiw-versus-table" role="table" aria-label="Feature comparison">
-        <div class="hiw-versus-row hiw-versus-head" role="row">
-          <span role="columnheader"></span>
-          <span class="vr-moov" role="columnheader">MOOV</span>
-          <span class="vr-phone" role="columnheader">Phone alarm</span>
+      {%- if versus_blocks.size > 0 -%}
+        <div class="hiw-versus-table" role="table" aria-label="Feature comparison">
+          <div class="hiw-versus-row hiw-versus-head" role="row">
+            <span role="columnheader"></span>
+            <span class="vr-moov" role="columnheader">{{ versus_col_moov | escape }}</span>
+            <span class="vr-phone" role="columnheader">{{ versus_col_phone | escape }}</span>
+          </div>
+          {%- for block in versus_blocks -%}
+            <div class="hiw-versus-row" role="row" {{ block.shopify_attributes }}>
+              <span class="vr-label" role="rowheader">{{ block.settings.label | escape }}</span>
+              <span class="vr-moov" role="cell">{{ block.settings.moov_value | escape }}</span>
+              <span class="vr-phone" role="cell">{{ block.settings.phone_value | escape }}</span>
+            </div>
+          {%- endfor -%}
         </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">Where it lives</span>
-          <span class="vr-moov" role="cell">Across the room, on a wall</span>
-          <span class="vr-phone" role="cell">Six inches from your face</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">What you dismiss with</span>
-          <span class="vr-moov" role="cell">A palm on a ring</span>
-          <span class="vr-phone" role="cell">A swipe through notifications</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">What's on the screen</span>
-          <span class="vr-moov" role="cell">Nothing — there is no screen</span>
-          <span class="vr-phone" role="cell">Whatever the algorithm picked overnight</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">Battery cadence</span>
-          <span class="vr-moov" role="cell">Twice a year</span>
-          <span class="vr-phone" role="cell">Every night</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">Account required</span>
-          <span class="vr-moov" role="cell">No</span>
-          <span class="vr-phone" role="cell">Yes, and three more underneath it</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">Subscription</span>
-          <span class="vr-moov" role="cell">No, ever</span>
-          <span class="vr-phone" role="cell">Depends which alarm app you trust this week</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">Time you spend in app</span>
-          <span class="vr-moov" role="cell">Two minutes a week</span>
-          <span class="vr-phone" role="cell">Two hours a day</span>
-        </div>
-        <div class="hiw-versus-row" role="row">
-          <span class="vr-label" role="rowheader">What you wake up to</span>
-          <span class="vr-moov" role="cell">A walk and a press</span>
-          <span class="vr-phone" role="cell">A feed</span>
-        </div>
-      </div>
+      {%- endif -%}
     </div>
   </section>
 
@@ -316,56 +319,24 @@
     <div class="hiw-inner">
       <div class="hiw-faq-grid">
         <div class="hiw-faq-head">
-          <p class="hiw-eyebrow">Reasonable concerns</p>
-          <h2 id="hiw-faq-heading" class="hiw-section-h2">The five we hear most.</h2>
+          {%- if faq_eyebrow != blank -%}<p class="hiw-eyebrow">{{ faq_eyebrow | escape }}</p>{%- endif -%}
+          {%- if faq_heading != blank -%}<h2 id="hiw-faq-heading" class="hiw-section-h2">{{ faq_heading | escape }}</h2>{%- endif -%}
         </div>
-        <ul class="hiw-faq-list" role="list">
-          <li>
-            <details class="hiw-faq-item">
-              <summary class="hiw-faq-q">
-                <span>What if the room I want to mount in doesn't have power nearby?</span>
-                <span class="hiw-faq-caret" aria-hidden="true"></span>
-              </summary>
-              <p class="hiw-faq-a">It doesn't need any. MOOV runs on its internal battery for around eight months. Charge it once via USB-C in the kitchen, hang it back up, forget about it.</p>
-            </details>
-          </li>
-          <li>
-            <details class="hiw-faq-item">
-              <summary class="hiw-faq-q">
-                <span>Will it wake me through a closed door?</span>
-                <span class="hiw-faq-caret" aria-hidden="true"></span>
-              </summary>
-              <p class="hiw-faq-a">Yes. The front-facing speaker is tuned for tile and stone rooms — bathrooms, hallways. Five volume steps; most testers settle on three. If it's still not enough, we'll exchange for the louder firmware build, free.</p>
-            </details>
-          </li>
-          <li>
-            <details class="hiw-faq-item">
-              <summary class="hiw-faq-q">
-                <span>Can I snooze?</span>
-                <span class="hiw-faq-caret" aria-hidden="true"></span>
-              </summary>
-              <p class="hiw-faq-a">No. That's the entire premise. If you press the ring, the alarm stops. If you don't, it stops on its own after ten minutes. There is no second chance because we found that second chance was the problem.</p>
-            </details>
-          </li>
-          <li>
-            <details class="hiw-faq-item">
-              <summary class="hiw-faq-q">
-                <span>What happens if I take MOOV off the wall and walk back to bed?</span>
-                <span class="hiw-faq-caret" aria-hidden="true"></span>
-              </summary>
-              <p class="hiw-faq-a">It still rings until you press the ring, and you've already done the walk. It's not designed to catch you out — it's designed to make the first thirty seconds of the day involve standing.</p>
-            </details>
-          </li>
-          <li>
-            <details class="hiw-faq-item">
-              <summary class="hiw-faq-q">
-                <span>Do I need to use the app every day?</span>
-                <span class="hiw-faq-caret" aria-hidden="true"></span>
-              </summary>
-              <p class="hiw-faq-a">No. Once the alarm is set, the app has nothing to show you. There are no graphs, no streaks, no notifications. Open it again only when the alarm needs to change.</p>
-            </details>
-          </li>
-        </ul>
+        {%- if hiw_faq_blocks.size > 0 -%}
+          <ul class="hiw-faq-list" role="list">
+            {%- for block in hiw_faq_blocks -%}
+              <li {{ block.shopify_attributes }}>
+                <details class="hiw-faq-item">
+                  <summary class="hiw-faq-q">
+                    <span>{{ block.settings.question | escape }}</span>
+                    <span class="hiw-faq-caret" aria-hidden="true"></span>
+                  </summary>
+                  <p class="hiw-faq-a">{{ block.settings.answer | escape }}</p>
+                </details>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
       </div>
     </div>
   </section>
@@ -374,8 +345,8 @@
   <section class="hiw-cta hiw-cream" aria-label="Call to action">
     <div class="hiw-inner">
       <div class="hiw-cta-inner">
-        <p class="hiw-eyebrow hiw-eyebrow--amber">Try it on your wall</p>
-        <h2 class="hiw-cta-h2">{{ cta_heading | escape }} <em>If your morning doesn't change, send it back.</em></h2>
+        {%- if cta_eyebrow != blank -%}<p class="hiw-eyebrow hiw-eyebrow--amber">{{ cta_eyebrow | escape }}</p>{%- endif -%}
+        <h2 class="hiw-cta-h2">{{ cta_heading | escape }}{%- if cta_inline_note != blank %} <em>{{ cta_inline_note | escape }}</em>{%- endif -%}</h2>
         <p class="hiw-cta-sub">{{ cta_sub | escape }}</p>
         <div class="hiw-cta-actions">
           <a href="{{ section.settings.cta_primary_url | default: '/products/moov' }}" class="hiw-btn hiw-btn--primary">
@@ -1086,8 +1057,8 @@ details[open] .hiw-faq-q { color: var(--moov-amber); }
   .hiw-time-dot { margin-top: 4px; }
   .hiw-versus-row { grid-template-columns: 1fr; gap: 6px; }
   .hiw-versus-head { display: none; }
-  .vr-moov::before { content: "MOOV · "; color: var(--moov-amber); }
-  .vr-phone::before { content: "Phone · "; color: var(--moov-text-tertiary-light); }
+  .vr-moov::before { content: "MOOV -"; color: var(--moov-amber); }
+  .vr-phone::before { content: "Phone -"; color: var(--moov-text-tertiary-light); }
 }
 
 @media (max-width: 600px) {
@@ -1107,28 +1078,100 @@ details[open] .hiw-faq-q { color: var(--moov-amber); }
   "settings": [
     {
       "type": "header",
-      "content": "Hero"
+      "content": "01 -Hero"
     },
     {
       "type": "textarea",
       "id": "hero_heading",
-      "label": "Heading",
+      "label": "Hero heading",
       "default": "Wake up. Walk across the room. Press the ring."
     },
     {
       "type": "textarea",
       "id": "hero_sub",
-      "label": "Sub-heading",
+      "label": "Hero sub-heading",
       "default": "MOOV is a wall-mounted alarm with one job. The walk is the feature. No screens, no notifications, no scroll — just an object on a wall, and a small, ordinary triumph at 6:30 a.m."
     },
     {
       "type": "header",
-      "content": "Images"
+      "content": "02 -Three steps section"
+    },
+    {
+      "type": "text",
+      "id": "steps_eyebrow",
+      "label": "Eyebrow",
+      "default": "Three steps"
+    },
+    {
+      "type": "text",
+      "id": "steps_heading",
+      "label": "Heading",
+      "default": "Simple by design."
+    },
+    {
+      "type": "header",
+      "content": "03 -Timeline section"
+    },
+    {
+      "type": "text",
+      "id": "timeline_eyebrow",
+      "label": "Eyebrow",
+      "default": "Why it works"
+    },
+    {
+      "type": "textarea",
+      "id": "timeline_heading",
+      "label": "Heading",
+      "default": "Most alarms wake you up. MOOV gets you moving."
+    },
+    {
+      "type": "header",
+      "content": "04 -Mount section"
+    },
+    {
+      "type": "text",
+      "id": "mount_eyebrow",
+      "label": "Eyebrow",
+      "default": "Mounting"
+    },
+    {
+      "type": "textarea",
+      "id": "mount_heading",
+      "label": "Heading",
+      "default": "Ten minutes, two anchors, one screw."
+    },
+    {
+      "type": "textarea",
+      "id": "mount_body",
+      "label": "Body copy",
+      "default": "The brass cleat ships with everything you need — a paper template, two drywall anchors, and a single hidden screw. MOOV slides onto it with a soft click."
+    },
+    {
+      "type": "textarea",
+      "id": "mount_rental_note",
+      "label": "Renter note",
+      "default": "Renting? The optional adhesive cleat replaces the anchors on most painted drywall — holds the 412 g shell with no holes left behind."
     },
     {
       "type": "image_picker",
       "id": "mount_image",
       "label": "Mount section image"
+    },
+    {
+      "type": "header",
+      "content": "05 -Anatomy section"
+    },
+    {
+      "type": "text",
+      "id": "anatomy_eyebrow",
+      "label": "Eyebrow",
+      "default": "The object"
+    },
+    {
+      "type": "textarea",
+      "id": "anatomy_heading",
+      "label": "Heading",
+      "default": "Six parts. Nothing else inside."
     },
     {
       "type": "image_picker",
@@ -1137,18 +1180,75 @@ details[open] .hiw-faq-q { color: var(--moov-amber); }
     },
     {
       "type": "header",
-      "content": "CTA"
+      "content": "06 -Versus section"
+    },
+    {
+      "type": "text",
+      "id": "versus_eyebrow",
+      "label": "Eyebrow",
+      "default": "MOOV vs. the phone in the bed"
+    },
+    {
+      "type": "textarea",
+      "id": "versus_heading",
+      "label": "Heading",
+      "default": "The difference, line by line."
+    },
+    {
+      "type": "text",
+      "id": "versus_col_moov",
+      "label": "Left column header (MOOV)",
+      "default": "MOOV"
+    },
+    {
+      "type": "text",
+      "id": "versus_col_phone",
+      "label": "Right column header (competitor)",
+      "default": "Phone alarm"
+    },
+    {
+      "type": "header",
+      "content": "07 -FAQ section"
+    },
+    {
+      "type": "text",
+      "id": "faq_eyebrow",
+      "label": "Eyebrow",
+      "default": "Reasonable concerns"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "Heading",
+      "default": "The five we hear most."
+    },
+    {
+      "type": "header",
+      "content": "08 -CTA section"
+    },
+    {
+      "type": "text",
+      "id": "cta_eyebrow",
+      "label": "Eyebrow",
+      "default": "Try it on your wall"
     },
     {
       "type": "textarea",
       "id": "cta_heading",
-      "label": "CTA heading",
+      "label": "Heading",
       "default": "Live with MOOV for thirty days."
+    },
+    {
+      "type": "text",
+      "id": "cta_inline_note",
+      "label": "Inline italic note",
+      "info": "Displayed in italics after the heading. Leave blank to hide.",
+      "default": "If your morning doesn't change, send it back."
     },
     {
       "type": "textarea",
       "id": "cta_sub",
-      "label": "CTA sub",
+      "label": "Sub-text",
       "default": "Free shipping, no restocking fee, a real person on the other end of every email."
     },
     {
@@ -1194,12 +1294,103 @@ details[open] .hiw-faq-q { color: var(--moov-amber); }
           "type": "image_picker",
           "id": "image",
           "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "timeline_item",
+      "name": "Timeline item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time stamp",
+          "default": "6:30 a.m."
         },
         {
           "type": "text",
-          "id": "image_asset",
-          "label": "Asset filename fallback",
-          "info": "Filename of an image already uploaded to your theme assets, e.g. step-1.jpg"
+          "id": "title",
+          "label": "Title",
+          "default": "Event title"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "What happens at this moment."
+        }
+      ]
+    },
+    {
+      "type": "mount_step",
+      "name": "Mount step",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Step instruction",
+          "default": "Describe this installation step."
+        }
+      ]
+    },
+    {
+      "type": "anatomy_part",
+      "name": "Product part (Anatomy)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Part name",
+          "default": "Part name"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Description",
+          "default": "Brief description of this part."
+        }
+      ]
+    },
+    {
+      "type": "versus_row",
+      "name": "Comparison row (Versus)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Feature label",
+          "default": "Feature"
+        },
+        {
+          "type": "text",
+          "id": "moov_value",
+          "label": "MOOV value",
+          "default": "MOOV answer"
+        },
+        {
+          "type": "text",
+          "id": "phone_value",
+          "label": "Phone alarm value",
+          "default": "Phone answer"
+        }
+      ]
+    },
+    {
+      "type": "hiw_faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Question text?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Answer text."
         }
       ]
     }
@@ -1212,24 +1403,228 @@ details[open] .hiw-faq-q { color: var(--moov-amber); }
           "type": "step",
           "settings": {
             "title": "Mount it across the room.",
-            "text": "Bathroom, hallway, kitchen — anywhere you don't sleep. The brass cleat takes ten minutes and two anchors. Renters can use the optional adhesive cleat.",
-            "image_asset": "step-1-how it works.jpg"
+            "text": "Bathroom, hallway, kitchen — anywhere you don't sleep. The brass cleat takes ten minutes and two anchors. Renters can use the optional adhesive cleat."
           }
         },
         {
           "type": "step",
           "settings": {
             "title": "Pair once, set the alarm.",
-            "text": "Open the MOOV app, pair over Bluetooth, choose a wake-up sound and the pre-alert window. The app then disappears — there's nothing else inside it.",
-            "image_asset": "step-2 hot it works.PNG"
+            "text": "Open the MOOV app, pair over Bluetooth, choose a wake-up sound and the pre-alert window. The app then disappears — there's nothing else inside it."
           }
         },
         {
           "type": "step",
           "settings": {
             "title": "Wake, walk, press.",
-            "text": "When MOOV rings, you have to get up to dismiss it. By the time your palm meets the ring, you're already standing. The phone stays in the kitchen.",
-            "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG"
+            "text": "When MOOV rings, you have to get up to dismiss it. By the time your palm meets the ring, you're already standing. The phone stays in the kitchen."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "10:30 p.m.",
+            "title": "Phone goes in the kitchen.",
+            "body": "On the charger, face down. MOOV has nothing to do until morning."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "6:25 a.m.",
+            "title": "Soft pre-alert.",
+            "body": "A two second amber pulse and a gentle chime. If you sleep through, the main alarm follows."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "6:30 a.m.",
+            "title": "MOOV rings.",
+            "body": "Full volume, front facing speaker. Tuned for tile rooms, bathrooms, hallways, kitchens."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "6:30:14",
+            "title": "You're upright.",
+            "body": "By second fourteen, most testers have at least one foot on the floor. By twenty, both."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "6:30:28",
+            "title": "Palm on the ring.",
+            "body": "One press. No snooze, no swipe, no second screen. The chime stops the moment you make contact."
+          }
+        },
+        {
+          "type": "timeline_item",
+          "settings": {
+            "time": "6:31 a.m.",
+            "title": "Day starts.",
+            "body": "You're already in the kitchen with the phone. The first conscious minute belonged to you."
+          }
+        },
+        {
+          "type": "mount_step",
+          "settings": {
+            "text": "Tape the paper template at eye level, level it, drill two pilots."
+          }
+        },
+        {
+          "type": "mount_step",
+          "settings": {
+            "text": "Hammer the anchors flush, drive the cleat with the included Torx key."
+          }
+        },
+        {
+          "type": "mount_step",
+          "settings": {
+            "text": "Hang MOOV. Done before the kettle whistles."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "Glazed ceramic shell",
+            "body": "Soft white finish. Wall-mount ready. Built to live in your space."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "Warm-amber LED ring",
+            "body": "Four brightness levels. Visible from the doorway, invisible from the pillow."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "Capacitive dismiss",
+            "body": "One palm press, anywhere on the ring. No buttons to find in the dark."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "Front-facing speaker",
+            "body": "Full-range driver, tuned for hard surfaces. Plenty of volume, never harsh."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "Brass French-cleat",
+            "body": "Solid brass, single hidden screw. Lifts off in two seconds for charging."
+          }
+        },
+        {
+          "type": "anatomy_part",
+          "settings": {
+            "title": "USB-C port",
+            "body": "Around the back. Ninety minutes to full. Charge twice a year."
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "Where it lives",
+            "moov_value": "Across the room, on a wall",
+            "phone_value": "Six inches from your face"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "What you dismiss with",
+            "moov_value": "A palm on a ring",
+            "phone_value": "A swipe through notifications"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "What's on the screen",
+            "moov_value": "Nothing — there is no screen",
+            "phone_value": "Whatever the algorithm picked overnight"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "Battery cadence",
+            "moov_value": "Twice a year",
+            "phone_value": "Every night"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "Account required",
+            "moov_value": "No",
+            "phone_value": "Yes, and three more underneath it"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "Subscription",
+            "moov_value": "No, ever",
+            "phone_value": "Depends which alarm app you trust this week"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "Time you spend in app",
+            "moov_value": "Two minutes a week",
+            "phone_value": "Two hours a day"
+          }
+        },
+        {
+          "type": "versus_row",
+          "settings": {
+            "label": "What you wake up to",
+            "moov_value": "A walk and a press",
+            "phone_value": "A feed"
+          }
+        },
+        {
+          "type": "hiw_faq_item",
+          "settings": {
+            "question": "What if the room I want to mount in doesn't have power nearby?",
+            "answer": "It doesn't need any. MOOV runs on its internal battery for around eight months. Charge it once via USB-C in the kitchen, hang it back up, forget about it."
+          }
+        },
+        {
+          "type": "hiw_faq_item",
+          "settings": {
+            "question": "Will it wake me through a closed door?",
+            "answer": "Yes. The front-facing speaker is tuned for tile and stone rooms — bathrooms, hallways. Five volume steps; most testers settle on three. If it's still not enough, we'll exchange for the louder firmware build, free."
+          }
+        },
+        {
+          "type": "hiw_faq_item",
+          "settings": {
+            "question": "Can I snooze?",
+            "answer": "No. That's the entire premise. If you press the ring, the alarm stops. If you don't, it stops on its own after ten minutes. There is no second chance because we found that second chance was the problem."
+          }
+        },
+        {
+          "type": "hiw_faq_item",
+          "settings": {
+            "question": "What happens if I take MOOV off the wall and walk back to bed?",
+            "answer": "It still rings until you press the ring, and you've already done the walk. It's not designed to catch you out — it's designed to make the first thirty seconds of the day involve standing."
+          }
+        },
+        {
+          "type": "hiw_faq_item",
+          "settings": {
+            "question": "Do I need to use the app every day?",
+            "answer": "No. Once the alarm is set, the app has nothing to show you. There are no graphs, no streaks, no notifications. Open it again only when the alarm needs to change."
           }
         }
       ]

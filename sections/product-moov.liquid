@@ -438,12 +438,14 @@
       </aside>
 
       <div class="moov-specs__content">
-        <div class="moov-specs__tabs" role="tablist">
-          <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="design">{{ 'product.specs.design' | t }}</button>
-          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
-          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
-          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="mounting">{{ 'product.specs.mounting' | t }}</button>
-          <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
+        <div class="moov-specs__tabs-wrap">
+          <div class="moov-specs__tabs" role="tablist">
+            <button class="moov-specs__tab is-active" role="tab" aria-selected="true" data-tab="design">{{ 'product.specs.design' | t }}</button>
+            <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="dimensions">{{ 'product.specs.dimensions' | t }}</button>
+            <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="connectivity">{{ 'product.specs.connectivity' | t }}</button>
+            <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="mounting">{{ 'product.specs.mounting' | t }}</button>
+            <button class="moov-specs__tab" role="tab" aria-selected="false" data-tab="inbox">{{ 'product.specs.in_the_box' | t }}</button>
+          </div>
         </div>
 
         <div class="moov-specs__panel is-active" data-panel="design" role="tabpanel">
@@ -1229,6 +1231,20 @@
   }
 
   /* Tab bar */
+  .moov-specs__tabs-wrap {
+    position: relative;
+  }
+
+  .moov-specs__tabs-wrap::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 4px;
+    width: 48px;
+    background: linear-gradient(to right, transparent, var(--moov-cream));
+    pointer-events: none;
+    opacity: 0;
+  }
+
   .moov-specs__tabs {
     display: flex;
     flex-wrap: wrap;
@@ -1306,8 +1322,9 @@
   }
 
   @media (max-width: 860px) {
-    .moov-specs__layout { grid-template-columns: 1fr; }
-    .moov-specs__aside { position: static; }
+    .moov-specs { padding-top: 56px; padding-bottom: 56px; }
+    .moov-specs__layout { grid-template-columns: 1fr; gap: 32px; }
+    .moov-specs__aside { position: static; gap: 12px; }
     .moov-specs__tabs {
       flex-wrap: nowrap;
       overflow-x: auto;
@@ -1316,25 +1333,48 @@
       padding-bottom: 4px;
     }
     .moov-specs__tabs::-webkit-scrollbar { display: none; }
+    .moov-specs__tabs-wrap::after { opacity: 1; }
   }
 
   @media (max-width: 640px) {
+    .moov-specs {
+      padding-top: 40px;
+      padding-bottom: 48px;
+    }
+    .moov-specs__heading {
+      font-size: clamp(1.9rem, 7vw, 2.2rem);
+    }
+    .moov-specs__intro {
+      font-size: var(--text-xs, 13px);
+      line-height: 1.6;
+    }
+    .moov-specs__tabs {
+      gap: 8px;
+    }
     .moov-specs__tab {
       padding: 8px 16px;
       font-size: var(--text-xs, 12px);
+      min-width: max-content;
+    }
+    .moov-specs__panel.is-active {
+      border-radius: 10px;
     }
     .moov-specs__row {
-      padding: 16px 20px;
+      padding: 14px 18px;
       flex-direction: column;
       align-items: flex-start;
-      gap: 6px;
+      gap: 4px;
+    }
+    .moov-specs__row dt {
+      font-size: var(--text-xs, 12px);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
     .moov-specs__row dd {
       text-align: left;
       font-size: var(--text-sm);
-    }
-    .moov-specs__row dt {
-      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--moov-black);
     }
   }
 

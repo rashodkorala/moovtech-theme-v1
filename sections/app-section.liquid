@@ -32,41 +32,21 @@
       {%- endif -%}
 
       {%- comment -%} Feature list {%- endcomment -%}
-      <div class="app-section__features">
-        {%- for i in (1..3) -%}
-          {%- liquid
-            case i
-              when 1
-                assign feat_label = section.settings.feature_1_label
-                assign feat_desc = section.settings.feature_1_desc
-              when 2
-                assign feat_label = section.settings.feature_2_label
-                assign feat_desc = section.settings.feature_2_desc
-              when 3
-                assign feat_label = section.settings.feature_3_label
-                assign feat_desc = section.settings.feature_3_desc
-            endcase
-            if feat_label == blank
-              assign pk = 'store_marketing.pillar_' | append: i | append: '_title'
-              assign feat_label = pk | t
-            endif
-            if feat_desc == blank
-              assign dk = 'store_marketing.pillar_' | append: i | append: '_body'
-              assign feat_desc = dk | t
-            endif
-          -%}
-          {%- if feat_label != blank or feat_desc != blank -%}
-            <div class="app-section__feature" data-animate="stagger" style="--stagger-delay: {{ i | minus: 1 | times: 100 }}ms;">
-              {%- if feat_label != blank -%}
-                <span class="app-section__feature-label">{{ feat_label | escape }}</span>
+      {%- assign feature_blocks = section.blocks | where: 'type', 'feature' -%}
+      {%- if feature_blocks.size > 0 -%}
+        <div class="app-section__features">
+          {%- for block in feature_blocks -%}
+            <div class="app-section__feature" data-animate="stagger" style="--stagger-delay: {{ forloop.index0 | times: 100 }}ms;" {{ block.shopify_attributes }}>
+              {%- if block.settings.label != blank -%}
+                <span class="app-section__feature-label">{{ block.settings.label | escape }}</span>
               {%- endif -%}
-              {%- if feat_desc != blank -%}
-                <span class="app-section__feature-desc">{{ feat_desc | escape }}</span>
+              {%- if block.settings.desc != blank -%}
+                <span class="app-section__feature-desc">{{ block.settings.desc | escape }}</span>
               {%- endif -%}
             </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
 
       {%- comment -%} Primary CTA {%- endcomment -%}
       {%- if section.settings.cta_label != blank -%}
@@ -136,14 +116,7 @@
                 alt: section.settings.product_render.alt | escape
             }}
           {%- else -%}
-            <img
-              src="{{ 'moov-app-pairing.png' | asset_url }}"
-              alt="MOOV App: Pairing"
-              class="app-section__product-img"
-              loading="lazy"
-              width="390"
-              height="844"
-            >
+            <div class="app-section__product-img app-section__product-img--placeholder" role="img" aria-label="Product render — upload via theme editor"></div>
           {%- endif -%}
         </div>
 
@@ -159,14 +132,7 @@
                 alt: section.settings.app_screen.alt | escape
             }}
           {%- else -%}
-            <img
-              src="{{ 'moov-app-home.png' | asset_url }}"
-              alt="MOOV App: Home"
-              class="app-section__screen-img"
-              loading="lazy"
-              width="390"
-              height="844"
-            >
+            <div class="app-section__screen-img app-section__screen-img--placeholder" role="img" aria-label="App screen — upload via theme editor"></div>
           {%- endif -%}
         </div>
 
@@ -579,46 +545,6 @@
     },
     {
       "type": "header",
-      "content": "t:general.features"
-    },
-    {
-      "type": "text",
-      "id": "feature_1_label",
-      "label": "t:labels.feature_label",
-      "default": "AI routine generator"
-    },
-    {
-      "type": "text",
-      "id": "feature_1_desc",
-      "label": "t:labels.feature_desc",
-      "default": "Build a short routine around your energy, time, and priorities. MOOV adapts it as your schedule changes."
-    },
-    {
-      "type": "text",
-      "id": "feature_2_label",
-      "label": "t:labels.feature_label",
-      "default": "App blocker"
-    },
-    {
-      "type": "text",
-      "id": "feature_2_desc",
-      "label": "t:labels.feature_desc",
-      "default": "Choose which apps go quiet during your first hour. Social, email, news. Override anytime; the friction alone is often enough."
-    },
-    {
-      "type": "text",
-      "id": "feature_3_label",
-      "label": "t:labels.feature_label",
-      "default": "Progress tracking"
-    },
-    {
-      "type": "text",
-      "id": "feature_3_desc",
-      "label": "t:labels.feature_desc",
-      "default": "See your streak, review your routines, and watch your mornings compound over time. Progress you can actually feel."
-    },
-    {
-      "type": "header",
       "content": "t:general.primary_button"
     },
     {
@@ -661,9 +587,52 @@
       "label": "t:labels.app_screen"
     }
   ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "App feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Feature name",
+          "default": "Feature name"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Feature description",
+          "default": "Brief description of this feature."
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "t:sections.app_section.name"
+      "name": "t:sections.app_section.name",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "label": "AI routine generator",
+            "desc": "Build a short routine around your energy, time, and priorities. MOOV adapts it as your schedule changes."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "App blocker",
+            "desc": "Choose which apps go quiet during your first hour. Social, email, news. Override anytime; the friction alone is often enough."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Progress tracking",
+            "desc": "See your streak, review your routines, and watch your mornings compound over time. Progress you can actually feel."
+          }
+        }
+      ]
     }
   ]
 }
