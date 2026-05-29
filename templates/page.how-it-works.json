@@ -16,39 +16,65 @@
           "type": "step",
           "settings": {
             "title": "Set your alarm.",
-            "text": "Set your wake-up time directly in the MOOV app.",
-            "image_asset": "step-1-how it works.jpg"
+            "text": "Set your wake-up time directly in the MOOV app."
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
             "title": "Get out of bed.",
-            "text": "When your alarm rings, you'll need to physically move to your MOOV device to begin your morning.",
-            "image_asset": "step-2 hot it works.PNG"
+            "text": "When your alarm rings, you'll need to physically move to your MOOV device to begin your morning."
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
             "title": "Stay focused.",
-            "text": "Optional Focus Mode helps reduce distracting app usage during your morning routine.",
-            "image_asset": "CDB146EA-3404-44E1-B8F6-96E0E056E90C.PNG"
+            "text": "Optional Focus Mode helps reduce distracting app usage during your morning routine."
           }
         }
       },
-      "block_order": ["step-1", "step-2", "step-3"],
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ],
       "settings": {
         "hero_heading": "Built to get you moving.",
         "hero_sub": "MOOV combines physical movement and digital boundaries to help you start your mornings with more intention.",
+        "steps_eyebrow": "Three steps",
+        "steps_heading": "Simple by design.",
+        "timeline_eyebrow": "Why it works",
+        "timeline_heading": "Most alarms wake you up. MOOV gets you moving.",
+        "mount_eyebrow": "Mounting",
+        "mount_heading": "Ten minutes, two anchors, one screw.",
+        "mount_body": "The brass cleat ships with everything you need — a paper template, two drywall anchors, and a single hidden screw. MOOV slides onto it with a soft click.",
+        "mount_rental_note": "Renting? The optional adhesive cleat replaces the anchors on most painted drywall — holds the 412 g shell with no holes left behind.",
+        "anatomy_eyebrow": "The object",
+        "anatomy_heading": "Six parts. Nothing else inside.",
+        "versus_eyebrow": "MOOV vs. the phone in the bed",
+        "versus_heading": "The difference, line by line.",
+        "versus_col_moov": "MOOV",
+        "versus_col_phone": "Phone alarm",
+        "faq_eyebrow": "Reasonable concerns",
+        "faq_heading": "The five we hear most.",
+        "cta_eyebrow": "Try it on your wall",
         "cta_heading": "Better mornings start with movement.",
+        "cta_inline_note": "If your morning doesn't change, send it back.",
         "cta_sub": "Start building mornings with more intention, focus, and momentum.",
         "cta_primary_label": "Join MOOV",
         "cta_primary_url": "/products/moov",
         "cta_secondary_label": "Read our story",
         "cta_secondary_url": "/pages/our-story"
       }
+    },
+    "17800720361a7121ac": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "17800720361a7121ac"
+  ]
 }

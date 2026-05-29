@@ -16,10 +16,10 @@
       "settings": {
         "transparent_header": true,
         "sticky_header": true,
-        "announcement_enabled": true,
+        "announcement_enabled": false,
         "announcement_text": "Founder Drop · Limited to 500 — Reserve your MOOV for $1",
         "announcement_url": "/products/moov",
-        "logo_max_width": 70,
+        "logo_max_width": 230,
         "logo_text": "MOOV",
         "nav_1_label": "How it works",
         "nav_1_url": "shopify://pages/how-it-works",
