@@ -12,9 +12,20 @@
     "main": {
       "type": "our-story",
       "settings": {
+        "hero_image": "shopify://shop_images/IMG_5269.jpg",
+        "hero_image_asset": "",
+        "hero_heading": "",
         "hero_sub": "Snooze. Scroll. Rush. Repeat. This is the story of how that cycle ended — and why movement had to come first.",
+        "hero_caption": "",
+        "video_url": "",
+        "video_file_url": "",
         "video_poster_asset": "CFC86724-4271-4448-BD4D-1BFC891817C5.PNG",
+        "craft_image_asset": "",
+        "cta_heading": "",
+        "cta_sub": "",
+        "cta_primary_label": "",
         "cta_primary_url": "/products/moov",
+        "cta_secondary_label": "",
         "cta_secondary_url": "/pages/how-it-works"
       }
     }
