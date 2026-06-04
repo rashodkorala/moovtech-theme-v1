@@ -13,6 +13,21 @@
     assign moov_accent = settings.accent_color | default: '#ed9d09'
     assign moov_cream = settings.background_color | default: '#deddd8'
     assign moov_black = settings.foreground_color | default: '#0a0a09'
+    assign moov_white = settings.white_color | default: '#ffffff'
+    assign moov_success = settings.success_color | default: '#2e7d32'
+    assign moov_error = settings.error_color | default: '#c62828'
+
+    assign type_scale = settings.body_type_scale | default: 100 | divided_by: 100.0
+    assign section_scale = settings.section_spacing_scale | default: 100 | divided_by: 100.0
+    assign header_max = settings.header_height | default: 88
+
+    # Border/divider/surface alphas derive from a single strength knob.
+    # Base alpha 0.10 at 100% strength; scale proportionally.
+    assign border_factor = settings.border_strength | default: 100 | divided_by: 100.0
+    assign border_alpha = border_factor | times: 0.10
+    assign divider_alpha = border_factor | times: 0.07
+    assign surface_raised_alpha = border_factor | times: 0.04
+    assign surface_elevated_alpha = border_factor | times: 0.06
   -%}
 
   :root {
@@ -63,7 +78,7 @@
 
     /* Brand palette: cream “white”, near-black, accent (editable under Theme settings → Colors) */
     --moov-black: {{ moov_black }};
-    --moov-white: #ffffff;
+    --moov-white: {{ moov_white }};
     --moov-cream: {{ moov_cream }};
     --moov-cream-shadow: {{ moov_cream | color_darken: 6 }};
     --moov-amber: {{ moov_accent }};
@@ -74,8 +89,8 @@
     --moov-eyebrow-accent: {{ moov_accent | color_modify: 'alpha', 0.7 }};
 
     /* Surface fills — subtle tinted backgrounds for cards & panels */
-    --moov-surface-dark-raised: {{ moov_cream | color_modify: 'alpha', 0.04 }};
-    --moov-surface-dark-divider: {{ moov_cream | color_modify: 'alpha', 0.07 }};
+    --moov-surface-dark-raised: {{ moov_cream | color_modify: 'alpha', surface_raised_alpha }};
+    --moov-surface-dark-divider: {{ moov_cream | color_modify: 'alpha', divider_alpha }};
 
     --moov-text-primary-dark: {{ moov_cream }};
     --moov-text-secondary-dark: {{ moov_cream | color_modify: 'alpha', 0.96 }};
@@ -86,53 +101,53 @@
     --moov-text-secondary-light: {{ moov_black | color_modify: 'alpha', 0.90 }};
     --moov-text-tertiary-light: {{ moov_black | color_modify: 'alpha', 0.80 }};
 
-    --moov-border-dark: {{ moov_cream | color_modify: 'alpha', 0.1 }};
-    --moov-border-light: {{ moov_black | color_modify: 'alpha', 0.1 }};
+    --moov-border-dark: {{ moov_cream | color_modify: 'alpha', border_alpha }};
+    --moov-border-light: {{ moov_black | color_modify: 'alpha', border_alpha }};
     --moov-border-amber: {{ moov_accent | color_modify: 'alpha', 0.35 }};
 
     /* Extra surfaces (avoid hard-coded grays in sections) */
-    --moov-surface-dark-elevated: {{ moov_cream | color_modify: 'alpha', 0.06 }};
+    --moov-surface-dark-elevated: {{ moov_cream | color_modify: 'alpha', surface_elevated_alpha }};
     --moov-wash-on-cream-4: color-mix(in srgb, var(--moov-black) 4%, var(--moov-cream));
     --moov-wash-on-cream-6: color-mix(in srgb, var(--moov-black) 6%, var(--moov-cream));
     --moov-surface-section-rail: color-mix(in srgb, var(--moov-cream) 94%, var(--moov-black));
     --moov-neutral-mid: color-mix(in srgb, var(--moov-cream) 72%, var(--moov-black));
     --moov-neutral-deep: color-mix(in srgb, var(--moov-cream) 58%, var(--moov-black));
 
-    /* Feedback colours — success / error states */
-    --moov-success: #2e7d32;
-    --moov-success-bg: rgba(46, 125, 50, 0.08);
-    --moov-error: #c62828;
-    --moov-error-bg: rgba(198, 40, 40, 0.06);
+    /* Feedback colours — success / error states (editable under Theme settings → Colors) */
+    --moov-success: {{ moov_success }};
+    --moov-success-bg: {{ moov_success | color_modify: 'alpha', 0.08 }};
+    --moov-error: {{ moov_error }};
+    --moov-error-bg: {{ moov_error | color_modify: 'alpha', 0.06 }};
 
     /*
       Fluid type scale — same ratio from mobile to large screens (clamp min / preferred / max).
       Tuned so body copy stays readable (~15px+) on small viewports.
     */
-    --text-2xs: clamp(0.75rem, 0.15vw + 0.64rem, 0.9375rem);
-    --text-eyebrow: clamp(0.9375rem, 0.4vw + 0.75rem, 1.25rem);
-    --text-xs: clamp(0.8125rem, 0.15vw + 0.7rem, 1rem);
-    --text-sm: clamp(0.875rem, 0.2vw + 0.72rem, 1.125rem);
-    --text-base: clamp(1rem, 0.25vw + 0.85rem, 1.1875rem);
-    --text-md: clamp(1.0625rem, 0.25vw + 0.9rem, 1.3125rem);
-    --text-lg: clamp(1.1875rem, 0.3vw + 0.99rem, 1.4375rem);
-    --text-xl: clamp(1.4375rem, 0.4vw + 1.15rem, 1.8125rem);
-    --text-2xl: clamp(1.75rem, 0.5vw + 1.35rem, 2.25rem);
-    --text-3xl: clamp(2rem, 0.8vw + 1.44rem, 2.75rem);
-    --text-4xl: clamp(2.5rem, 1.2vw + 1.66rem, 3.5rem);
-    --text-5xl: clamp(3rem, 1.5vw + 1.94rem, 4rem);
+    --text-2xs: clamp({{ 0.75 | times: type_scale }}rem, {{ 0.15 | times: type_scale }}vw + {{ 0.64 | times: type_scale }}rem, {{ 0.9375 | times: type_scale }}rem);
+    --text-eyebrow: clamp({{ 0.9375 | times: type_scale }}rem, {{ 0.4 | times: type_scale }}vw + {{ 0.75 | times: type_scale }}rem, {{ 1.25 | times: type_scale }}rem);
+    --text-xs: clamp({{ 0.8125 | times: type_scale }}rem, {{ 0.15 | times: type_scale }}vw + {{ 0.7 | times: type_scale }}rem, {{ 1 | times: type_scale }}rem);
+    --text-sm: clamp({{ 0.875 | times: type_scale }}rem, {{ 0.2 | times: type_scale }}vw + {{ 0.72 | times: type_scale }}rem, {{ 1.125 | times: type_scale }}rem);
+    --text-base: clamp({{ 1 | times: type_scale }}rem, {{ 0.25 | times: type_scale }}vw + {{ 0.85 | times: type_scale }}rem, {{ 1.1875 | times: type_scale }}rem);
+    --text-md: clamp({{ 1.0625 | times: type_scale }}rem, {{ 0.25 | times: type_scale }}vw + {{ 0.9 | times: type_scale }}rem, {{ 1.3125 | times: type_scale }}rem);
+    --text-lg: clamp({{ 1.1875 | times: type_scale }}rem, {{ 0.3 | times: type_scale }}vw + {{ 0.99 | times: type_scale }}rem, {{ 1.4375 | times: type_scale }}rem);
+    --text-xl: clamp({{ 1.4375 | times: type_scale }}rem, {{ 0.4 | times: type_scale }}vw + {{ 1.15 | times: type_scale }}rem, {{ 1.8125 | times: type_scale }}rem);
+    --text-2xl: clamp({{ 1.75 | times: type_scale }}rem, {{ 0.5 | times: type_scale }}vw + {{ 1.35 | times: type_scale }}rem, {{ 2.25 | times: type_scale }}rem);
+    --text-3xl: clamp({{ 2 | times: type_scale }}rem, {{ 0.8 | times: type_scale }}vw + {{ 1.44 | times: type_scale }}rem, {{ 2.75 | times: type_scale }}rem);
+    --text-4xl: clamp({{ 2.5 | times: type_scale }}rem, {{ 1.2 | times: type_scale }}vw + {{ 1.66 | times: type_scale }}rem, {{ 3.5 | times: type_scale }}rem);
+    --text-5xl: clamp({{ 3 | times: type_scale }}rem, {{ 1.5 | times: type_scale }}vw + {{ 1.94 | times: type_scale }}rem, {{ 4 | times: type_scale }}rem);
 
-    --header-height: clamp(4rem, 1vw + 3.5rem, 5.5rem);
+    --header-height: clamp(4rem, 1vw + 3.5rem, {{ header_max }}px);
     --announcement-height: 2.25rem;
     --moov-announcement-offset: max(3.75rem, 60px);
     --section-inline-pad: clamp(1rem, 4vw + 0.75rem, 5rem);
     /* Vertical rhythm — use together with --section-inline-pad for section padding */
-    --section-block-pad-y: clamp(3rem, 8vw, 7.5rem);
-    --section-block-pad-y-sm: clamp(2.5rem, 5vw, 4rem);
-    --section-block-pad-y-md: clamp(3.5rem, 7vw, 6.25rem);
-    --section-block-pad-y-lg: clamp(4rem, 9vw, 8.75rem);
-    --section-block-pad-y-xl: clamp(5rem, 11vw, 10rem);
-    --section-block-pad-y-hero: clamp(5.5rem, 14vw, 10rem);
-    --section-block-pad-y-hero-bottom: clamp(3.5rem, 8vw, 7.5rem);
+    --section-block-pad-y: clamp({{ 3 | times: section_scale }}rem, {{ 8 | times: section_scale }}vw, {{ 7.5 | times: section_scale }}rem);
+    --section-block-pad-y-sm: clamp({{ 2.5 | times: section_scale }}rem, {{ 5 | times: section_scale }}vw, {{ 4 | times: section_scale }}rem);
+    --section-block-pad-y-md: clamp({{ 3.5 | times: section_scale }}rem, {{ 7 | times: section_scale }}vw, {{ 6.25 | times: section_scale }}rem);
+    --section-block-pad-y-lg: clamp({{ 4 | times: section_scale }}rem, {{ 9 | times: section_scale }}vw, {{ 8.75 | times: section_scale }}rem);
+    --section-block-pad-y-xl: clamp({{ 5 | times: section_scale }}rem, {{ 11 | times: section_scale }}vw, {{ 10 | times: section_scale }}rem);
+    --section-block-pad-y-hero: clamp({{ 5.5 | times: section_scale }}rem, {{ 14 | times: section_scale }}vw, {{ 10 | times: section_scale }}rem);
+    --section-block-pad-y-hero-bottom: clamp({{ 3.5 | times: section_scale }}rem, {{ 8 | times: section_scale }}vw, {{ 7.5 | times: section_scale }}rem);
   }
   /* ── Page shell ── */
   html {

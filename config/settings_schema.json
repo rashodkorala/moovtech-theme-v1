@@ -19,6 +19,17 @@
         "id": "type_primary_font",
         "default": "manrope_n4",
         "label": "t:general.primary"
+      },
+      {
+        "type": "range",
+        "id": "body_type_scale",
+        "label": "Body font size scale",
+        "min": 75,
+        "max": 150,
+        "step": 1,
+        "unit": "%",
+        "default": 100,
+        "info": "Scales all body text sizes proportionally."
       }
     ]
   },
@@ -176,6 +187,35 @@
         "info": "Used for eyebrows, badges, hover highlights, and CTAs across the theme."
       },
       {
+        "type": "color",
+        "id": "white_color",
+        "default": "#ffffff",
+        "label": "White",
+        "info": "Pure white used for max-brightness text on dark surfaces (e.g. header nav)."
+      },
+      {
+        "type": "header",
+        "content": "Feedback colours"
+      },
+      {
+        "type": "color",
+        "id": "success_color",
+        "default": "#2e7d32",
+        "label": "Success",
+        "info": "Used for success states (e.g. in-stock, confirmation messages)."
+      },
+      {
+        "type": "color",
+        "id": "error_color",
+        "default": "#c62828",
+        "label": "Error",
+        "info": "Used for error states (e.g. validation, sold out)."
+      },
+      {
+        "type": "header",
+        "content": "Corners"
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
@@ -195,6 +235,44 @@
         "label": "Button corner radius",
         "default": 1000,
         "info": "1000 = pill shape. Use lower values for rounded rectangles."
+      }
+    ]
+  },
+  {
+    "name": "Spacing & sizing",
+    "settings": [
+      {
+        "type": "range",
+        "id": "section_spacing_scale",
+        "label": "Section spacing scale",
+        "min": 50,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "default": 100,
+        "info": "Scales the vertical padding between sections proportionally."
+      },
+      {
+        "type": "range",
+        "id": "header_height",
+        "label": "Header height",
+        "min": 56,
+        "max": 120,
+        "step": 1,
+        "unit": "px",
+        "default": 88,
+        "info": "Maximum header height on desktop. Shrinks responsively on smaller screens."
+      },
+      {
+        "type": "range",
+        "id": "border_strength",
+        "label": "Border strength",
+        "min": 25,
+        "max": 250,
+        "step": 5,
+        "unit": "%",
+        "default": 100,
+        "info": "Controls how visible borders and dividers are across the theme."
       }
     ]
   }
